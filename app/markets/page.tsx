@@ -1,0 +1,450 @@
+"use client"
+
+import { useState, useMemo } from "react"
+import {
+  Search,
+  Car,
+  PenTool as Restroom,
+  MSquare as Mosque,
+  ArrowUpDown,
+  Grid,
+  List,
+  Map,
+  Navigation2,
+} from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Checkbox } from "@/components/ui/checkbox"
+import Link from "next/link"
+import { getAllMarkets } from "@/lib/markets-data"
+import { useTranslation } from "@/lib/i18n"
+import LanguageSwitcher from "@/components/language-switcher"
+
+const malaysianStates = [
+  "All States",
+  "Johor",
+  "Kedah",
+  "Kelantan",
+  "Kuala Lumpur",
+  "Labuan",
+  "Malacca",
+  "Negeri Sembilan",
+  "Pahang",
+  "Penang",
+  "Perak",
+  "Perlis",
+  "Putrajaya",
+  "Sabah",
+  "Sarawak",
+  "Selangor",
+  "Terengganu",
+]
+
+const daysOfWeek = ["All Days", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+
+function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
+  const R = 6371 // Radius of the Earth in kilometers
+  const dLat = ((lat2 - lat1) * Math.PI) / 180
+  const dLon = ((lon2 - lon1) * Math.PI) / 180
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos((lat1 * Math.PI) / 180) * Math.cos((lat2 * Math.PI) / 180) * Math.sin(dLon / 2) * Math.sin(dLon / 2)
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+  return R * c // Distance in kilometers
+}
+
+export default function MarketsPage() {
+  const sampleMarkets = getAllMarkets()
+  const [language, setLanguage] = useState("en")
+  const t = useTranslation(language)
+  const [searchQuery, setSearchQuery] = useState("")
+  const [selectedState, setSelectedState] = useState("All States")
+  const [selectedDay, setSelectedDay] = useState("All Days")
+  const [sortBy, setSortBy] = useState("name")
+  const [viewMode, setViewMode] = useState<"grid" | "list">("list") // Default to list view for better UX
+  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null)
+  const [filters, setFilters] = useState({
+    parking: false,
+    toilet: false,
+    prayer_room: false,
+    accessible_parking: false,
+  })
+
+  const findNearestMarkets = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setUserLocation({
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          })
+          setSortBy("distance")
+        },
+        (error) => {
+          console.error("Geolocation error:", error)
+          alert("Unable to get your location. Please enable location services.")
+        },
+      )
+    } else {
+      alert("Geolocation is not supported by this browser.")
+    }
+  }
+
+  const filteredAndSortedMarkets = useMemo(() => {
+    const filtered = sampleMarkets.filter((market) => {
+      const matchesSearch =
+        searchQuery === "" ||
+        market.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        market.district.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        market.state.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        market.address.toLowerCase().includes(searchQuery.toLowerCase())
+
+      const matchesState = selectedState === "All States" || market.state === selectedState
+
+      const matchesDay = selectedDay === "All Days" || market.schedule.some((schedule) => schedule.day === selectedDay)
+
+      const matchesFilters =
+        (!filters.parking || market.parking.available) &&
+        (!filters.toilet || market.amenities.toilet) &&
+        (!filters.prayer_room || market.amenities.prayer_room) &&
+        (!filters.accessible_parking || market.parking.accessible)
+
+      return matchesSearch && matchesState && matchesDay && matchesFilters
+    })
+
+    // Sort markets
+    filtered.sort((a, b) => {
+      switch (sortBy) {
+        case "name":
+          return a.name.localeCompare(b.name)
+        case "state":
+          return a.state.localeCompare(b.state) || a.district.localeCompare(b.district)
+        case "size":
+          return (b.total_shop || 0) - (a.total_shop || 0)
+        case "area":
+          return b.area_m2 - a.area_m2
+        case "distance":
+          if (!userLocation) return 0
+          const distanceA = a.location
+            ? calculateDistance(userLocation.lat, userLocation.lng, a.location.latitude, a.location.longitude)
+            : Number.POSITIVE_INFINITY
+          const distanceB = b.location
+            ? calculateDistance(userLocation.lat, userLocation.lng, b.location.latitude, b.location.longitude)
+            : Number.POSITIVE_INFINITY
+          return distanceA - distanceB
+        default:
+          return 0
+      }
+    })
+
+    return filtered
+  }, [searchQuery, selectedState, selectedDay, sortBy, filters, userLocation])
+
+  const clearAllFilters = () => {
+    setSearchQuery("")
+    setSelectedState("All States")
+    setSelectedDay("All Days")
+    setFilters({
+      parking: false,
+      toilet: false,
+      prayer_room: false,
+      accessible_parking: false,
+    })
+  }
+
+  const formatArea = (areaM2: number) => {
+    if (areaM2 >= 10000) {
+      return `${(areaM2 / 1000000).toFixed(2)} ${t.kmSquared}`
+    }
+    return `${Math.round(areaM2)} m²`
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      {/* Header */}
+      <header className="border-b border-border bg-card">
+        <div className="container mx-auto px-4 py-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <Link href="/" className="text-3xl font-bold text-foreground hover:text-primary transition-colors">
+                Pasar Malam Directory
+              </Link>
+              <p className="text-muted-foreground mt-1">Browse all night markets across Malaysia</p>
+            </div>
+            <div className="flex items-center gap-3">
+              <Button onClick={findNearestMarkets} variant="outline" className="gap-2 bg-transparent">
+                <Navigation2 className="h-4 w-4" />
+                <span className="hidden sm:inline">{t.findNearest}</span>
+              </Button>
+              <Link href="/markets/map">
+                <Button variant="outline">
+                  <Map className="h-4 w-4 mr-2" />
+                  {t.mapView}
+                </Button>
+              </Link>
+              <LanguageSwitcher currentLanguage={language} onLanguageChange={setLanguage} />
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div className="container mx-auto px-4 py-8">
+        {/* Search and Filters */}
+        <div className="mb-8">
+          <div className="flex flex-col lg:flex-row gap-4 mb-6">
+            <div className="flex-1">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
+                <Input
+                  placeholder={t.searchPlaceholder}
+                  className="pl-10 h-12 text-lg"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+              </div>
+            </div>
+            <div className="flex gap-2">
+              <Select value={selectedState} onValueChange={setSelectedState}>
+                <SelectTrigger className="w-48">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {malaysianStates.map((state) => (
+                    <SelectItem key={state} value={state}>
+                      {state === "All States" ? t.allStates : state}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <Select value={selectedDay} onValueChange={setSelectedDay}>
+                <SelectTrigger className="w-40">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {daysOfWeek.map((day) => (
+                    <SelectItem key={day} value={day}>
+                      {day === "All Days" ? t.allDays : t[day.toLowerCase() as keyof typeof t] || day}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          {/* Advanced Filters */}
+          <Card className="mb-6">
+            <CardHeader className="pb-4">
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-lg">{t.filtersAmenities}</CardTitle>
+                <div className="flex items-center gap-2">
+                  <Button variant="outline" size="sm" onClick={clearAllFilters}>
+                    {t.clearAllFilters}
+                  </Button>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="parking"
+                    checked={filters.parking}
+                    onCheckedChange={(checked) => setFilters((prev) => ({ ...prev, parking: !!checked }))}
+                  />
+                  <label
+                    htmlFor="parking"
+                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  >
+                    {t.parkingAvailable}
+                  </label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="accessible-parking"
+                    checked={filters.accessible_parking}
+                    onCheckedChange={(checked) => setFilters((prev) => ({ ...prev, accessible_parking: !!checked }))}
+                  />
+                  <label
+                    htmlFor="accessible-parking"
+                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  >
+                    {t.accessibleParking}
+                  </label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="toilet"
+                    checked={filters.toilet}
+                    onCheckedChange={(checked) => setFilters((prev) => ({ ...prev, toilet: !!checked }))}
+                  />
+                  <label
+                    htmlFor="toilet"
+                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  >
+                    {t.toiletFacilities}
+                  </label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="prayer-room"
+                    checked={filters.prayer_room}
+                    onCheckedChange={(checked) => setFilters((prev) => ({ ...prev, prayer_room: !!checked }))}
+                  />
+                  <label
+                    htmlFor="prayer-room"
+                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  >
+                    {t.prayerRoom}
+                  </label>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Results Header */}
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h2 className="text-2xl font-bold text-foreground">Markets Directory</h2>
+              <p className="text-muted-foreground">
+                {t.showingResults} {filteredAndSortedMarkets.length} {t.of} {sampleMarkets.length} markets
+              </p>
+            </div>
+            <div className="flex items-center gap-2">
+              <Select value={sortBy} onValueChange={setSortBy}>
+                <SelectTrigger className="w-48">
+                  <ArrowUpDown className="h-4 w-4 mr-2" />
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="name">{t.sortByName}</SelectItem>
+                  <SelectItem value="state">{t.sortByLocation}</SelectItem>
+                  <SelectItem value="size">{t.sortByStallCount}</SelectItem>
+                  <SelectItem value="area">{t.sortByAreaSize}</SelectItem>
+                  {userLocation && <SelectItem value="distance">Sort by Distance</SelectItem>}
+                </SelectContent>
+              </Select>
+              <div className="flex border rounded-md">
+                <Button
+                  variant={viewMode === "grid" ? "default" : "ghost"}
+                  size="sm"
+                  onClick={() => setViewMode("grid")}
+                  className="rounded-r-none"
+                >
+                  <Grid className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant={viewMode === "list" ? "default" : "ghost"}
+                  size="sm"
+                  onClick={() => setViewMode("list")}
+                  className="rounded-l-none"
+                >
+                  <List className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Results */}
+        {filteredAndSortedMarkets.length === 0 ? (
+          <div className="text-center py-12">
+            <p className="text-muted-foreground text-lg mb-2">{t.noMarketsFound}</p>
+            <p className="text-muted-foreground mb-4">{t.tryAdjustingFilters}</p>
+            <Button onClick={clearAllFilters}>{t.clearAllFilters}</Button>
+          </div>
+        ) : (
+          <div className={viewMode === "grid" ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" : "space-y-4"}>
+            {filteredAndSortedMarkets.map((market) => {
+              const distance =
+                userLocation && market.location
+                  ? calculateDistance(
+                      userLocation.lat,
+                      userLocation.lng,
+                      market.location.latitude,
+                      market.location.longitude,
+                    )
+                  : null
+
+              return (
+                <Card
+                  key={market.id}
+                  className={`overflow-hidden hover:shadow-lg transition-shadow ${
+                    viewMode === "list" ? "flex flex-col" : ""
+                  }`}
+                >
+                  <div className="flex-1">
+                    <CardHeader className="pb-3">
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <CardTitle className="text-lg mb-2">{market.name}</CardTitle>
+                          <div className="flex items-center gap-2 mb-2">
+                            <Badge variant="secondary">{market.state}</Badge>
+                            {distance && (
+                              <Badge variant="outline" className="text-xs">
+                                {distance.toFixed(1)} km away
+                              </Badge>
+                            )}
+                          </div>
+                          <CardDescription className="text-sm">
+                            {market.district} • {market.schedule[0]?.day} {market.schedule[0]?.sessions[0]?.start}-
+                            {market.schedule[0]?.sessions[market.schedule[0]?.sessions.length - 1]?.end}
+                          </CardDescription>
+                        </div>
+                      </div>
+                    </CardHeader>
+                    <CardContent className="pt-0">
+                      <p className="text-sm text-muted-foreground mb-4 line-clamp-2">{market.address}</p>
+
+                      <div className="flex flex-wrap gap-3 text-sm text-muted-foreground mb-4">
+                        {market.parking.available && (
+                          <div className="flex items-center gap-1">
+                            <Car className="h-4 w-4" />
+                            <span>{t.parking}</span>
+                          </div>
+                        )}
+                        {market.amenities.toilet && (
+                          <div className="flex items-center gap-1">
+                            <Restroom className="h-4 w-4" />
+                            <span>Toilet</span>
+                          </div>
+                        )}
+                        {market.amenities.prayer_room && (
+                          <div className="flex items-center gap-1">
+                            <Mosque className="h-4 w-4" />
+                            <span>Surau</span>
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-4 text-sm text-muted-foreground mb-4">
+                        {market.total_shop && (
+                          <div>
+                            <span className="font-medium">{t.totalStalls}:</span>
+                            <br />
+                            <span>{market.total_shop}</span>
+                          </div>
+                        )}
+                        <div>
+                          <span className="font-medium">{t.areaSize}:</span>
+                          <br />
+                          <span>{formatArea(market.area_m2)}</span>
+                        </div>
+                      </div>
+
+                      <Link href={`/markets/${market.id}`}>
+                        <Button className="w-full">{t.viewDetails}</Button>
+                      </Link>
+                    </CardContent>
+                  </div>
+                </Card>
+              )
+            })}
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
