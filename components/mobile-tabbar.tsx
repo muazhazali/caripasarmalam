@@ -35,12 +35,12 @@ export default function MobileTabBar() {
   const tabs = [
     { href: "/", label: "Nearest", icon: Home },
     { href: "/markets", label: "Markets", icon: ShoppingBag },
-    { href: "/markets/map", label: "Map", icon: MapIcon },
+    { href: "/map", label: "Map", icon: MapIcon },
   ]
 
   return (
     <nav
-      className="fixed bottom-0 left-0 right-0 z-40 border-t border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 md:hidden"
+      className="fixed bottom-0 left-0 right-0 z-50 border-t border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 md:hidden"
       role="navigation"
       aria-label="Primary"
     >

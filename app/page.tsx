@@ -222,8 +222,8 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Quick Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 max-w-4xl mx-auto">
+          {/* Quick Stats (desktop only) */}
+          <div className="hidden md:grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
             <Card>
               <CardContent className="p-4 md:p-6 text-center">
                 <MapPin className="h-8 w-8 text-primary mx-auto mb-2" />

@@ -181,7 +181,7 @@ export default function MarketsPage() {
                 <Navigation2 className="h-4 w-4" />
                 <span className="hidden sm:inline">{t.findNearest}</span>
               </Button>
-              <Link href="/markets/map" className="hidden md:inline-flex">
+              <Link href="/map" className="hidden md:inline-flex">
                 <Button variant="outline">
                   <Map className="h-4 w-4 mr-2" />
                   {t.mapView}
