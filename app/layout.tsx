@@ -20,7 +20,7 @@ const playfairDisplay = Playfair_Display({
 })
 
 export const metadata: Metadata = {
-  title: "Pasar Malam Directory Malaysia",
+  title: "Cari Pasar Malam Malaysia",
   description: "Find night markets (pasar malam) across Malaysia with opening hours, amenities, and locations",
   generator: "v0.app",
 }
@@ -31,7 +31,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
+    <html lang="ms">
       <body className={`font-sans ${sourceSansPro.variable} ${playfairDisplay.variable} ${GeistMono.variable}`}>
         <Suspense fallback={null}>{children}</Suspense>
         <Analytics />

@@ -251,6 +251,6 @@ export const translations: Record<string, Translations> = {
   },
 }
 
-export function useTranslation(locale = "en") {
-  return translations[locale] || translations.en
+export function useTranslation(locale = "ms") {
+  return translations[locale] || translations.ms || translations.en
 }

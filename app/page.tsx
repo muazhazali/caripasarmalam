@@ -58,7 +58,9 @@ function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: numbe
 
 export default function HomePage() {
   const sampleMarkets = getAllMarkets()
-  const [language, setLanguage] = useState("en")
+  const [language, setLanguage] = useState(
+    typeof window !== "undefined" ? localStorage.getItem("language") || "ms" : "ms",
+  )
   const t = useTranslation(language)
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedState, setSelectedState] = useState("All States")
@@ -133,8 +135,8 @@ export default function HomePage() {
         <div className="container mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-foreground">Pasar Malam Directory</h1>
-              <p className="text-muted-foreground mt-1">Discover night markets across Malaysia</p>
+              <h1 className="text-3xl font-bold text-foreground">Cari Pasar Malam</h1>
+              <p className="text-muted-foreground mt-1">Terokai pasar malam di seluruh Malaysia</p>
             </div>
             <nav className="flex gap-2 items-center">
               <Button onClick={findNearestMarkets} variant="outline" className="gap-2 bg-transparent">
@@ -142,7 +144,7 @@ export default function HomePage() {
                 <span className="hidden sm:inline">{t.findNearest}</span>
               </Button>
               <Link href="/markets">
-                <Button variant="outline">Browse All Markets</Button>
+                <Button variant="outline">Lihat Semua Pasar</Button>
               </Link>
               <Link href="/markets/map">
                 <Button variant="outline">
@@ -150,7 +152,13 @@ export default function HomePage() {
                   {t.mapView}
                 </Button>
               </Link>
-              <LanguageSwitcher currentLanguage={language} onLanguageChange={setLanguage} />
+              <LanguageSwitcher
+                currentLanguage={language}
+                onLanguageChange={(code) => {
+                  setLanguage(code)
+                  if (typeof window !== "undefined") localStorage.setItem("language", code)
+                }}
+              />
             </nav>
           </div>
         </div>
@@ -159,12 +167,9 @@ export default function HomePage() {
       {/* Hero Section */}
       <section className="bg-gradient-to-b from-card to-background py-16">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6 text-balance">
-            Find Your Perfect Night Market
-          </h2>
+          <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6 text-balance">Cari Pasar Malam Pilihan Anda</h2>
           <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto text-pretty">
-            Explore authentic Malaysian pasar malam with detailed information about opening hours, amenities, and
-            locations
+            Jelajahi pasar malam autentik Malaysia dengan maklumat waktu operasi, kemudahan dan lokasi
           </p>
 
           <div className="max-w-4xl mx-auto mb-8">
@@ -186,7 +191,7 @@ export default function HomePage() {
                   onClick={() => setShowFilters(!showFilters)}
                 >
                   <Filter className="h-5 w-5 mr-2" />
-                  Filters
+                  Penapis
                 </Button>
               </div>
 
@@ -208,7 +213,7 @@ export default function HomePage() {
                     </Select>
                   </div>
                   <div className="flex-1">
-                    <label className="text-sm font-medium text-foreground mb-2 block">Day of Week</label>
+                    <label className="text-sm font-medium text-foreground mb-2 block">Hari dalam Minggu</label>
                     <Select value={selectedDay} onValueChange={setSelectedDay}>
                       <SelectTrigger>
                         <SelectValue />
@@ -233,21 +238,21 @@ export default function HomePage() {
               <CardContent className="p-6 text-center">
                 <MapPin className="h-8 w-8 text-primary mx-auto mb-2" />
                 <div className="text-2xl font-bold text-foreground">{sampleMarkets.length}+</div>
-                <div className="text-muted-foreground">Markets Listed</div>
+                <div className="text-muted-foreground">Jumlah Pasar Tersenarai</div>
               </CardContent>
             </Card>
             <Card>
               <CardContent className="p-6 text-center">
                 <Clock className="h-8 w-8 text-primary mx-auto mb-2" />
-                <div className="text-2xl font-bold text-foreground">7 Days</div>
-                <div className="text-muted-foreground">Weekly Coverage</div>
+                <div className="text-2xl font-bold text-foreground">7 Hari</div>
+                <div className="text-muted-foreground">Liputan Mingguan</div>
               </CardContent>
             </Card>
             <Card>
               <CardContent className="p-6 text-center">
                 <Users className="h-8 w-8 text-primary mx-auto mb-2" />
-                <div className="text-2xl font-bold text-foreground">13 States</div>
-                <div className="text-muted-foreground">Nationwide</div>
+                <div className="text-2xl font-bold text-foreground">13 Negeri</div>
+                <div className="text-muted-foreground">Seluruh Negara</div>
               </CardContent>
             </Card>
           </div>
@@ -259,8 +264,8 @@ export default function HomePage() {
           <div className="flex items-center justify-between mb-8">
             <h3 className="text-3xl font-bold text-foreground">
               {searchQuery || selectedState !== "All States" || selectedDay !== "All Days" || userLocation
-                ? `Search Results (${filteredMarkets.length})`
-                : "Featured Markets"}
+                ? `Hasil Carian (${filteredMarkets.length})`
+                : "Pasar Pilihan"}
             </h3>
             <div className="flex gap-2">
               {(searchQuery || selectedState !== "All States" || selectedDay !== "All Days" || userLocation) && (
@@ -277,7 +282,7 @@ export default function HomePage() {
                 </Button>
               )}
               <Link href="/markets">
-                <Button>View All Markets</Button>
+                <Button>Lihat Semua Pasar</Button>
               </Link>
             </div>
           </div>
@@ -307,7 +312,7 @@ export default function HomePage() {
                         <Badge variant="secondary">{market.state}</Badge>
                         {distance && (
                           <Badge variant="outline" className="text-xs">
-                            {distance.toFixed(1)} km away
+                            {distance.toFixed(1)} km dari sini
                           </Badge>
                         )}
                       </div>
@@ -356,7 +361,7 @@ export default function HomePage() {
           {filteredMarkets.length > 6 && (
             <div className="text-center mt-8">
               <Link href="/markets">
-                <Button size="lg">View All {filteredMarkets.length} Markets</Button>
+                <Button size="lg">Lihat Semua {filteredMarkets.length} Pasar</Button>
               </Link>
             </div>
           )}
@@ -366,9 +371,7 @@ export default function HomePage() {
       {/* Footer */}
       <footer className="bg-card border-t border-border py-8">
         <div className="container mx-auto px-4 text-center">
-          <p className="text-muted-foreground">
-            © 2025 Pasar Malam Directory Malaysia. Open source project for the community.
-          </p>
+          <p className="text-muted-foreground">© 2025 Direktori Pasar Malam Malaysia. Projek sumber terbuka untuk komuniti.</p>
         </div>
       </footer>
     </div>
