@@ -80,7 +80,7 @@ export default function MarketsMap({ markets, selectedMarket, onMarketSelect, cl
           })
 
           const userMarker = L.marker([userLocation.lat, userLocation.lng], { icon: userIcon }).addTo(map)
-          userMarker.bindPopup('<div class="p-2"><p class="text-sm font-medium">Your Location</p></div>')
+          userMarker.bindPopup('<div class="p-2"><p class="text-sm font-medium">Lokasi Anda</p></div>')
           markersRef.current.push(userMarker)
         }
 
@@ -106,7 +106,7 @@ export default function MarketsMap({ markets, selectedMarket, onMarketSelect, cl
 
             const scheduleText = market.schedule[0]
               ? `${market.schedule[0].day} ${market.schedule[0].sessions[0]?.start}-${market.schedule[0].sessions[market.schedule[0].sessions.length - 1]?.end}`
-              : "Schedule not available"
+              : "Jadual tidak tersedia"
 
             marker.bindPopup(`
               <div class="p-3 min-w-64">
@@ -114,12 +114,12 @@ export default function MarketsMap({ markets, selectedMarket, onMarketSelect, cl
                 <p class="text-xs text-gray-600 mb-2">${market.district}, ${market.state}</p>
                 <p class="text-xs text-gray-500 mb-2">${scheduleText}</p>
                 <div class="flex gap-1 mb-2">
-                  ${market.parking.available ? '<span class="text-xs bg-green-100 text-green-800 px-1 rounded">Parking</span>' : ""}
-                  ${market.amenities.toilet ? '<span class="text-xs bg-blue-100 text-blue-800 px-1 rounded">Toilet</span>' : ""}
-                  ${market.amenities.prayer_room ? '<span class="text-xs bg-purple-100 text-purple-800 px-1 rounded">Prayer Room</span>' : ""}
+                  ${market.parking.available ? '<span class="text-xs bg-green-100 text-green-800 px-1 rounded">Parkir</span>' : ""}
+                  ${market.amenities.toilet ? '<span class="text-xs bg-blue-100 text-blue-800 px-1 rounded">Tandas</span>' : ""}
+                  ${market.amenities.prayer_room ? '<span class="text-xs bg-purple-100 text-purple-800 px-1 rounded">Surau</span>' : ""}
                 </div>
                 <button onclick="window.location.href='/markets/${market.id}'" class="text-xs bg-primary text-white px-2 py-1 rounded hover:bg-primary/90">
-                  View Details
+                  Lihat Butiran
                 </button>
               </div>
             `)

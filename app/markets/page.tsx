@@ -24,16 +24,16 @@ import { useTranslation } from "@/lib/i18n"
 import LanguageSwitcher from "@/components/language-switcher"
 
 const malaysianStates = [
-  "All States",
+  "Semua Negeri",
   "Johor",
   "Kedah",
   "Kelantan",
   "Kuala Lumpur",
   "Labuan",
-  "Malacca",
+  "Melaka",
   "Negeri Sembilan",
   "Pahang",
-  "Penang",
+  "Pulau Pinang",
   "Perak",
   "Perlis",
   "Putrajaya",
@@ -43,7 +43,7 @@ const malaysianStates = [
   "Terengganu",
 ]
 
-const daysOfWeek = ["All Days", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+const daysOfWeek = ["Semua Hari", "Isnin", "Selasa", "Rabu", "Khamis", "Jumaat", "Sabtu", "Ahad"]
 
 function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
   const R = 6371 // Radius of the Earth in kilometers
@@ -58,7 +58,9 @@ function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: numbe
 
 export default function MarketsPage() {
   const sampleMarkets = getAllMarkets()
-  const [language, setLanguage] = useState("en")
+  const [language, setLanguage] = useState(
+    typeof window !== "undefined" ? localStorage.getItem("language") || "ms" : "ms",
+  )
   const t = useTranslation(language)
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedState, setSelectedState] = useState("All States")
@@ -170,9 +172,9 @@ export default function MarketsPage() {
           <div className="flex items-center justify-between">
             <div>
               <Link href="/" className="text-3xl font-bold text-foreground hover:text-primary transition-colors">
-                Pasar Malam Directory
+                Direktori Pasar Malam
               </Link>
-              <p className="text-muted-foreground mt-1">Browse all night markets across Malaysia</p>
+              <p className="text-muted-foreground mt-1">Lihat semua pasar malam di seluruh Malaysia</p>
             </div>
             <div className="flex items-center gap-3">
               <Button onClick={findNearestMarkets} variant="outline" className="gap-2 bg-transparent">
@@ -185,7 +187,13 @@ export default function MarketsPage() {
                   {t.mapView}
                 </Button>
               </Link>
-              <LanguageSwitcher currentLanguage={language} onLanguageChange={setLanguage} />
+              <LanguageSwitcher
+                currentLanguage={language}
+                onLanguageChange={(code) => {
+                  setLanguage(code)
+                  if (typeof window !== "undefined") localStorage.setItem("language", code)
+                }}
+              />
             </div>
           </div>
         </div>
@@ -307,9 +315,9 @@ export default function MarketsPage() {
           {/* Results Header */}
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h2 className="text-2xl font-bold text-foreground">Markets Directory</h2>
+              <h2 className="text-2xl font-bold text-foreground">Direktori Pasar</h2>
               <p className="text-muted-foreground">
-                {t.showingResults} {filteredAndSortedMarkets.length} {t.of} {sampleMarkets.length} markets
+                {t.showingResults} {filteredAndSortedMarkets.length} {t.of} {sampleMarkets.length} {t.markets}
               </p>
             </div>
             <div className="flex items-center gap-2">
@@ -323,7 +331,7 @@ export default function MarketsPage() {
                   <SelectItem value="state">{t.sortByLocation}</SelectItem>
                   <SelectItem value="size">{t.sortByStallCount}</SelectItem>
                   <SelectItem value="area">{t.sortByAreaSize}</SelectItem>
-                  {userLocation && <SelectItem value="distance">Sort by Distance</SelectItem>}
+                  {userLocation && <SelectItem value="distance">Susun mengikut Jarak</SelectItem>}
                 </SelectContent>
               </Select>
               <div className="flex border rounded-md">
@@ -384,7 +392,7 @@ export default function MarketsPage() {
                             <Badge variant="secondary">{market.state}</Badge>
                             {distance && (
                               <Badge variant="outline" className="text-xs">
-                                {distance.toFixed(1)} km away
+                                {distance.toFixed(1)} km dari sini
                               </Badge>
                             )}
                           </div>

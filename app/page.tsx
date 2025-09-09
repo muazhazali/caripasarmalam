@@ -24,16 +24,16 @@ import { useTranslation } from "@/lib/i18n"
 import LanguageSwitcher from "@/components/language-switcher"
 
 const malaysianStates = [
-  "All States",
+  "Semua Negeri",
   "Johor",
   "Kedah",
   "Kelantan",
   "Kuala Lumpur",
   "Labuan",
-  "Malacca",
+  "Melaka",
   "Negeri Sembilan",
   "Pahang",
-  "Penang",
+  "Pulau Pinang",
   "Perak",
   "Perlis",
   "Putrajaya",
@@ -43,7 +43,7 @@ const malaysianStates = [
   "Terengganu",
 ]
 
-const daysOfWeek = ["All Days", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+const daysOfWeek = ["Semua Hari", "Isnin", "Selasa", "Rabu", "Khamis", "Jumaat", "Sabtu", "Ahad"]
 
 function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
   const R = 6371 // Radius of the Earth in kilometers
@@ -135,8 +135,8 @@ export default function HomePage() {
         <div className="container mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-foreground">Cari Pasar Malam</h1>
-              <p className="text-muted-foreground mt-1">Terokai pasar malam di seluruh Malaysia</p>
+              <h1 className="text-3xl font-bold text-foreground">{t.appTitle}</h1>
+              <p className="text-muted-foreground mt-1">{t.homeSubtitle}</p>
             </div>
             <nav className="flex gap-2 items-center">
               <Button onClick={findNearestMarkets} variant="outline" className="gap-2 bg-transparent">
@@ -167,7 +167,7 @@ export default function HomePage() {
       {/* Hero Section */}
       <section className="bg-gradient-to-b from-card to-background py-16">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6 text-balance">Cari Pasar Malam Pilihan Anda</h2>
+          <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6 text-balance">{t.heroTitle}</h2>
           <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto text-pretty">
             Jelajahi pasar malam autentik Malaysia dengan maklumat waktu operasi, kemudahan dan lokasi
           </p>

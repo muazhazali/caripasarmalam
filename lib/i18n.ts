@@ -1,4 +1,8 @@
 export interface Translations {
+  // App/Home Titles
+  appTitle: string
+  heroTitle: string
+  homeSubtitle: string
   // Navigation
   home: string
   markets: string
@@ -84,6 +88,10 @@ export interface Translations {
 
 export const translations: Record<string, Translations> = {
   en: {
+    // App/Home Titles
+    appTitle: "Find Night Markets",
+    heroTitle: "Find Your Perfect Night Market",
+    homeSubtitle: "Discover night markets across Malaysia",
     // Navigation
     home: "Home",
     markets: "Markets",
@@ -167,6 +175,10 @@ export const translations: Record<string, Translations> = {
     marketPhoto: "Market Photo",
   },
   ms: {
+    // App/Home Titles
+    appTitle: "Cari Pasar Malam",
+    heroTitle: "Cari Pasar Malam Pilihan Anda",
+    homeSubtitle: "Terokai pasar malam di seluruh Malaysia",
     // Navigation
     home: "Laman Utama",
     markets: "Pasar",

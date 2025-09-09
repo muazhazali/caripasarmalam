@@ -10,16 +10,16 @@ import MarketsMap from "@/components/markets-map"
 import { getAllMarkets, type Market } from "@/lib/markets-data"
 
 const malaysianStates = [
-  "All States",
+  "Semua Negeri",
   "Johor",
   "Kedah",
   "Kelantan",
   "Kuala Lumpur",
   "Labuan",
-  "Malacca",
+  "Melaka",
   "Negeri Sembilan",
   "Pahang",
-  "Penang",
+  "Pulau Pinang",
   "Perak",
   "Perlis",
   "Putrajaya",
@@ -34,6 +34,9 @@ export default function MarketsMapPage() {
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedState, setSelectedState] = useState("All States")
   const [selectedMarket, setSelectedMarket] = useState<Market | null>(null)
+  const [language, setLanguage] = useState(
+    typeof window !== "undefined" ? localStorage.getItem("language") || "ms" : "ms",
+  )
 
   const filteredMarkets = allMarkets.filter((market) => {
     const matchesSearch =
@@ -56,17 +59,17 @@ export default function MarketsMapPage() {
             <Link href="/markets">
               <Button variant="ghost" size="sm">
                 <ArrowLeft className="h-4 w-4 mr-2" />
-                Back to Directory
+                Kembali ke Direktori
               </Button>
             </Link>
             <div className="flex-1">
-              <h1 className="text-2xl font-bold text-foreground">Markets Map</h1>
-              <p className="text-muted-foreground">Explore night markets across Malaysia</p>
+              <h1 className="text-2xl font-bold text-foreground">Peta Pasar</h1>
+              <p className="text-muted-foreground">Terokai pasar malam di seluruh Malaysia</p>
             </div>
             <Link href="/markets">
               <Button variant="outline">
                 <List className="h-4 w-4 mr-2" />
-                List View
+                Paparan Senarai
               </Button>
             </Link>
           </div>
@@ -80,7 +83,7 @@ export default function MarketsMapPage() {
             <div className="flex-1 relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
               <Input
-                placeholder="Search markets..."
+                placeholder="Cari pasar..."
                 className="pl-10"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -99,7 +102,7 @@ export default function MarketsMapPage() {
               </SelectContent>
             </Select>
           </div>
-          <div className="mt-2 text-sm text-muted-foreground">Showing {filteredMarkets.length} markets on map</div>
+          <div className="mt-2 text-sm text-muted-foreground">Menunjukkan {filteredMarkets.length} pasar pada peta</div>
         </div>
       </div>
 

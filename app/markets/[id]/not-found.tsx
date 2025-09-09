@@ -12,16 +12,16 @@ export default function NotFound() {
             <div className="mx-auto mb-4">
               <MapPin className="h-16 w-16 text-muted-foreground" />
             </div>
-            <CardTitle className="text-2xl">Market Not Found</CardTitle>
-            <CardDescription>The market you're looking for doesn't exist or may have been removed.</CardDescription>
+            <CardTitle className="text-2xl">Pasar Tidak Dijumpai</CardTitle>
+            <CardDescription>Pasar yang anda cari tiada atau mungkin telah dipadam.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <Link href="/markets">
-              <Button className="w-full">Browse All Markets</Button>
+              <Button className="w-full">Lihat Semua Pasar</Button>
             </Link>
             <Link href="/">
               <Button variant="outline" className="w-full bg-transparent">
-                Back to Homepage
+                Kembali ke Laman Utama
               </Button>
             </Link>
           </CardContent>

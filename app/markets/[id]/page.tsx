@@ -30,7 +30,9 @@ interface MarketPageProps {
 }
 
 export default function MarketPage({ params }: MarketPageProps) {
-  const [language, setLanguage] = useState("en")
+  const [language, setLanguage] = useState(
+    typeof window !== "undefined" ? localStorage.getItem("language") || "ms" : "ms",
+  )
   const t = useTranslation(language)
   const market = getMarketById(params.id)
 
@@ -70,7 +72,13 @@ export default function MarketPage({ params }: MarketPageProps) {
                 <span className="text-foreground">{market.name}</span>
               </nav>
             </div>
-            <LanguageSwitcher currentLanguage={language} onLanguageChange={setLanguage} />
+            <LanguageSwitcher
+              currentLanguage={language}
+              onLanguageChange={(code) => {
+                setLanguage(code)
+                if (typeof window !== "undefined") localStorage.setItem("language", code)
+              }}
+            />
           </div>
         </div>
       </header>
@@ -156,7 +164,7 @@ export default function MarketPage({ params }: MarketPageProps) {
                         <Badge variant={market.parking.available ? "default" : "secondary"}>
                           {market.parking.available ? t.available : t.notAvailable}
                         </Badge>
-                        {market.parking.accessible && <Badge variant="outline">Accessible</Badge>}
+                        {market.parking.accessible && <Badge variant="outline">Mudah Akses</Badge>}
                       </div>
                       <p className="text-sm text-muted-foreground">{market.parking.notes}</p>
                     </div>
@@ -168,15 +176,11 @@ export default function MarketPage({ params }: MarketPageProps) {
                     <div className="space-y-2">
                       <div className="flex items-center gap-2">
                         <Restroom className="h-4 w-4 text-muted-foreground" />
-                        <span className="text-sm">
-                          Toilet: {market.amenities.toilet ? t.available : t.notAvailable}
-                        </span>
+                        <span className="text-sm">Tandas: {market.amenities.toilet ? t.available : t.notAvailable}</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <Mosque className="h-4 w-4 text-muted-foreground" />
-                        <span className="text-sm">
-                          {t.prayerRoom}: {market.amenities.prayer_room ? t.available : t.notAvailable}
-                        </span>
+                        <span className="text-sm">{t.prayerRoom}: {market.amenities.prayer_room ? t.available : t.notAvailable}</span>
                       </div>
                     </div>
                   </div>
