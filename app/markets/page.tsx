@@ -11,6 +11,7 @@ import {
   List,
   Map,
   Navigation2,
+  Filter,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -18,6 +19,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Checkbox } from "@/components/ui/checkbox"
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import Link from "next/link"
 import { getAllMarkets } from "@/lib/markets-data"
 import { useTranslation } from "@/lib/i18n"
@@ -74,6 +76,7 @@ export default function MarketsPage() {
     prayer_room: false,
     accessible_parking: false,
   })
+  const [showFilters, setShowFilters] = useState(false)
 
   const findNearestMarkets = () => {
     if (navigator.geolocation) {
@@ -166,22 +169,19 @@ export default function MarketsPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
+      {/* Header (slim) */}
       <header className="border-b border-border bg-card">
-        <div className="container mx-auto px-4 py-6">
+        <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <div>
-              <Link href="/" className="text-3xl font-bold text-foreground hover:text-primary transition-colors">
-                Direktori Pasar Malam
-              </Link>
-              <p className="text-muted-foreground mt-1">Lihat semua pasar malam di seluruh Malaysia</p>
-            </div>
-            <div className="flex items-center gap-3">
-              <Button onClick={findNearestMarkets} variant="outline" className="gap-2 bg-transparent">
+            <Link href="/" className="text-xl md:text-3xl font-bold text-foreground hover:text-primary transition-colors">
+              Direktori Pasar Malam
+            </Link>
+            <div className="flex items-center gap-2">
+              <Button onClick={findNearestMarkets} variant="outline" className="gap-2 bg-transparent hidden md:inline-flex">
                 <Navigation2 className="h-4 w-4" />
                 <span className="hidden sm:inline">{t.findNearest}</span>
               </Button>
-              <Link href="/markets/map">
+              <Link href="/markets/map" className="hidden md:inline-flex">
                 <Button variant="outline">
                   <Map className="h-4 w-4 mr-2" />
                   {t.mapView}
@@ -196,25 +196,26 @@ export default function MarketsPage() {
               />
             </div>
           </div>
+          <p className="text-muted-foreground mt-1 hidden md:block">Lihat semua pasar malam di seluruh Malaysia</p>
         </div>
       </header>
 
       <div className="container mx-auto px-4 py-8">
         {/* Search and Filters */}
         <div className="mb-8">
-          <div className="flex flex-col lg:flex-row gap-4 mb-6">
+          <div className="flex flex-col lg:flex-row gap-3 md:gap-4 mb-4 md:mb-6">
             <div className="flex-1">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
                 <Input
                   placeholder={t.searchPlaceholder}
-                  className="pl-10 h-12 text-lg"
+                  className="pl-10 h-11 md:h-12 text-base md:text-lg"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
               </div>
             </div>
-            <div className="flex gap-2">
+            <div className="hidden md:flex gap-2">
               <Select value={selectedState} onValueChange={setSelectedState}>
                 <SelectTrigger className="w-48">
                   <SelectValue />
@@ -242,8 +243,8 @@ export default function MarketsPage() {
             </div>
           </div>
 
-          {/* Advanced Filters */}
-          <Card className="mb-6">
+          {/* Advanced Filters (desktop) */}
+          <Card className="mb-6 hidden md:block">
             <CardHeader className="pb-4">
               <div className="flex items-center justify-between">
                 <CardTitle className="text-lg">{t.filtersAmenities}</CardTitle>
@@ -453,6 +454,102 @@ export default function MarketsPage() {
           </div>
         )}
       </div>
+      
+      {/* Mobile FAB + filter sheet */}
+      <Sheet open={showFilters} onOpenChange={setShowFilters}>
+        <SheetTrigger asChild>
+          <Button className="md:hidden fixed bottom-20 right-4 z-40 rounded-full h-12 w-12 p-0 shadow-lg">
+            <Filter className="h-5 w-5" />
+          </Button>
+        </SheetTrigger>
+        <SheetContent side="bottom" className="h-[75vh] p-4">
+          <SheetHeader>
+            <SheetTitle>Penapis</SheetTitle>
+          </SheetHeader>
+          <div className="mt-4 space-y-4">
+            <div>
+              <label className="text-sm font-medium text-foreground mb-2 block">Negeri</label>
+              <Select value={selectedState} onValueChange={setSelectedState}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {malaysianStates.map((state) => (
+                    <SelectItem key={state} value={state}>
+                      {state === "All States" ? t.allStates : state}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <label className="text-sm font-medium text-foreground mb-2 block">Hari</label>
+              <Select value={selectedDay} onValueChange={setSelectedDay}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {daysOfWeek.map((day) => (
+                    <SelectItem key={day} value={day}>
+                      {day === "All Days" ? t.allDays : t[day.toLowerCase() as keyof typeof t] || day}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="m-parking"
+                  checked={filters.parking}
+                  onCheckedChange={(checked) => setFilters((prev) => ({ ...prev, parking: !!checked }))}
+                />
+                <label htmlFor="m-parking" className="text-sm font-medium">
+                  {t.parkingAvailable}
+                </label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="m-accessible-parking"
+                  checked={filters.accessible_parking}
+                  onCheckedChange={(checked) => setFilters((prev) => ({ ...prev, accessible_parking: !!checked }))}
+                />
+                <label htmlFor="m-accessible-parking" className="text-sm font-medium">
+                  {t.accessibleParking}
+                </label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="m-toilet"
+                  checked={filters.toilet}
+                  onCheckedChange={(checked) => setFilters((prev) => ({ ...prev, toilet: !!checked }))}
+                />
+                <label htmlFor="m-toilet" className="text-sm font-medium">
+                  {t.toiletFacilities}
+                </label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="m-prayer-room"
+                  checked={filters.prayer_room}
+                  onCheckedChange={(checked) => setFilters((prev) => ({ ...prev, prayer_room: !!checked }))}
+                />
+                <label htmlFor="m-prayer-room" className="text-sm font-medium">
+                  {t.prayerRoom}
+                </label>
+              </div>
+            </div>
+            <div className="pt-2 flex gap-2">
+              <Button variant="outline" className="flex-1" onClick={clearAllFilters}>
+                {t.clearAllFilters}
+              </Button>
+              <Button className="flex-1" onClick={() => setShowFilters(false)}>
+                Guna Penapis
+              </Button>
+            </div>
+          </div>
+        </SheetContent>
+      </Sheet>
     </div>
   )
 }

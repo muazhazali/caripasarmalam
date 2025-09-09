@@ -1,0 +1,64 @@
+"use client"
+
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+import { Home, ShoppingBag, Map as MapIcon } from "lucide-react"
+
+function TabButton({
+  href,
+  label,
+  icon: Icon,
+  isActive,
+}: {
+  href: string
+  label: string
+  icon: any
+  isActive: boolean
+}) {
+  return (
+    <Link
+      href={href}
+      className={`flex flex-col items-center justify-center gap-1 px-3 py-2 rounded-md transition-colors ${
+        isActive ? "text-primary" : "text-muted-foreground hover:text-foreground"
+      }`}
+      aria-current={isActive ? "page" : undefined}
+    >
+      <Icon className="h-5 w-5" />
+      <span className="text-xs font-medium">{label}</span>
+    </Link>
+  )
+}
+
+export default function MobileTabBar() {
+  const pathname = usePathname()
+
+  const tabs = [
+    { href: "/", label: "Nearest", icon: Home },
+    { href: "/markets", label: "Markets", icon: ShoppingBag },
+    { href: "/markets/map", label: "Map", icon: MapIcon },
+  ]
+
+  return (
+    <nav
+      className="fixed bottom-0 left-0 right-0 z-40 border-t border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 md:hidden"
+      role="navigation"
+      aria-label="Primary"
+    >
+      <div className="mx-auto max-w-5xl">
+        <div className="grid grid-cols-3 items-center justify-between px-2 py-2">
+          {tabs.map((tab) => (
+            <TabButton
+              key={tab.href}
+              href={tab.href}
+              label={tab.label}
+              icon={tab.icon}
+              isActive={pathname === tab.href}
+            />
+          ))}
+        </div>
+      </div>
+    </nav>
+  )
+}
+
+

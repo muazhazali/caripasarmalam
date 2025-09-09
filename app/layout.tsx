@@ -6,6 +6,7 @@ import { GeistMono } from "geist/font/mono"
 import { Analytics } from "@vercel/analytics/next"
 import { Suspense } from "react"
 import "./globals.css"
+import MobileTabBar from "@/components/mobile-tabbar"
 
 const sourceSansPro = Source_Sans_3({
   subsets: ["latin"],
@@ -33,7 +34,10 @@ export default function RootLayout({
   return (
     <html lang="ms">
       <body className={`font-sans ${sourceSansPro.variable} ${playfairDisplay.variable} ${GeistMono.variable}`}>
-        <Suspense fallback={null}>{children}</Suspense>
+        <Suspense fallback={null}>
+          <div className="md:pb-0 pb-16">{children}</div>
+        </Suspense>
+        <MobileTabBar />
         <Analytics />
       </body>
     </html>
