@@ -2,7 +2,10 @@ export interface Translations {
   // App/Home Titles
   appTitle: string
   heroTitle: string
+  heroDescription: string
   homeSubtitle: string
+  featuredMarkets: string
+  searchResults: string
   // Navigation
   home: string
   markets: string
@@ -17,8 +20,15 @@ export interface Translations {
   sortByLocation: string
   sortByStallCount: string
   sortByAreaSize: string
+  sortByDistance: string
   clearAllFilters: string
   filtersAmenities: string
+  filters: string
+  applyFilters: string
+  reset: string
+  stateLabel: string
+  dayLabel: string
+  dayOfWeekLabel: string
 
   // Amenities
   parkingAvailable: string
@@ -30,6 +40,7 @@ export interface Translations {
   operatingSchedule: string
   amenitiesFacilities: string
   parking: string
+  toilet: string
   otherFacilities: string
   locationAddress: string
   fullAddress: string
@@ -43,14 +54,19 @@ export interface Translations {
   getDirections: string
   shareMarket: string
   findNearest: string
+  findNearestTitle: string
+  findNearestDescription: string
+  searching: string
 
   // Status
   available: string
   notAvailable: string
   active: string
+  accessible: string
 
   // Units
   kmSquared: string
+  kmFromHere: string
 
   // Days
   monday: string
@@ -80,10 +96,15 @@ export interface Translations {
   loadingMap: string
   yourLocation: string
   viewDetails: string
+  viewAll: string
+  viewAllMarkets: string
   openInGoogleMaps: string
   scheduleNotAvailable: string
   locationNotAvailable: string
   marketPhoto: string
+  directoryTitle: string
+  directorySubtitle: string
+  footerText: string
 }
 
 export const translations: Record<string, Translations> = {
@@ -91,7 +112,10 @@ export const translations: Record<string, Translations> = {
     // App/Home Titles
     appTitle: "Find Night Markets",
     heroTitle: "Find Your Perfect Night Market",
+    heroDescription: "Explore authentic Malaysian night markets with operating hours, amenities, and locations",
     homeSubtitle: "Discover night markets across Malaysia",
+    featuredMarkets: "Featured Markets",
+    searchResults: "Search Results",
     // Navigation
     home: "Home",
     markets: "Markets",
@@ -106,8 +130,15 @@ export const translations: Record<string, Translations> = {
     sortByLocation: "Sort by Location",
     sortByStallCount: "Sort by Stall Count",
     sortByAreaSize: "Sort by Area Size",
+    sortByDistance: "Sort by Distance",
     clearAllFilters: "Clear All",
     filtersAmenities: "Filters & Amenities",
+    filters: "Filters",
+    applyFilters: "Apply Filters",
+    reset: "Reset",
+    stateLabel: "State",
+    dayLabel: "Day",
+    dayOfWeekLabel: "Day of Week",
 
     // Amenities
     parkingAvailable: "Parking Available",
@@ -119,6 +150,7 @@ export const translations: Record<string, Translations> = {
     operatingSchedule: "Operating Schedule",
     amenitiesFacilities: "Amenities & Facilities",
     parking: "Parking",
+    toilet: "Toilet",
     otherFacilities: "Other Facilities",
     locationAddress: "Location & Address",
     fullAddress: "Full Address",
@@ -132,14 +164,19 @@ export const translations: Record<string, Translations> = {
     getDirections: "Get Directions",
     shareMarket: "Share Market",
     findNearest: "Find Nearest",
+    findNearestTitle: "Find Nearby Markets",
+    findNearestDescription: "Use your current location to list the nearest markets.",
+    searching: "Searching...",
 
     // Status
     available: "Available",
     notAvailable: "Not Available",
     active: "Active",
+    accessible: "Accessible",
 
     // Units
     kmSquared: "km²",
+    kmFromHere: "km from here",
 
     // Days
     monday: "Monday",
@@ -169,16 +206,24 @@ export const translations: Record<string, Translations> = {
     loadingMap: "Loading map...",
     yourLocation: "Your Location",
     viewDetails: "View Details",
+    viewAll: "View All",
+    viewAllMarkets: "View All Markets",
     openInGoogleMaps: "Open in Google Maps",
     scheduleNotAvailable: "Schedule not available",
     locationNotAvailable: "Location not available",
     marketPhoto: "Market Photo",
+    directoryTitle: "Night Market Directory",
+    directorySubtitle: "Browse all night markets across Malaysia",
+    footerText: "© 2025 Malaysia Night Market Directory. An open-source project for the community.",
   },
   ms: {
     // App/Home Titles
     appTitle: "Cari Pasar Malam",
     heroTitle: "Cari Pasar Malam Pilihan Anda",
+    heroDescription: "Jelajahi pasar malam autentik Malaysia dengan maklumat waktu operasi, kemudahan dan lokasi",
     homeSubtitle: "Terokai pasar malam di seluruh Malaysia",
+    featuredMarkets: "Pasar Pilihan",
+    searchResults: "Hasil Carian",
     // Navigation
     home: "Laman Utama",
     markets: "Pasar",
@@ -193,8 +238,15 @@ export const translations: Record<string, Translations> = {
     sortByLocation: "Susun mengikut Lokasi",
     sortByStallCount: "Susun mengikut Bilangan Gerai",
     sortByAreaSize: "Susun mengikut Saiz Kawasan",
+    sortByDistance: "Susun mengikut Jarak",
     clearAllFilters: "Kosongkan Semua",
     filtersAmenities: "Penapis & Kemudahan",
+    filters: "Penapis",
+    applyFilters: "Guna Penapis",
+    reset: "Set Semula",
+    stateLabel: "Negeri",
+    dayLabel: "Hari",
+    dayOfWeekLabel: "Hari dalam Minggu",
 
     // Amenities
     parkingAvailable: "Tempat Letak Kereta Tersedia",
@@ -206,6 +258,7 @@ export const translations: Record<string, Translations> = {
     operatingSchedule: "Jadual Operasi",
     amenitiesFacilities: "Kemudahan & Fasiliti",
     parking: "Tempat Letak Kereta",
+    toilet: "Tandas",
     otherFacilities: "Kemudahan Lain",
     locationAddress: "Lokasi & Alamat",
     fullAddress: "Alamat Penuh",
@@ -219,14 +272,19 @@ export const translations: Record<string, Translations> = {
     getDirections: "Dapatkan Arah",
     shareMarket: "Kongsi Pasar",
     findNearest: "Cari Terdekat",
+    findNearestTitle: "Cari Pasar Terdekat",
+    findNearestDescription: "Guna lokasi semasa anda untuk senarai paling dekat.",
+    searching: "Mencari...",
 
     // Status
     available: "Tersedia",
     notAvailable: "Tidak Tersedia",
     active: "Aktif",
+    accessible: "Mudah Akses",
 
     // Units
     kmSquared: "km²",
+    kmFromHere: "km dari sini",
 
     // Days
     monday: "Isnin",
@@ -256,10 +314,15 @@ export const translations: Record<string, Translations> = {
     loadingMap: "Memuatkan peta...",
     yourLocation: "Lokasi Anda",
     viewDetails: "Lihat Butiran",
+    viewAll: "Lihat Semua",
+    viewAllMarkets: "Lihat Semua Pasar",
     openInGoogleMaps: "Buka di Google Maps",
     scheduleNotAvailable: "Jadual tidak tersedia",
     locationNotAvailable: "Lokasi tidak tersedia",
     marketPhoto: "Foto Pasar",
+    directoryTitle: "Direktori Pasar Malam",
+    directorySubtitle: "Lihat semua pasar malam di seluruh Malaysia",
+    footerText: "© 2025 Direktori Pasar Malam Malaysia. Projek sumber terbuka untuk komuniti.",
   },
 }
 

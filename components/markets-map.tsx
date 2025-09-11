@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
+import { useTranslation } from "@/lib/i18n"
 import { MapPin, Navigation } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -19,6 +20,7 @@ export default function MarketsMap({ markets, selectedMarket, onMarketSelect, cl
   const mapInstanceRef = useRef<any>(null)
   const markersRef = useRef<any[]>([])
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null)
+  const t = useTranslation(typeof window !== "undefined" ? localStorage.getItem("language") || "ms" : "ms")
 
   // Get user location
   useEffect(() => {
@@ -80,7 +82,7 @@ export default function MarketsMap({ markets, selectedMarket, onMarketSelect, cl
           })
 
           const userMarker = L.marker([userLocation.lat, userLocation.lng], { icon: userIcon }).addTo(map)
-          userMarker.bindPopup('<div class="p-2"><p class="text-sm font-medium">Lokasi Anda</p></div>')
+          userMarker.bindPopup(`<div class="p-2"><p class="text-sm font-medium">${t.yourLocation}</p></div>`)
           markersRef.current.push(userMarker)
         }
 
@@ -106,7 +108,7 @@ export default function MarketsMap({ markets, selectedMarket, onMarketSelect, cl
 
             const scheduleText = market.schedule[0]
               ? `${market.schedule[0].day} ${market.schedule[0].sessions[0]?.start}-${market.schedule[0].sessions[market.schedule[0].sessions.length - 1]?.end}`
-              : "Jadual tidak tersedia"
+              : t.scheduleNotAvailable
 
             marker.bindPopup(`
               <div class="p-3 min-w-64">
@@ -114,12 +116,12 @@ export default function MarketsMap({ markets, selectedMarket, onMarketSelect, cl
                 <p class="text-xs text-gray-600 mb-2">${market.district}, ${market.state}</p>
                 <p class="text-xs text-gray-500 mb-2">${scheduleText}</p>
                 <div class="flex gap-1 mb-2">
-                  ${market.parking.available ? '<span class="text-xs bg-green-100 text-green-800 px-1 rounded">Parkir</span>' : ""}
-                  ${market.amenities.toilet ? '<span class="text-xs bg-blue-100 text-blue-800 px-1 rounded">Tandas</span>' : ""}
-                  ${market.amenities.prayer_room ? '<span class="text-xs bg-purple-100 text-purple-800 px-1 rounded">Surau</span>' : ""}
+                  ${market.parking.available ? `<span class="text-xs bg-green-100 text-green-800 px-1 rounded">${t.parking}</span>` : ""}
+                  ${market.amenities.toilet ? `<span class="text-xs bg-blue-100 text-blue-800 px-1 rounded">${t.toilet}</span>` : ""}
+                  ${market.amenities.prayer_room ? `<span class="text-xs bg-purple-100 text-purple-800 px-1 rounded">${t.prayerRoom}</span>` : ""}
                 </div>
                 <button onclick="window.location.href='/markets/${market.id}'" class="text-xs bg-primary text-white px-2 py-1 rounded hover:bg-primary/90">
-                  Lihat Butiran
+                  ${t.viewDetails}
                 </button>
               </div>
             `)
@@ -177,7 +179,7 @@ export default function MarketsMap({ markets, selectedMarket, onMarketSelect, cl
       <div className="absolute inset-0 bg-muted rounded-lg flex items-center justify-center pointer-events-none">
         <div className="text-center text-muted-foreground">
           <MapPin className="h-8 w-8 mx-auto mb-2 animate-pulse" />
-          <p className="text-sm">Loading map...</p>
+          <p className="text-sm">{t.loadingMap}</p>
         </div>
       </div>
 

@@ -10,8 +10,8 @@ interface LanguageSwitcherProps {
 
 export default function LanguageSwitcher({ currentLanguage, onLanguageChange }: LanguageSwitcherProps) {
   const languages = [
-    { code: "en", name: "English", flag: "🇬🇧" },
     { code: "ms", name: "Bahasa Melayu", flag: "🇲🇾" },
+    { code: "en", name: "English", flag: "🇬🇧" },
   ]
 
   const currentLang = languages.find((lang) => lang.code === currentLanguage) || languages[0]

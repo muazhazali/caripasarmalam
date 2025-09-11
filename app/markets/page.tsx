@@ -174,7 +174,7 @@ export default function MarketsPage() {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <Link href="/" className="text-xl md:text-3xl font-bold text-foreground hover:text-primary transition-colors">
-              Direktori Pasar Malam
+              {t.appTitle}
             </Link>
             <div className="flex items-center gap-2">
               <Button onClick={findNearestMarkets} variant="outline" className="gap-2 bg-transparent hidden md:inline-flex">
@@ -196,7 +196,7 @@ export default function MarketsPage() {
               />
             </div>
           </div>
-          <p className="text-muted-foreground mt-1 hidden md:block">Lihat semua pasar malam di seluruh Malaysia</p>
+          <p className="text-muted-foreground mt-1 hidden md:block">{t.directorySubtitle}</p>
         </div>
       </header>
 
@@ -316,7 +316,7 @@ export default function MarketsPage() {
           {/* Results Header */}
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h2 className="text-2xl font-bold text-foreground">Direktori Pasar</h2>
+              <h2 className="text-2xl font-bold text-foreground">{t.directoryTitle}</h2>
               <p className="text-muted-foreground">
                 {t.showingResults} {filteredAndSortedMarkets.length} {t.of} {sampleMarkets.length} {t.markets}
               </p>
@@ -332,7 +332,7 @@ export default function MarketsPage() {
                   <SelectItem value="state">{t.sortByLocation}</SelectItem>
                   <SelectItem value="size">{t.sortByStallCount}</SelectItem>
                   <SelectItem value="area">{t.sortByAreaSize}</SelectItem>
-                  {userLocation && <SelectItem value="distance">Susun mengikut Jarak</SelectItem>}
+                  {userLocation && <SelectItem value="distance">{t.sortByDistance}</SelectItem>}
                 </SelectContent>
               </Select>
               <div className="flex border rounded-md">
@@ -393,7 +393,7 @@ export default function MarketsPage() {
                             <Badge variant="secondary">{market.state}</Badge>
                             {distance && (
                               <Badge variant="outline" className="text-xs">
-                                {distance.toFixed(1)} km dari sini
+                                {distance.toFixed(1)} {t.kmFromHere}
                               </Badge>
                             )}
                           </div>
@@ -417,13 +417,13 @@ export default function MarketsPage() {
                         {market.amenities.toilet && (
                           <div className="flex items-center gap-1">
                             <Restroom className="h-4 w-4" />
-                            <span>Toilet</span>
+                            <span>{t.toilet}</span>
                           </div>
                         )}
                         {market.amenities.prayer_room && (
                           <div className="flex items-center gap-1">
                             <Mosque className="h-4 w-4" />
-                            <span>Surau</span>
+                            <span>{t.prayerRoom}</span>
                           </div>
                         )}
                       </div>
@@ -464,11 +464,11 @@ export default function MarketsPage() {
         </SheetTrigger>
         <SheetContent side="bottom" className="h-[75vh] p-4">
           <SheetHeader>
-            <SheetTitle>Penapis</SheetTitle>
+            <SheetTitle>{t.filters}</SheetTitle>
           </SheetHeader>
           <div className="mt-4 space-y-4">
             <div>
-              <label className="text-sm font-medium text-foreground mb-2 block">Negeri</label>
+              <label className="text-sm font-medium text-foreground mb-2 block">{t.stateLabel}</label>
               <Select value={selectedState} onValueChange={setSelectedState}>
                 <SelectTrigger>
                   <SelectValue />
@@ -483,7 +483,7 @@ export default function MarketsPage() {
               </Select>
             </div>
             <div>
-              <label className="text-sm font-medium text-foreground mb-2 block">Hari</label>
+              <label className="text-sm font-medium text-foreground mb-2 block">{t.dayLabel}</label>
               <Select value={selectedDay} onValueChange={setSelectedDay}>
                 <SelectTrigger>
                   <SelectValue />
@@ -544,7 +544,7 @@ export default function MarketsPage() {
                 {t.clearAllFilters}
               </Button>
               <Button className="flex-1" onClick={() => setShowFilters(false)}>
-                Guna Penapis
+                {t.applyFilters}
               </Button>
             </div>
           </div>

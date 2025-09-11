@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useRef } from "react"
+import { useTranslation } from "@/lib/i18n"
 import { MapPin } from "lucide-react"
 
 interface InteractiveMapProps {
@@ -14,6 +15,7 @@ interface InteractiveMapProps {
 export default function InteractiveMap({ latitude, longitude, name, address, className = "" }: InteractiveMapProps) {
   const mapRef = useRef<HTMLDivElement>(null)
   const mapInstanceRef = useRef<any>(null)
+  const t = useTranslation(typeof window !== "undefined" ? localStorage.getItem("language") || "ms" : "ms")
 
   useEffect(() => {
     // Only load map on client side
@@ -66,7 +68,9 @@ export default function InteractiveMap({ latitude, longitude, name, address, cla
         const resizeObserver = new ResizeObserver(() => {
           map.invalidateSize()
         })
-        resizeObserver.observe(mapRef.current)
+        if (mapRef.current) {
+          resizeObserver.observe(mapRef.current)
+        }
 
         return () => {
           resizeObserver.disconnect()
@@ -93,7 +97,7 @@ export default function InteractiveMap({ latitude, longitude, name, address, cla
       <div className="absolute inset-0 bg-muted rounded-lg flex items-center justify-center">
         <div className="text-center text-muted-foreground">
           <MapPin className="h-8 w-8 mx-auto mb-2 animate-pulse" />
-          <p className="text-sm">Loading map...</p>
+          <p className="text-sm">{t.loadingMap}</p>
         </div>
       </div>
     </div>

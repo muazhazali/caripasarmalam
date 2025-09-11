@@ -157,7 +157,7 @@ export default function HomePage() {
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl md:text-5xl font-bold text-foreground mb-4 md:mb-6 text-balance">{t.heroTitle}</h2>
           <p className="text-base md:text-xl text-muted-foreground mb-6 md:mb-8 max-w-2xl mx-auto text-pretty">
-            Jelajahi pasar malam autentik Malaysia dengan maklumat waktu operasi, kemudahan dan lokasi
+            {t.heroDescription}
           </p>
 
           <div className="max-w-4xl mx-auto mb-8">
@@ -180,7 +180,7 @@ export default function HomePage() {
                     onClick={() => setShowFilters(!showFilters)}
                   >
                     <Filter className="h-5 w-5 mr-2" />
-                    Penapis
+                    {t.filters}
                   </Button>
                 </div>
               </div>
@@ -203,7 +203,7 @@ export default function HomePage() {
                     </Select>
                   </div>
                   <div className="flex-1">
-                    <label className="text-sm font-medium text-foreground mb-2 block">Hari dalam Minggu</label>
+                    <label className="text-sm font-medium text-foreground mb-2 block">{t.dayOfWeekLabel}</label>
                     <Select value={selectedDay} onValueChange={setSelectedDay}>
                       <SelectTrigger>
                         <SelectValue />
@@ -254,8 +254,8 @@ export default function HomePage() {
           <div className="flex items-center justify-between mb-6 md:mb-8">
             <h3 className="text-2xl md:text-3xl font-bold text-foreground">
               {searchQuery || selectedState !== "All States" || selectedDay !== "All Days" || userLocation
-                ? `Hasil Carian (${filteredMarkets.length})`
-                : "Pasar Pilihan"}
+                ? `${t.searchResults} (${filteredMarkets.length})`
+                : t.featuredMarkets}
             </h3>
             <div className="hidden md:flex gap-2">
               {(searchQuery || selectedState !== "All States" || selectedDay !== "All Days" || userLocation) && (
@@ -268,11 +268,11 @@ export default function HomePage() {
                     setUserLocation(null)
                   }}
                 >
-                  Clear Filters
+                  {t.clearAllFilters}
                 </Button>
               )}
               <Link href="/markets">
-                <Button>Lihat Semua Pasar</Button>
+                <Button>{t.viewAllMarkets}</Button>
               </Link>
             </div>
           </div>
@@ -282,12 +282,12 @@ export default function HomePage() {
             <Card className="mb-6 md:mb-8">
               <CardContent className="p-4 md:p-6 flex items-center justify-between gap-3">
                 <div className="text-left">
-                  <div className="font-semibold text-foreground">Cari Pasar Terdekat</div>
-                  <div className="text-sm text-muted-foreground">Guna lokasi semasa anda untuk senarai paling dekat.</div>
+                  <div className="font-semibold text-foreground">{t.findNearestTitle}</div>
+                  <div className="text-sm text-muted-foreground">{t.findNearestDescription}</div>
                 </div>
                 <Button onClick={findNearestMarkets} disabled={isRequestingLocation} className="gap-2">
                   <Navigation2 className="h-4 w-4" />
-                  {isRequestingLocation ? "Mencari..." : t.findNearest}
+                  {isRequestingLocation ? t.searching : t.findNearest}
                 </Button>
               </CardContent>
             </Card>
@@ -318,7 +318,7 @@ export default function HomePage() {
                         <Badge variant="secondary">{market.state}</Badge>
                         {distance && (
                           <Badge variant="outline" className="text-xs">
-                            {distance.toFixed(1)} km dari sini
+                            {distance.toFixed(1)} {t.kmFromHere}
                           </Badge>
                         )}
                       </div>
@@ -339,19 +339,19 @@ export default function HomePage() {
                         {market.amenities.toilet && (
                           <div className="flex items-center gap-1">
                             <Restroom className="h-4 w-4" />
-                            <span>Toilet</span>
+                            <span>{t.toilet}</span>
                           </div>
                         )}
                         {market.amenities.prayer_room && (
                           <div className="flex items-center gap-1">
                             <Mosque className="h-4 w-4" />
-                            <span>Surau</span>
+                            <span>{t.prayerRoom}</span>
                           </div>
                         )}
                       </div>
                       {market.total_shop && (
                         <p className="text-sm text-muted-foreground mb-4">
-                          {market.total_shop} stalls • {formatArea(market.area_m2)}
+                          {market.total_shop} {t.totalStalls.toLowerCase()} • {formatArea(market.area_m2)}
                         </p>
                       )}
                       <Link href={`/markets/${market.id}`}>
@@ -367,7 +367,7 @@ export default function HomePage() {
           {filteredMarkets.length > 6 && (
             <div className="text-center mt-8">
               <Link href="/markets">
-                <Button size="lg">Lihat Semua {filteredMarkets.length} Pasar</Button>
+                <Button size="lg">{t.viewAll} {filteredMarkets.length} {t.markets}</Button>
               </Link>
             </div>
           )}
@@ -380,11 +380,11 @@ export default function HomePage() {
             </SheetTrigger>
             <SheetContent side="bottom" className="h-[70vh] p-4">
               <SheetHeader>
-                <SheetTitle>Penapis</SheetTitle>
+                <SheetTitle>{t.filters}</SheetTitle>
               </SheetHeader>
               <div className="mt-4 space-y-4">
                 <div>
-                  <label className="text-sm font-medium text-foreground mb-2 block">{t.state}</label>
+                  <label className="text-sm font-medium text-foreground mb-2 block">{t.stateLabel}</label>
                   <Select value={selectedState} onValueChange={setSelectedState}>
                     <SelectTrigger>
                       <SelectValue />
@@ -399,7 +399,7 @@ export default function HomePage() {
                   </Select>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-foreground mb-2 block">Hari dalam Minggu</label>
+                  <label className="text-sm font-medium text-foreground mb-2 block">{t.dayLabel}</label>
                   <Select value={selectedDay} onValueChange={setSelectedDay}>
                     <SelectTrigger>
                       <SelectValue />
@@ -423,10 +423,10 @@ export default function HomePage() {
                       setSelectedDay("All Days")
                     }}
                   >
-                    Reset
+                    {t.reset}
                   </Button>
                   <Button className="flex-1" onClick={() => setShowFilters(false)}>
-                    Guna Penapis
+                    {t.applyFilters}
                   </Button>
                 </div>
               </div>
@@ -439,7 +439,7 @@ export default function HomePage() {
       {/* Footer */}
       <footer className="bg-card border-t border-border py-8">
         <div className="container mx-auto px-4 text-center">
-          <p className="text-muted-foreground">© 2025 Direktori Pasar Malam Malaysia. Projek sumber terbuka untuk komuniti.</p>
+          <p className="text-muted-foreground">{t.footerText}</p>
         </div>
       </footer>
     </div>

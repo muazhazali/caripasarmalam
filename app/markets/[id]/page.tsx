@@ -164,7 +164,7 @@ export default function MarketPage({ params }: MarketPageProps) {
                         <Badge variant={market.parking.available ? "default" : "secondary"}>
                           {market.parking.available ? t.available : t.notAvailable}
                         </Badge>
-                        {market.parking.accessible && <Badge variant="outline">Mudah Akses</Badge>}
+                        {market.parking.accessible && <Badge variant="outline">{t.accessible}</Badge>}
                       </div>
                       <p className="text-sm text-muted-foreground">{market.parking.notes}</p>
                     </div>
