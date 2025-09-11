@@ -2,7 +2,10 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { useEffect, useState } from "react"
 import { Home, ShoppingBag, Map as MapIcon } from "lucide-react"
+import { useTranslation } from "@/lib/i18n"
+import LanguageSwitcher from "@/components/language-switcher"
 
 function NavLink({ href, label, icon: Icon, isActive }: { href: string; label: string; icon: any; isActive: boolean }) {
   return (
@@ -21,31 +24,50 @@ function NavLink({ href, label, icon: Icon, isActive }: { href: string; label: s
 
 export default function DesktopNavbar() {
   const pathname = usePathname()
+  const [language, setLanguage] = useState(typeof window !== "undefined" ? localStorage.getItem("language") || "ms" : "ms")
+  const t = useTranslation(language)
+
+  useEffect(() => {
+    function handleStorage(e: StorageEvent) {
+      if (e.key === "language" && e.newValue) setLanguage(e.newValue)
+    }
+    window.addEventListener("storage", handleStorage)
+    return () => window.removeEventListener("storage", handleStorage)
+  }, [])
 
   const items = [
-    { href: "/", label: "Nearest", icon: Home },
-    { href: "/markets", label: "Markets", icon: ShoppingBag },
-    { href: "/map", label: "Map", icon: MapIcon },
+    { href: "/", label: t.home, icon: Home },
+    { href: "/markets", label: t.markets, icon: ShoppingBag },
+    { href: "/map", label: t.mapView, icon: MapIcon },
   ]
 
   return (
     <header className="sticky top-0 z-40 hidden border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 md:block">
       <div className="mx-auto max-w-5xl px-4">
-        <div className="flex h-14 items-center justify-between">
+        <div className="flex h-14 items-center justify-between gap-3">
           <Link href="/" className="font-semibold text-foreground hover:text-primary transition-colors">
-            Cari Pasar Malam
+            {t.appTitle}
           </Link>
-          <nav className="flex items-center gap-1" aria-label="Primary">
-            {items.map((item) => (
-              <NavLink
-                key={item.href}
-                href={item.href}
-                label={item.label}
-                icon={item.icon}
-                isActive={pathname === item.href}
-              />
-            ))}
-          </nav>
+          <div className="flex items-center gap-3">
+            <nav className="flex items-center gap-1" aria-label="Primary">
+              {items.map((item) => (
+                <NavLink
+                  key={item.href}
+                  href={item.href}
+                  label={item.label}
+                  icon={item.icon}
+                  isActive={pathname === item.href}
+                />
+              ))}
+            </nav>
+            <LanguageSwitcher
+              currentLanguage={language}
+              onLanguageChange={(code) => {
+                setLanguage(code)
+                if (typeof window !== "undefined") localStorage.setItem("language", code)
+              }}
+            />
+          </div>
         </div>
       </div>
     </header>
