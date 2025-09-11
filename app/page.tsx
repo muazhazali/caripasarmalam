@@ -223,26 +223,26 @@ export default function HomePage() {
           </div>
 
           {/* Quick Stats (desktop only) */}
-          <div className="hidden md:grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+          <div className="hidden md:grid md:grid-cols-3 gap-4 max-w-3xl mx-auto">
             <Card>
-              <CardContent className="p-4 md:p-6 text-center">
-                <MapPin className="h-8 w-8 text-primary mx-auto mb-2" />
-                <div className="text-2xl font-bold text-foreground">{sampleMarkets.length}+</div>
-                <div className="text-muted-foreground">Jumlah Pasar Tersenarai</div>
+              <CardContent className="p-3 md:p-4 text-center">
+                <MapPin className="h-6 w-6 text-primary mx-auto mb-1.5" />
+                <div className="text-xl font-bold text-foreground">{sampleMarkets.length}+</div>
+                <div className="text-muted-foreground text-sm">{t.statsMarketsListed}</div>
               </CardContent>
             </Card>
             <Card>
-              <CardContent className="p-4 md:p-6 text-center">
-                <Clock className="h-8 w-8 text-primary mx-auto mb-2" />
-                <div className="text-2xl font-bold text-foreground">7 Hari</div>
-                <div className="text-muted-foreground">Liputan Mingguan</div>
+              <CardContent className="p-3 md:p-4 text-center">
+                <Clock className="h-6 w-6 text-primary mx-auto mb-1.5" />
+                <div className="text-xl font-bold text-foreground">7 {t.days}</div>
+                <div className="text-muted-foreground text-sm">{t.statsWeeklyCoverage}</div>
               </CardContent>
             </Card>
             <Card>
-              <CardContent className="p-4 md:p-6 text-center">
-                <Users className="h-8 w-8 text-primary mx-auto mb-2" />
-                <div className="text-2xl font-bold text-foreground">13 Negeri</div>
-                <div className="text-muted-foreground">Seluruh Negara</div>
+              <CardContent className="p-3 md:p-4 text-center">
+                <Users className="h-6 w-6 text-primary mx-auto mb-1.5" />
+                <div className="text-xl font-bold text-foreground">13 {t.states}</div>
+                <div className="text-muted-foreground text-sm">{t.statsNationwide}</div>
               </CardContent>
             </Card>
           </div>

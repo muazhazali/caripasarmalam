@@ -12,6 +12,13 @@ export interface Translations {
   mapView: string
   backToDirectory: string
 
+  // Quick Stats
+  statsMarketsListed: string
+  statsWeeklyCoverage: string
+  statsNationwide: string
+  days: string
+  states: string
+
   // Search & Filters
   searchPlaceholder: string
   allStates: string
@@ -122,6 +129,13 @@ export const translations: Record<string, Translations> = {
     mapView: "Map View",
     backToDirectory: "Back to Directory",
 
+    // Quick Stats
+    statsMarketsListed: "Markets Listed",
+    statsWeeklyCoverage: "Weekly Coverage",
+    statsNationwide: "Nationwide",
+    days: "days",
+    states: "states",
+
     // Search & Filters
     searchPlaceholder: "Search markets, locations, or addresses...",
     allStates: "All States",
@@ -229,6 +243,13 @@ export const translations: Record<string, Translations> = {
     markets: "Pasar",
     mapView: "Paparan Peta",
     backToDirectory: "Kembali ke Direktori",
+
+    // Quick Stats
+    statsMarketsListed: "Jumlah Pasar Tersenarai",
+    statsWeeklyCoverage: "Liputan Mingguan",
+    statsNationwide: "Seluruh Negara",
+    days: "hari",
+    states: "negeri",
 
     // Search & Filters
     searchPlaceholder: "Cari pasar, lokasi, atau alamat...",
