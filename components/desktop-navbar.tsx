@@ -4,7 +4,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
 import { Home, ShoppingBag, Map as MapIcon } from "lucide-react"
-import { useTranslation } from "@/lib/i18n"
+import { useLanguage } from "@/components/language-provider"
 import LanguageSwitcher from "@/components/language-switcher"
 
 function NavLink({ href, label, icon: Icon, isActive }: { href: string; label: string; icon: any; isActive: boolean }) {
@@ -24,16 +24,7 @@ function NavLink({ href, label, icon: Icon, isActive }: { href: string; label: s
 
 export default function DesktopNavbar() {
   const pathname = usePathname()
-  const [language, setLanguage] = useState(typeof window !== "undefined" ? localStorage.getItem("language") || "ms" : "ms")
-  const t = useTranslation(language)
-
-  useEffect(() => {
-    function handleStorage(e: StorageEvent) {
-      if (e.key === "language" && e.newValue) setLanguage(e.newValue)
-    }
-    window.addEventListener("storage", handleStorage)
-    return () => window.removeEventListener("storage", handleStorage)
-  }, [])
+  const { language, setLanguage, t } = useLanguage()
 
   const items = [
     { href: "/", label: t.home, icon: Home },
@@ -60,13 +51,7 @@ export default function DesktopNavbar() {
                 />
               ))}
             </nav>
-            <LanguageSwitcher
-              currentLanguage={language}
-              onLanguageChange={(code) => {
-                setLanguage(code)
-                if (typeof window !== "undefined") localStorage.setItem("language", code)
-              }}
-            />
+            <LanguageSwitcher currentLanguage={language} onLanguageChange={setLanguage} />
           </div>
         </div>
       </div>

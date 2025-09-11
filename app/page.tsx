@@ -21,8 +21,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import Link from "next/link"
 import { getAllMarkets } from "@/lib/markets-data"
-import { useTranslation } from "@/lib/i18n"
-import LanguageSwitcher from "@/components/language-switcher"
+import { useLanguage } from "@/components/language-provider"
 
 const malaysianStates = [
   "Semua Negeri",
@@ -59,10 +58,7 @@ function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: numbe
 
 export default function HomePage() {
   const sampleMarkets = getAllMarkets()
-  const [language, setLanguage] = useState(
-    typeof window !== "undefined" ? localStorage.getItem("language") || "ms" : "ms",
-  )
-  const t = useTranslation(language)
+  const { t } = useLanguage()
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedState, setSelectedState] = useState("All States")
   const [selectedDay, setSelectedDay] = useState("All Days")

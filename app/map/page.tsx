@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import MarketsMap from "@/components/markets-map"
 import { getAllMarkets, type Market } from "@/lib/markets-data"
+import { useLanguage } from "@/components/language-provider"
 
 const malaysianStates = [
   "Semua Negeri",
@@ -31,6 +32,7 @@ const malaysianStates = [
 
 export default function MapPage() {
   const allMarkets = getAllMarkets()
+  const { t } = useLanguage()
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedState, setSelectedState] = useState("All States")
   const [selectedMarket, setSelectedMarket] = useState<Market | null>(null)
@@ -58,7 +60,7 @@ export default function MapPage() {
             <div className="flex-1 relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
               <Input
-                placeholder="Cari pasar..."
+                placeholder={t.searchPlaceholder}
                 className="pl-10 h-10 md:h-11"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -77,7 +79,7 @@ export default function MapPage() {
               </SelectContent>
             </Select>
           </div>
-          <div className="mt-2 text-sm text-muted-foreground">Menunjukkan {filteredMarkets.length} pasar pada peta</div>
+          <div className="mt-2 text-sm text-muted-foreground">{t.showingResults} {filteredMarkets.length} {t.markets}</div>
         </div>
       </div>
 

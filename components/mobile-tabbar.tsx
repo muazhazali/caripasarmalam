@@ -4,7 +4,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
 import { Home, ShoppingBag, Map as MapIcon, Globe } from "lucide-react"
-import { useTranslation } from "@/lib/i18n"
+import { useLanguage } from "@/components/language-provider"
 import { Button } from "@/components/ui/button"
 
 function TabButton({
@@ -34,16 +34,7 @@ function TabButton({
 
 export default function MobileTabBar() {
   const pathname = usePathname()
-  const [language, setLanguage] = useState(typeof window !== "undefined" ? localStorage.getItem("language") || "ms" : "ms")
-  const t = useTranslation(language)
-
-  useEffect(() => {
-    function handleStorage(e: StorageEvent) {
-      if (e.key === "language" && e.newValue) setLanguage(e.newValue)
-    }
-    window.addEventListener("storage", handleStorage)
-    return () => window.removeEventListener("storage", handleStorage)
-  }, [])
+  const { language, setLanguage, t } = useLanguage()
 
   const tabs = [
     { href: "/", label: t.home, icon: Home },
@@ -74,7 +65,6 @@ export default function MobileTabBar() {
             onClick={() => {
               const next = language === "ms" ? "en" : "ms"
               setLanguage(next)
-              if (typeof window !== "undefined") localStorage.setItem("language", next)
             }}
           >
             <Globe className="h-5 w-5" />
