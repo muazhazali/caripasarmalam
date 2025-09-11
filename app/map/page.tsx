@@ -49,28 +49,7 @@ export default function MapPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header (slim) */}
-      <header className="border-b border-border bg-card">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center gap-3">
-            <Link href="/markets">
-              <Button variant="ghost" size="sm">
-                <ArrowLeft className="h-4 w-4 mr-2" />
-                Kembali
-              </Button>
-            </Link>
-            <div className="flex-1">
-              <h1 className="text-xl md:text-2xl font-bold text-foreground">Peta Pasar</h1>
-            </div>
-            <Link href="/markets" className="hidden md:inline-flex">
-              <Button variant="outline">
-                <List className="h-4 w-4 mr-2" />
-                Paparan Senarai
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </header>
+      
 
       {/* Search Controls */}
       <div className="border-b border-border bg-card">

@@ -133,24 +133,7 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header (slim on mobile) */}
-      <header className="border-b border-border bg-card">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <h1 className="text-xl md:text-3xl font-bold text-foreground">{t.appTitle}</h1>
-            <nav className="flex gap-2 items-center">
-              <LanguageSwitcher
-                currentLanguage={language}
-                onLanguageChange={(code) => {
-                  setLanguage(code)
-                  if (typeof window !== "undefined") localStorage.setItem("language", code)
-                }}
-              />
-            </nav>
-          </div>
-          <p className="text-muted-foreground mt-1 hidden md:block">{t.homeSubtitle}</p>
-        </div>
-      </header>
+      
 
       {/* Hero Section */}
       <section className="bg-gradient-to-b from-card to-background py-8 md:py-16">

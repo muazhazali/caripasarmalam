@@ -7,6 +7,7 @@ import { Analytics } from "@vercel/analytics/next"
 import { Suspense } from "react"
 import "./globals.css"
 import MobileTabBar from "@/components/mobile-tabbar"
+import DesktopNavbar from "@/components/desktop-navbar"
 
 const sourceSansPro = Source_Sans_3({
   subsets: ["latin"],
@@ -34,6 +35,7 @@ export default function RootLayout({
   return (
     <html lang="ms">
       <body className={`font-sans ${sourceSansPro.variable} ${playfairDisplay.variable} ${GeistMono.variable}`}>
+        <DesktopNavbar />
         <Suspense fallback={null}>
           <div className="md:pb-0 pb-16">{children}</div>
         </Suspense>

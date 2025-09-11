@@ -169,36 +169,7 @@ export default function MarketsPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header (slim) */}
-      <header className="border-b border-border bg-card">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <Link href="/" className="text-xl md:text-3xl font-bold text-foreground hover:text-primary transition-colors">
-              {t.appTitle}
-            </Link>
-            <div className="flex items-center gap-2">
-              <Button onClick={findNearestMarkets} variant="outline" className="gap-2 bg-transparent hidden md:inline-flex">
-                <Navigation2 className="h-4 w-4" />
-                <span className="hidden sm:inline">{t.findNearest}</span>
-              </Button>
-              <Link href="/map" className="hidden md:inline-flex">
-                <Button variant="outline">
-                  <Map className="h-4 w-4 mr-2" />
-                  {t.mapView}
-                </Button>
-              </Link>
-              <LanguageSwitcher
-                currentLanguage={language}
-                onLanguageChange={(code) => {
-                  setLanguage(code)
-                  if (typeof window !== "undefined") localStorage.setItem("language", code)
-                }}
-              />
-            </div>
-          </div>
-          <p className="text-muted-foreground mt-1 hidden md:block">{t.directorySubtitle}</p>
-        </div>
-      </header>
+      
 
       <div className="container mx-auto px-4 py-8">
         {/* Search and Filters */}
