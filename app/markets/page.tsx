@@ -314,17 +314,57 @@ export default function MarketsPage() {
           </Card>
 
           {/* Results Header */}
-          <div className="flex items-center justify-between mb-6">
-            <div>
-              <h2 className="text-2xl font-bold text-foreground">{t.directoryTitle}</h2>
-              <p className="text-muted-foreground">
-                {t.showingResults} {filteredAndSortedMarkets.length} {t.of} {sampleMarkets.length} {t.markets}
-              </p>
+          <div className="mb-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-2xl font-bold text-foreground">{t.directoryTitle}</h2>
+                <p className="text-muted-foreground">
+                  {t.showingResults} {filteredAndSortedMarkets.length} {t.of} {sampleMarkets.length} {t.markets}
+                </p>
+              </div>
+              {/* Desktop controls */}
+              <div className="hidden md:flex items-center gap-2">
+                <Select value={sortBy} onValueChange={setSortBy}>
+                  <SelectTrigger className="w-48">
+                    <ArrowUpDown className="h-4 w-4 mr-2" />
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="name">{t.sortByName}</SelectItem>
+                    <SelectItem value="state">{t.sortByLocation}</SelectItem>
+                    <SelectItem value="size">{t.sortByStallCount}</SelectItem>
+                    <SelectItem value="area">{t.sortByAreaSize}</SelectItem>
+                    {userLocation && <SelectItem value="distance">{t.sortByDistance}</SelectItem>}
+                  </SelectContent>
+                </Select>
+                <div className="flex border rounded-md">
+                  <Button
+                    variant={viewMode === "grid" ? "default" : "ghost"}
+                    size="sm"
+                    onClick={() => setViewMode("grid")}
+                    className="rounded-r-none"
+                    aria-label="Grid view"
+                  >
+                    <Grid className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    variant={viewMode === "list" ? "default" : "ghost"}
+                    size="sm"
+                    onClick={() => setViewMode("list")}
+                    className="rounded-l-none"
+                    aria-label="List view"
+                  >
+                    <List className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
             </div>
-            <div className="flex items-center gap-2">
+
+            {/* Mobile controls */}
+            <div className="mt-3 grid grid-cols-1 gap-2 md:hidden">
               <Select value={sortBy} onValueChange={setSortBy}>
-                <SelectTrigger className="w-48">
-                  <ArrowUpDown className="h-4 w-4 mr-2" />
+                <SelectTrigger className="h-11 w-full text-base">
+                  <ArrowUpDown className="h-5 w-5 mr-2" />
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -335,22 +375,22 @@ export default function MarketsPage() {
                   {userLocation && <SelectItem value="distance">{t.sortByDistance}</SelectItem>}
                 </SelectContent>
               </Select>
-              <div className="flex border rounded-md">
+              <div className="flex border rounded-md overflow-hidden">
                 <Button
                   variant={viewMode === "grid" ? "default" : "ghost"}
-                  size="sm"
+                  className="h-11 flex-1 rounded-none"
                   onClick={() => setViewMode("grid")}
-                  className="rounded-r-none"
+                  aria-label="Grid view"
                 >
-                  <Grid className="h-4 w-4" />
+                  <Grid className="h-5 w-5" />
                 </Button>
                 <Button
                   variant={viewMode === "list" ? "default" : "ghost"}
-                  size="sm"
+                  className="h-11 flex-1 rounded-none border-l"
                   onClick={() => setViewMode("list")}
-                  className="rounded-l-none"
+                  aria-label="List view"
                 >
-                  <List className="h-4 w-4" />
+                  <List className="h-5 w-5" />
                 </Button>
               </div>
             </div>
