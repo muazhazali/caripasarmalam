@@ -160,7 +160,7 @@ export default function HomePage() {
             {t.heroDescription}
           </p>
 
-          <div className="max-w-4xl mx-auto mb-8">
+          <div className="max-w-4xl mx-auto mb-4 md:mb-8">
             <div className="flex flex-col gap-3 md:gap-4">
               <div className="flex gap-2">
                 <div className="flex-1 relative">
@@ -249,7 +249,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="py-16">
+      <section className="py-8 md:py-16">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between mb-6 md:mb-8">
             <h3 className="text-2xl md:text-3xl font-bold text-foreground">
