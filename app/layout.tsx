@@ -5,6 +5,7 @@ import { Playfair_Display } from "next/font/google"
 import { GeistMono } from "geist/font/mono"
 import { Analytics } from "@vercel/analytics/next"
 import { Suspense } from "react"
+import { cookies } from "next/headers"
 import "./globals.css"
 import MobileTabBar from "@/components/mobile-tabbar"
 import DesktopNavbar from "@/components/desktop-navbar"
@@ -28,15 +29,18 @@ export const metadata: Metadata = {
   generator: "v0.app",
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const cookieStore = await cookies()
+  const cookieLang = cookieStore.get("language")?.value
+  const initialLanguage = cookieLang === "en" ? "en" : "ms"
   return (
-    <html lang="ms">
+    <html lang={initialLanguage}>
       <body className={`font-sans ${sourceSansPro.variable} ${playfairDisplay.variable} ${GeistMono.variable}`}>
-        <LanguageProvider>
+        <LanguageProvider initialLanguage={initialLanguage}>
           <DesktopNavbar />
           <Suspense fallback={null}>
             <div className="md:pb-0 pb-16">{children}</div>
