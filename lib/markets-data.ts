@@ -49,6 +49,14 @@ export const marketsData: Market[] = [
       "One of the most popular night markets in Kuala Lumpur, Pasar Malam Taman Melawati offers a wide variety of local street food, fresh produce, and household items. Known for its vibrant atmosphere and authentic Malaysian cuisine.",
     schedule: [
       {
+        day: "Tuesday",
+        sessions: [{ start: "17:00", end: "22:00", note: "Night market" }],
+      },
+      {
+        day: "Thursday",
+        sessions: [{ start: "17:00", end: "22:00", note: "Night market" }],
+      },
+      {
         day: "Saturday",
         sessions: [
           { start: "07:00", end: "11:00", note: "Morning market" },

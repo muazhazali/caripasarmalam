@@ -5,6 +5,7 @@ import {
   Search,
   MapPin,
   Clock,
+  CalendarDays,
   Users,
   Filter,
   Car,
@@ -87,6 +88,47 @@ export default function HomePage() {
         // Fallback is handled by showing all markets; no blocking dialog
       },
       { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 },
+    )
+  }
+
+  const dayOrder: string[] = [
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday",
+  ]
+
+  function getLocalizedDay(englishDay: string): string {
+    const key = englishDay.toLowerCase() as keyof typeof t
+    return (t[key] as unknown as string) || englishDay
+  }
+
+  function renderScheduleBadges(market: ReturnType<typeof getAllMarkets>[number]) {
+    const ordered = [...market.schedule].sort(
+      (a, b) => dayOrder.indexOf(a.day) - dayOrder.indexOf(b.day),
+    )
+    return (
+      <div className="flex flex-wrap gap-2 mb-4">
+        {ordered.map((sch) => {
+          const times = sch.sessions
+            .map((s) => `${s.start}–${s.end}`)
+            .join(", ")
+          const localizedDay = getLocalizedDay(sch.day)
+          const aria = `${localizedDay}, ${times}`
+          return (
+            <Badge key={`${market.id}-${sch.day}`} variant="outline" className="flex items-center gap-1" aria-label={aria}>
+              <CalendarDays className="h-3.5 w-3.5" aria-hidden="true" />
+              <span className="whitespace-nowrap">{localizedDay}</span>
+              <span className="text-muted-foreground">•</span>
+              <Clock className="h-3.5 w-3.5" aria-hidden="true" />
+              <span className="whitespace-nowrap">{times}</span>
+            </Badge>
+          )
+        })}
+      </div>
     )
   }
 
@@ -303,11 +345,11 @@ export default function HomePage() {
                       </div>
                       <CardTitle className="text-lg">{market.name}</CardTitle>
                       <CardDescription>
-                        {market.district} • {market.schedule[0]?.day} {market.schedule[0]?.sessions[0]?.start}-
-                        {market.schedule[0]?.sessions[market.schedule[0]?.sessions.length - 1]?.end}
+                        {market.district}
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
+                      {renderScheduleBadges(market)}
                       <div className="flex flex-wrap gap-3 text-sm text-muted-foreground mb-4">
                         {market.parking.available && (
                           <div className="flex items-center gap-1">
