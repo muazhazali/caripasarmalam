@@ -1,0 +1,759 @@
+name,address,city/town,district,postcode,state,latitude,longitude,gmaps_link,operating_day,operating_hour,parking,area_m2,amenities,status,total_shop,source,local_authorities,category
+Pasar Malam Taman Melawati,"Pusat Bandar, 311, Lorong Selangor, Taman Melawati, 53100 Kuala Lumpur, Wilayah Persekutuan Kuala Lumpur",,Kuala Lumpur,,WP Kuala Lumpur,3.2104933,101.7493301,https://maps.app.goo.gl/QmFnDaXLgfLxY8LM8,"Tuesday, Thursday, Saturday",4-10pm,1 star,"4,590.72 m²","Toilet, Prayer Room",Active,,,,
+"Pasar Malam Jalan 30/10A, Taman Perindustrian IKS",Taman Perindustrian IKS,,Batu,68100,WP Kuala Lumpur,3.221393,101.68881,https://maps.app.goo.gl/KvXCzyGonwKktbg88,Jumaat,6-10pm,,,,,77,https://ecentral.my/pasar-malam-kl/,,
+Pasar Malam Jalan Kangsar Off Jalan Ipoh,Taman Rainbow,,Batu,51100,WP Kuala Lumpur,3.1938417,101.6777776,https://maps.app.goo.gl/Kux37PbHoT2yYHVb7,Isnin,6-10pm,,,,,117,https://ecentral.my/pasar-malam-kl/,,
+Pasar Malam PKNS Jalan Kuching,Jinjang Selatan,,Batu,54200,WP Kuala Lumpur,3.199854,101.6688947,https://maps.app.goo.gl/KAebVGCzmPwf1jng8,Khamis,6-10pm,,,,,138,https://ecentral.my/pasar-malam-kl/,,
+Pasar Malam PPR Batu Muda,"Jalan 2/12a, Sentul",,Batu,51200,WP Kuala Lumpur,"3.2056782,101.6792353",,https://maps.app.goo.gl/dtBKiiPAzRBWRMTw6,Khamis & Selasa,"4.30pm-10.30pm, 4.30pm-10.30pm",,,,,276,https://ecentral.my/pasar-malam-kl/,,
+Pasar Malam Sentul Pasar Dalam 4B,"Jalan 1/48a, Bandar Baru Sentul",,Batu,51000,WP Kuala Lumpur,"3.1868429,101.6959855",,https://maps.app.goo.gl/73HuJG6uHwV7nxfr6,Jumaat,5-10pm,,,,,89,https://ecentral.my/pasar-malam-kl/,,
+Pasar Malam Taman Beringin,,,Batu,,WP Kuala Lumpur,"3.2189819,101.6618913",,https://maps.app.goo.gl/XPC3o4eQsFXUujta9,Rabu,6-10pm,,,,,150,https://ecentral.my/pasar-malam-kl/,,
+Pasar Malam Taman Dato Senu,"Jalan Dato Senu 20, Taman Dato Senu",,Batu,51000,WP Kuala Lumpur,"3.1939448,101.6936048",,https://maps.app.goo.gl/g3MW46tLMwRud2hw6,Selasa,6-10pm,,,,,158,https://ecentral.my/pasar-malam-kl/,,
+Pasar Malam Taman Intan Baiduri,,,Batu,,WP Kuala Lumpur,,,,Selasa,,,,,,80,https://ecentral.my/pasar-malam-kl/,,
+"Pasar Malam Jalan Manjoi, Taman Kok Lian",Taman Kok Lian,,Batu,51200,WP Kuala Lumpur,"3.1987756,101.6748066",,https://maps.app.goo.gl/k5T6wyeMv8o9y1Lh6,Selasa,,,,,,50,https://ecentral.my/pasar-malam-kl/,,
+Pasar Malam Taman Koperasi Polis Fasa  2,"Jalan 28/10, Taman Koperasi Polis",,Batu,68100,WP Kuala Lumpur,"3.2214084,101.6895423",,https://maps.app.goo.gl/vT2HaR7HRnVvu4k39,Isnin,,,,,,70,https://ecentral.my/pasar-malam-kl/,,
+Pasar Malam Taman Koperasi Polis Fasa  1,,,Batu,,WP Kuala Lumpur,,,,Sabtu,,,,,,150,https://ecentral.my/pasar-malam-kl/,,
+Pasar Malam Taman Mastiara,"62, Jalan 15/18a, Taman Mastiara",,Batu,51200,WP Kuala Lumpur,"3.2095226,101.6740388",,https://maps.app.goo.gl/Xzu1gxZgD14W4Bry9,Jumaat,,,,,,45,https://ecentral.my/pasar-malam-kl/,,
+Pasar Malam Taman Sri Murni,Taman Sri Murni,,Batu,68100,WP Kuala Lumpur,"3.2349203,101.660271",,,Isnin,,,,,,31,https://ecentral.my/pasar-malam-kl/,,
+"Pasar Malam Jalan 20/2A, Taman Wilayah, Selayang",,,Batu,,WP Kuala Lumpur,,,,Jumaat,,,,,,117,https://ecentral.my/pasar-malam-kl/,,
+"Pasar Malam Jalan Sibu 6, Taman Wahyu",Taman Wahyu,,Batu,68100,WP Kuala Lumpur,"3.2120527,101.6656787",,,Jumaat,,,,,,15,https://ecentral.my/pasar-malam-kl/,,
+"Pasar Malam Flat Sri Terengganu, Sentul",,,Batu,,WP Kuala Lumpur,,,,*Tiada maklumat,,,,,,,https://ecentral.my/pasar-malam-kl/,,
+"Pasar Malam Jalan K, Taman Bat, Segambut",,,Batu,,WP Kuala Lumpur,,,,*Tiada maklumat,,,,,,,https://ecentral.my/pasar-malam-kl/,,
+Pasar Malam Pekan Sg Besi,Sungai Besi,,Bdr Tun Razak,57000,WP Kuala Lumpur,"3.0610562,101.7088991",,https://maps.app.goo.gl/vn5nERpH2YgvXeff7,Rabu & Sabtu,"5-10pm, 5-10pm",,,,,320,https://ecentral.my/pasar-malam-kl/,,
+Pasar Malam Desa Tun Razak,Desa Tun Razak,,Bdr Tun Razak,56000,WP Kuala Lumpur,"3.0798325,101.7144033",,,Jumaat,,,,,,25,https://ecentral.my/pasar-malam-kl/,,
+Pasar Malam Jalan Bangsawan,Bandar Tun Razak,,Bdr Tun Razak,56000,WP Kuala Lumpur,"3.085832192068157, 101.72169124893917",,https://maps.app.goo.gl/7oNgcH9YmGD9jT4r6,Selasa,,,,,,75,https://ecentral.my/pasar-malam-kl/,,
+Pasar Malam Jalan Jujur,Jalan Jujur 1,,Bdr Tun Razak,56000,WP Kuala Lumpur,"3.08801523211417, 101.72181013745377",,https://maps.app.goo.gl/zo6sxNiM6xFA59bf6,Isnin & Khamis,,,,,,280,https://ecentral.my/pasar-malam-kl/,,
+Pasar Malam Kg Malaysia Tambahan,"Jalan 9/141, Kampung Malaysia Tambahan",,Bdr Tun Razak,57100,WP Kuala Lumpur,"3.0777403322642973, 101.7067323658968",,https://maps.app.goo.gl/23x7eUzjKmEQCyVv8,Rabu,,,,,,17,https://ecentral.my/pasar-malam-kl/,,
+Pasar Malam Seri Penara,,,Bdr Tun Razak,,WP Kuala Lumpur,,,,Isnin & Jumaat,,,,,,35,https://ecentral.my/pasar-malam-kl/,,
+"Pasar Malam Jalan 4/146, Bandar Tasek Selatan",,,Bdr Tun Razak,,WP Kuala Lumpur,,,,*Tiada maklumat,,,,,,,https://ecentral.my/pasar-malam-kl/,,
+Pasar Malam Jalan Berhala,"2, Jalan Berhala, Brickfields",,Bukit Bintang,50470,WP Kuala Lumpur,"3.1303108704577176, 101.68776684562529",,https://maps.app.goo.gl/ub3WFQaE71Ex2rVu9,Khamis,,,,,,180,https://ecentral.my/pasar-malam-kl/,,
+Pasar Malam Lorong Tuanku Abd Rahman,City Centre,,Bukit Bintang,50100,WP Kuala Lumpur,"3.1548452989398563, 101.69685442719454",,https://maps.app.goo.gl/4hJaW8BPsFy1h3S6A,Sabtu,,,,,,550,https://ecentral.my/pasar-malam-kl/,,
+Pasar Malam Lorong Tar,"7, Lorong Tuanku Abdul Rahman, City Centre",,Bukit Bintang,50100,WP Kuala Lumpur,"3.153493193393134, 101.69693874189527",,https://maps.app.goo.gl/iq1Rq1n6micT8sr68,Sabtu,,,,,,550,https://ecentral.my/pasar-malam-kl/,,
+Pasar Malam Taman Ikan Emas,Taman Ikan Emas,,Bdr Tun Razak,56000,WP Kuala Lumpur,"3.116363313333354, 101.71942688547232",,https://maps.app.goo.gl/wzEoLbApqzGyPx9s9,Khamis,,,,,,56,https://ecentral.my/pasar-malam-kl/,,
+Pasar Malam Flat Sri Selangor,,,Cheras,,WP Kuala Lumpur,,,,Ahad,,,,,,180,https://ecentral.my/pasar-malam-kl/,,
+Pasar Malam Jalan Kas Kas,"Jalan Kaskas 3, Taman Cheras",,Cheras,56100,WP Kuala Lumpur,"3.100508667546798, 101.74205020250699",,https://maps.app.goo.gl/vpQQHu5RXi7mTvZRA,Khamis,,,,,,380,https://ecentral.my/pasar-malam-kl/,,
+Pasar Malam Lorong Jubilee,,,Cheras,,WP Kuala Lumpur,,,,Jumaat,,,,,,100,https://ecentral.my/pasar-malam-kl/,,
+Pasar Malam Miharja Fasa 1,,,Cheras,,WP Kuala Lumpur,,,,*Tiada maklumat,,,,,,,https://ecentral.my/pasar-malam-kl/,,
+Pasar Malam Miharja Fasa 2,"Jalan Lombong, Taman Miharja",,Cheras,55200,WP Kuala Lumpur,"3.124198811741528, 101.72351755886616",,https://maps.app.goo.gl/VCtpxqKReNarpcfr9,Isnin,,,,,,,https://ecentral.my/pasar-malam-kl/,,
+Pasar Malam PPR Sri Alam Fasa 2,,,Cheras,,WP Kuala Lumpur,,,,Khamis,,,,,,,https://ecentral.my/pasar-malam-kl/,,
+Pasar Malam Taman Midah,,,Cheras,56000,WP Kuala Lumpur,"3.102410583341092, 101.73369518806207",,https://maps.app.goo.gl/567Sq546nEhE5dhV9,Sabtu,,,,,,,https://ecentral.my/pasar-malam-kl/,,
+Pasar Malam Taman Pertama,"Jalan Selar, Taman Permata",,Cheras,56100,WP Kuala Lumpur,"3.1141311477384277, 101.73123818033204",,https://maps.app.goo.gl/Mw6xVW39kFsw13c68,Selasa,,,,,,,https://ecentral.my/pasar-malam-kl/,,
+Pasar Malam Taman Segar,"Jalan Manis 4, Taman Segar",,Cheras,56100,WP Kuala Lumpur,"3.0886497966512025, 101.74358878682233",,https://maps.app.goo.gl/XfYcvEQkRVri3pXKA,Jumaat,,,,,,,https://ecentral.my/pasar-malam-kl/,,
+Pasar Malam Taman Tynton View,"Jalan Mutiara Barat 6, Taman Mutiara Barat",,Cheras,56000,WP Kuala Lumpur,"3.0893817340787066, 101.73538570876323",,https://maps.app.goo.gl/osuMWZwBFcYcRtNv7,Khamis,,,,,,,https://ecentral.my/pasar-malam-kl/,,
+Pasar Malam Jalan 1/40 Taman Pusat Kepong,"Jalan 3/40, Taman Pusat Kepong",,Kepong,52000,WP Kuala Lumpur,"3.2027847199175548, 101.65523609103056",,https://maps.app.goo.gl/apJtgz92eatv4SxEA,Khamis,,,,,,,https://ecentral.my/pasar-malam-kl/,,
+"Pasar Malam Jalan 133, Kepong",,,Kepong,,WP Kuala Lumpur,,,,Selasa,,,,,,,https://ecentral.my/pasar-malam-kl/,,
+"Pasar Malam Jalan Kelab, Jinjang",,,Kepong,,WP Kuala Lumpur,,,,Sabtu,,,,,,,https://ecentral.my/pasar-malam-kl/,,
+Pasar Malam Jalan Metro Prima 3,,,Kepong,,WP Kuala Lumpur,"3.2119208067252276, 101.64218371433796",,https://maps.app.goo.gl/M229PL5wXV6Q56Pv5,Khamis,,,,,,,https://ecentral.my/pasar-malam-kl/,,
+Pasar Malam Mergastua,Jalan Mergastua Kepong Baru,,Kepong,52100,WP Kuala Lumpur,"3.201802248421376, 101.64569663789929",,https://maps.app.goo.gl/nLbfsFim2JKHbi2T8,Ahad,5-10pm,,,,,,https://ecentral.my/pasar-malam-kl/,,
+Pasar Malam Taman Titikaya,,,Kepong,,WP Kuala Lumpur,,,,Ahad,,,,,,,https://ecentral.my/pasar-malam-kl/,,
+Pasar Malam Flat Sri Pahang,,,Lembah Pantai,,WP Kuala Lumpur,,,,Rabu,,,,,,,https://ecentral.my/pasar-malam-kl/,,
+Pasar Malam Jalan Ang Seng,,,Lembah Pantai,,WP Kuala Lumpur,,,,Jumaat,,,,,,,https://ecentral.my/pasar-malam-kl/,,
+Pasar Malam Jalan Telawi,Bangsar,,Lembah Pantai,59100,WP Kuala Lumpur,"3.1300452038117594, 101.6720675403028",,https://maps.app.goo.gl/ekEVBXpMX3xmJwn2A,Ahad,4.30-9pm,,,,,,https://ecentral.my/pasar-malam-kl/,,
+Pasar Malam Kg Abdullah Hukum,,,Lembah Pantai,,WP Kuala Lumpur,,,,Khamis,,,,,,,https://ecentral.my/pasar-malam-kl/,,
+"Pasar Malam Taman Sri Sentosa, Klang Lama","Jalan Seri Sentosa 12, Taman Sri Sentosa",,Lembah Pantai,58000,WP Kuala Lumpur,"3.072345890257532, 101.65175877092953",,https://maps.app.goo.gl/T9HVSQEDxmWBhdUdA,Khamis,,,,,,,https://ecentral.my/pasar-malam-kl/,,
+Pasar Malam Vista Angkasa,Pantai Dalam,,Lembah Pantai,59200,WP Kuala Lumpur,"3.113630170821574, 101.66183321737118",,https://maps.app.goo.gl/CnVFVN7DshnHiS317,Isnin & Jumaat,"5-10pm, 5-10pm",,,,,,https://ecentral.my/pasar-malam-kl/,,
+Pasar Malam Jalan Pantai Permai,,,Lembah Pantai,,WP Kuala Lumpur,,,,Rabu,,,,,,,https://ecentral.my/pasar-malam-kl/,,
+"Pasar Malam Jalan Ang Seng, Brickfield",,,Lembah Pantai,,WP Kuala Lumpur,,,,*Tiada maklumat,,,,,,,https://ecentral.my/pasar-malam-kl/,,
+Pasar Malam Jalan Kelapa Gading,,,Segambut,,WP Kuala Lumpur,,,,Ahad,,,,,,,https://ecentral.my/pasar-malam-kl/,,
+Pasar Malam Jalan Kg Taman Batu,,,Segambut,,WP Kuala Lumpur,,,,Rabu,,,,,,,https://ecentral.my/pasar-malam-kl/,,
+Pasar Malam Kg Kasipillay,"Jalan Kasipillay, Jalan Ipoh",,Segambut,51200,WP Kuala Lumpur,"3.1764026152194784, 101.68213954227706",,https://maps.app.goo.gl/yJfoq7PCR8vM7eDc7,Selasa,,,,,,,https://ecentral.my/pasar-malam-kl/,,
+Pasar Malam Kg Sungai Penchala,"Jalan Datuk Sulaiman, Kampung Sungai Penchala",,Segambut,60000,WP Kuala Lumpur,"3.161583890338239, 101.62677752892402",,https://maps.app.goo.gl/VXEDuULeDrpgsqXf9,Rabu,,,,,,,https://ecentral.my/pasar-malam-kl/,,
+Pasar Malam Desa Seri Mahkota,,,Segambut,,WP Kuala Lumpur,,,,*Tiada maklumat,,,,,,,https://ecentral.my/pasar-malam-kl/,,
+Pasar Malam Sri Kuching,,,Segambut,,WP Kuala Lumpur,,,,Ahad,,,,,,,https://ecentral.my/pasar-malam-kl/,,
+Pasar Malam Taman Kok Doh,Taman Kok Doh,,Segambut,51200,WP Kuala Lumpur,"3.1959001913451095, 101.66545864646181",,https://maps.app.goo.gl/wZEPeFaeiNQMaMFbA,Jumaat,,,,,,,https://ecentral.my/pasar-malam-kl/,,
+Pasar Malam Taman Sri Bintang,Taman Sri Bintang,,Segambut,51200,WP Kuala Lumpur,"3.186466652800834, 101.64397137237248",,https://maps.app.goo.gl/ZQUFjW4uyLT3vt6h6,Sabtu,,,,,,,https://ecentral.my/pasar-malam-kl/,,
+Pasar Malam Taman Tun Dr Ismail,"Jalan Tun Mohd Fuad 2, Taman Tun Dr Ismail",,Segambut,60000,WP Kuala Lumpur,"3.1411215250155355, 101.62916567445447",,https://maps.app.goo.gl/1B3EBsAB2YWyYDXA6,Ahad,,,,,,,https://ecentral.my/pasar-malam-kl/,,
+Pasar Malam Udang Siar,"Jalan Udang Siar, Taman Sri Segambut",,Segambut,52000,WP Kuala Lumpur,"3.1972423513625063, 101.65724038622596",,https://maps.app.goo.gl/EcbGywNXR8CV7PxYA,Sabtu,,,,,,,https://ecentral.my/pasar-malam-kl/,,
+"Pasar Malam Jalan 1/109F, Taman Desa",Taman Danau Desa,,Seputeh,58100,WP Kuala Lumpur,"3.0980467528010167, 101.68690609125142",,https://maps.app.goo.gl/599xvhzKhZ4KNkKGA,Khamis,,,,,,,https://ecentral.my/pasar-malam-kl/,,
+"Pasar Malam Jalan Hujan Emas, Oug",Taman Overseas Union,,Seputeh,58200,WP Kuala Lumpur,"3.072619907943021, 101.6728633660555",,https://maps.app.goo.gl/V9ax7ku7eaHAvsBFA,Khamis,,,,,,,https://ecentral.my/pasar-malam-kl/,,
+"Pasar Malam Jalan Lazat, Taman Gembira",Taman Bukit Indah,,Seputeh,58200,WP Kuala Lumpur,"3.0778653178894353, 101.68002028296368",,https://maps.app.goo.gl/wSwL5ymE6VQ5vuEV6,Sabtu,,,,,,,https://ecentral.my/pasar-malam-kl/,,
+"Pasar Malam Jalan Selesa, Taman Gembira",,,Seputeh,,WP Kuala Lumpur,,,,Ahad,,,,,,,https://ecentral.my/pasar-malam-kl/,,
+Pasar Malam Kuchai Entrepeneurs Park,"Jalan Kuchai Maju 10, Kuchai Entrepreneurs Park",,Seputeh,58200,WP Kuala Lumpur,"3.0899866137959426, 101.688313887325",,https://maps.app.goo.gl/z6B94mHnrrmXi6EM6,Rabu,,,,,,,https://ecentral.my/pasar-malam-kl/,,
+Pasar Malam Taman Bukit Gembira,"Jalan Gembira, Taman Gembira",,Seputeh,58200,WP Kuala Lumpur,"3.082872501938417, 101.68846878882911",,https://maps.app.goo.gl/LkcLPD5oqUT9GHNi6,Isnin,,,,,,,https://ecentral.my/pasar-malam-kl/,,
+Pasar Malam Taman Desa (Water Park),,,Seputeh,,WP Kuala Lumpur,,,,Jumaat,,,,,,,https://ecentral.my/pasar-malam-kl/,,
+Pasar Malam Taman Sri Endah,,,Seputeh,57000,WP Kuala Lumpur,"3.064801082098846, 101.69162862229815",,https://maps.app.goo.gl/tnQWtMV4gh31CK1R7,Sabtu,,,,,,,https://ecentral.my/pasar-malam-kl/,,
+Pasar Malam Taman Sri Petaling,"Jalan Radin Anum, Bandar Baru Sri Petaling",,Seputeh,57000,WP Kuala Lumpur,"3.0694705392886594, 101.69130767683008",,https://maps.app.goo.gl/SnAaAF3PCejffU4r6,Selasa,,,,,,,https://ecentral.my/pasar-malam-kl/,,
+Pasar Malam Taman Sungai Besi,,,Seputeh,57100,WP Kuala Lumpur,"3.0945198944597134, 101.7002111064538",,https://maps.app.goo.gl/ok7vdqq9cjzZWzk19,Sabtu,,,,,,,https://ecentral.my/pasar-malam-kl/,,
+"Pasar Malam Jalan Gempita, Salak Selatan",,,Seputeh,,WP Kuala Lumpur,,,,*Tiada maklumat,,,,,,,https://ecentral.my/pasar-malam-kl/,,
+Pasar Malam AU2 Taman Keramat,"Jalan AU 2c, AU 2",,Setiawangsa,54200,WP Kuala Lumpur,"3.176863426658847, 101.7494355049776",,https://maps.app.goo.gl/6GaUMEJTBdrVoRGLA,Sabtu,,,,,closed,,https://ecentral.my/pasar-malam-kl/,,
+Pasar Malam Jalan Air Bah,,,Setiawangsa,,WP Kuala Lumpur,,,,Selasa,,,,,,,https://ecentral.my/pasar-malam-kl/,,
+Pasar Malam Jalan Air Panas,,,Setiawangsa,,WP Kuala Lumpur,,,,Isnin,,,,,,,https://ecentral.my/pasar-malam-kl/,,
+Pasar Malam Jalan Rejang,Taman Setapak Jaya,,Setiawangsa,53300,WP Kuala Lumpur,"3.1919787822615353, 101.72568716790869",,https://maps.app.goo.gl/tmps4bhTNmA5en5b9,Sabtu,,,,,,,https://ecentral.my/pasar-malam-kl/,,
+Pasar Malam Jalan Semarak,,,Setiawangsa,,WP Kuala Lumpur,,,,Ahad,,,,,,,https://ecentral.my/pasar-malam-kl/,,
+Pasar Malam Keramat Wangsa,,,Setiawangsa,54200,WP Kuala Lumpur,"3.181534248936776, 101.74876843314985",,https://maps.app.goo.gl/mvWtFoeyrqa1a2Kn7,Sabtu & Selasa,,,,,closed,,https://ecentral.my/pasar-malam-kl/,,
+"Pasar Malam Sek 10, Wangsa Maju",,,Setiawangsa,,WP Kuala Lumpur,,,,Rabu,,,,,,,https://ecentral.my/pasar-malam-kl/,,
+Pasar Malam Taman Sri Rampai,"Jalan 46/26, Taman Sri Rampai",,Setiawangsa,53300,WP Kuala Lumpur,"3.1961528631808926, 101.73228292237246",,https://maps.app.goo.gl/2ueTca6F3joEDjYt7,Khamis,,,,,,,https://ecentral.my/pasar-malam-kl/,,
+Pasar Malam Desa Pandan,"Jalan 2/76a, Desa Pandan",,Titiwangsa,55000,WP Kuala Lumpur,"3.14473695646047, 101.73261794695115",,https://maps.app.goo.gl/AssXZiipRFWLfCwLA,Isnin,,,,,,,https://ecentral.my/pasar-malam-kl/,,
+Pasar Malam Jalan Chemur Pekeliling,,,Titiwangsa,,WP Kuala Lumpur,,,,Selasa,,,,,,,https://ecentral.my/pasar-malam-kl/,,
+Pasar Malam Jalan Perkasa Taman Maluri,"Jalan Perkasa 1, Maluri",,Titiwangsa,55100,WP Kuala Lumpur,"3.1310435867860145, 101.73236125690892",,https://maps.app.goo.gl/Je6p5do1ek5nrHqs7,Ahad,,,,,,,https://ecentral.my/pasar-malam-kl/,,
+Pasar Malam Wirawati,"Jalan Wira, Maluri",,Titiwangsa,55100,WP Kuala Lumpur,"3.1412661413244374, 101.73145880322028",,https://maps.app.goo.gl/9pqB898ma7uQg6ys8,Rabu,,,,,,,https://ecentral.my/pasar-malam-kl/,,
+"Pasar Malam Gombak 1A, Sri Kedah","Jalan Madrasah, Gombak Setia",,Wangsa Maju,53100,WP Kuala Lumpur,"3.2159084066043557, 101.7175966292611",,https://maps.app.goo.gl/uA4cr9pxy3qgWLHu6,Selasa,,,,,,,https://ecentral.my/pasar-malam-kl/,,
+"Pasar Malam Jalan 1A/6, Setapak Indah","Jalan 1a/6, Taman Setapak Indah",,Wangsa Maju,53100,WP Kuala Lumpur,"3.20928851424591, 101.71985068612588",,https://maps.app.goo.gl/NcKfRhUV1jwbWrbaA,Khamis??/ cek ni pls,,,,,,,https://ecentral.my/pasar-malam-kl/,,
+Pasar Malam Seksyen 1 Wangsa Maju,,,Wangsa Maju,,WP Kuala Lumpur,,,,Isnin,,,,,,,https://ecentral.my/pasar-malam-kl/,,
+Pasar Malam Taman Melati,"Jalan Taman Melati 10, Taman Melati",,Wangsa Maju,53100,WP Kuala Lumpur,"3.2260145471849473, 101.72395846349006",,https://maps.app.goo.gl/SppXjEJVmNHS29Ja8,Jumaat,,,,,,,https://ecentral.my/pasar-malam-kl/,,
+Pasar Malam Taman Tasek Damai,"Jalan Tawas Baru 6, Taman Tasek Damai",,Ipoh,30010,Perak,4.652923024,101.1031674,https://maps.app.goo.gl/ozAQn3DehHd1XHXr5,Isnin,4.30-9.30pm,,,,,,,,
+Pasar Malam Taman Perpaduan,"1a, Lengkok Perpaduan, Taman Perpaduan",,Ulu Kinta,31150,Perak,4.637399225,101.1541249,https://maps.app.goo.gl/sEPgvvDC597LbYoX9,Selasa,5-10pm,,,,,,,,
+Pasar Malam Taman Jati,"1243, Jalan Jati, Taman Meru 3C",,Ipoh,30020,Perak,4.661027072,101.0711795,https://maps.app.goo.gl/JJhGYmG3RXSpfSid7,Selasa,5-10pm,,,,,,,,
+Pasar Malam Bandar Baru Putra,,,Ipoh,,Perak,,,,Rabu,,,,,,,,,
+Taman Bercham Raya / Taman Anda,,,Ipoh,,Perak,,,,Sabtu,,,,,,,,,
+Pasar Malam Bandar Baru Menglembu,"70, Persiaran Kledang Timur 17a, Taman Bandar Baru",,Ipoh,31450,Perak,4.612643339,101.0433485,https://maps.app.goo.gl/oJwM5jXHQ91AvhDL7,"Isnin, Khamis",5-9pm,,,,,,,,
+Taman Ampang,,,Ipoh,,Perak,,,,Jumaat,,,,,,,,,
+Pasar Malam Taman Rasi,"Lorong Kledang Timur 15, Taman Rasi",,Ipoh,31450,Perak,4.573995267,101.04291,https://maps.app.goo.gl/nDPqHRdzvmsbMNcDA,Sabtu,6-11pm,,,,,,,,
+Pasar Malam Rapat Setia Baru,"Jalan Teoh Kim Swee, Taman Rapat Setia Baru",,Ipoh,31350,Perak,4.571195553,101.1303329,https://maps.app.goo.gl/AxhKWD8KeVgVUizc7,Rabu,4.30-9pm,,,,,,,,
+Pasar Malam Taman Seri Rapat,"Jalan Harilela 1a, Taman Seri Rapat",,Ipoh,31350,Perak,4.564443502,101.1067936,https://maps.app.goo.gl/1ZtdLQ2L8VMc1y2m6,Khamis,5-10pm,,,,,,,,
+Pasar Malam Silibin,"437-453, Jalan Silibin, Taman Sri Wan",,Ipoh,30100,Perak,4.612048777,101.0558452,https://maps.app.goo.gl/QZkGW7fif1vR7CaJA,"Isnin, Khamis",4-9.30pm,,,,,,,,
+Pasar Malam Chemor,"48, Hala Chemor 1",,Ipoh,31200,Perak,4.718024437,101.1159526,https://maps.app.goo.gl/28BUNX4mdhbyJUKr8,Jumaat,5-10pm,,,,,,,,
+Kanthan,,,Ipoh,,Perak,,,,Sabtu,,,,,,,,,
+Kg.Sri Kinta,,,Ipoh,,Perak,,,,Sabtu,,,,,,,,,
+Pasar Malam Taman Temara,"165, Jalan Pengkalan Barat 18, Taman Temara",,Ipoh,31650,Perak,4.556512686,101.0638687,https://maps.app.goo.gl/Nmat7Gm4MrvwFDC66,Jumaat,5-10pm,,,,,,,,
+Pasar Malam Desa Aman,"No. 1, Hala Pegoh Aman 3, Taman Pegoh, Lahat, Taman Desa Aman",,Ipoh,31650,Perak,4.540240028,101.0637028,https://maps.app.goo.gl/Rf9kEswMnsy3mds46,Ahad,4.30-5.30pm,,,,,,,,
+Taman Bersatu,,,Ipoh,,Perak,,,,Jumaat,,,,,,,,,
+Pasar Malam Pekan Razaki,"Jalan Rokam, Pekan Razaki",,Ipoh,31350,Perak,4.583661824,101.1210833,https://maps.app.goo.gl/DDCJfVm4k7gPA9yT6,Jumaat,4.30-8pm,,,,,,,,
+Pasar Malam Lahat Baru,"Laluan Lahat Baru 2, Kampung Pengkalan",,Ipoh,31500,Perak,4.540451028,101.0439243,https://maps.app.goo.gl/3zyDHjvUCt8ztAu29,Selasa,5-9pm,,,,,,,,
+Pasar Malam Station 18,"Susunan Stesen 18, Taman Pengkalan Jaya",,Ipoh,31650,Perak,4.543297578,101.0697398,https://maps.app.goo.gl/qwiaWHFQUBx9yNXE6,Isnin,5-11pm,,,,,,,,
+Pasar Malam Bercham,"45, Hala Bercham Timur 11, Taman Pakatan",,Ipoh,31400,Perak,4.635299452,101.1324402,https://maps.app.goo.gl/agiurcFDTkzg1MNR8,Rabu,5-10pm,,,,,,,,
+Taman Rasi Jaya,,,Ipoh,,Perak,,,,Jumaat,,,,,,,,,
+Pasar Malam Sppk,"93-77, Jalan Pegoh, Taman Pengkalan Jaya",,Ipoh,,Perak,4.556268502,101.0795627,https://maps.app.goo.gl/RxQtR8hPqmbg7oE58,Selasa,4-9pm,,,,,,,,
+Taman Ipoh Jaya,,,Ipoh,,Perak,,,,Isnin,,,,,,,,,
+Tambun,,,Ipoh,,Perak,,,,Isnin,,,,,,,,,
+Taman Soon Choon,,,Ipoh,,Perak,,,,Sabtu,,,,,,,,,
+"Persiaran Putra 4, Bandar Baru Putra",,,Ipoh,,Perak,,,,Jumaat,,,,,,,,,
+Taman Klebang Jaya,,,Ipoh,,Perak,,,,Ahad Dan Rabu,,,,,,,,,
+Medan Klebang Restu,,,Ipoh,,Perak,,,,Jumaat,,,,,,,,,
+"Taman Mas, Chepor",,,Ipoh,,Perak,,,,Khamis,,,,,,,,,
+Lengkok Meru Permai 1 Dan 2,,,Ipoh,,Perak,,,,Rabu,,,,,,,,,
+Bandar Baru Menglembu,,,Ipoh,,Perak,,,,Isnin,,,,,,,,,
+Bandar Baru Medan Ipoh / Simpang Pulai,,,Ipoh,,Perak,,,,Selasa,,,,,,,,,
+Taman Sppk,,,Ipoh,,Perak,,,,Khamis,,,,,,,,,
+Taman Pertama,,,Ipoh,,Perak,,,,Jumaat,,,,,,,,,
+Taman Ipoh Timur / Taman Rasi,,,Ipoh,,Perak,,,,Sabtu,,,,,,,,,
+"Taman Desa Kencana, Bercham",,,Ipoh,,Perak,,,,Ahad,,,,,,,,,
+Bandar Baru Siber,,,Ipoh,,Perak,,,,Rabu,,,,,,,,,
+Taman Tg. Perdana,,,Ipoh,,Perak,,,,Rabu,,,,,,,,,
+Taman Desa Pinji,,,Ipoh,,Perak,,,,Isnin,,,,,,,,,
+Taman Ipoh Timur / Taman Rasi,,,Ipoh,,Perak,,,,Khamis,,,,,,,,,
+Medan Gopeng,,,Ipoh,,Perak,,,,Ahad,,,,,,,,,
+Tempak Letak Kereta Pasar Mode,Seksyen 6,,Shah Alam,,Selangor,,,,Selasa & Jumaat,,,,,,,,,
+Jalan Plumbum 7/28 (Belakang Gerai Majlis),Seksyen 7,,Shah Alam,,Selangor,,,,Rabu,,,,,,,,,
+Jalan 16/3,Seksyen 16,,Shah Alam,,Selangor,,,,Isnin,,,,,,,,,
+Tempat Letak Kereta Pasar Malam Seksyen 17/9,Seksyen 17,,Shah Alam,,Selangor,,,,Selasa,,,,,,,,,
+"Jalan padang, Kg. Padang Jawa",Seksyen 17,,Shah Alam,,Selangor,,,,Jumaat,,,,,,,,,
+Jalan 18/A dan 18/2,Seksyen 18,,Shah Alam,,Selangor,,,,Isnin,,,,,,,,,
+Jalan 19/D dan 19/E,Seksyen 19,,Shah Alam,,Selangor,,,,Sabtu,,,,,,,,,
+Jalan Singa C 20/C,Seksyen 20,,Shah Alam,,Selangor,,,,Sabtu,,,,,,,,,
+Jalan 24/B dan 24/15,Seksyen 24,,Shah Alam,,Selangor,,,,Rabu,,,,,,,,,
+Jalan 25/38,Seksyen 25,,Shah Alam,,Selangor,,,,Jumaat,,,,,,,,,
+Jalan 27/6,Seksyen 27,,Shah Alam,,Selangor,,,,Khamis,,,,,,,,,
+Jalan 28/35,Seksyen 28,,Shah Alam,,Selangor,,,,Isnin,,,,,,,,,
+"Lorong Hj Yusof, Kg. Jalan Kedan",Seksyen 30,,Shah Alam,,Selangor,,,,Selasa,,,,,,,,,
+"Lorong Hj Said, Kg. Jalan Kebun",Seksyen 30,,Shah Alam,,Selangor,,,,Jumaat,,,,,,,,,
+Jalan Anggerik Mokara 31/E (Kota Kemuning),Seksyen 31,,Shah Alam,,Selangor,,,,Selasa,,,,,,,,,
+"Jalan Rezab Buang, Kg. Bukit Naga",Seksyen 32,,Shah Alam,,Selangor,,,,Jumaat,,,,,,,,,
+Jalan Stering 34/6,Seksyen 34,,Shah Alam,,Selangor,,,,Isnin,,,,,,,,,
+"Jalan Sg. Kandis, Kg. Sungai Kandis",Seksyen 36,,Shah Alam,,Selangor,,,,Rabu,,,,,,,,,
+"Jalan Nagasari 36/1, Desa Latania",Seksyen 36,,Shah Alam,,Selangor,,,,Sabtu,,,,,,,,,
+Jalan Saujana Indah 1 (TTDI Jaya),Seksyen U2,,Shah Alam,,Selangor,,,,Jumaat,,,,,,,,,
+Jalan Bulan BV U5/BV (Subang 2),Seksyen U5,,Shah Alam,,Selangor,,,,Sabtu,,,,,,,,,
+Kg Melayu Subang Tambahan,Seksyen U5,,Shah Alam,,Selangor,,,,Khamis,,,,,,,,,
+"Mah Sing (Jalan U5/18A, Pinggiran Subang)",Seksyen U5,,Shah Alam,,Selangor,,,,Rabu,,,,,,,,,
+"Dataran Pasar Tani, Kg. Bertik Subang",Seksyen U6,,Shah Alam,,Selangor,,,,Isnin,,,,,,,,,
+"Dataran Pasar Tani, Kg Melayu Subang",Seksyen U6,,Shah Alam,,Selangor,,,,Sabtu,,,,,,,,,
+"Jalan A U13/A, Setia Alam",Seksyen U13,,Shah Alam,,Selangor,,,,Ahad,,,,,,,,,
+Taman Bukit Subang,Seksyen U16,,Shah Alam,,Selangor,,,,Rabu,,,,,,,,,
+Kg. Paya Jaras Tengah,Seksyen U19,,Shah Alam,,Selangor,,,,"Selasa, Khamis & Sabtu",,,,,,,,,
+Jalan Perusahaan A/1,Seksyen U20,,Shah Alam,,Selangor,,,,Isnin,,,,,,,,,
+Pasar Malam Taman Harmoni,"Jalan Utama, Taman Harmoni",Bentong,Bentong,28700,Pahang,3.5523732,101.9421455,,,,,,,,,,MP Bentong,Pasar Malam
+Pasar Malam Taman Gemilang,"Tapak Parkir, Hadapan Kedai",Bentong,Bentong,28700,Pahang,3.539918,101.9002522,,,,,,,,,,MP Bentong,Pasar Malam
+Pasar Malam Bukit Tinggi,"Jalan Utama, Kg. Bukit Tinggi",Bentong,Bentong,28750,Pahang,3.5400056,101.8663268,,,,,,,,,,MP Bentong,Pasar Malam
+Pasar Malam Taman Desa Damai,"Jalan Utama, Taman Desa Damai",Bentong,Bentong,28700,Pahang,3.5713463,101.8820492,,,,,,,,,,MP Bentong,Pasar Malam
+Pasar Malam Karak,"Tapak parkir, Hadapan Kedai",Bentong,Bentong,28600,Pahang,3.5716997,101.7507151,,,,,,,,,,MP Bentong,Pasar Malam
+Pasar Minggu/Pagi Jalan Chui yin,"Jalan Utama, Jalan Chui Yin",Bentong,Bentong,28700,Pahang,3.523188,101.9048167,,,,,,,,,,MP Bentong,Pasar Minggu
+Pasar Besar Bentong,"Jalan Ah Peng, Bentong",Bentong,Bentong,28700,Pahang,0,0,,,,,,,,,,MP Bentong,Pasar Awam
+Pasar Perting,"Kg Perting, Bentong",Bentong,Bentong,28700,Pahang,0,0,,,,,,,,,,MP Bentong,Pasar Awam
+Pasar Mempaga,Jalan Utama Mempaga-Sertik,Bentong,Bentong,28700,Pahang,0,0,,,,,,,,,,MP Bentong,Pasar Awam
+Pasar Sg Dua,"Kg Sg Dua, Karak",Sg Dua,Bentong,28600,Pahang,0,0,,,,,,,,,,MP Bentong,Pasar Awam
+Pasar Besar Karak,"Pekan Karak, Karak",Karak,Bentong,28600,Pahang,0,0,,,,,,,,,,MP Bentong,Pasar Awam
+Pasar Ayam Karak,"Pekan Karak, Karak",Karak,Bentong,28600,Pahang,0,0,,,,,,,,,,MP Bentong,Pasar Awam
+Pasar Khinzir Karak,"Pekan Karak, Karak",Karak,Bentong,28600,Pahang,0,0,,,,,,,,,,MP Bentong,Pasar Awam
+Pasar Telemong,Pekan Telemong,Telemong,Bentong,28600,Pahang,0,0,,,,,,,,,,MP Bentong,Pasar Awam
+Pasar Manchis,Pekan Manchis,Manchis,Bentong,28600,Pahang,0,0,,,,,,,,,,MP Bentong,Pasar Awam
+Pasar Simpang Pelangai,Pekan Simpang Pelangai,Simpang Pelangai,Bentong,28600,Pahang,0,0,,,,,,,,,,MP Bentong,Pasar Awam
+Pasar Chemomoi,Kg Chemomoi,Pekan Chemomoi,Bentong,28600,Pahang,0,0,,,,,,,,,,MP Bentong,Pasar Awam
+Pasar Bukit Tinggi,Kg Bukit Tinggi,Pekan Bukit Tinggi,Bentong,28750,Pahang,0,0,,,,,,,,,,MP Bentong,Pasar Awam
+Pekan Sehari Triang,Triang,Triang,Bera,28300,Pahang,3.241112,102.41147,,,,,,,,,,MD Bera,Pekan Sehari
+Pekan Sehari Durian Tawar,Kg. Durian Tawar,Durian Tawar,Bera,28200,Pahang,3.3459,102.4453,,,,,,,,,,MD Bera,Pekan Sehari
+Pekan Sehari Tementi,Felda Tementi,Tementi,Bera,28300,Pahang,3.2696,102.6086,,,,,,,,,,MD Bera,Pekan Sehari
+Pekan Sehari Bukit Mendi,Felda Bukit Mendi,Bukit Mendi,Bera,28320,Pahang,3.2052,102.3089,,,,,,,,,,MD Bera,Pekan Sehari
+Pekan Sehari Kemayan,Taman Jaya,Kemayan,Bera,28380,Pahang,3.1415,102.3675,,,,,,,,,,MD Bera,Pekan Sehari
+Pekan Sehari Kumai,Felda Kumai,Kumai,Bera,28300,Pahang,3.3123,102.6538,,,,,,,,,,MD Bera,Pekan Sehari
+Pekan Sehari Bandar Bera,Bandar Bera,Bandar Bera,Bera,28200,Pahang,3.2709,102.4557,,,,,,,,,,MD Bera,Pekan Sehari
+Pekan Sehari Purun,Felda Purun,Purun,Bera,28330,Pahang,3.3718,102.6337,,,,,,,,,,MD Bera,Pekan Sehari
+Pekan Sehari Mayam,Felda Mayam,Mayam,Bera,28300,Pahang,3.3655,102.6613,,,,,,,,,,MD Bera,Pekan Sehari
+Pekan Sehari Bukit Kepayang,Felda Bukit Kepayang,Bukit Kepayang,Bera,28330,Pahang,3.3401,102.6094,,,,,,,,,,MD Bera,Pekan Sehari
+Pasar Malam Kemayan,Jalan Besar Kemayan,Kemayan,Bera,28380,Pahang,3.1362,102.3698,,,,,,,,,,MD Bera,Pasar Malam
+Pasar Malam Kemayan Sentral,Kemayan Sentral,Kemayan,Bera,28380,Pahang,3.1366,102.3618,,,,,,,,,,MD Bera,Pasar Malam
+Pasar Malam Bukit Mendi,Felda Bukit Mendi,Bukit Mendi,Bera,28320,Pahang,3.2052,102.3089,,,,,,,,,,MD Bera,Pasar Malam
+Pasar Malam Sebertak,Felda Sebertak,Sebertak,Bera,28300,Pahang,3.2565,102.6021,,,,,,,,,,MD Bera,Pasar Malam
+Pasar Malam Purun,Felda Purun,Purun,Bera,28330,Pahang,3.3718,102.6337,,,,,,,,,,MD Bera,Pasar Malam
+Pasar Malam Kumai,Felda Kumai,Kumai,Bera,28300,Pahang,3.3123,102.6538,,,,,,,,,,MD Bera,Pasar Malam
+Pasar Malam Mengkarak,Jalan Besar Mengkarak,Mengkarak,Bera,28200,Pahang,3.3306,102.4234,,,,,,,,,,MD Bera,Pasar Malam
+Pasar Malam Simpang Kepayang,Simpang Kepayang,Simpang Kepayang,Bera,28330,Pahang,3.2586,102.5831,,,,,,,,,,MD Bera,Pasar Malam
+Pasar Malam Kerayong,Taman Komersial Emas,Kerayong,Bera,28200,Pahang,3.2641,102.4482,,,,,,,,,,MD Bera,Pasar Malam
+Pasar Tani Taman Jati,Taman Jati Bera,Bandar Bera,Bera,28200,Pahang,3.2888,102.46,,,,,,,,,,MD Bera,Pasar Tani
+Pasar Tani Bandar Bera,Bandar Bera,Bandar Bera,Bera,28200,Pahang,3.2705,102.4548,,,,,,,,,,MD Bera,Pasar Tani
+Pasar Awam Bandar Bera,Bandar Bera,Bandar Bera,Bera,28200,Pahang,3.2709,102.4557,,,,,,,,,,MD Bera,Pasar Awam
+Pasar Babi Bandar Bera,Bandar Bera,Bandar Bera,Bera,28200,Pahang,3.2709,102.4557,,,,,,,,,,MD Bera,Pasar Awam
+Pasar Bandar 32,Bandar 32 Bera,Bandar 32,Bera,28300,Pahang,3.2675,102.6082,,,,,,,,,,MD Bera,Pasar Awam
+Pasar Awam Triang,Triang,Triang,Bera,28300,Pahang,3.24111,102.4114,,,,,,,,,,MD Bera,Pasar Awam
+Pasar Awam Mengkuang,Bandar Mengkuang,Mengkuang,Bera,28340,Pahang,3.1884,102.3986,,,,,,,,,,MD Bera,Pasar Awam
+Pasar Awam Kemayan,Bandar Kemayan,Kemayan,Bera,28380,Pahang,3.1362,102.3698,,,,,,,,,,MD Bera,Pasar Awam
+Pasar Besar Jerantut,Jalan Diwangsa,Bandar Baru,Jerantut,27000,Pahang,3.940087,102.359257,,,,,,,,,,MD Jerantut,Pasar Besar
+Pasar Borong Temin,Jalan Temerloh Jerantut,Bandar Baru,Jerantut,27000,Pahang,3.926231,102.382584,,,,,,,,,,MD Jerantut,Pasar Borong
+Pasar khinzir Jerantut,Jalan Diwangsa,Bandar Baru,Jerantut,27000,Pahang,3.944345,102.365643,,,,,,,,,,MD Jerantut,Pasar Khinzir
+Pasar Malam Sekitar Balai Raya Jerantut Feri,Pekan Jerantut Feri,Feri,Jerantut,27150,Pahang,3.959772,102.422266,,,,,,,,,,MD Jerantut,Pasar Malam
+Pasar Pagi Pekan Ulu Cheka,Pekan Ulu Cheka,Ulu Cheka,Jerantut,27030,Pahang,3.891465,102.195994,,,,,,,,,,MD Jerantut,Pasar Pagi
+Pasar Pagi Kuala Tembeling,Tapak Pekan Sehari,Kuala Tembeling,Jerantut,27020,Pahang,4.067908,102.316423,,,,,,,,,,MD Jerantut,Pasar Pagi
+Pasar Malam Pekan Damak,Pekan Damak,Damak,Jerantut,27030,Pahang,3.950742,102.216647,,,,,,,,,,MD Jerantut,Pasar Malam
+Pasar Malam Bandar Inderapura,Bandar Inderapura,Bandar Inderapura,Jerantut,27000,Pahang,3.936985,102.366211,,,,,,,,,,MD Jerantut,Pasar Malam
+Pasar Pagi Felda Padang Piol,Felda Padang Piol,Felda Padang Piol,Jerantut,27200,Pahang,4.033186,102.381884,,,,,,,,,,MD Jerantut,Pasar Pagi
+Pasar Pagi Kuala Tahan,Kuala Tahan,Kuala Tahan,Jerantut,27200,Pahang,0,0,,,,,,,,,,MD Jerantut,Pasar Pagi
+Pasar Malam Batu Embun,Batu Embun,Batu Embun,Jerantut,27000,Pahang,3.954726,102.359361,,,,,,,,,,MD Jerantut,Pasar Malam
+Pasar Pagi Pekan Damak,Pekan Damak,Damak,Jerantut,27030,Pahang,3.950742,102.216647,,,,,,,,,,MD Jerantut,Pasar Pagi
+Pasar Malam Simpang Jengka 8,Jengka 8,Jengka 8,Jerantut,27150,Pahang,3.87892,102.493789,,,,,,,,,,MD Jerantut,Pasar Malam
+Pasar Malam Tapak Pekan Sehari Jerantut,Tapak Pekan Sehari Jerantut,Bandar Jerantut,Jerantut,27000,Pahang,3.940572,102.359773,,,,,,,,,,MD Jerantut,Pasar Malam
+Pasar Pagi Simpang Pulau Tawar,Simpang Pulau Tawar,Pulau Tawar,Jerantut,27150,Pahang,3.907506,102.447656,,,,,,,,,,MD Jerantut,Pasar Pagi
+Pasar Pagi Tapak Pekan Sehari Jerantut,Tapak Pekan Sehari Jerantut,Bandar Jerantut,Jerantut,27000,Pahang,3.940087,102.359257,,,,,,,,,,MD Jerantut,Pasar Pagi
+Pasar Malam Felda Padang Piol,Felda Padang Piol,Felda Padang Piol,Jerantut,27200,Pahang,4.033186,102.381884,,,,,,,,,,MD Jerantut,Pasar Malam
+P/L Beserah,Beserah,Kuantan,Kuantan,25250,Pahang,0,0,,,,,,,,,,MP Kuantan,Pasar Lambak
+P/L Jaya Gading,Jaya Gading,Kuantan,Kuantan,26070,Pahang,0,0,,,,,,,,,,MP Kuantan,Pasar Lambak
+P/L Lorong Alor Akar 15,Alor Akar 15,Kuantan,Kuantan,25250,Pahang,0,0,,,,,,,,,,MP Kuantan,Pasar Lambak
+P/L Taman Tas,Taman Tas,Kuantan,Kuantan,26070,Pahang,0,0,,,,,,,,,,MP Kuantan,Pasar Lambak
+P/L Balok Makmur,Balok Makmur,Kuantan,Kuantan,25050,Pahang,0,0,,,,,,,,,,MP Kuantan,Pasar Lambak
+P/L Bukit Setongkol (S.Emas),Bukit Setongkol,Kuantan,Kuantan,25200,Pahang,0,0,,,,,,,,,,MP Kuantan,Pasar Lambak
+P/L Pak Mahat,Kempadang,Kuantan,Kuantan,25150,Pahang,0,0,,,,,,,,,,MP Kuantan,Pasar Lambak
+P/L Sg Isap Jaya,Sg Isap Jaya,Kuantan,Kuantan,25150,Pahang,0,0,,,,,,,,,,MP Kuantan,Pasar Lambak
+P/L IM Jaya (Pasdec),Indera Mahkota Jaya,Kuantan,Kuantan,25100,Pahang,0,0,,,,,,,,,,MP Kuantan,Pasar Lambak
+P/L IM (P.Selamat),IM 3/19,Kuantan,Kuantan,25200,Pahang,0,0,,,,,,,,,,MP Kuantan,Pasar Lambak
+P/L Peramu,Peramu,Kuantan,Kuantan,25150,Pahang,0,0,,,,,,,,,,MP Kuantan,Pasar Lambak
+P/L Taman Impianku,Taman Impianku,Kuantan,Kuantan,25200,Pahang,0,0,,,,,,,,,,MP Kuantan,Pasar Lambak
+P/L Indera Sempurna,Indera Sempurna,Kuantan,Kuantan,25150,Pahang,0,0,,,,,,,,,,MP Kuantan,Pasar Lambak
+P/L Nirwana (J.Gading),Jaya Gading,Kuantan,Kuantan,26070,Pahang,0,0,,,,,,,,,,MP Kuantan,Pasar Lambak
+P/L Cenderawasih,Cenderawasih,Kuantan,Kuantan,25150,Pahang,0,0,,,,,,,,,,MP Kuantan,Pasar Lambak
+P/L Balok,Balok Perdana,Kuantan,Kuantan,25050,Pahang,0,0,,,,,,,,,,MP Kuantan,Pasar Lambak
+P/L Taman Sri Mahkota Aman,Mahkota Aman,Kuantan,Kuantan,26070,Pahang,0,0,,,,,,,,,,MP Kuantan,Pasar Lambak
+P/L Bukit Rangin,Bukit Rangin,Kuantan,Kuantan,25150,Pahang,0,0,,,,,,,,,,MP Kuantan,Pasar Lambak
+P/L Seri Damai Perdana,Seri Damai Perdana,Kuantan,Kuantan,25100,Pahang,0,0,,,,,,,,,,MP Kuantan,Pasar Lambak
+P/L Taman Rasau Perdana,Taman Rasau Perdana,Kuantan,Kuantan,25100,Pahang,0,0,,,,,,,,,,MP Kuantan,Pasar Lambak
+P/L Hentian Gambang,Gambang,Gambang,Kuantan,25100,Pahang,0,0,,,,,,,,,,MP Kuantan,Pasar Lambak
+P/L Lorong Sekilau 46,Bukit Sekilau 46,Kuantan,Kuantan,25200,Pahang,0,0,,,,,,,,,,MP Kuantan,Pasar Lambak
+P/L Inderapura,Taman Inderapura,Kuantan,Kuantan,25150,Pahang,0,0,,,,,,,,,,MP Kuantan,Pasar Lambak
+P/L Kedai Eco (Jln Bt3),Batu 3,Kuantan,Kuantan,25100,Pahang,0,0,,,,,,,,,,MP Kuantan,Pasar Lambak
+P/L Indera Mahkota 14,IM 14,Kuantan,Kuantan,25200,Pahang,0,0,,,,,,,,,,MP Kuantan,Pasar Lambak
+P/L Kempadang Perdana,Kempadang Perdana,Kuantan,Kuantan,25150,Pahang,0,0,,,,,,,,,,MP Kuantan,Pasar Lambak
+P/L Taman Dato Rashid,Taman Dato Rashid,Kuantan,Kuantan,25350,Pahang,0,0,,,,,,,,,,MP Kuantan,Pasar Lambak
+P/L Indera Mahkota 2,IM 2,Kuantan,Kuantan,25200,Pahang,0,0,,,,,,,,,,MP Kuantan,Pasar Lambak
+P/L Berjaya Permai,Berjaya Permai,Kuantan,Kuantan,25150,Pahang,0,0,,,,,,,,,,MP Kuantan,Pasar Lambak
+P/L Kampung Jawa,Kampung Jawa,Kuantan,Kuantan,25000,Pahang,0,0,,,,,,,,,,MP Kuantan,Pasar Lambak
+P/L Sungai Karang,Sungai Karang,Kuantan,Kuantan,25050,Pahang,0,0,,,,,,,,,,MP Kuantan,Pasar Lambak
+P/L Balok Perdana,Balok Perdana,Kuantan,Kuantan,25050,Pahang,0,0,,,,,,,,,,MP Kuantan,Pasar Lambak
+P/L Sungai Isap,Sungai Isap Jaya,Kuantan,Kuantan,25150,Pahang,0,0,,,,,,,,,,MP Kuantan,Pasar Lambak
+P/L Gambang Damai,Gambang Damai,Gambang,Kuantan,25100,Pahang,0,0,,,,,,,,,,MP Kuantan,Pasar Lambak
+P/L UTC Pahang,Bandar Kuantan,Kuantan,Kuantan,25000,Pahang,0,0,,,,,,,,,,MP Kuantan,Pasar Lambak
+P/L Taman Sentosa,Air Putih,Kuantan,Kuantan,25050,Pahang,0,0,,,,,,,,,,MP Kuantan,Pasar Lambak
+P/L Taman Gelora,Taman Gelora,Kuantan,Kuantan,25050,Pahang,0,0,,,,,,,,,,MP Kuantan,Pasar Lambak
+P/L Nirwana Batu 3,Batu 3,Kuantan,Kuantan,25100,Pahang,0,0,,,,,,,,,,MP Kuantan,Pasar Lambak
+P/L Tanjung Pasir,Jalan Sg Lembing,Kuantan,Kuantan,25200,Pahang,0,0,,,,,,,,,,MP Kuantan,Pasar Lambak
+P/L Hentian Gambang,Hentian Gambang,Gambang,Kuantan,25150,Pahang,0,0,,,,,,,,,,MP Kuantan,Pasar Lambak
+Pasar Besar Kuantan,Pusat Bandar,Kuantan,Kuantan,25000,Pahang,0,0,,,,,,,,,,MP Kuantan,Pasar Awam
+Pasar Sejahtera,Beserah,Kuantan,Kuantan,25050,Pahang,0,0,,,,,,,,,,MP Kuantan,Pasar Awam
+Pasar Taman Tas,Taman Tas,Kuantan,Kuantan,26070,Pahang,0,0,,,,,,,,,,MP Kuantan,Pasar Awam
+Pasar Peramu,Peramu,Kuantan,Kuantan,25150,Pahang,0,0,,,,,,,,,,MP Kuantan,Pasar Awam
+Pasar Balok,Balok,Kuantan,Kuantan,25050,Pahang,0,0,,,,,,,,,,MP Kuantan,Pasar Awam
+Pasar Gambang,Gambang,Kuantan,Kuantan,25150,Pahang,0,0,,,,,,,,,,MP Kuantan,Pasar Awam
+Pasar Borong Lama,Kemunting,Kuantan,Kuantan,25100,Pahang,0,0,,,,,,,,,,MP Kuantan,Pasar Awam
+Pasar Borong Baru,Kemunting,Kuantan,Kuantan,25100,Pahang,0,0,,,,,,,,,,MP Kuantan,Pasar Awam
+Pasar Tanjung Api,Tanjung Api,Kuantan,Kuantan,25050,Pahang,0,0,,,,,,,,,,MP Kuantan,Pasar Awam
+P/T UTC,Pusat Bandar,Kuantan,Kuantan,25000,Pahang,0,0,,,,,,,,,,MP Kuantan,Pasar Tani
+P/T IM2,Indera Mahkota 2,Kuantan,Kuantan,25200,Pahang,0,0,,,,,,,,,,MP Kuantan,Pasar Tani
+P/T Beserah,Beserah,Kuantan,Kuantan,25050,Pahang,0,0,,,,,,,,,,MP Kuantan,Pasar Tani
+P/T Taman Impian,Jalan Sg Lembing,Kuantan,Kuantan,25200,Pahang,0,0,,,,,,,,,,MP Kuantan,Pasar Tani
+P/T Balok,Balok,Kuantan,Kuantan,25050,Pahang,0,0,,,,,,,,,,MP Kuantan,Pasar Tani
+P/T Hentian Gambang,Gambang,Kuantan,Kuantan,25150,Pahang,0,0,,,,,,,,,,MP Kuantan,Pasar Tani
+P/T masjid Sungai Isap,Sungai Isap,Kuantan,Kuantan,25150,Pahang,0,0,,,,,,,,,,MP Kuantan,Pasar Tani
+Pasar Awam Bunga Cengkih,Bandar Baru Kuala Lipis,Kuala Lipis,Lipis,27200,Pahang,0,0,,,,,,,,,,MD Lipis,Pasar Awam
+Pasar Awam Benta,Pekan Benta,Benta,Lipis,27300,Pahang,0,0,,,,,,,,,,MD Lipis,Pasar Awam
+Pasar Awam Padang Tengku,Pekan Padang Tengku,Padang Tengku,Lipis,27100,Pahang,0,0,,,,,,,,,,MD Lipis,Pasar Awam
+Pasar Awam Sungai Koyan,Felda Sungai Koyan,Sg Koyan,Lipis,27650,Pahang,0,0,,,,,,,,,,MD Lipis,Pasar Awam
+Pasar Awam Merapoh,Pekan Merapoh,Merapoh,Lipis,27210,Pahang,0,0,,,,,,,,,,MD Lipis,Pasar Awam
+Pasar Malam Lipis,Bandar Baru Kuala Lipis,Kuala Lipis,Lipis,27200,Pahang,0,0,,,,,,,,,,MD Lipis,Pasar Malam
+Pasar Malam Desa Perwira,Taman Desa Perwira,Kuala Lipis,Lipis,27200,Pahang,0,0,,,,,,,,,,MD Lipis,Pasar Malam
+Pasar Malam Benta,Pekan Benta,Benta,Lipis,27300,Pahang,0,0,,,,,,,,,,MD Lipis,Pasar Malam
+Pasar Malam Padang Tengku,Pekan Padang Tengku,Padang Tengku,Lipis,27100,Pahang,0,0,,,,,,,,,,MD Lipis,Pasar Malam
+Pasar Tani Bandar Baru Kuala Lipis,Bandar Baru Kuala Lipis,Kuala Lipis,Lipis,27200,Pahang,0,0,,,,,,,,,,MD Lipis,Pasar Tani
+Pasar Panas Jengka,Bandar Tun Abdul Razak Jengka,Bandar Jengka,Maran,26400,Pahang,3.743184,102.543715,,,,,,,,,,MD Maran,Pasar Awam
+Pasar Malam Jengka,Bandar Tun Abdul Razak Jengka,Bandar Jengka,Maran,26400,Pahang,3.763606,102.548919,,,,,,,,,,MD Maran,Pasar Malam
+Pasar Tani Jengka,Bandar Tun Abdul Razak Jengka,Bandar Jengka,Maran,26400,Pahang,3.771142,102.546709,,,,,,,,,,MD Maran,Pasar Tani
+Pekan Sehari Maran,Bandar Maran,Bandar Maran,Maran,26500,Pahang,3.583276,102.776614,,,,,,,,,,MD Maran,Pasar Awam
+Pasar Malam Maran,Bandar Maran,Bandar Maran,Maran,26500,Pahang,3.583276,102.776614,,,,,,,,,,MD Maran,Pasar Malam
+Pasar Tani Maran,Bandar Maran,Bandar Maran,Maran,26500,Pahang,3.583276,102.776614,,,,,,,,,,MD Maran,Pasar Tani
+Pasar Malam Pekan Tajau,Pekan Tajau,Pekan Tajau,Maran,26500,Pahang,3.557631,102.689255,,,,,,,,,,MD Maran,Pasar Malam
+Pasar Malam Sungai Jerik,Pekan Sungai Jerik,Pekan Sungai Jerik,Maran,27080,Pahang,3.780013,102.643179,,,,,,,,,,MD Maran,Pasar Malam
+Pasar Malam Pekan Awah,Pekan Awah,Pekan Awah,Maran,28070,Pahang,3.49301,102.532654,,,,,,,,,,MD Maran,Pasar Malam
+Pasar Malam Pekan Sri Jaya,Pekan Sri Jaya,Pekan Sri Jaya,Maran,26070,Pahang,3.670233,102.871716,,,,,,,,,,MD Maran,Pasar Malam
+Pekan Sehari Chenor,Pekan Chenor,Pekan Chenor,Maran,28100,Pahang,3.479164,102.591645,,,,,,,,,,MD Maran,Pasar Awam
+Pasar Besar Pekan,Jalan Ahmad,Pekan,Pekan,26600,Pahang,0,0,,,,,,,,,,MD Pekan,Pasar Awam
+Pekan Sehari Bandar Pekan,Jalan Rompin Lama,Pekan,Pekan,26600,Pahang,0,0,,,,,,,,,,MD Pekan,Pasar Malam
+Pekan Sehari Dato' Shahbandar,Kampung Jambu,Pekan,Pekan,26600,Pahang,0,0,,,,,,,,,,MD Pekan,Pasar Malam
+Pekan Sehari Kelat Rendang,Kampung Pekan Seberang,Pekan,Pekan,26600,Pahang,0,0,,,,,,,,,,MD Pekan,Pasar Malam
+Pekan Sehari Peramu Jaya 3,Peramu Jaya 3,Pekan,Pekan,26600,Pahang,0,0,,,,,,,,,,MD Pekan,Pasar Malam
+Pekan Sehari Taman Tasik,Taman Tasik Sultan Abu Bakar,Pekan,Pekan,26600,Pahang,0,0,,,,,,,,,,MD Pekan,Pasar Malam
+Pasar Tani Peramu Jaya 3,Peramu Jaya 3,Pekan,Pekan,26600,Pahang,0,0,,,,,,,,,,MD Pekan,Pasar Tani
+Pasar Tani Bandar Pekan,Jalan Rompin Lama,Pekan,Pekan,26600,Pahang,0,0,,,,,,,,,,MD Pekan,Pasar Tani
+Pasar Tani Bandar Pekan 2,Jalan Rompin Lama,Pekan,Pekan,26600,Pahang,0,0,,,,,,,,,,MD Pekan,Pasar Tani
+Pasar Tani Bandar Dara Chini,Bandar Dara,Chini,Pekan,26690,Pahang,0,0,,,,,,,,,,MD Pekan,Pasar Tani
+Pasar Awam Chini,Bandar Dara,Chini,Pekan,26690,Pahang,0,0,,,,,,,,,,MD Pekan,Pasar Awam
+Pasar Malam Sungai Lui,Kg Sungai Lui,Raub,Raub,27600,Pahang,"3°48'44.8""N","101°50'49.8""E",,,,,,,,,,MD Raub,Pasar Malam
+Pasar Pagi Sungai Ruan,Kg Sungai Ruan,Sungai Ruan,Raub,27500,Pahang,"3°48'46.1""N","101°56'15.9""E",,,,,,,,,,MD Raub,Pasar Pagi
+Pasar Pagi Dong,Dong,Dong,Raub,27400,Pahang,"3°53'51.5""N","101°53'46.9""E",,,,,,,,,,MD Raub,Pasar Pagi
+Pasar Malam Taman Kemajuan,Taman Kemajuan,Raub,Raub,27600,Pahang,"3°48'38.2""N","101°51'51.2""E",,,,,,,,,,MD Raub,Pasar Malam
+Pasar Malam Cheroh,Kg Cheroh,Cheroh,Raub,27610,Pahang,"3°54'16.1""N","101°48'48.0""E",,,,,,,,,,MD Raub,Pasar Malam
+Pasar Malam Bukit Koman,Bukit Koman,Raub,Raub,27600,Pahang,"3°48'58.9""N","101°51'09.4""E",,,,,,,,,,MD Raub,Pasar Malam
+Pasar Malam Sungai Ruan,Kg Sungai Ruan,Sungai Ruan,Raub,27500,Pahang,"3°48'31.4""N","101°56'24.4""E",,,,,,,,,,MD Raub,Pasar Malam
+Pasar Pagi Ahad,Bandar Raub,Raub,Raub,27600,Pahang,"3°47'35.9""N","101°51'23.5""E",,,,,,,,,,MD Raub,Pasar Pagi
+Pasar Malam Sungai Klau,Kg Sungai Klau,Sungai Ruan,Raub,27500,Pahang,"3°44'50.1""N","101°58'45.8""E",,,,,,,,,,MD Raub,Pasar Malam
+Pasar Besar Raub,Bandar Raub,Raub,Raub,27600,Pahang,"3°47'33.2""N","101°51'22.2""E",,,,,,,,,,MD Raub,Pasar Awam
+Pasar Kampung Tras,Kg Tras,Tras,Raub,27600,Pahang,"3°44'38.2""N","101°48'29.6""E",,,,,,,,,,MD Raub,Pasar Awam
+Pasar Kg Sungai Lui,Kg Sungai Lui,Sungai Lui,Raub,27600,Pahang,"3°48'42.1""N","101°50'45.9""E",,,,,,,,,,MD Raub,Pasar Awam
+Pasar Cheroh,Kg Cheroh,Cheroh,Raub,27610,Pahang,"3°54'42.8""N","101°48'41.8""E",,,,,,,,,,MD Raub,Pasar Awam
+Pasar Sempalit,Sempalit,Sempalit,Raub,27600,Pahang,"3°47'53.0""N","101°52'02.9""E",,,,,,,,,,MD Raub,Pasar Awam
+Pasar Bukit Koman,Bukit Koman,Bukit Koman,Raub,27600,Pahang,"3°49'16.7""N","101°50'53.8""E",,,,,,,,,,MD Raub,Pasar Awam
+Pasar Sungai Ruan,Kg Sungai Ruan,Sugai Ruan,Raub,27500,Pahang,"3°48'40.7""N","101°56'16.8""E",,,,,,,,,,MD Raub,Pasar Awam
+Pasar Sungai Klau,Kg Sungai Klau,Sungai Klau,Raub,27500,Pahang,"3°44'52.4""N","101°58'32.2""E",,,,,,,,,,MD Raub,Pasar Awam
+Pasar Awam Temerloh,Jalan Pasar,Temerloh,Temerloh,28000,Pahang,3.454094,102.416152,,,,,,,,,,MP Temerloh,Pasar Awam
+Pasar Awam Mentakab,Jalan Pasar,Mentakab,Temerloh,28400,Pahang,3.485707,102.351739,,,,,,,,,,MP Temerloh,Pasar Awam
+Pasar Awam Kuala Krau,Jalan Pasar,Kuala Krau,Temerloh,28050,Pahang,3.710878,102.36763,,,,,,,,,,MP Temerloh,Pasar Awam
+Pasar Awam Lanchang,Jalan Datuk Bahaman,Lanchang,Temerloh,28500,Pahang,3.501917,102.184227,,,,,,,,,,MP Temerloh,Pasar Awam
+Pasar Malam Temerloh,Jalan Lurah Semantan,Temerloh,Temerloh,28000,Pahang,3.448761,102.422895,,,,,,,,,,MP Temerloh,Pasar Malam
+Pasar Malam Mentakab,Jalan Mok Hee Kiang,Mentakab,Temerloh,28400,Pahang,3.485364,102.347684,,,,,,,,,,MP Temerloh,Pasar Malam
+Pasar Malam Lanchang,Jalan Datuk Bahaman,Lanchang,Temerloh,28500,Pahang,3.50067,102.183809,,,,,,,,,,MP Temerloh,Pasar Malam
+Pasar Malam Kuala Krau,Jalan Temerloh Jerantut,Kuala Krau,Temerloh,28050,Pahang,3.710382,102.367371,,,,,,,,,,MP Temerloh,Pasar Malam
+Pekan Sehari Temerloh,Jalan Lurah Semantan,Temerloh,Temerloh,28000,Pahang,3.449739,102.422493,,,,,,,,,,MP Temerloh,Pasar Tani
+PASAR TANI STADIUM IPOH,"JALAN KOMPLEKS SUKAN, TAMAN IPOH",IPOH,,31400,Perak,,,,SABTU,,800,1200,,,TIDAK DINYATAKAN,,MAJLIS BANDARAYA IPOH,PASAR TANI
+PASAR TANI PENGKALAN PEGOH,"JALAN BUKIT MERAH, KAMPUNG PENGKALAN PEGOH",LAHAT,,31650,Perak,,,,SABTU,,800,1200,,,TIDAK DINYATAKAN,,MAJLIS BANDARAYA IPOH,PASAR TANI
+PASAR TANI MEDAN GOPENG,"11A, MEDAN GOPENG 4, MEDAN GOPENG",GOPENG,,31350,Perak,,,,AHAD,,800,1200,,,TIDAK DINYATAKAN,,MAJLIS BANDARAYA IPOH,PASAR TANI
+"PASAR TANI TAMAN KLEDANG JAYA, SILIBIN",PASAR TANI SILIBIN AHAD,IPOH,,30100,Perak,,,,AHAD,,800,1200,,,TIDAK DINYATAKAN,,MAJLIS BANDARAYA IPOH,PASAR TANI
+PASAR PAGI TAMAN KLEBANG JAYA RUKUN,"1, LALUAN KLEBANG JAYA 8, TAMAN KLEBANG JAYA",CHEMOR,,31200,Perak,,,,SETIAP HARI,,800,1200,,,TIDAK DINYATAKAN,,MAJLIS BANDARAYA IPOH,PASAR PAGI
+PASAR PAGI BANDAR SIBER,"75A, LEBUH LAPANGAN SIBER 1, BANDAR CYBER IPOH",SERI BOTANI,,31350,Perak,,,,SETIAP HARI,,800,1200,,,TIDAK DINYATAKAN,,MAJLIS BANDARAYA IPOH,PASAR PAGI
+PASAR MALAM TASEK DAMAI,JALAN TAWAS BARU 6,IPOH,,30010,Perak,,,,ISNIN,,1700,2200,,,TIDAK DINYATAKAN,,MAJLIS BANDARAYA IPOH,PASAR MALAM
+PASAR MALAM TAMAN PERPADUAN,TINGKAT PERPADUAN 1,IPOH,,31400,Perak,,,,SELASA,,1700,2200,,,TIDAK DINYATAKAN,,MAJLIS BANDARAYA IPOH,PASAR MALAM
+PASAR MALAM TAMAN JATI,"1243, JALAN JATI, TAMAN MERU 3C",IPOH,,30020,Perak,,,,SELASA,,1700,2200,,,TIDAK DINYATAKAN,,MAJLIS BANDARAYA IPOH,PASAR MALAM
+PASAR MALAM TAMANBARU PUTRA,"27, MEDAN PUTRA 1, BANDAR BARU PUTRA",IPOH,,31400,Perak,,,,RABU,,1700,2200,,,TIDAK DINYATAKAN,,MAJLIS BANDARAYA IPOH,PASAR MALAM
+PASAR MALAM TAMAN BERCHAM RAYA,"2, DATARAN PERPADUAN 12, TAMAN BERCHAM JAYA",ULU KINTA,,31150,Perak,,,,SABTU,,1700,2200,,,TIDAK DINYATAKAN,,MAJLIS BANDARAYA IPOH,PASAR MALAM
+PASAR MALAM TAMAN ANDA,0,IPOH,,31400,Perak,,,,SABTU,,1700,2200,,,TIDAK DINYATAKAN,,MAJLIS BANDARAYA IPOH,PASAR MALAM
+PASAR MALAM BANDAR BARU MENGLEMBU,"70, PERSIARAN KLEDANG TIMUR 17A, TAMAN BANDAR BARU",IPOH,,31450,Perak,,,,SELASA & KHAMIS,,1700,2200,,,TIDAK DINYATAKAN,,MAJLIS BANDARAYA IPOH,PASAR MALAM
+PASAR MALAM TAMAN AMPANG,0,IPOH,,31350,Perak,,,,JUMAAT,,1700,2200,,,TIDAK DINYATAKAN,,MAJLIS BANDARAYA IPOH,PASAR MALAM
+PASAR MALAM TAMAN RASI,"JALAN MENGLEMBU UTARA 1, TAMAN GELOMBANG",MENGLEMBU,,31450,Perak,,,,SELASA,,1700,2200,,,TIDAK DINYATAKAN,,MAJLIS BANDARAYA IPOH,PASAR MALAM
+PASAR MALAM TAMAN RAPAT SETIA BARU,"JALAN TEOH KIM SWEE, TAMAN RAPAT SETIA BARU",IPOH,,31350,Perak,,,,RABU,,1700,2200,,,TIDAK DINYATAKAN,,MAJLIS BANDARAYA IPOH,PASAR MALAM
+PASAR MALAM SRI RAPAT,"JALAN HARILELA 1A, TAMAN SRI WAN",IPOH,,31350,Perak,,,,KHAMIS,,1700,2200,,,TIDAK DINYATAKAN,,MAJLIS BANDARAYA IPOH,PASAR MALAM
+PASAR MALAM SILIBIN,"437-453, JALAN SILIBIN, TAMAN SRI WAN",IPOH,,30100,Perak,,,,ISNIN & KHAMIS,,1700,2200,,,TIDAK DINYATAKAN,,MAJLIS BANDARAYA IPOH,PASAR MALAM
+PASAR MALAM CHEMOR,"048, Hala Chemor 1, 31200 Chemor, Perak",CHEMOR,,31200,Perak,,,,JUMAAT,,1700,2200,,,TIDAK DINYATAKAN,,MAJLIS BANDARAYA IPOH,PASAR MALAM
+PASAR MALAM SRI KINTA,"28, JALAN SRI KINTA 15, KAMPUNG SRI KINTA",IPOH,,31650,Perak,,,,SABTU,,1700,2200,,,TIDAK DINYATAKAN,,MAJLIS BANDARAYA IPOH,PASAR MALAM
+PASAR MALAM TAMAN TEMARA,JALAN PENGKALAN BARAT 18,IPOH,,31650,Perak,,,,JUMAAT,,1700,2200,,,TIDAK DINYATAKAN,,MAJLIS BANDARAYA IPOH,PASAR MALAM
+PASAR MALAM DESA AMAN,"NO 1, HALA PEGOH AMAN 3, TAMAN DESA AMAN",IPOH,,31650,Perak,,,,AHAD,,1700,2200,,,TIDAK DINYATAKAN,,MAJLIS BANDARAYA IPOH,PASAR MALAM
+PASAR MALAM TAMAN BERSATU,0,IPOH,,31350,Perak,,,,JUMAAT,,1700,2200,,,TIDAK DINYATAKAN,,MAJLIS BANDARAYA IPOH,PASAR MALAM
+PASAR MALAM PEKAN RAZAKI,0,IPOH,,31350,Perak,,,,JUMAAT,,1700,2200,,,TIDAK DINYATAKAN,,MAJLIS BANDARAYA IPOH,PASAR MALAM
+PASAR MALAM BANDAR LAHAT BARU,0,LAHAT,,30200,Perak,,,,SELASA,,1700,2200,,,TIDAK DINYATAKAN,,MAJLIS BANDARAYA IPOH,PASAR MALAM
+PASAR MALAM STATION 18,"SUSUNAN STESEN 18, TAMAN PENGKALAN JAYA",IPOH,,31650,Perak,,,,ISNIN,,1700,2200,,,TIDAK DINYATAKAN,,MAJLIS BANDARAYA IPOH,PASAR MALAM
+PASAR MALAM BERCHAM,"HALA BERCHAM TIMUR 11, TAMAN PAKATAN",IPOH,,31400,Perak,,,,RABU,,1700,2200,,,TIDAK DINYATAKAN,,MAJLIS BANDARAYA IPOH,PASAR MALAM
+PASAR MALAM TAMAN RASI JAYA,0,MENGLEMBU,,31450,Perak,,,,JUMAAT,,1700,2200,,,TIDAK DINYATAKAN,,MAJLIS BANDARAYA IPOH,PASAR MALAM
+PASAR MALAM SPPK,"JALAN PEGOH, TAMAN, PENGKALAN JAYA",IPOH,,31650,Perak,,,,SELASA,,1700,2200,,,TIDAK DINYATAKAN,,MAJLIS BANDARAYA IPOH,PASAR MALAM
+PASAR MALAM GUNUNG RAPAT,"27, SELASAR ROKAM 11, TAMAN IPOH JAYA",IPOH,,31350,Perak,,,,ISNIN,,1700,2200,,,TIDAK DINYATAKAN,,MAJLIS BANDARAYA IPOH,PASAR MALAM
+PASAR MALAM TAMBUN,"JALAN TAMBUN, SUNWAY CITY",IPOH,,31400,Perak,,,,ISNIN,,1700,2200,,,TIDAK DINYATAKAN,,MAJLIS BANDARAYA IPOH,PASAR MALAM
+PASAR MALAM SOON CHOON,0,IPOH,,31350,Perak,,,,SABTU,,1700,2200,,,TIDAK DINYATAKAN,,MAJLIS BANDARAYA IPOH,PASAR MALAM
+PASAR MALAM PERSIARAN PUTRA 4,BANDAR BARU PUTRA,IPOH,,31200,Perak,,,,JUMAAT,,1700,2200,,,TIDAK DINYATAKAN,,MAJLIS BANDARAYA IPOH,PASAR MALAM
+PASAR MALAM KLEBANG JAYA,0,CHEMOR,,31200,Perak,,,,RABU,,1700,2200,,,TIDAK DINYATAKAN,,MAJLIS BANDARAYA IPOH,PASAR MALAM
+PASAR MALAM KLEBANG JAYA,0,CHEMOR,,31201,Perak,,,,AHAD,,1700,2200,,,TIDAK DINYATAKAN,,MAJLIS BANDARAYA IPOH,PASAR MALAM
+PASAR MALAM KLEBANG RESTU,0,CHEMOR,,31200,Perak,,,,JUMAAT,,1700,2200,,,TIDAK DINYATAKAN,,MAJLIS BANDARAYA IPOH,PASAR MALAM
+PASAR MALAM TAMAN MAS,0,CHEMOR,,31200,Perak,,,,KHAMIS,,1700,2200,,,TIDAK DINYATAKAN,,MAJLIS BANDARAYA IPOH,PASAR MALAM
+PASAR MALAM MERU PERMAI,LENGKOK MERU PERMAI 1 & 2,IPOH,Kinta Utara,30020,Perak,,,,RABU,4-8pm,1700,2200,,,TIDAK DINYATAKAN,,MAJLIS BANDARAYA IPOH,PASAR MALAM
+PASAR MALAM BANDAR BARU MENGLEMBU,MENGLEMBU,IPOH,,30200,Perak,,,,ISNIN,,1700,2200,,,TIDAK DINYATAKAN,,MAJLIS BANDARAYA IPOH,PASAR MALAM
+PASAR MALAM BANDAR BARU MEDAN IPOH,0,IPOH,,31400,Perak,,,,SELASA,,1700,2200,,,TIDAK DINYATAKAN,,MAJLIS BANDARAYA IPOH,PASAR MALAM
+PASAR MALAM SIMPANG PULAI,"79, PERSIARAN SENGAT BARU 2, TAMAN BERSATU",IPOH,,31300,Perak,,,,SELASA,,1700,2200,,,TIDAK DINYATAKAN,,MAJLIS BANDARAYA IPOH,PASAR MALAM
+PASAR MALAM TAMAN SPPK,"JALAN PEGOH, TAMAN PENGKALAN JAYA",IPOH,,31650,Perak,,,,KHAMIS,,1700,2200,,,TIDAK DINYATAKAN,,MAJLIS BANDARAYA IPOH,PASAR MALAM
+PASAR MALAM TAMAN IPOH TIMUR,"13, JALAN MEDAN IPOH 6, TAMAN IPOH TIMUR",IPOH,,31400,Perak,,,,SABTU,,1700,2200,,,TIDAK DINYATAKAN,,MAJLIS BANDARAYA IPOH,PASAR MALAM
+PASAR MALAM TAMAN RASI,0,IPOH,,31350,Perak,,,,SABTU,,1700,2200,,,TIDAK DINYATAKAN,,MAJLIS BANDARAYA IPOH,PASAR MALAM
+PASAR MALAM TAMAN PERTAMA,"JALAN TAMAN NG WENG HUP, TAMAN PERTAMA",IPOH,,30100,Perak,,,,JUMAAT,,1700,2200,,,TIDAK DINYATAKAN,,MAJLIS BANDARAYA IPOH,PASAR MALAM
+"PASAR MALAM DESA KENCANA, BERCHAM",0,IPOH,,31400,Perak,,,,AHAD,,1700,2200,,,TIDAK DINYATAKAN,,MAJLIS BANDARAYA IPOH,PASAR MALAM
+PASAR MALAM BANDAR BARU CYBER,0,IPOH,,31350,Perak,,,,RABU,,1700,2200,,,TIDAK DINYATAKAN,,MAJLIS BANDARAYA IPOH,PASAR MALAM
+PASAR MALAM TAMAN TANJUNG PERDANA,0,IPOH,,31250,Perak,,,,ISNIN,,1700,2200,,,TIDAK DINYATAKAN,,MAJLIS BANDARAYA IPOH,PASAR MALAM
+PASAR MALAM DESA PINJI,0,IPOH,,31650,Perak,,,,KHAMIS,,1700,2200,,,TIDAK DINYATAKAN,,MAJLIS BANDARAYA IPOH,PASAR MALAM
+PASAR MALAM MEDAN GOPENG,"11 A, MEDAN GOPENG 4, MEDAN GOPENG",IPOH,,31350,Perak,,,,AHAD,,1700,2200,,,TIDAK DINYATAKAN,,MAJLIS BANDARAYA IPOH,PASAR MALAM
+PASAR BESAR IPOH,JALAN DATO ONN JAAFAR,IPOH,,30300,Perak,,,,SETIAP HARI,,600,1300,,,808,,MAJLIS BANDARAYA IPOH,PASAR AWAM
+BUNTONG,KAMPUNG BARU BUNTONG,IPOH,,30100,Perak,,,,SETIAP HARI,,600,1300,,,258,,MAJLIS BANDARAYA IPOH,PASAR AWAM
+FALIM,FALIM,IPOH,,30200,Perak,,,,SETIAP HARI,,600,1300,,,21,,MAJLIS BANDARAYA IPOH,PASAR AWAM
+GUNUNG RAPAT,JALAN RAJA MUSA MAHADI,IPOH,,31350,Perak,,,,SETIAP HARI,,600,1300,,,172,,MAJLIS BANDARAYA IPOH,PASAR AWAM
+KAMPUNG SIMEE,JALAN KAMPUNG SIMEE,IPOH,,31400,Perak,,,,SETIAP HARI,,600,1300,,,214,,MAJLIS BANDARAYA IPOH,PASAR AWAM
+MENGLEMBU,JALAN MENGLEMBU,MENGLEMBU,,31450,Perak,,,,SETIAP HARI,,600,1300,,,409,,MAJLIS BANDARAYA IPOH,PASAR AWAM
+PASIR PINJI,JALAN SULTAN,IPOH,,31650,Perak,,,,SETIAP HARI,,600,1300,,,180,,MAJLIS BANDARAYA IPOH,PASAR AWAM
+PASIR PUTEH,JALAN PASIR PUTEH,IPOH,,31650,Perak,,,,SETIAP HARI,,600,1300,,,109,,MAJLIS BANDARAYA IPOH,PASAR AWAM
+TAMAN CANNING,TAMAN CANNING,IPOH,,31400,Perak,,,,SETIAP HARI,,600,1300,,,51,,MAJLIS BANDARAYA IPOH,PASAR AWAM
+BUKIT MERAH,KAMPUNG BARU BUKIT MERAH,LAHAT,,31500,Perak,,,,SETIAP HARI,,600,1300,,,52,,MAJLIS BANDARAYA IPOH,PASAR AWAM
+AMPANG BARU,KAMPUNG AMPANG BARU,IPOH,,31350,Perak,,,,SETIAP HARI,,600,1300,,,40,,MAJLIS BANDARAYA IPOH,PASAR AWAM
+BERCHAM,KAMPUNG BERCHAM,IPOH,,31400,Perak,,,,SETIAP HARI,,600,1300,,,241,,MAJLIS BANDARAYA IPOH,PASAR AWAM
+KAMPUNG TAWAS,KAMPUNG TAWAS,IPOH,,30010,Perak,,,,SETIAP HARI,,600,1300,,,119,,MAJLIS BANDARAYA IPOH,PASAR AWAM
+PASAR BORONG,JALAN KUALA PARI,FALIM,,30200,Perak,,,,SETIAP HARI,,600,1800,,,300,,MAJLIS BANDARAYA IPOH,PASAR AWAM
+TAMBUN,JALAN TAMBUN,IPOH,,31400,Perak,,,,SETIAP HARI,,600,1300,,,20,,MAJLIS BANDARAYA IPOH,PASAR AWAM
+JELAPANG,KAMPUNG BARU JELAPANG,IPOH,,30020,Perak,,,,SETIAP HARI,,600,1300,,,140,,MAJLIS BANDARAYA IPOH,PASAR AWAM
+TANJUNG RAMBUTAN,JALAN TG RAMBUTAN,TANJUNG RAMBUTAN,,31250,Perak,,,,SETIAP HARI,,600,1300,,,149,,MAJLIS BANDARAYA IPOH,PASAR AWAM
+SIMPANG PULAI,KAMPUNG BARU SIMPANG PULAI,KAMPUNG KEPAYANG,,31300,Perak,,,,SETIAP HARI,,600,1300,,,57,,MAJLIS BANDARAYA IPOH,PASAR AWAM
+CHEMOR,KAMPUNG BARU CHEMOR,CHEMOR,,31200,Perak,,,,SETIAP HARI,,600,1300,,,38,,MAJLIS BANDARAYA IPOH,PASAR AWAM
+GERAI DI PASAR AULONG,COUNCILLOR SQUARE AULONG,TAIPING,,34000,Perak,,,,AHAD- SABTU,,800,1600,,,33,,MAJLIS PERBANDARAN TAIPING,PASAR PAGI
+GERAI PASAR RUMAH HIJAU,KAWASAN RUMAH HIJAU,TAIPING,,34000,Perak,,,,AHAD- SABTU,,800,1200,,,10,,MAJLIS PERBANDARAN TAIPING,PASAR PAGI
+PASAR AULONG,COUNCILLOR SQUARE AULONG,TAIPING,,34000,Perak,,,,AHAD- SABTU,,700,1230,,,69,,MAJLIS PERBANDARAN TAIPING,PASAR PAGI
+PASAR AYAM TAIPING,HALAMAN PASAR,TAIPING,,34000,Perak,,,,AHAD- SABTU,,600,1230,,,15,,MAJLIS PERBANDARAN TAIPING,PASAR PAGI
+PASAR BARU AULONG,AULONG,TAIPING,,34000,Perak,,,,AHAD- SABTU,,700,1800,,,34,,MAJLIS PERBANDARAN TAIPING,PASAR PAGI
+PASAR BATU KURAU,JALAN BESAR,BATU KURAU,,34500,Perak,,,,AHAD- SABTU,,600,1230,,,35,,MAJLIS PERBANDARAN TAIPING,PASAR AWAM
+PASAR BORONG IKAN BARU KAMUNTING,"JALAN STESYEN, KAMUNTING",KAMUNTING,,34600,Perak,,,,AHAD- SABTU,,200,900,,,35,,MAJLIS PERBANDARAN TAIPING,PASAR AWAM
+PASAR BORONG IKAN KAMUNTING,KAWASAN PERUSAHAAN KAMUNTING,KAMUNTING,,34600,Perak,,,,AHAD- SABTU,,600,2200,,,5,,MAJLIS PERBANDARAN TAIPING,PASAR AWAM
+PASAR BORONG KAMUNTING,MEDAN KAMUNTING,KAMUNTING,,34600,Perak,,,,AHAD- SABTU,,200,800,,,55,,MAJLIS PERBANDARAN TAIPING,PASAR AWAM
+PASAR BUAH TAIPING,HALAMAN PASAR,TAIPING,,34000,Perak,,,,AHAD- SABTU,,600,1230,,,22,,MAJLIS PERBANDARAN TAIPING,PASAR AWAM
+PASAR DAGING BABI TAIPING,HALAMAN PASAR,TAIPING,,34000,Perak,,,,AHAD- SABTU,,600,1230,,,8,,MAJLIS PERBANDARAN TAIPING,PASAR AWAM
+PASAR DAGING LEMBU/KAMBING TAIPING,HALAMAN PASAR,TAIPING,,34000,Perak,,,,AHAD- SABTU,,600,1230,,,21,,MAJLIS PERBANDARAN TAIPING,PASAR AWAM
+PASAR IKAN TAIPING,JALAN TAMING SARI,TAIPING,,34000,Perak,,,,AHAD- SABTU,,600,1230,,,44,,MAJLIS PERBANDARAN TAIPING,PASAR AWAM
+PASAR KAMUNTING,OFF JALAN STESYEN,KAMUNTING,,34600,Perak,,,,AHAD- SABTU,,600,1230,,,33,,MAJLIS PERBANDARAN TAIPING,PASAR BASAH
+PASAR KAMUNTING,"JALAN PASAR, KAMUNTING BARU TAMBAHAN",KAMUNTING,,34600,Perak,,,,AHAD- SABTU,,600,1230,,,35,,MAJLIS PERBANDARAN TAIPING,PASAR PAGI
+PASAR LAMBAK WISMA MPT,JALAN PANGGONG WAYANG,TAIPING,,34000,Perak,,,,AHAD- SABTU,,300,2200,,,154,,MAJLIS PERBANDARAN TAIPING,PASAR LAMBAK
+PASAR MAKANAN TAIPING,HALAMAN PASAR,TAIPING,,34000,Perak,,,,AHAD- SABTU,,500,2400,,,37,,MAJLIS PERBANDARAN TAIPING,PASAR AWAM
+PASAR MALAM AIR KUNING,TAMAN EMAS KUNING,TAIPING,,34000,Perak,,,,KHAMIS,,1600,2200,,,143,,MAJLIS PERBANDARAN TAIPING,PASAR MALAM
+PASAR MALAM BATU 2 ½ SIMPANG,"BATU 2 ½, JALAN SIMPANG, SIMPANG",SIMPANG,,34700,Perak,,,,ISNIN,,1600,2200,,,125,,MAJLIS PERBANDARAN TAIPING,PASAR MALAM
+PASAR MALAM BUKIT JANA,KAMPUNG TERSUSUN BUKIT JANA,KAMUNTING,,34600,Perak,,,,SELASA,,1600,2200,,,80,,MAJLIS PERBANDARAN TAIPING,PASAR MALAM
+PASAR MALAM CHANGKAT JERING,CHANGKAT JERING,CHANGKAT JERING,,34850,Perak,,,,SABTU,,1600,2200,,,127,,MAJLIS PERBANDARAN TAIPING,PASAR MALAM
+PASAR MALAM KAMUNTING,MEDAN KAMUNTING,KAMUNTING,,34600,Perak,,,,RABU-KHAMIS,,1600,2200,,,352,,MAJLIS PERBANDARAN TAIPING,PASAR MALAM
+PASAR MALAM TAMAN KAYA,TAMAN KAYA,TAIPING,,34000,Perak,,,,JUMAAT,,1600,2200,,,121,,MAJLIS PERBANDARAN TAIPING,PASAR MALAM
+PASAR MALAM TAMAN KOTA JAYA,TAMAN KOTA JAYA,SIMPANG,,34700,Perak,,,,ISNIN,,1600,2200,,,196,,MAJLIS PERBANDARAN TAIPING,PASAR MALAM
+PASAR MALAM TAMAN PERTAMA,TAMAN PERTAMA,TAIPING,,34000,Perak,,,,JUMAAT,,1600,2200,,,123,,MAJLIS PERBANDARAN TAIPING,PASAR MALAM
+PASAR MALAM TAMAN RAJA IDRIS,JALAN SULTAN IDRIS,TAIPING,,34000,Perak,,,,JUMAAT,,1600,2200,,,122,,MAJLIS PERBANDARAN TAIPING,PASAR MALAM
+PASAR MATANG,MATANG,MATANG,,34750,Perak,,,,AHAD- SABTU,,600,1230,,,11,,MAJLIS PERBANDARAN TAIPING,PASAR BASAH
+PASAR MINGGU CHANGKAT JERING,CHANGKAT JERING,CHANGKAT JERING,,34850,Perak,,,,SABTU - AHAD,,600,1100,,,127,,MAJLIS PERBANDARAN TAIPING,PASAR MINGGU
+PASAR MINGGU KAMUNTING,MEDAN KAMUNTING,KAMUNTING,,34600,Perak,,,,SABTU - AHAD,,600,1100,,,352,,MAJLIS PERBANDARAN TAIPING,PASAR MINGGU
+PASAR PAGI AULONG,AULONG,TAIPING,,34000,Perak,,,,AHAD- SABTU,,600,1100,,,107,,MAJLIS PERBANDARAN TAIPING,PASAR PAGI
+PASAR PAGI CHANGKAT JERING,CHANGKAT JERING,CHANGKAT JERING,,34850,Perak,,,,AHAD- SABTU,,600,1100,,,127,,MAJLIS PERBANDARAN TAIPING,PASAR PAGI
+PASAR PAGI DI PASAR BORONG KAMUNTING,MEDAN KAMUNTING,KAMUNTING,,34600,Perak,,,,AHAD- SABTU,,600,1100,,,15,,MAJLIS PERBANDARAN TAIPING,PASAR PAGI
+PASAR PAGI KAMUNTING,MEDAN KAMUNTING,KAMUNTING,,34600,Perak,,,,AHAD- SABTU,,600,1100,,,352,,MAJLIS PERBANDARAN TAIPING,PASAR PAGI
+PASAR PAGI POKOK ASSAM,POKOK ASSAM,TAIPING,,34000,Perak,,,,AHAD- SABTU,,600,1100,,,121,,MAJLIS PERBANDARAN TAIPING,PASAR PAGI
+PASAR PAGI SIMPANG,JALAN BESAR SIMPANG,SIMPANG,,34700,Perak,,,,AHAD- SABTU,,600,1100,,,99,,MAJLIS PERBANDARAN TAIPING,PASAR PAGI
+PASAR PAGI TAMAN KOTA JAYA,TAMAN KOTA JAYA,SIMPANG,,34700,Perak,,,,AHAD- SABTU,,600,1100,,,TUTUP,,MAJLIS PERBANDARAN TAIPING,PASAR PAGI
+PASAR PAGI TAMAN KAYA,TAMAN KAYA,TAIPING,,34000,Perak,,,,AHAD- SABTU,,600,1100,,,121,,MAJLIS PERBANDARAN TAIPING,PASAR PAGI
+PASAR POKOK ASSAM,LORONG PASAR,POKOK ASSAM,,34000,Perak,,,,AHAD- SABTU,,600,1230,,,53,,MAJLIS PERBANDARAN TAIPING,PASAR PAGI
+PASAR RUMAH HIJAU,KAWASAN RUMAH HIJAU,TAIPING,,34000,Perak,,,,AHAD- SABTU,,600,1230,,,33,,MAJLIS PERBANDARAN TAIPING,PASAR PAGI
+PASAR SAYUR TAIPING,HALAMAN PASAR,TAIPING,,34000,Perak,,,,AHAD- SABTU,,600,1230,,,33,,MAJLIS PERBANDARAN TAIPING,PASAR PAGI
+PASAR SERI KOTA (TAPAK JUALAN),TAMAN SRI KOTA,TAIPING,,34000,Perak,,,,AHAD- SABTU,,600,1230,,,6,,MAJLIS PERBANDARAN TAIPING,PASAR PAGI
+PASAR SIMPANG,"MARKET SQUARE, SIMPANG",SIMPANG,,34700,Perak,,,,AHAD- SABTU,,600,1230,,,51,,MAJLIS PERBANDARAN TAIPING,PASAR PAGI
+PASAR TAMAN KAYA,TAMAN KAYA,TAIPING,,34000,Perak,,,,AHAD- SABTU,,600,1230,,,42,,MAJLIS PERBANDARAN TAIPING,PASAR PAGI
+PASAR TRONG,JALAN PASAR,TRONG,,34800,Perak,,,,AHAD- SABTU,,600,1230,,,1,,MAJLIS PERBANDARAN TAIPING,PASAR PAGI
+STOR PASAR SIMPANG,"TAMAN RIA, JALAN KUALA KANGSAR",SIMPANG,,34700,Perak,,,,AHAD- SABTU,,800,1700,,,1,,MAJLIS PERBANDARAN TAIPING,PASAR PAGI
+TAPAK SEBELAH PASAR AWAM MATANG,MATANG,MATANG,,34750,Perak,,,,AHAD- SABTU,,800,1700,,,1,,MAJLIS PERBANDARAN TAIPING,PASAR BASAH
+MPKK,TELUK MURUH,LUMUT,,32200,Perak,,,,JUMAAT,,1600,2100,,,62,,MAJLIS PERBANDARAN MANJUNG,PASAR MALAM
+KAR SIN BERHAD,SERI MANJUNG (BERSEBELAHAN PASARAYA TF VALUE-MART),SERI MANJUNG,,32040,Perak,,,,SABTU,,1600,2100,,,46,,MAJLIS PERBANDARAN MANJUNG,PASAR MALAM
+KAR SIN BERHAD,SERI MANJUNG (BERSEBELAHAN PASARAYA TF VALUE-MART),SERI MANJUNG,,32040,Perak,,,,AHAD,,1600,2100,,,46,,MAJLIS PERBANDARAN MANJUNG,PASAR MALAM
+PERSALAM,SERI MANJUNG (BERSEBELAHAN PASARAYA TF VALUE-MART),SERI MANJUNG,,32040,Perak,,,,KHAMIS,,1600,2100,,,14,,MAJLIS PERBANDARAN MANJUNG,PASAR MALAM
+PERSALAM,SERI MANJUNG (BERSEBELAHAN PASARAYA TF VALUE-MART),SERI MANJUNG,,32040,Perak,,,,SABTU,,1600,2100,,,149,,MAJLIS PERBANDARAN MANJUNG,PASAR MALAM
+PERSALAM,SERI MANJUNG (BERSEBELAHAN PASARAYA TF VALUE-MART),SERI MANJUNG,,32040,Perak,,,,AHAD,,1600,2100,,,149,,MAJLIS PERBANDARAN MANJUNG,PASAR MALAM
+MPKK,KAMPUNG DATO' SERI KAMARUDDIN,SERI MANJUNG,,32040,Perak,,,,ISNIN,,1600,2100,,,198,,MAJLIS PERBANDARAN MANJUNG,PASAR MALAM
+MPKK,KAMPUNG SITIAWAN,SERI MANJUNG,,32040,Perak,,,,SELASA,,1600,2100,,,51,,MAJLIS PERBANDARAN MANJUNG,PASAR MALAM
+MPM,PEKAN GURNEY / SIMPANG TIGA,SITIAWAN,,32020,Perak,,,,KHAMIS,,1600,2100,,,52,,MAJLIS PERBANDARAN MANJUNG,PASAR MALAM
+MPM,KAMPUNG KOH (HADAPAN PASAR AWAM),SITIAWAN,,32020,Perak,,,,KHAMIS,,1000,2100,,,74,,MAJLIS PERBANDARAN MANJUNG,PASAR SEHARI
+MPM,TAMAN MANICKAVASAGAM / SUNGAI WANGI,AYER TAWAR,,32040,Perak,,,,ISNIN,,1600,2100,,,21,,MAJLIS PERBANDARAN MANJUNG,PASAR MALAM
+MPM,KAMPUNG JERING,AYER TAWAR,,32040,Perak,,,,JUMAAT,,1600,2100,,,25,,MAJLIS PERBANDARAN MANJUNG,PASAR MALAM
+HOCK SENG KONG TEMPLE,CHANGKAT KRUING,AYER TAWAR,,32040,Perak,,,,JUMAAT,,1600,2100,,,23,,MAJLIS PERBANDARAN MANJUNG,PASAR MALAM
+MPM,PANTAI REMIS (HADAPAN PASAR AWAM),PANTAI REMIS,,34900,Perak,,,,RABU,,600,1300,,,157,,MAJLIS PERBANDARAN MANJUNG,PASAR SEHARI
+MPM,BERUAS (JALAN HADAPAN DEWAN INDERAWATI),AYER TAWAR,,32040,Perak,,,,RABU,,1600,2100,,,17,,MAJLIS PERBANDARAN MANJUNG,PASAR MALAM
+MPM,"PADANG BOLA, KAMPUNG BARU AYER TAWAR",AYER TAWAR,,32040,Perak,,,,SABTU,,1000,1500,,,15,,MAJLIS PERBANDARAN MANJUNG,PASAR PAGI
+MPKK,TAMAN BINTANG,PANTAI REMIS,,34900,Perak,,,,SELASA,,1600,2100,,,16,,MAJLIS PERBANDARAN MANJUNG,PASAR MALAM
+PERSALAM,TAMAN MEDAN SERI SENTOSA,AYER TAWAR,,32040,Perak,,,,RABU,,1600,2100,,,68,,MAJLIS PERBANDARAN MANJUNG,PASAR MALAM
+MPM,KAWASAN PASAR AWAM AYER TAWAR,AYER TAWAR,,32040,Perak,,,,SETIAP HARI,,600,1800,,,230,,MAJLIS PERBANDARAN MANJUNG,PASAR HARIAN
+MASJID AL-KHAIRIAH,"BATU 10, LEKIR",SITIAWAN,,32020,Perak,,,,SABTU,,600,1300,,,105,,MAJLIS PERBANDARAN MANJUNG,PASAR SEHARI
+FAMA,PASAR KOMUNITI DAN KARAVAN,SERI MANJUNG,,32040,Perak,,,,AHAD,,600,1100,,,57,,MAJLIS PERBANDARAN MANJUNG,PASAR TANI
+HADAPAN MASJID TELUK RAJA BAYANG,HADAPAN MASJID TELUK RAJA BAYANG,PULAU PANGKOR,,32300,Perak,,,,SETIAP HARI,,600,1200,,,5,,MAJLIS PERBANDARAN MANJUNG,PASAR AWAM
+PASAR AWAM LUMUT,JALAN TITI PANJANG,LUMUT,,32200,Perak,,,,SETIAP HARI,,600,1200,,,5,,MAJLIS PERBANDARAN MANJUNG,PASAR AWAM
+PASAR AWAM SERI MANJUNG,JALAN SEMARAK API,SERI MANJUNG,,32040,Perak,,,,SETIAP HARI,,600,1200,,,60,,MAJLIS PERBANDARAN MANJUNG,PASAR AWAM
+PASAR AWAM KAMPUNG KOH,"JALAN DESA KOH 2, KAMPUNG KOH",KAMPUNG KOH,,32020,Perak,,,,SETIAP HARI,,600,1200,,,49,,MAJLIS PERBANDARAN MANJUNG,PASAR AWAM
+PASAR AWAM KAMPUNG KOH (GERAI BERKUNCI),"JALAN DESA KOH 2, KAMPUNG KOH",KAMPUNG KOH,,32020,Perak,,,,SETIAP HARI,,600,1200,,,7,,MAJLIS PERBANDARAN MANJUNG,PASAR AWAM
+PASAR AWAM JALAN SENAWI,JALAN SENAWI,SITIAWAN,,32020,Perak,,,,SETIAP HARI,,600,1200,,,61,,MAJLIS PERBANDARAN MANJUNG,PASAR AWAM
+PASAR AWAM JALAN SENAWI (GERAI BERKUNCI),JALAN SENAWI,SITIAWAN,,32020,Perak,,,,SETIAP HARI,,600,1200,,,24,,MAJLIS PERBANDARAN MANJUNG,PASAR AWAM
+PASAR AWAM SIMPANG DUA,JALAN SIMPANG DUA,SIMPANG DUA,,32000,Perak,,,,SETIAP HARI,,600,1200,,,11,,MAJLIS PERBANDARAN MANJUNG,PASAR AWAM
+PASAR AWAM PEKAN GURNEY,JALAN PEKAN GURNEY,PEKAN GURNEY,,32010,Perak,,,,SETIAP HARI,,600,1200,,,60,,MAJLIS PERBANDARAN MANJUNG,PASAR AWAM
+PASAR AWAM BATU 8 LEKIR,JALAN BESAR BATU 8 LEKIR,BATU 8 LEKIR,,32020,Perak,,,,SETIAP HARI,,600,1200,,,4,,MAJLIS PERBANDARAN MANJUNG,PASAR AWAM
+PASAR AWAM AYER TAWAR (BARU),JALAN PASAR AYER TAWAR,AYER TAWAR,,32400,Perak,,,,SETIAP HARI,,600,1200,,,60,,MAJLIS PERBANDARAN MANJUNG,PASAR AWAM
+PASAR AWAM AYER TAWAR (LAMA),JALAN PASAR AYER TAWAR,AYER TAWAR,,32400,Perak,,,,SETIAP HARI,,600,1200,,,16,,MAJLIS PERBANDARAN MANJUNG,PASAR AWAM
+PASAR AWAM AYER TAWAR (KHINZIR),JALAN PASAR AYER TAWAR,AYER TAWAR,,32400,Perak,,,,SETIAP HARI,,600,1200,,,14,,MAJLIS PERBANDARAN MANJUNG,PASAR AWAM
+PASAR AWAM BERUAS,JALAN PASAR BERUAS,BERUAS,,32700,Perak,,,,SETIAP HARI,,600,1200,,,36,,MAJLIS PERBANDARAN MANJUNG,PASAR AWAM
+PASAR AWAM PANTAI REMIS,JALAN KHONG CHONG,PANTAI REMIS,,34900,Perak,,,,SETIAP HARI,,600,1200,,,98,,MAJLIS PERBANDARAN MANJUNG,PASAR AWAM
+PASAR AWAM PANTAI REMIS (KHINZIR),JALAN KHONG CHONG,PANTAI REMIS,,34900,Perak,,,,SETIAP HARI,,600,1200,,,10,,MAJLIS PERBANDARAN MANJUNG,PASAR AWAM
+PASAR AWAM CHANGKAT KRUING,JALAN CHANGKAT KRUING,CHANGKAT KRUING,,32500,Perak,,,,SETIAP HARI,,600,1200,,,5,,MAJLIS PERBANDARAN MANJUNG,PASAR AWAM
+PASAR AWAM CHANGKAT KRUING (KHINZIR),JALAN CHANGKAT KRUING,CHANGKAT KRUING,,32500,Perak,,,,SETIAP HARI,,600,1200,,,3,,MAJLIS PERBANDARAN MANJUNG,PASAR AWAM
+KAMPUNG BATU 12,JALAN BIDOR,TELUK INTAN,,36700,Perak,,,,ISNIN,,1700,2200,,,45,,MAJLIS PERBANDARAN TELUK INTAN,PASAR MALAM
+TAMAN SRI ISHAQ,JALAN SIMPANG EMPAT,HUTANG MELINTANG,,36400,Perak,,,,ISNIN,,1700,2200,,,238,,MAJLIS PERBANDARAN TELUK INTAN,PASAR MALAM
+PASAR TANI LANGKAP,JALAN KAMPAR-CHANGKAT JONG,LANGKAP,,36700,Perak,,,,ISNIN,,1600,2100,,,20,,MAJLIS PERBANDARAN TELUK INTAN,PASAR PAGI
+SIMPANG 3 RUNGKUP,JALAN BAGAN DATUK,BAGAN DATUK,,36100,Perak,,,,SELASA,,800,1200,,,85,,MAJLIS PERBANDARAN TELUK INTAN,PASAR PAGI
+KAMPUNG BAHAGIA,JALAN SUNGAI MANIK,TELUK INTAN,,36000,Perak,,,,SELASA,,1700,2000,,,54,,MAJLIS PERBANDARAN TELUK INTAN,PASAR MALAM
+BATU 13 JALAN BAGAN DATUK,JALAN BAGAN DATUK,BAGAN DATUK,,36100,Perak,,,,SELASA,,1700,2300,,,2,,MAJLIS PERBANDARAN TELUK INTAN,PASAR MALAM
+PASAR RABU LANGKAP,JALAN KAMPAR-CHANGKAT JONG,LANGKAP,,36700,Perak,,,,RABU,,800,1200,,,154,,MAJLIS PERBANDARAN TELUK INTAN,PASAR PAGI
+BATU 16 SMPG 3 SG. DULANG,"SUNGAI SUMUN, BAGAN DATUK",BAGAN DATUK,,36300,Perak,,,,RABU,,700,1200,,,27,,MAJLIS PERBANDARAN TELUK INTAN,PASAR PAGI
+PERUMAHAN AWAM PADANG TEMBAK,JALAN PADANG TEMBAK,TELUK INTAN,,36000,Perak,,,,RABU,,1700,2300,,,69,,MAJLIS PERBANDARAN TELUK INTAN,PASAR MALAM
+BATU 20 BAGAN PASIR,"JALAN SELEKOH, BAGAN DATUK",BAGAN DATUK,,36200,Perak,,,,RABU,,1700,2300,,,106,,MAJLIS PERBANDARAN TELUK INTAN,PASAR MALAM
+BATU 20 BAGAN PASIR,"JALAN SELEKOH, BAGAN DATUK",BAGAN DATUK,,36200,Perak,,,,KHAMIS,,800,1200,,,39,,MAJLIS PERBANDARAN TELUK INTAN,PASAR PAGI
+TAMAN INDAH JAYA,JALAN TERATAI J4/6,TELUK INTAN,,36000,Perak,,,,KHAMIS,,1700,2100,,,81,,MAJLIS PERBANDARAN TELUK INTAN,PASAR MALAM
+KPG. CHUI CHAK,JALAN CHUI CHAK,LANGKAP,,36700,Perak,,,,KHAMIS,,1700,2200,,,89,,MAJLIS PERBANDARAN TELUK INTAN,PASAR MALAM
+TAMAN MELOR 3,JALAN SUNGAI MANIK,TELUK INTAN,,36000,Perak,,,,KHAMIS,,1700,2200,,,37,,MAJLIS PERBANDARAN TELUK INTAN,PASAR MALAM
+TAMAN DESA BAKTI,JALAN TEBUK BANJAR,TELUK INTAN,,36000,Perak,,,,JUMAAT,,1700,2200,,,44,,MAJLIS PERBANDARAN TELUK INTAN,PASAR MALAM
+TAMAN IMPIANA,JALAN MERBUK,TELUK INTAN,,36000,Perak,,,,JUMAAT,,1700,2200,,,70,,MAJLIS PERBANDARAN TELUK INTAN,PASAR MALAM
+SELEKOH,JALAN BAGAN DATUK,BAGAN DATUK,,36200,Perak,,,,SABTU,,630,1200,,,162,,MAJLIS PERBANDARAN TELUK INTAN,PASAR PAGI
+CHENDERONG BALAI,JALAN LABU KUBONG,CHENDERONG BALAI,,36600,Perak,,,,SABTU,,630,1300,,,236,,MAJLIS PERBANDARAN TELUK INTAN,PASAR PAGI
+PASAR TANI HUTAN MELINTANG,JALAN SIMPANG EMPAT,HUTANG MELINTANG,,36400,Perak,,,,SABTU,,630,1300,,,50,,MAJLIS PERBANDARAN TELUK INTAN,PASAR TANI
+BAGAN DATUK,JALAN DATOH,BAGAN DATUK,,36100,Perak,,,,SABTU,,1700,2300,,,150,,MAJLIS PERBANDARAN TELUK INTAN,PASAR MALAM
+TELUK INTAN,JALAN MAHKOTA,TELUK INTAN,,36000,Perak,,,,SABTU,,1700,0,,,197,,MAJLIS PERBANDARAN TELUK INTAN,PASAR MALAM
+BAGAN DATUK,JALAN DATOH,BAGAN DATUK,,36100,Perak,,,,AHAD,,600,1300,,,161,,MAJLIS PERBANDARAN TELUK INTAN,PASAR PAGI
+TELUK INTAN,JALAN MAHKOTA,TELUK INTAN,,36000,Perak,,,,AHAD,,630,1300,,,30,,MAJLIS PERBANDARAN TELUK INTAN,PASAR TANI
+TAMAN INTAN MAS III,"LORONG 1, JALAN TEBUK BANJAR",TELUK INTAN,,36000,Perak,,,,AHAD,,1700,2300,,,47,,MAJLIS PERBANDARAN TELUK INTAN,PASAR MALAM
+LANGKAP,TAPAK PASAR RABU,LANGKAP,,36000,Perak,,,,KHAMIS,,1700,2300,,,20,,MAJLIS PERBANDARAN TELUK INTAN,PASAR MALAM
+TAMAN DESA AMAN,JALAN MAHARAJALELA,TELUK INTAN,,36000,Perak,,,,AHAD,,1700,2300,,,36,,MAJLIS PERBANDARAN TELUK INTAN,PASAR MALAM
+PASAR BESAR KUALA KANGSAR,JALAN KANGSAR,KUALA KANGSAR,,33000,Perak,,,,SETIAP HARI,,600,1300,,,160,,MAJLIS PERBANDARAN KUALA KANGSAR,PASAR BESAR
+PASAR AWAM JERLUN,JLN SUL ISKANDAR SHAH,KUALA KANGSAR,,33000,Perak,,,,SETIAP HARI,,600,1300,,,13,,MAJLIS PERBANDARAN KUALA KANGSAR,PASAR AWAM
+PASAR LIMAN KATI,JLN BESAR KATI,KUALA KANGSAR,,33020,Perak,,,,SETIAP HARI,,600,1300,,,10,,MAJLIS PERBANDARAN KUALA KANGSAR,PASAR AWAM
+PASAR AWAM PADANG RENGAS,JLN BESAR PADANG RENGAS,KUALA KANGSAR,,33700,Perak,,,,SETIAP HARI,,600,1300,,,22,,MAJLIS PERBANDARAN KUALA KANGSAR,PASAR AWAM
+PASAR AWAM SAUK,JALAN BESAR SAUK,KUALA KANGSAR,,33500,Perak,,,,SETIAP HARI,,600,1300,,,22,,MAJLIS PERBANDARAN KUALA KANGSAR,PASAR AWAM
+PASAR AWAM KATI,PEKAN KATI,KUALA KANGSAR,,33020,Perak,,,,SETIAP HARI,,600,1300,,,4,,MAJLIS PERBANDARAN KUALA KANGSAR,PASAR AWAM
+PASAR BESAR SUNGAI SIPUT,0,SUNGAI SIPUT,,31100,Perak,,,,SETIAP HARI,,600,1300,,,85,,MAJLIS PERBANDARAN KUALA KANGSAR,PASAR AWAM
+PASAR AWAM JALONG,0,SUNGAI SIPUT,,31100,Perak,,,,SETIAP HARI,,600,1300,,,51,,MAJLIS PERBANDARAN KUALA KANGSAR,PASAR AWAM
+PASAR AWAM RIMBA PANJANG,0,SUNGAI SIPUT,,31100,Perak,,,,SETIAP HARI,,600,1300,,,20,,MAJLIS PERBANDARAN KUALA KANGSAR,PASAR AWAM
+PASAR AWAM JALAN LINTANG,0,SUNGAI SIPUT,,31100,Perak,,,,SETIAP HARI,,600,1300,,,22,,MAJLIS PERBANDARAN KUALA KANGSAR,PASAR AWAM
+PASAR AWAM SUNGAI BULOH,0,SUNGAI SIPUT,,31100,Perak,,,,SETIAP HARI,,600,1300,,,19,,MAJLIS PERBANDARAN KUALA KANGSAR,PASAR AWAM
+PASAR AWAM SALAK,0,SUNGAI SIPUT,,31100,Perak,,,,SETIAP HARI,,600,1300,,,12,,MAJLIS PERBANDARAN KUALA KANGSAR,PASAR AWAM
+"DATARAN AMANJAYA, MANONG","2010, A3, KAMPUNG SUAK PETAI",MANONG,,33800,Perak,,,,ISNIN,,1600,2000,,,100,,MAJLIS PERBANDARAN KUALA KANGSAR,PASAR MALAM
+TAMAN PUNCAK BOUGAINVILLEA,JALAN PUNCAK BOUGAINVILLEA,KUALA KANGSAR,,33010,Perak,,,,SELASA,,1600,2000,,,50,,MAJLIS PERBANDARAN KUALA KANGSAR,PASAR MALAM
+"TAMAN ORKID, SG. SIPUT",TAMAN ORKID,SUNGAI SIPUT,,31100,Perak,,,,RABU,,1600,2000,,,120,,MAJLIS PERBANDARAN KUALA KANGSAR,PASAR MALAM
+HADAPAN PASAR BESAR KUALA KANGSAR,"K8, PERSIARAN BENDAHARA,BANDAR BARU",KUALA KANGSAR,,33000,Perak,,,,JUMAAT,,1600,2000,,,80,,MAJLIS PERBANDARAN KUALA KANGSAR,PASAR MALAM
+JALAN DATO SAGOR,"JALAN DATO SAGOR,TAMAN SURIA,",KUALA KANGSAR,,33000,Perak,,,,SABTU,,1600,2000,,,40,,MAJLIS PERBANDARAN KUALA KANGSAR,PASAR MALAM
+BELAKANG MASJID PADANG RENGAS,"MASJID AL HADHARI, JALAN BESAR",PADANG RENGAS,,33700,Perak,,,,ISNIN,,700,1200,,,28,,MAJLIS PERBANDARAN KUALA KANGSAR,PASAR PAGI
+"TAMAN TUN SAMBANTHAN, SUNGAI SIPUT","TAMAN TUN SAMBANTHAN, SUNGAI SIPUT",KUALA KANGSAR,,33012,Perak,,,,ISNIN,,1600,2000,,,30,,MAJLIS PERBANDARAN KUALA KANGSAR,PASAR MALAM
+"KAMPUNG BARU , SUNGAI BULOH","KAMPUNG BARU , SUNGAI BULOH",KUALA KANGSAR,,33011,Perak,,,,KHAMIS,,1600,2000,,,35,,MAJLIS PERBANDARAN KUALA KANGSAR,PASAR MALAM
+PEKAN KARAI,"PEKAN KARAI,",ENGGOR,,33600,Perak,,,,SELASA,,700,1200,,,150,,MAJLIS PERBANDARAN KUALA KANGSAR,PASAR PAGI
+HADAPAN PASAR BESAR SUNGAI SIPUT,PASAR BESAR SUNGAI SIPUT,SUNGAI SIPUT,,31100,Perak,,,,KHAMIS,,700,1200,,,60,,MAJLIS PERBANDARAN KUALA KANGSAR,PASAR TANI FAMA
+"DATARAN AMANJAYA, MANONG","2010, A3, KAMPUNG SUAK PETAI",MANONG,,33800,Perak,,,,JUMAAT,,700,1200,,,120,,MAJLIS PERBANDARAN KUALA KANGSAR,PASAR PAGI
+DEPAN AMBANK KUALA KANGSAR,JALAN RAJA CHULAN,KUALA KANGSAR,,33000,Perak,,,,SABTU,,700,1200,,,50,,MAJLIS PERBANDARAN KUALA KANGSAR,PASAR TANI FAMA
+TAMAN PUNCAK BOUGAINVILLEA,JALAN PUNCAK BOUGAINVILLEA,KUALA KANGSAR,,33010,Perak,,,,AHAD,,700,1200,,,250,,MAJLIS PERBANDARAN KUALA KANGSAR,PASAR PAGI
+"KAMPUNG MUHIBBAH, SUNGAI SIPUT","KAMPUNG MUHIBBAH, SUNGAI SIPUT",KUALA KANGSAR,,33011,Perak,,,,SELASA,,1600,2000,,,60,,MAJLIS PERBANDARAN KUALA KANGSAR,PASAR MALAM
+TG.TUALANG,JALAN KAMPAR,BATU GAJAH,,31000,Perak,,,,AHAD,,700,1200,,,181,,MAJLIS DAERAH BATU GAJAH,PASAR SEHARI
+PUSING,JALAN BESAR PUSING,BATU GAJAH,,31550,Perak,,,,SELASA,,700,1200,,,96,,MAJLIS DAERAH BATU GAJAH,PASAR SEHARI
+TRONOH,JALAN SIPUTEH,SIPUTEH,,31560,Perak,,,,SELASA,,700,1200,,,61,,MAJLIS DAERAH BATU GAJAH,PASAR SEHARI
+BATU GAJAH,JALAN GOPENG,BATU GAJAH,,31000,Perak,,,,AHAD,,700,1200,,,150,,MAJLIS DAERAH BATU GAJAH,PASAR SEHARI
+LUAR PASAR AWAM PUSING,JALAN BESAR PUSING,BATU GAJAH,,31550,Perak,,,,HARIAN,,700,1200,,,185,,MAJLIS DAERAH BATU GAJAH,PASAR HARIAN
+TAMAN SAUJANA,JALAN PUSING,PUSING,,31000,Perak,,,,KHAMIS,,700,2200,,,116,,MAJLIS DAERAH BATU GAJAH,PASAR MALAM
+BATU GAJAH,JALAN PANDAK AKHAT,BATU GAJAH,,31000,Perak,,,,SELASA,,700,2200,,,270,,MAJLIS DAERAH BATU GAJAH,PASAR MALAM
+BATU GAJAH PERDANA PERSIARAN 10,JALAN PUSING,BATU GAJAH,,31550,Perak,,,,AHAD,,700,2200,,,92,,MAJLIS DAERAH BATU GAJAH,PASAR MALAM
+BANDAR SRI PENGKALAN,JALAN PUSING,BATU GAJAH,,31550,Perak,,,,JUMAAT,,700,2200,,,149,,MAJLIS DAERAH BATU GAJAH,PASAR MALAM
+TRONOH,JALAN SIPUTEH,SIPUTEH,,31560,Perak,,,,JUMAAT,,700,2200,,,52,,MAJLIS DAERAH BATU GAJAH,PASAR MALAM
+BANDAR PULAI JAYA,HALA PULAI JAYA,BATU GAJAH,,31300,Perak,,,,SABTU,,700,2200,,,87,,MAJLIS DAERAH BATU GAJAH,PASAR MALAM
+TG.TUALANG,JALAN KAMPAR,BATU GAJAH,,31000,Perak,,,,JUMAAT,,700,2200,,,146,,MAJLIS DAERAH BATU GAJAH,PASAR MALAM
+TAMAN SERI RAIA,KAMPUNG KEPAYANG,BATU GAJAH,,31300,Perak,,,,RABU,,700,2200,,,30,,MAJLIS DAERAH BATU GAJAH,0
+TAMAN RAIA MESRA,KAMPUNG KEPAYANG,BATU GAJAH,,31000,Perak,,,,ISNIN,,700,2200,,,25,,MAJLIS DAERAH BATU GAJAH,PASAR MALAM
+PASAR MALAM TANJONG MALIM,0,TANJONG MALIM,,35900,Perak,,,,SABTU,,1500,2200,,,380,,MAJLIS DAERAH TANJONG MALIM,PASAR MALAM
+PASAR MALAM BEHRANG 2020,JALAN WAWASAN DAGANGAN 2,TANJONG MALIM,,35900,Perak,,,,SELASA,,1500,2200,,,68,,MAJLIS DAERAH TANJONG MALIM,PASAR MALAM
+PASAR MALAM TAMAN SEKIAH MAKMUR,0,BEHRANG ULU,,35950,Perak,,,,RABU,,1500,2200,,,20,,MAJLIS DAERAH TANJONG MALIM,PASAR MALAM
+PASAR MALAM SLIM RIVER,JALAN PASAR,SLIM RIVER,,35800,Perak,,,,KHAMIS,,1500,2200,,,225,,MAJLIS DAERAH TANJONG MALIM,PASAR MALAM
+PASAR LAMBAK BEHRANG STESEN,JALAN BESAR,BEHRANG STESEN,,35950,Perak,,,,JUMAAT,,700,1200,,,85,,MAJLIS DAERAH TANJONG MALIM,PASAR LAMBAK
+PASAR LAMBAK SLIM VILLAGE,JALAN TAYLOR,SLIM VILLAGE,,35800,Perak,,,,SABTU,,700,1200,,,82,,MAJLIS DAERAH TANJONG MALIM,PASAR LAMBAK
+PASAR LAMBAK SLIM RIVER,JALAN PASAR,SLIM RIVER,,35800,Perak,,,,AHAD,,700,1200,,,220,,MAJLIS DAERAH TANJONG MALIM,PASAR LAMBAK
+PASAR AWAM TANJONG MALIM,0,TANJONG MALIM,,35900,Perak,,,,SETIAP HARI,,600,1400,,,120,,MAJLIS DAERAH TANJONG MALIM,PASAR AWAM TANJONG MALIM
+PASAR AWAM BEHRANG STESEN,JALAN BESAR,BEHRANG STESEN,,35950,Perak,,,,SETIAP HARI,,600,1400,,,30,,MAJLIS DAERAH TANJONG MALIM,PASAR AWAM BEHRANG STESEN
+PASAR AWAM SLIM RIVER,JALAN PASAR,SLIM RIVER,,35800,Perak,,,,SETIAP HARI,,600,1400,,,60,,MAJLIS DAERAH TANJONG MALIM,PASAR AWAM SLIM RIVER
+PASAR AWAM SLIM VILLAGE,JALAN TAYLOR,SLIM VILLAGE,,35800,Perak,,,,SETIAP HARI,,600,1400,,,8,,MAJLIS DAERAH TANJONG MALIM,PASAR AWAM SLIM VILLAGE
+PASAR TANI (FAMA),JALAN DOUGLAS,TANJONG MALIM,,35900,Perak,,,,RABU,,700,1300,,,50,,MAJLIS DAERAH TANJONG MALIM,PASAR TANI (FAMA)
+PASAR TANI (PELADANG),JALAN DEW,SLIM RIVER,,35800,Perak,,,,KHAMIS,,700,1300,,,50,,MAJLIS DAERAH TANJONG MALIM,PASAR TANI (PELADANG)
+KAMPAR,JALAN PASAR,KAMPAR,,31900,Perak,,,,SETIAP HARI,,500,1300,,,333,,MAJLIS DAERAH KAMPAR,PASAR AWAM
+MALIM NAWAR,JALAN MALM NAWAR,MALIM NAWAR,,31700,Perak,,,,SETIAP HARI,,500,1300,,,97,,MAJLIS DAERAH KAMPAR,PASAR AWAM
+MAMBANG DIAWAN FASA,JALAN HARUAN,MAMBANG DIAWAN,,31950,Perak,,,,SETIAP HARI,,500,1300,,,76,,MAJLIS DAERAH KAMPAR,PASAR AWAM
+JERAM,JALAN BESAR,JERAM,,31850,Perak,,,,SETIAP HARI,,600,1200,,,57,,MAJLIS DAERAH KAMPAR,PASAR AWAM
+GOPENG,JALAN PASAR,GOPENG,,31600,Perak,,,,SETIAP HARI,,500,1500,,,95,,MAJLIS DAERAH KAMPAR,PASAR AWAM
+LAWAN KUDA,JALAN BESAR,GOPENG,,31600,Perak,,,,SETIAP HARI,,600,1300,,,87,,MAJLIS DAERAH KAMPAR,PASAR AWAM
+KOPISAN,JALAN PASAR,GOPENG,,31600,Perak,,,,SETIAP HARI,,600,1300,,,46,,MAJLIS DAERAH KAMPAR,PASAR AWAM
+TRONOH MINES,JALAN BESAR,KAMPAR,,31910,Perak,,,,SETIAP HARI,,600,1300,,,26,,MAJLIS DAERAH KAMPAR,PASAR AWAM
+MAMBANG DIAWAN,JALAN HARUAN,MAMBANG DIAWAN,,31950,Perak,,,,ISNIN,,630,1230,,,118,,MAJLIS DAERAH KAMPAR,PASAR SEHARI
+GOPENG,JALAN PASAR,GOPENG,,31600,Perak,,,,SELASA,,630,1230,,,110,,MAJLIS DAERAH KAMPAR,PASAR SEHARI
+JERAM,JALAN BESAR,JERAM,,31850,Perak,,,,RABU,,630,1230,,,56,,MAJLIS DAERAH KAMPAR,PASAR SEHARI
+KOPISAN,JALAN PASAR,GOPENG,,31600,Perak,,,,KHAMIS,,630,1230,,,73,,MAJLIS DAERAH KAMPAR,PASAR SEHARI
+LAWAN KUDA,JALAN BESAR,GOPENG,,31600,Perak,,,,JUMAAT,,630,1230,,,121,,MAJLIS DAERAH KAMPAR,PASAR SEHARI
+MALIM NAWAR,BELAKANG PASAR,MALIM NAWAR,,31700,Perak,,,,SABTU,,630,1230,,,161,,MAJLIS DAERAH KAMPAR,PASAR SEHARI
+LAWAN KUDA,JALAN BESAR,GOPENG,,31600,Perak,,,,ISNIN,,1630,2030,,,152,,MAJLIS DAERAH KAMPAR,PASAR MALAM
+MALIM NAWAR,BELAKANG PASAR,MALIM NAWAR,,31700,Perak,,,,SELASA,,1630,2100,,,125,,MAJLIS DAERAH KAMPAR,PASAR MALAM
+TAMAN BANDAR BARU,JALAN BATU SINAR,KAMPAR,,31900,Perak,,,,RABU,,1630,2100,,,203,,MAJLIS DAERAH KAMPAR,PASAR MALAM
+MAMBANG DIAWAN,JALAN HARUAN,MAMBANG DIAWAN,,31950,Perak,,,,KHAMIS,,1630,2100,,,79,,MAJLIS DAERAH KAMPAR,PASAR MALAM
+TAMAN MELAYU JAYA,JALAN CENGAL,KAMPAR,,31900,Perak,,,,JUMAAT,,1630,2100,,,44,,MAJLIS DAERAH KAMPAR,PASAR MALAM
+KAMPAR,JALAN TOKONG,KAMPAR,,31900,Perak,,,,SABTU,,1630,2000,,,97,,MAJLIS DAERAH KAMPAR,PASAR MALAM
+KAMPUNG PASIR,JALAN KAMPAR IPOH,JERAM,,31850,Perak,,,,AHAD,,1630,2,,,64,,MAJLIS DAERAH KAMPAR,PASAR MALAM
+GOPENG,JALAN MASJID,GOPENG,,31600,Perak,,,,AHAD,,1630,2100,,,66,,MAJLIS DAERAH KAMPAR,PASAR MALAM
+FAMA,JALAN IDRIS,KAMPAR,,31900,Perak,,,,RABU,,700,1200,,,10,,MAJLIS DAERAH KAMPAR,PASAR TANI
+KAMPAR,JALAN PASAR,KAMPAR,,31900,Perak,,,,SETIAP HARI,,630,1300,,,83,,MAJLIS DAERAH KAMPAR,PASAR HARIAN
+FAMA,MASJID ANNUR KAMPAR,KAMPAR,,31900,Perak,,,,SABTU,,630,1200,,,30,,MAJLIS DAERAH KAMPAR,PASAR TANI
+PASAR AWAM KAMPUNG GAJAH,JALAN SIPUNTUM,KAMPUNGGAJAH,,36800,Perak,,,,SETIAP HARI,,700,1200,,,8,,MAJLIS DAERAH PERAK TENGAH,PASAR AWAM
+PASAR AWAM PARIT,"JALAN BESAR, PARIT",PARIT,,32800,Perak,,,,SETIAP HARI,,700,1200,,,46,,MAJLIS DAERAH PERAK TENGAH,PASAR AWAM
+PASAR AWAM BOTA KANAN,"JALAN PUSAT KONSERVASI TUNTUNG, BOTA KANAN",BOTA KANAN,,32600,Perak,,,,SETIAP HARI,,700,1200,,,4,,MAJLIS DAERAH PERAK TENGAH,PASAR AWAM
+PARIT,JALAN HAJI WAHAB,PARIT,,32800,Perak,,,,ISNIN,,700,1200,,,122,,MAJLIS DAERAH PERAK TENGAH,PASAR SEHARI
+KAMPUNG GAJAH,"PASAR SEHARI KAMPUNG 
+ GAJAH",KAMPUNG GAJAH,,36800,Perak,,,,SELASA,,700,1200,,,173,,MAJLIS DAERAH PERAK TENGAH,PASAR SEHARI
+BOTA KANAN,JALAN BOTA KANAN,BOTA KANAN,,32600,Perak,,,,SABTU,,700,1200,,,160,,MAJLIS DAERAH PERAK TENGAH,PASAR SEHARI
+ISKANDAR PERDANA,ISKANDAR PERDANA,ISKANDAR PERDANA,,32610,Perak,,,,ISNIN,,1600,2100,,,135,,MAJLIS DAERAH PERAK TENGAH,PASAR MALAM
+BANDAR U,"BANDAR UNIVERSITI, 
+ SERI ISKANDAR",BANDAR U,,32610,Perak,,,,RABU,,1600,2100,,,211,,MAJLIS DAERAH PERAK TENGAH,PASAR MALAM
+PEKAN PARIT,JALAN HAJI WAHAB,PEKAN PARIT,,32800,Perak,,,,RABU,,700,1200,,,69,,MAJLIS DAERAH PERAK TENGAH,PASAR TANI
+CHANGKAT LADA,DATARAN BELIA CHANGKAT LADA,CHANGKAT LADA,,36800,Perak,,,,KHAMIS,,700,1200,,,53,,MAJLIS DAERAH PERAK TENGAH,PASAR TANI
+KAMPUNG GAJAH,KAMPUNG GAJAH,KAMPUNG GAJAH,,36800,Perak,,,,JUMAA,,700,1200,,,85,,MAJLIS DAERAH PERAK TENGAH,PASAR TANI
+PARIT,JALAN HAJI WAHAB,PARIT,,32800,Perak,,,,SABTU,,700,1200,,,69,,MAJLIS DAERAH PERAK TENGAH,PASAR TANI
+SERI ISKANDAR,ISKANDAR PERDANA,SERI ISKANDAR,,32610,Perak,,,,SABTU,,700,1200,,,18,,MAJLIS DAERAH PERAK TENGAH,PASAR TANI
+PASAR AWAM BAGAN SERAI,0,BAGAN SERAI,,34300,Perak,,,,SETIAP HARI,,600,1900,,,30,,MAJLIS DAERAH KERIAN,PASAR AWAM
+PASAR AWAM KUALA KURAU,JALAN SWEE LEE,KUALA KURAU,,34350,Perak,,,,SETIAP HARI,,600,1900,,,21,,MAJLIS DAERAH KERIAN,PASAR AWAM
+PASAR AWAM PARIT BUNTAR,PUSAT BANDAR,PARIT BUNTAR,,34200,Perak,,,,SETIAP HARI,,600,1900,,,36,,MAJLIS DAERAH KERIAN,PASAR AWAM
+TAPAK PENJAJA TITI SERONG,PEKAN TITI SERONG,PARIT BUNTAR,,34200,Perak,,,,SETIAP HARI,,600,1900,,,35,,MAJLIS DAERAH KERIAN,PASAR AWAM
+PASAR AWAM BATU LIMA,PEKAN BATU LIMA,PARIT BUNTAR,,34200,Perak,,,,SETIAP HARI,,600,1900,,,31,,MAJLIS DAERAH KERIAN,PASAR AWAM
+PASAR SEJAHTERA TANJUNG PIANDANG,TAMAN PIANDANG INDAH,TANJUNG PIANDANG,,34250,Perak,,,,SETIAP HARI,,600,1900,,,35,,MAJLIS DAERAH KERIAN,PASAR AWAM
+"LORONG KERAMAT, BAGAN SERAI",LORONG KERAMAT,BAGAN SERAI,,34300,Perak,,,,SETIAP HARI,,800,1100,,,25,,MAJLIS DAERAH KERIAN,PASAR HARI
+"PASAR AWAM, BAGAN SERAI",0,BAGAN SERAI,,34300,Perak,,,,SETIAP HARI,,800,1100,,,19,,MAJLIS DAERAH KERIAN,PASAR HARI
+PEKAN KUALA KURAU,JALAN SWEE LEE,KUALA KURAU,,34350,Perak,,,,SETIAP HARI,,800,1100,,,22,,MAJLIS DAERAH KERIAN,PASAR HARI
+"JALAN SYARIKAT, PARIT BUNTAR",JALAN SYARIKAT,PARIT BUNTAR,,34200,Perak,,,,SETIAP HARI,,800,1100,,,28,,MAJLIS DAERAH KERIAN,PASAR HARI
+"PASAR AWAM, PARIT BUNTAR",PUSAT BANDAR,PARIT BUNTAR,,34200,Perak,,,,"SABTU, AHAD",,800,1100,,,32,,MAJLIS DAERAH KERIAN,PASAR HARI
+PEKAN TANJUNG PIANDANG,JALAN BESAR TANJUNG PIANDANG,TANJUNG PIANDANG,,34250,Perak,,,,SETIAP HARI,,800,1100,,,30,,MAJLIS DAERAH KERIAN,PASAR HARI
+PEKAN BAGAN SERAI,JALAN SYED THAUPY 2,BAGAN SERAI,,34300,Perak,,,,ISNIN,,1700,2200,,,53,,MAJLIS DAERAH KERIAN,PASAR MALAM
+PEKAN BUKIT MERAH,0,BAGAN SERAI,,34310,Perak,,,,SELASA,,1600,2200,,,60,,MAJLIS DAERAH KERIAN,PASAR MALAM
+PEKAN ALOR PONGSU,JALAN STESEN,BAGAN SERAI,,34300,Perak,,,,SELASA,,1630,1900,,,63,,MAJLIS DAERAH KERIAN,PASAR MALAM
+SUNGAI GEDONG,SUNGAI GEDONG,BAGAN SERAI,,34300,Perak,,,,KHAMIS,,1700,2100,,,52,,MAJLIS DAERAH KERIAN,PASAR MALAM
+LEMBAH BERIAH,0,BAGAN SERAI,,34400,Perak,,,,SABTU,,1700,2100,,,55,,MAJLIS DAERAH KERIAN,PASAR MALAM
+JALAN PANTAI KUALA KURAU,JALAN PANTAI,KUALA KURAU,,34350,Perak,,,,RABU,,1800,2200,,,48,,MAJLIS DAERAH KERIAN,PASAR MALAM
+"TAMAN KERIAN PERMAI, PARIT BUNTAR",JALAN PERMAI 3,PARIT BUNTAR,,34200,Perak,,,,KHAMIS,,1600,2000,,,60,,MAJLIS DAERAH KERIAN,PASAR MALAM
+PEKAN LAMA PARIT BUNTAR,JALAN THE PEH KONG,PARIT BUNTAR,,34200,Perak,,,,JUMAAT,,1700,2300,,,95,,MAJLIS DAERAH KERIAN,PASAR MALAM
+PEKAN BATU LIMA JALAN BAHARU,0,PARIT BUNTAR,,34200,Perak,,,,SABTU,,1600,2200,,,58,,MAJLIS DAERAH KERIAN,PASAR MALAM
+SIMPANG TIGA SELINSING,JALAN SELINSING,SEMANGGOL,,34400,Perak,,,,ISNIN,,1630,1900,,,42,,MAJLIS DAERAH KERIAN,PASAR MALAM
+"TAMAN INDAH JAYA,KAMPUNG JAYA",TAMAN INDAH JAYA,SEMANGGOL,,34400,Perak,,,,ISNIN,,1630,1900,,,48,,MAJLIS DAERAH KERIAN,PASAR MALAM
+PEKAN SELINSING,PEKAN SELINSING,SEMANGGOL,,34400,Perak,,,,KHAMIS,,1630,1900,,,50,,MAJLIS DAERAH KERIAN,PASAR MALAM
+PEKAN SEMANGGOL,PEKAN SEMANGGOL,SEMANGGOL,,34400,Perak,,,,SABTU,,1630,1900,,,45,,MAJLIS DAERAH KERIAN,PASAR MALAM
+KAMPUNG TEBUK PANCUR,TEBUK PANCUR,SEMANGGOL,,34400,Perak,,,,AHAD,,1630,1900,,,45,,MAJLIS DAERAH KERIAN,PASAR MALAM
+PEKAN TANJUNG PIANDANG,JALAN PANTAI,TANJUNG PIANDANG,,34250,Perak,,,,SELASA,,1700,2200,,,57,,MAJLIS DAERAH KERIAN,PASAR MALAM
+"PEKAN SUNGAI BARU, TANJUNG PIANDANG",JALAN PANTAI,TANJUNG PIANDANG,,34250,Perak,,,,KHAMIS,,1630,2100,,,60,,MAJLIS DAERAH KERIAN,PASAR MALAM
+PEKAN TITI SERONG,LOT 7941 DAN 7943 PEKAN TITI SERONG,TITI SERONG,,34200,Perak,,,,ISNIN,,1630,2130,,,49,,MAJLIS DAERAH KERIAN,PASAR MALAM
+PEKAN ALOR PONGSU,JALAN STESEN,ALOR PONGSU,,34310,Perak,,,,SABTU,,800,1100,,,35,,MAJLIS DAERAH KERIAN,PASAR PAGI
+MASJID TINGGI,JALAN BANJAR,BAGAN SERAI,,34300,Perak,,,,KHAMIS,,800,1100,,,40,,MAJLIS DAERAH KERIAN,PASAR PAGI
+PEKAN BAGAN TIANG,"JALAN BESAR, PEKAN BAGAN TIANG",BAGAN SERAI,,34200,Perak,,,,SABTU,,800,1100,,,38,,MAJLIS DAERAH KERIAN,PASAR PAGI
+SUNGAI GEDONG,SUNGAI GEDONG,BAGAN SERAI,,34300,Perak,,,,AHAD,,800,1100,,,35,,MAJLIS DAERAH KERIAN,PASAR PAGI
+PEKAN BATU LIMA,PEKAN BATU LIMA,PARIT BUNTAR,,34200,Perak,,,,RABU,,800,1100,,,32,,MAJLIS DAERAH KERIAN,PASAR PAGI
+PEKAN SEMANGGOL,PEKAN SEMANGGOL,SEMANGGOL,,34400,Perak,,,,SELASA,,800,1100,,,32,,MAJLIS DAERAH KERIAN,PASAR PAGI
+PEKAN TANJUNG PIANDANG,JALAN PANTAI,TANJUNG PIANDANG,,34250,Perak,,,,ISNIN,,800,1100,,,32,,MAJLIS DAERAH KERIAN,PASAR PAGI
+PEKAN TITI SERONG,PEKAN TITI SERONG,TITI SERONG,,34200,Perak,,,,AHAD,,700,1130,,,38,,MAJLIS DAERAH KERIAN,PASAR PAGI
+PASAR TANI PUSAT BANDAR BAGAN SERAI,JALAN HARMONI,BAGAN SERAI,,34300,Perak,,,,JUMAAT,,1600,1900,,,39,,MAJLIS DAERAH KERIAN,PASAR TANI
+PASAR TANI TAMAN KERIAN,JALAN PERUSAHAAN,PARIT BUNTAR,,34200,Perak,,,,"SELASA, RABU",,1700,2000,,,50,,MAJLIS DAERAH KERIAN,PASAR TANI
+PASAR SEHARI TAPAH,PASAR AWAM TAPAH,TAPAH,,35000,Perak,,,,KHAMIS,,600,1200,,,0,,MAJLIS DAERAH TAPAH,PASAR SEHARI
+PASAR SEHARI CHENDERIANG,PEKAN CHENDERIANG,CHENDERIANG,,35300,Perak,,,,SELASA,,600,1200,,,0,,MAJLIS DAERAH TAPAH,PASAR SEHARI
+PASAR SEHARI AIR KUNING,JALAN BANIR,AIR KUNING,,31900,Perak,,,,SELASA,,600,1200,,,0,,MAJLIS DAERAH TAPAH,PASAR SEHARI
+PASAR SEHARI SUNGKAI,PASAR AWAM SUNGKAI,SUNGKAI,,35600,Perak,,,,AHAD,,600,1200,,,0,,MAJLIS DAERAH TAPAH,PASAR SEHARI
+PASAR SEHARI SG LESONG,0,SG LESONG,,31900,Perak,,,,JUMAAT,,600,1200,,,0,,MAJLIS DAERAH TAPAH,PASAR SEHARI
+PASAR MALAM TAPAH,PASAR AWAM TAPAH,TAPAH,,35000,Perak,,,,SABTU,,1600,2300,,,0,,MAJLIS DAERAH TAPAH,PASAR MALAM
+PASAR MALAM TAPAH ROAD,UNIRESIDENSI TAPAH,TAPAH ROAD,,35400,Perak,,,,JUMAAT,,1600,2300,,,0,,MAJLIS DAERAH TAPAH,PASAR MALAM
+PASAR MALAM AIR KUNING,TAMAN ELOK,AIR KUNING,,31900,Perak,,,,JUMAAT,,1600,2300,,,0,,MAJLIS DAERAH TAPAH,PASAR MALAM
+PASAR MALAM TEMOH,DATARAN AMANJAYA,TEMOH,,35350,Perak,,,,AHAD,,1600,2300,,,0,,MAJLIS DAERAH TAPAH,PASAR MALAM
+PASAR MALAM CHENDERIANG,PEKAN CHENDERIANG,CHENDERIANG,,35300,Perak,,,,SELASA,,1600,2300,,,0,,MAJLIS DAERAH TAPAH,PASAR MALAM
+PASAR MALAM BIDOR,MEDAN SELERA BIDOR,BIDOR,,35500,Perak,,,,RABU,,1600,2300,,,0,,MAJLIS DAERAH TAPAH,PASAR MALAM
+PASAR MALAM BIDOR BOTANI,TAMAN BIDOR BOTANI,BIDOR,,35500,Perak,,,,ISNIN,,1600,2300,,,0,,MAJLIS DAERAH TAPAH,PASAR MALAM
+PASAR MALAM SUNGKAI,PASAR AWAM SUNGKAI,SUNGKAI,,35600,Perak,,,,SELASA,,1600,2300,,,0,,MAJLIS DAERAH TAPAH,PASAR MALAM
+PASAR MALAM SUNGKAI PERDANA,TAMAN SUNGKAI PERDANA,SUNGKAI,,35600,Perak,,,,JUMAAT,,1600,2300,,,0,,MAJLIS DAERAH TAPAH,PASAR MALAM
+PASAR TANI TAPAH,PASAR AWAM TAPAH,TAPAH,,35000,Perak,,,,SELASA,,600,1200,,,0,,MAJLIS DAERAH TAPAH,PASAR TANI
+PASAR TANI KAWASAN MASJID TAPAH,TAPAK PAKIR MASJID TAPAH,TAPAH,,35000,Perak,,,,AHAD,,600,1200,,,0,,MAJLIS DAERAH TAPAH,PASAR TANI
+PASAR AWAM TAPAH,JALAN TEMOH,TAPAH,,35000,Perak,,,,SETIAP HARI,,600,1200,,,0,,MAJLIS DAERAH TAPAH,PASAR AWAM
+PASAR AWAM BIDOR,JALAN PASAR,BIDOR,,35500,Perak,,,,SETIAP HARI,,600,1200,,,150,,MAJLIS DAERAH TAPAH,PASAR AWAM
+PASAR AWAM SUNGKAI,JALAN PASAR,SUNGKAI,,35600,Perak,,,,SETIAP HARI,,600,1200,,,69,,MAJLIS DAERAH TAPAH,PASAR AWAM
+PASAR AWAM TAPAH ROAD,JALAN BESAR,TAPAH ROAD,,35400,Perak,,,,SETIAP HARI,,600,1200,,,32,,MAJLIS DAERAH TAPAH,PASAR AWAM
+PASAR AWAM AIR KUNING,JALAN BANIR,AIR KUNING,,31920,Perak,,,,SETIAP HARI,,600,1000,,,12,,MAJLIS DAERAH TAPAH,PASAR AWAM
+PASAR AWAM CHENDERIANG,JALAN PASAR,CHENDERIANG,,35300,Perak,,,,SETIAP HARI,,600,1000,,,10,,MAJLIS DAERAH TAPAH,PASAR AWAM
+PASAR AWAM COLDSTREAM,KAMPUNG BARU COLDSTREAM,BIDOR,,35500,Perak,,,,SETIAP HARI,,600,1000,,,6,,MAJLIS DAERAH TAPAH,PASAR AWAM
+PASAR MALAM GERIK,"JALAN KUALA
+ KENDERONG",GERIK,,33300,Perak,,,,JUMAAT,,1500,2200,,,140,,MAJLIS DAERAH GERIK,PASAR MALAM
+PASAR TANI GERIK,"JALAN KUALA
+ KENDERONG",GERIK,,33300,Perak,,,,SELASA,,800,1300,,,34,,MAJLIS DAERAH GERIK,PASAR TANI
+PASAR BASAH,"JALAN PERSIARAN 
+ PASAR",GERIK,,33300,Perak,,,,"SETIAP
+ HARI",,600,1400,,,56,,MAJLIS DAERAH GERIK,PASAR AWAM
+PASAR TIDAK HALAL,KAMPUNG BARU BATU 2,GERIK,,33300,Perak,,,,"SETIAP
+ HARI",,600,1400,,,4,,MAJLIS DAERAH GERIK,PASAR KHINZIR
+PASAR BORONG,"JALAN PERSIARAN 
+ PASAR",GERIK,,33300,Perak,,,,"SETIAP
+ HARI",,600,1400,,,8,,MAJLIS DAERAH GERIK,PASAR BORONG
+PASAR MALAM BUKIT BERTAM,BUKIT BERTAM,SELAMA,,34140,Perak,,,,SELASA,,1600,2100,,,50,,MAJLIS DAERAH SELAMA,PASAR MALAM
+PASAR MALAM SG KERIAN,JLN SIR CHULAN,SELAMA,,34100,Perak,,,,SABTU,,1400,1900,,,70,,MAJLIS DAERAH SELAMA,PASAR MALAM
+PASAR SUNGAI BAYUR,SUNGAI BAYUR,SELAMA,,34140,Perak,,,,JUMAAT,,600,1200,,,180,,MAJLIS DAERAH SELAMA,PASAR PAGI
+PASAR KG MASJID,KG MASJID,SELAMA,,34150,Perak,,,,JUMAAT,,600,1200,,,100,,MAJLIS DAERAH SELAMA,PASAR PAGI
+PASAR RANTAU PANJANG,RANTAU PANJANG,SELAMA,,34140,Perak,,,,RABU,,1500,1900,,,35,,MAJLIS DAERAH SELAMA,PASAR MALAM
+PASAR RANTAU PANJANG,RANTAU PANJANG,SELAMA,,34140,Perak,,,,ISNIN,,700,1100,,,35,,MAJLIS DAERAH SELAMA,PASAR PAGI
+PEKAN LENGGONG,"LOT 4467, LOT PERNIAGAAN 88",LENGGONG,,33400,Perak,,,,JUMAAT,,1600,2100,,,35,,MAJLIS DAERAH LENGGONG,PASAR MALAM
+TASIK RABAN,DATARAN TASIK RABAN,LENGGONG,,33400,Perak,,,,ISNIN,,1600,2100,,,36,,MAJLIS DAERAH LENGGONG,PASAR MALAM
+PEKAN LENGGONG,"LOT 4467, LOT PERNIAGAAN 88",LENGGONG,,33400,Perak,,,,SABTU,,700,100,,,130,,MAJLIS DAERAH LENGGONG,PASAR SEHARI
+FAMA,JALAN ALANG ISKANDAR,LENGGONG,,33400,Perak,,,,KHAMIS,,700,100,,,12,,MAJLIS DAERAH LENGGONG,PASAR TANI
+PASAR MALAM PENGKALAN HULU,JALAN PH SENTRAL,PENGKALAN HULU,,33100,Perak,,,,RABU,,1600,2100,,,74,,MAJLIS DAERAH PENGKALAN HULU,PASAR MALAM
+PASAR BESAR PENGKALAN HULU,JALAN DATO' HJ. SHAMSUDDIN,PENGKALAN HULU,,33100,Perak,,,,SETIAP HARI KECUALI HARI KHAMIS,,700,1200,,,21,,MAJLIS DAERAH PENGKALAN HULU,PASAR AWAM
+Pasar Malam Pekan Bedong,"32, JALAN TAMAN BANDAR BARU, TAMAN BANDAR BARU SUNGAI LALANG",,Bedong,08100,Kedah,5.70888555,100.5343206,https://maps.app.goo.gl/wFGHNjtTHC66Uyk1A,Ahad,5-10pm,3,,,,,,,
+Pasar Malam Taman Arked,"106, JALAN FAIRUZ 9, KAWASAN PERUSAHAAN RINGAN BAKAR ARANG",,Sungai Petani,08000,Kedah,5.623995644,100.4720304,https://maps.app.goo.gl/WgDTmwQNFAZmofMi9,KHAMIS,4.30-10pm,3,,,,,,,
+Pasar Malam Bandar Puteri Jaya,BANDAR PUTERI JAYA,,Sungai Petani,08000,Kedah,5.610612104,100.53134,https://maps.app.goo.gl/hXbnPG7fUBJ3ZUHK6,"RABU, AHAD",4.30-9pm,3,,,,,,,
+Pasar Malam Taman Keladi,"365, LORONG ANGSANA 1, TAMAN KELADI",,Sungai Petani,08000,Kedah,5.616405079,100.5043822,https://maps.app.goo.gl/EDGRTCAE2tgy3s978,Ahad,5-10pm,3,,,,,,,
+Pasar Malam Sungai Petani,,,,,Kedah,,,,Ahad,5-10pm,3,,,,,,,
+Pasar Malam Taman Gurun Jaya,,,,,Kedah,,,,Isnin,5-10pm,3,,,,,,,
+Pasar Malam Gurun,,,,,Kedah,,,,Isnin,5-10pm,3,,,,,,,
+Pasar Malam Taman Sri Wang,,,,,Kedah,,,,Isnin,5-10pm,3,,,,,,,
+Pasar Malam Taman Ria Jaya,"186, LORONG GAMELAN 2, TAMAN RIA JAYA",,Sungai Petani,08000,Kedah,5.65226461,100.5160021,https://maps.app.goo.gl/zNPkXkGgFzz91tiG7,"SELASA, SABTU",4-10pm,3,,,,,,,
+Pasar Malam Taman Semarak,,,,,Kedah,,,,Rabu,5-10pm,3,,,,,,,
+Pasar Malam Taman Kempas,JALAN KEMPAS,,Sungai Petani,08000,Kedah,5.590174389,100.4840231,https://maps.app.goo.gl/1pbgLcCRdswA9D6D6,JUMAAT,4-9.30pm,3,,,,,,,
+Pasar Malam Kota Kuala Muda,KAMPUNG KEPALA JALAN,,Kota Kuala Muda,08500,Kedah,5.585310991,100.3395459,https://maps.app.goo.gl/ggGvdppG5rKqdRUf9,"ISNIN, RABU",6-10pm,3,,,,,,,
+,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,
+Pasar Tani Arau,,,,,Perlis,,,,Isnin,,,,,,,,,
+Nat Balai Baru,BALAI BARU,,Kangar,02400,Perlis,6.515378329,100.2312624,https://maps.app.goo.gl/YPhoh5qSntW2BX149,"ISNIN, RABU, SABTU, AHAD","7am-1pm, 6.30-10pm (AHAD)",,,,,,,,
+Pasar Mlm Jejawi,"OPPOSITE JPJ JEJAWI,JALAN UMNO, KAMPUNG BEHOR PISANG",,Kangar,01000,Perlis,6.441894061,100.2341244,https://maps.app.goo.gl/tFcKcFPyLJUwpgGUA,"ISNIN, SABTU",5-10pm,,,,,,,,
+Pasar Mlm Guar Sanji,,,,,Perlis,,,,Isnin,,,,,,,,,
+Pasar Mlm Kuala Sanglang,,,,,Perlis,,,,Isnin,,,,,,,,,
+Pasar Mlm Simpang 4 Abi,,,,,Perlis,,,,Isnin,,,,,,,,,
+Nat Simpang 4,,,,,Perlis,,,,Selasa,,,,,,,,,
+Nat Batu 2,,,,,Perlis,,,,Selasa,,,,,,,,,
+Pasar Mlm Kuala Perlis,,,,,Perlis,,,,Selasa,,,,,,,,,
+Pasar Mlm Lubuk Sireh,,,,,Perlis,,,,Selasa,,,,,,,,,
+Pasar Mlm Bukit Keteri,,,,,Perlis,,,,Selasa,,,,,,,,,
+Nat Balai Baru,,,,,Perlis,,,,Rabu,,,,,,,,,
+Pasar Tani Serlab,,,,,Perlis,,,,Rabu,,,,,,,,,
+Nat Arau (Tapak Psar Mlm),,,,,Perlis,,,,Rabu,,,,,,,,,
+Pasar Mlm Kok Mak,,,,,Perlis,,,,Rabu,,,,,,,,,
+Pasar Mlm Pasar Borong,,,,,Perlis,,,,Rabu,,,,,,,,,
+Pasar Mlm Bintong,,,,,Perlis,,,,Rabu,,,,,,,,,
+Pasar Tani Pekan Simpang 4,,,,,Perlis,,,,Khamis,,,,,,,,,
+Nat Jejawi,,,,,Perlis,,,,Khamis,,,,,,,,,
+Nat Simpang 4,,,,,Perlis,,,,Khamis,,,,,,,,,
+Pasar Mlm Pauh,,,,,Perlis,,,,Khamis,,,,,,,,,
+Pasar Mlm Tt Chal.utan Aji,,,,,Perlis,,,,Khamis,,,,,,,,,
+Pasar Mlm Tmn Melati Indah,,,,,Perlis,,,,Khamis,,,,,,,,,
+Pasar Mlm Batu Bertangkup,,,,,Perlis,,,,Khamis,,,,,,,,,
+Nat Behor Lateh,,,,,Perlis,,,,Jumaat,,,,,,,,,
+"Nat Pokok Getah, Pauh",,,,,Perlis,,,,Jumaat,,,,,,,,,
+Nat Bukit Keteri,,,,,Perlis,,,,Jumaat,,,,,,,,,
+Nat Padang Melangit,,,,,Perlis,,,,Jumaat,,,,,,,,,
+Pasar Mlm Arau,,,,,Perlis,,,,Jumaat,,,,,,,,,
+Pasar Mlm Pekan Simpang 4,,,,,Perlis,,,,Jumaat,,,,,,,,,
+Pasar Mlm Ngulang,,,,,Perlis,,,,Jumaat,,,,,,,,,
+Pasar Mlm Tt Tinggi,,,,,Perlis,,,,Jumaat,,,,,,,,,
+Pasar Mlm Beseri Dalam,,,,,Perlis,,,,Jumaat,,,,,,,,,
+Nat Balai Baru,,,,,Perlis,,,,Sabtu,,,,,,,,,
+Nat Roundbout Felda Chuping,,,,,Perlis,,,,Sabtu,,,,,,,,,
+Pasar Tani Tmn Sena,,,,,Perlis,,,,Sabtu,,,,,,,,,
+Pasar Mlm Jejawi,,,,,Perlis,,,,Sabtu,,,,,,,,,
+Pasar Mlm Semadong,,,,,Perlis,,,,Sabtu,,,,,,,,,
+Pasar Mlm Seberang Ramal,,,,,Perlis,,,,Sabtu,,,,,,,,,
+Nat Pokok Getah,,,,,Perlis,,,,Ahad,,,,,,,,,
+Nat Mata Air,,,,,Perlis,,,,Ahad,,,,,,,,,
+Nat Behor Lateh,,,,,Perlis,,,,Ahad,,,,,,,,,
+Nat Kuala Perlis,,,,,Perlis,,,,Ahad,,,,,,,,,
+Pasar Tani Tmn Sena,,,,,Perlis,,,,Ahad,,,,,,,,,
+Pasar Mlm Tt Chal.utan Aji,,,,,Perlis,,,,Ahad,,,,,,,,,
+Pasar Mlm Balai Baru,,,,,Perlis,,,,Ahad,,,,,,,,,
+Pasar Mlm Kaki Bukit,,,,,Perlis,,,,Ahad,,,,,,,,,
+Uptown Simpang 4 Syed Kassim,,,,,Perlis,,,,Ahad,,,,,,,,,
