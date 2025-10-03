@@ -350,3 +350,38 @@ export const translations: Record<string, Translations> = {
 export function useTranslation(locale = "ms") {
   return translations[locale] || translations.ms || translations.en
 }
+
+// Helpers to format weekday codes and schedule rules
+import type { Weekday, MarketSchedule } from "@/lib/markets-data"
+
+export function formatWeekday(code: Weekday, locale: string = "ms"): string {
+  const t = translations[locale] || translations.ms
+  switch (code) {
+    case "mon":
+      return t.monday
+    case "tue":
+      return t.tuesday
+    case "wed":
+      return t.wednesday
+    case "thu":
+      return t.thursday
+    case "fri":
+      return t.friday
+    case "sat":
+      return t.saturday
+    case "sun":
+      return t.sunday
+    default:
+      return code
+  }
+}
+
+export function formatWeekdayList(codes: Weekday[], locale: string = "ms"): string {
+  return codes.map((c) => formatWeekday(c, locale)).join(", ")
+}
+
+export function formatScheduleRule(rule: MarketSchedule, locale: string = "ms"): string {
+  const dayText = formatWeekdayList(rule.days, locale)
+  const timeText = rule.times.map((t) => `${t.start}-${t.end}`).join(", ")
+  return `${dayText} ${timeText}`
+}

@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import { useTranslation } from "@/lib/i18n"
+import { useTranslation, formatScheduleRule } from "@/lib/i18n"
 import { MapPin, Navigation } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -106,8 +106,9 @@ export default function MarketsMap({ markets, selectedMarket, onMarketSelect, cl
               icon: markerIcon,
             }).addTo(map)
 
+            const locale = typeof window !== "undefined" ? localStorage.getItem("language") || "ms" : "ms"
             const scheduleText = market.schedule[0]
-              ? `${market.schedule[0].day} ${market.schedule[0].sessions[0]?.start}-${market.schedule[0].sessions[market.schedule[0].sessions.length - 1]?.end}`
+              ? formatScheduleRule(market.schedule[0], locale)
               : t.scheduleNotAvailable
 
             marker.bindPopup(`

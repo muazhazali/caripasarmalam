@@ -22,6 +22,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import Link from "next/link"
 import { getAllMarkets } from "@/lib/markets-data"
+import { formatScheduleRule, formatWeekday } from "@/lib/i18n"
 import { useLanguage } from "@/components/language-provider"
 
 const malaysianStates = [
@@ -45,6 +46,25 @@ const malaysianStates = [
 ]
 
 const daysOfWeek = ["Semua Hari", "Isnin", "Selasa", "Rabu", "Khamis", "Jumaat", "Sabtu", "Ahad"]
+
+const dayStringToCode: Record<string, string> = {
+  // English
+  "Monday": "mon",
+  "Tuesday": "tue",
+  "Wednesday": "wed",
+  "Thursday": "thu",
+  "Friday": "fri",
+  "Saturday": "sat",
+  "Sunday": "sun",
+  // Malay
+  "Isnin": "mon",
+  "Selasa": "tue",
+  "Rabu": "wed",
+  "Khamis": "thu",
+  "Jumaat": "fri",
+  "Sabtu": "sat",
+  "Ahad": "sun",
+}
 
 function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
   const R = 6371 // Radius of the Earth in kilometers
@@ -91,37 +111,35 @@ export default function HomePage() {
     )
   }
 
-  const dayOrder: string[] = [
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-    "Sunday",
-  ]
+  const dayOrderCodes: string[] = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"]
 
-  function getLocalizedDay(englishDay: string): string {
-    const key = englishDay.toLowerCase() as keyof typeof t
-    return (t[key] as unknown as string) || englishDay
+  function getLocalizedDayFromCode(code: string): string {
+    // Map code to localized label via i18n helpers
+    const locale = typeof window !== "undefined" ? localStorage.getItem("language") || "ms" : "ms"
+    return formatWeekday(code as any, locale)
   }
 
   function renderScheduleBadges(market: ReturnType<typeof getAllMarkets>[number]) {
-    const ordered = [...market.schedule].sort(
-      (a, b) => dayOrder.indexOf(a.day) - dayOrder.indexOf(b.day),
-    )
+    const ordered = [...market.schedule].sort((a, b) => {
+      const aIdx = Math.min(
+        ...a.days.map((d) => dayOrderCodes.indexOf(d)).filter((i) => i >= 0),
+      )
+      const bIdx = Math.min(
+        ...b.days.map((d) => dayOrderCodes.indexOf(d)).filter((i) => i >= 0),
+      )
+      return aIdx - bIdx
+    })
     return (
       <div className="flex flex-wrap gap-2 mb-4">
         {ordered.map((sch) => {
-          const times = sch.sessions
-            .map((s) => `${s.start}–${s.end}`)
-            .join(", ")
-          const localizedDay = getLocalizedDay(sch.day)
-          const aria = `${localizedDay}, ${times}`
+          const locale = typeof window !== "undefined" ? localStorage.getItem("language") || "ms" : "ms"
+          const times = sch.times.map((s) => `${s.start}–${s.end}`).join(", ")
+          const dayLabel = sch.days.map((d) => getLocalizedDayFromCode(d)).join(", ")
+          const aria = `${dayLabel}, ${times}`
           return (
-            <Badge key={`${market.id}-${sch.day}`} variant="outline" className="flex items-center gap-1" aria-label={aria}>
+            <Badge key={`${market.id}-${sch.days.join('-')}`} variant="outline" className="flex items-center gap-1" aria-label={aria}>
               <CalendarDays className="h-3.5 w-3.5" aria-hidden="true" />
-              <span className="whitespace-nowrap">{localizedDay}</span>
+              <span className="whitespace-nowrap">{dayLabel}</span>
               <span className="text-muted-foreground">•</span>
               <Clock className="h-3.5 w-3.5" aria-hidden="true" />
               <span className="whitespace-nowrap">{times}</span>
@@ -142,7 +160,12 @@ export default function HomePage() {
 
       const matchesState = selectedState === "All States" || market.state === selectedState
 
-      const matchesDay = selectedDay === "All Days" || market.schedule.some((schedule) => schedule.day === selectedDay)
+      const matchesDay =
+        selectedDay === "All Days" ||
+        market.schedule.some((schedule) => {
+          const code = dayStringToCode[selectedDay] || dayStringToCode[selectedDay as keyof typeof dayStringToCode]
+          return code ? schedule.days.includes(code as any) : true
+        })
 
       return matchesSearch && matchesState && matchesDay
     })
