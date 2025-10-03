@@ -1,9 +1,11 @@
+export type Weekday = 'mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat' | 'sun'
+
 export interface MarketSchedule {
-  day: string
-  sessions: {
+  days: Weekday[]
+  times: {
     start: string
     end: string
-    note: string
+    note?: string
   }[]
 }
 
@@ -49,16 +51,16 @@ export const marketsData: Market[] = [
       "One of the most popular night markets in Kuala Lumpur, Pasar Malam Taman Melawati offers a wide variety of local street food, fresh produce, and household items. Known for its vibrant atmosphere and authentic Malaysian cuisine.",
     schedule: [
       {
-        day: "Tuesday",
-        sessions: [{ start: "17:00", end: "22:00", note: "Night market" }],
+        days: ["tue"],
+        times: [{ start: "17:00", end: "22:00", note: "Night market" }],
       },
       {
-        day: "Thursday",
-        sessions: [{ start: "17:00", end: "22:00", note: "Night market" }],
+        days: ["thu"],
+        times: [{ start: "17:00", end: "22:00", note: "Night market" }],
       },
       {
-        day: "Saturday",
-        sessions: [
+        days: ["sat"],
+        times: [
           { start: "07:00", end: "11:00", note: "Morning market" },
           { start: "17:00", end: "22:00", note: "Evening market" },
         ],
@@ -89,8 +91,8 @@ export const marketsData: Market[] = [
       "A bustling night market in the heart of Petaling Jaya, famous for its diverse food offerings and affordable prices. Popular among locals and students from nearby universities.",
     schedule: [
       {
-        day: "Wednesday",
-        sessions: [{ start: "18:00", end: "23:00", note: "Night market" }],
+        days: ["wed"],
+        times: [{ start: "18:00", end: "23:00", note: "Night market" }],
       },
     ],
     parking: { available: true, accessible: false, notes: "Street parking only. Can get crowded during peak hours." },
@@ -114,8 +116,8 @@ export const marketsData: Market[] = [
       "A historic night market in the vibrant Chow Kit area, operating late into the night. Known for its authentic local atmosphere and traditional Malaysian street food.",
     schedule: [
       {
-        day: "Saturday",
-        sessions: [{ start: "19:00", end: "01:00", note: "Late night market" }],
+        days: ["sat"],
+        times: [{ start: "19:00", end: "01:00", note: "Late night market" }],
       },
     ],
     parking: { available: false, accessible: false, notes: "No dedicated parking. Public transport recommended." },
@@ -139,8 +141,8 @@ export const marketsData: Market[] = [
       "One of the longest night markets in Malaysia, stretching over 2 kilometers. Famous for its extensive variety of food, clothing, and household items at competitive prices.",
     schedule: [
       {
-        day: "Wednesday",
-        sessions: [{ start: "17:30", end: "22:30", note: "Evening market" }],
+        days: ["wed"],
+        times: [{ start: "17:30", end: "22:30", note: "Evening market" }],
       },
     ],
     parking: {
@@ -168,8 +170,8 @@ export const marketsData: Market[] = [
       "Located near the famous Batu Caves temple, this night market offers a mix of local and Indian cuisine, reflecting the diverse community in the area.",
     schedule: [
       {
-        day: "Tuesday",
-        sessions: [{ start: "18:00", end: "23:00", note: "Night market" }],
+        days: ["tue"],
+        times: [{ start: "18:00", end: "23:00", note: "Night market" }],
       },
     ],
     parking: {
@@ -197,8 +199,8 @@ export const marketsData: Market[] = [
       "An upscale night market in the trendy Bangsar area, known for its quality food offerings and modern atmosphere. Popular among expatriates and young professionals.",
     schedule: [
       {
-        day: "Sunday",
-        sessions: [{ start: "17:00", end: "22:00", note: "Sunday market" }],
+        days: ["sun"],
+        times: [{ start: "17:00", end: "22:00", note: "Sunday market" }],
       },
     ],
     parking: {
@@ -226,8 +228,8 @@ export const marketsData: Market[] = [
       "A family-friendly night market with a good selection of local delicacies and fresh produce. Known for its clean environment and organized layout.",
     schedule: [
       {
-        day: "Thursday",
-        sessions: [{ start: "18:30", end: "23:30", note: "Night market" }],
+        days: ["thu"],
+        times: [{ start: "18:30", end: "23:30", note: "Night market" }],
       },
     ],
     parking: {
@@ -255,8 +257,8 @@ export const marketsData: Market[] = [
       "A neighborhood night market serving the local Setapak community with affordable food and daily necessities. Known for its friendly vendors and community atmosphere.",
     schedule: [
       {
-        day: "Friday",
-        sessions: [{ start: "17:00", end: "22:00", note: "Friday market" }],
+        days: ["fri"],
+        times: [{ start: "17:00", end: "22:00", note: "Friday market" }],
       },
     ],
     parking: {
