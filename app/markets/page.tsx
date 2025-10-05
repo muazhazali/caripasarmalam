@@ -105,7 +105,18 @@ export default function MarketsPage() {
 
       const matchesState = selectedState === "All States" || market.state === selectedState
 
-      const matchesDay = selectedDay === "All Days" || market.schedule.some((schedule) => schedule.day === selectedDay)
+      const matchesDay = selectedDay === "All Days" || market.schedule.some((schedule) => schedule.days.some(day => {
+        const dayMap: { [key: string]: string } = {
+          "Isnin": "mon",
+          "Selasa": "tue", 
+          "Rabu": "wed",
+          "Khamis": "thu",
+          "Jumaat": "fri",
+          "Sabtu": "sat",
+          "Ahad": "sun"
+        }
+        return dayMap[selectedDay] === day
+      }))
 
       const matchesFilters =
         (!filters.parking || market.parking.available) &&
@@ -405,8 +416,19 @@ export default function MarketsPage() {
                             )}
                           </div>
                           <CardDescription className="text-sm">
-                            {market.district} • {market.schedule[0]?.day} {market.schedule[0]?.sessions[0]?.start}-
-                            {market.schedule[0]?.sessions[market.schedule[0]?.sessions.length - 1]?.end}
+                            {market.district} • {market.schedule[0]?.days[0] && (() => {
+                              const dayMap: { [key: string]: string } = {
+                                "mon": "Isnin",
+                                "tue": "Selasa", 
+                                "wed": "Rabu",
+                                "thu": "Khamis",
+                                "fri": "Jumaat",
+                                "sat": "Sabtu",
+                                "sun": "Ahad"
+                              }
+                              return dayMap[market.schedule[0].days[0]]
+                            })()} {market.schedule[0]?.times[0]?.start}-
+                            {market.schedule[0]?.times[market.schedule[0]?.times.length - 1]?.end}
                           </CardDescription>
                         </div>
                       </div>

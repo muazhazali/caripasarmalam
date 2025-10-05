@@ -123,18 +123,29 @@ export default function MarketPage({ params }: MarketPageProps) {
                   {market.schedule.map((schedule, index) => (
                     <div key={index} className="flex flex-col sm:flex-row sm:items-center gap-2">
                       <div className="font-medium text-foreground min-w-24">
-                        {t[schedule.day.toLowerCase() as keyof typeof t] || schedule.day}
+                        {schedule.days.map(day => {
+                          const dayMap: { [key: string]: string } = {
+                            "mon": "Isnin",
+                            "tue": "Selasa", 
+                            "wed": "Rabu",
+                            "thu": "Khamis",
+                            "fri": "Jumaat",
+                            "sat": "Sabtu",
+                            "sun": "Ahad"
+                          }
+                          return dayMap[day]
+                        }).join(", ")}
                       </div>
                       <div className="flex-1">
-                        {schedule.sessions.map((session, sessionIndex) => (
-                          <div key={sessionIndex} className="flex items-center gap-2 mb-1">
+                        {schedule.times.map((time, timeIndex) => (
+                          <div key={timeIndex} className="flex items-center gap-2 mb-1">
                             <Clock className="h-4 w-4 text-muted-foreground" />
                             <span className="text-foreground">
-                              {session.start} - {session.end}
+                              {time.start} - {time.end}
                             </span>
-                            {session.note && (
+                            {time.note && (
                               <Badge variant="outline" className="text-xs">
-                                {t[session.note.toLowerCase().replace(/\s+/g, "") as keyof typeof t] || session.note}
+                                {t[time.note.toLowerCase().replace(/\s+/g, "") as keyof typeof t] || time.note}
                               </Badge>
                             )}
                           </div>
