@@ -344,7 +344,7 @@ export default function HomePage() {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-              {filteredMarkets.slice(0, 6).map((market) => {
+              {filteredMarkets.slice(0, 100).map((market) => {
                 const distance =
                   userLocation && market.location
                     ? calculateDistance(
@@ -408,7 +408,7 @@ export default function HomePage() {
             </div>
           )}
 
-          {filteredMarkets.length > 6 && (
+          {filteredMarkets.length > 100 && (
             <div className="text-center mt-8">
               <Link href="/markets">
                 <Button size="lg">{t.viewAll} {filteredMarkets.length} {t.markets}</Button>
