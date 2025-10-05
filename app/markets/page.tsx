@@ -240,6 +240,7 @@ export default function MarketsPage() {
                     id="parking"
                     checked={filters.parking}
                     onCheckedChange={(checked) => setFilters((prev) => ({ ...prev, parking: !!checked }))}
+                    className="size-5 border-2 shadow-sm hover:border-foreground data-[state=checked]:border-primary"
                   />
                   <label
                     htmlFor="parking"
@@ -253,6 +254,7 @@ export default function MarketsPage() {
                     id="accessible-parking"
                     checked={filters.accessible_parking}
                     onCheckedChange={(checked) => setFilters((prev) => ({ ...prev, accessible_parking: !!checked }))}
+                    className="size-5 border-2 shadow-sm hover:border-foreground data-[state=checked]:border-primary"
                   />
                   <label
                     htmlFor="accessible-parking"
@@ -266,6 +268,7 @@ export default function MarketsPage() {
                     id="toilet"
                     checked={filters.toilet}
                     onCheckedChange={(checked) => setFilters((prev) => ({ ...prev, toilet: !!checked }))}
+                    className="size-5 border-2 shadow-sm hover:border-foreground data-[state=checked]:border-primary"
                   />
                   <label
                     htmlFor="toilet"
@@ -279,6 +282,7 @@ export default function MarketsPage() {
                     id="prayer-room"
                     checked={filters.prayer_room}
                     onCheckedChange={(checked) => setFilters((prev) => ({ ...prev, prayer_room: !!checked }))}
+                    className="size-5 border-2 shadow-sm hover:border-foreground data-[state=checked]:border-primary"
                   />
                   <label
                     htmlFor="prayer-room"
@@ -531,7 +535,8 @@ export default function MarketsPage() {
                 <Checkbox
                   id="m-parking"
                   checked={filters.parking}
-                  onCheckedChange={(checked) => setFilters((prev) => ({ ...prev, parking: !!checked }))}
+                    onCheckedChange={(checked) => setFilters((prev) => ({ ...prev, parking: !!checked }))}
+                    className="size-5 border-2 shadow-sm hover:border-foreground data-[state=checked]:border-primary"
                 />
                 <label htmlFor="m-parking" className="text-sm font-medium">
                   {t.parkingAvailable}
@@ -541,7 +546,8 @@ export default function MarketsPage() {
                 <Checkbox
                   id="m-accessible-parking"
                   checked={filters.accessible_parking}
-                  onCheckedChange={(checked) => setFilters((prev) => ({ ...prev, accessible_parking: !!checked }))}
+                    onCheckedChange={(checked) => setFilters((prev) => ({ ...prev, accessible_parking: !!checked }))}
+                    className="size-5 border-2 shadow-sm hover:border-foreground data-[state=checked]:border-primary"
                 />
                 <label htmlFor="m-accessible-parking" className="text-sm font-medium">
                   {t.accessibleParking}
@@ -551,7 +557,8 @@ export default function MarketsPage() {
                 <Checkbox
                   id="m-toilet"
                   checked={filters.toilet}
-                  onCheckedChange={(checked) => setFilters((prev) => ({ ...prev, toilet: !!checked }))}
+                    onCheckedChange={(checked) => setFilters((prev) => ({ ...prev, toilet: !!checked }))}
+                    className="size-5 border-2 shadow-sm hover:border-foreground data-[state=checked]:border-primary"
                 />
                 <label htmlFor="m-toilet" className="text-sm font-medium">
                   {t.toiletFacilities}
@@ -561,7 +568,8 @@ export default function MarketsPage() {
                 <Checkbox
                   id="m-prayer-room"
                   checked={filters.prayer_room}
-                  onCheckedChange={(checked) => setFilters((prev) => ({ ...prev, prayer_room: !!checked }))}
+                    onCheckedChange={(checked) => setFilters((prev) => ({ ...prev, prayer_room: !!checked }))}
+                    className="size-5 border-2 shadow-sm hover:border-foreground data-[state=checked]:border-primary"
                 />
                 <label htmlFor="m-prayer-room" className="text-sm font-medium">
                   {t.prayerRoom}

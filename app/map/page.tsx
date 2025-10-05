@@ -34,7 +34,8 @@ export default function MapPage() {
   const allMarkets = getAllMarkets()
   const { t } = useLanguage()
   const [searchQuery, setSearchQuery] = useState("")
-  const [selectedState, setSelectedState] = useState("All States")
+  // Match the options list default to avoid filtering everything out
+  const [selectedState, setSelectedState] = useState("Semua Negeri")
   const [selectedMarket, setSelectedMarket] = useState<Market | null>(null)
 
   const filteredMarkets = allMarkets.filter((market) => {
@@ -44,7 +45,7 @@ export default function MapPage() {
       market.district.toLowerCase().includes(searchQuery.toLowerCase()) ||
       market.state.toLowerCase().includes(searchQuery.toLowerCase())
 
-    const matchesState = selectedState === "All States" || market.state === selectedState
+    const matchesState = selectedState === "Semua Negeri" || market.state === selectedState
 
     return matchesSearch && matchesState && market.location
   })

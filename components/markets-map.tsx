@@ -20,6 +20,7 @@ export default function MarketsMap({ markets, selectedMarket, onMarketSelect, cl
   const mapInstanceRef = useRef<any>(null)
   const markersRef = useRef<any[]>([])
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null)
+  const [isReady, setIsReady] = useState(false)
   const t = useTranslation(typeof window !== "undefined" ? localStorage.getItem("language") || "ms" : "ms")
 
   // Get user location
@@ -39,10 +40,13 @@ export default function MarketsMap({ markets, selectedMarket, onMarketSelect, cl
     }
   }, [])
 
+  // Initialize the map ONCE
   useEffect(() => {
     if (typeof window === "undefined" || !mapRef.current) return
 
-    const loadMap = async () => {
+    let resizeObserver: ResizeObserver | null = null
+
+    const init = async () => {
       try {
         const L = (await import("leaflet")).default
         await import("leaflet/dist/leaflet.css")
@@ -55,107 +59,115 @@ export default function MarketsMap({ markets, selectedMarket, onMarketSelect, cl
           shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
         })
 
-        // Initialize map centered on Malaysia
-        if (mapInstanceRef.current) {
-          mapInstanceRef.current.remove()
-        }
+        if (!mapInstanceRef.current) {
+          const map = L.map(mapRef.current).setView([3.139, 101.6869], 10)
+          L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+            attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+          }).addTo(map)
+          mapInstanceRef.current = map
+          // ready after first paint
+          setTimeout(() => {
+            setIsReady(true)
+            map.invalidateSize()
+          }, 0)
 
-        const map = L.map(mapRef.current).setView([3.139, 101.6869], 10) // Kuala Lumpur center
-
-        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-          attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-        }).addTo(map)
-
-        mapInstanceRef.current = map
-
-        // Clear existing markers
-        markersRef.current.forEach((marker) => map.removeLayer(marker))
-        markersRef.current = []
-
-        // Add user location marker if available
-        if (userLocation) {
-          const userIcon = L.divIcon({
-            html: '<div class="w-4 h-4 bg-blue-500 rounded-full border-2 border-white shadow-lg"></div>',
-            className: "user-location-marker",
-            iconSize: [16, 16],
-            iconAnchor: [8, 8],
+          // Handle resize
+          resizeObserver = new ResizeObserver(() => {
+            if (mapInstanceRef.current) mapInstanceRef.current.invalidateSize()
           })
-
-          const userMarker = L.marker([userLocation.lat, userLocation.lng], { icon: userIcon }).addTo(map)
-          userMarker.bindPopup(`<div class="p-2"><p class="text-sm font-medium">${t.yourLocation}</p></div>`)
-          markersRef.current.push(userMarker)
-        }
-
-        // Add market markers
-        markets.forEach((market) => {
-          if (market.location) {
-            const isSelected = selectedMarket?.id === market.id
-
-            const markerIcon = L.divIcon({
-              html: `<div class="w-6 h-6 ${isSelected ? "bg-primary" : "bg-secondary"} rounded-full border-2 border-white shadow-lg flex items-center justify-center">
-                       <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                         <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
-                       </svg>
-                     </div>`,
-              className: "market-marker",
-              iconSize: [24, 24],
-              iconAnchor: [12, 12],
-            })
-
-            const marker = L.marker([market.location.latitude, market.location.longitude], {
-              icon: markerIcon,
-            }).addTo(map)
-
-            const locale = typeof window !== "undefined" ? localStorage.getItem("language") || "ms" : "ms"
-            const scheduleText = market.schedule[0]
-              ? formatScheduleRule(market.schedule[0], locale)
-              : t.scheduleNotAvailable
-
-            marker.bindPopup(`
-              <div class="p-3 min-w-64">
-                <h3 class="font-semibold text-sm mb-2">${market.name}</h3>
-                <p class="text-xs text-gray-600 mb-2">${market.district}, ${market.state}</p>
-                <p class="text-xs text-gray-500 mb-2">${scheduleText}</p>
-                <div class="flex gap-1 mb-2">
-                  ${market.parking.available ? `<span class="text-xs bg-green-100 text-green-800 px-1 rounded">${t.parking}</span>` : ""}
-                  ${market.amenities.toilet ? `<span class="text-xs bg-blue-100 text-blue-800 px-1 rounded">${t.toilet}</span>` : ""}
-                  ${market.amenities.prayer_room ? `<span class="text-xs bg-purple-100 text-purple-800 px-1 rounded">${t.prayerRoom}</span>` : ""}
-                </div>
-                <button onclick="window.location.href='/markets/${market.id}'" class="text-xs bg-primary text-white px-2 py-1 rounded hover:bg-primary/90">
-                  ${t.viewDetails}
-                </button>
-              </div>
-            `)
-
-            marker.on("click", () => {
-              if (onMarketSelect) {
-                onMarketSelect(market)
-              }
-            })
-
-            markersRef.current.push(marker)
-          }
-        })
-
-        // Fit map to show all markers if there are markets
-        if (markets.length > 0 && markets.some((m) => m.location)) {
-          const group = new L.featureGroup(markersRef.current)
-          map.fitBounds(group.getBounds().pad(0.1))
+          if (mapRef.current) resizeObserver.observe(mapRef.current)
         }
       } catch (error) {
-        console.error("Error loading map:", error)
+        console.error("Error initializing map:", error)
       }
     }
 
-    loadMap()
+    init()
 
     return () => {
+      if (resizeObserver) resizeObserver.disconnect()
       if (mapInstanceRef.current) {
         mapInstanceRef.current.remove()
         mapInstanceRef.current = null
       }
     }
-  }, [markets, selectedMarket, userLocation, onMarketSelect])
+  }, [])
+
+  // Update markers when data changes without recreating the map
+  useEffect(() => {
+    const updateMarkers = async () => {
+      if (!mapInstanceRef.current) return
+      const map = mapInstanceRef.current
+      const L = (await import("leaflet")).default
+
+      // Remove old markers
+      markersRef.current.forEach((m) => map.removeLayer(m))
+      markersRef.current = []
+
+      // User location
+      if (userLocation) {
+        const userIcon = L.divIcon({
+          html: '<div class="w-4 h-4 bg-blue-500 rounded-full border-2 border-white shadow-lg"></div>',
+          className: "user-location-marker",
+          iconSize: [16, 16],
+          iconAnchor: [8, 8],
+        })
+        const userMarker = L.marker([userLocation.lat, userLocation.lng], { icon: userIcon }).addTo(map)
+        userMarker.bindPopup(`<div class="p-2"><p class="text-sm font-medium">${t.yourLocation}</p></div>`)
+        markersRef.current.push(userMarker)
+      }
+
+      // Market markers
+      markets.forEach((market) => {
+        if (!market.location) return
+        const isSelected = selectedMarket?.id === market.id
+        const markerIcon = L.divIcon({
+          html: `<div class="w-6 h-6 ${isSelected ? "bg-primary" : "bg-secondary"} rounded-full border-2 border-white shadow-lg flex items-center justify-center">
+                   <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                     <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
+                   </svg>
+                 </div>`,
+          className: "market-marker",
+          iconSize: [24, 24],
+          iconAnchor: [12, 12],
+        })
+        const marker = L.marker([market.location.latitude, market.location.longitude], { icon: markerIcon }).addTo(map)
+
+        const locale = typeof window !== "undefined" ? localStorage.getItem("language") || "ms" : "ms"
+        const scheduleText = market.schedule[0] ? formatScheduleRule(market.schedule[0], locale) : t.scheduleNotAvailable
+
+        marker.bindPopup(`
+          <div class="p-3 min-w-64">
+            <h3 class="font-semibold text-sm mb-2">${market.name}</h3>
+            <p class="text-xs text-gray-600 mb-2">${market.district}, ${market.state}</p>
+            <p class="text-xs text-gray-500 mb-2">${scheduleText}</p>
+            <div class="flex gap-1 mb-2">
+              ${market.parking.available ? `<span class=\"text-xs bg-green-100 text-green-800 px-1 rounded\">${t.parking}</span>` : ""}
+              ${market.amenities.toilet ? `<span class=\"text-xs bg-blue-100 text-blue-800 px-1 rounded\">${t.toilet}</span>` : ""}
+              ${market.amenities.prayer_room ? `<span class=\"text-xs bg-purple-100 text-purple-800 px-1 rounded\">${t.prayerRoom}</span>` : ""}
+            </div>
+            <button onclick=\"window.location.href='/markets/${market.id}'\" class="text-xs bg-primary text-white px-2 py-1 rounded hover:bg-primary/90">
+              ${t.viewDetails}
+            </button>
+          </div>
+        `)
+
+        marker.on("click", () => {
+          if (onMarketSelect) onMarketSelect(market)
+        })
+        markersRef.current.push(marker)
+      })
+
+      // Fit bounds
+      const markerCount = markersRef.current.length
+      if (markerCount > 0) {
+        const group = new L.featureGroup(markersRef.current)
+        map.fitBounds(group.getBounds().pad(0.1))
+      }
+    }
+
+    updateMarkers()
+  }, [markets, selectedMarket, userLocation, onMarketSelect, t])
 
   const centerOnUserLocation = () => {
     if (userLocation && mapInstanceRef.current) {
@@ -177,12 +189,14 @@ export default function MarketsMap({ markets, selectedMarket, onMarketSelect, cl
       </div>
 
       {/* Loading fallback */}
-      <div className="absolute inset-0 bg-muted rounded-lg flex items-center justify-center pointer-events-none">
-        <div className="text-center text-muted-foreground">
-          <MapPin className="h-8 w-8 mx-auto mb-2 animate-pulse" />
-          <p className="text-sm">{t.loadingMap}</p>
+      {!isReady && (
+        <div className="absolute inset-0 bg-muted rounded-lg flex items-center justify-center pointer-events-none">
+          <div className="text-center text-muted-foreground">
+            <MapPin className="h-8 w-8 mx-auto mb-2 animate-pulse" />
+            <p className="text-sm">{t.loadingMap}</p>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Selected market info */}
       {selectedMarket && (
