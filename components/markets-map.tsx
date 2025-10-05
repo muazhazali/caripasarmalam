@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 import { useTranslation, formatScheduleRule } from "@/lib/i18n"
-import { MapPin, Navigation } from "lucide-react"
+import { MapPin, Navigation, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -21,6 +21,7 @@ export default function MarketsMap({ markets, selectedMarket, onMarketSelect, cl
   const markersRef = useRef<any[]>([])
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null)
   const [isReady, setIsReady] = useState(false)
+  const [isUpdating, setIsUpdating] = useState(true)
   const t = useTranslation(typeof window !== "undefined" ? localStorage.getItem("language") || "ms" : "ms")
 
   // Get user location
@@ -69,6 +70,7 @@ export default function MarketsMap({ markets, selectedMarket, onMarketSelect, cl
           setTimeout(() => {
             setIsReady(true)
             map.invalidateSize()
+            setIsUpdating(false)
           }, 0)
 
           // Handle resize
@@ -96,6 +98,7 @@ export default function MarketsMap({ markets, selectedMarket, onMarketSelect, cl
   // Update markers when data changes without recreating the map
   useEffect(() => {
     const updateMarkers = async () => {
+      setIsUpdating(true)
       if (!mapInstanceRef.current) return
       const map = mapInstanceRef.current
       const L = (await import("leaflet")).default
@@ -164,6 +167,7 @@ export default function MarketsMap({ markets, selectedMarket, onMarketSelect, cl
         const group = new L.featureGroup(markersRef.current)
         map.fitBounds(group.getBounds().pad(0.1))
       }
+      setIsUpdating(false)
     }
 
     updateMarkers()
@@ -195,6 +199,14 @@ export default function MarketsMap({ markets, selectedMarket, onMarketSelect, cl
             <MapPin className="h-8 w-8 mx-auto mb-2 animate-pulse" />
             <p className="text-sm">{t.loadingMap}</p>
           </div>
+        </div>
+      )}
+
+      {/* Updating indicator (non-blocking) */}
+      {isReady && isUpdating && (
+        <div className="absolute top-4 left-4 flex items-center gap-2 rounded-md bg-card/90 border px-3 py-1.5 text-sm text-muted-foreground pointer-events-none shadow-sm">
+          <Loader2 className="h-4 w-4 animate-spin" />
+          <span>{t.loadingMap}</span>
         </div>
       )}
 

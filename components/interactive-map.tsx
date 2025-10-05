@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useTranslation } from "@/lib/i18n"
 import { MapPin } from "lucide-react"
 
@@ -15,6 +15,7 @@ interface InteractiveMapProps {
 export default function InteractiveMap({ latitude, longitude, name, address, className = "" }: InteractiveMapProps) {
   const mapRef = useRef<HTMLDivElement>(null)
   const mapInstanceRef = useRef<any>(null)
+  const [isReady, setIsReady] = useState(false)
   const t = useTranslation(typeof window !== "undefined" ? localStorage.getItem("language") || "ms" : "ms")
 
   useEffect(() => {
@@ -64,6 +65,12 @@ export default function InteractiveMap({ latitude, longitude, name, address, cla
 
         mapInstanceRef.current = map
 
+        // mark as ready after first paint
+        setTimeout(() => {
+          setIsReady(true)
+          map.invalidateSize()
+        }, 0)
+
         // Handle resize
         const resizeObserver = new ResizeObserver(() => {
           if (mapInstanceRef.current) {
@@ -99,6 +106,7 @@ export default function InteractiveMap({ latitude, longitude, name, address, cla
         mapInstanceRef.current.remove()
         mapInstanceRef.current = null
       }
+      setIsReady(false)
     }
   }, [latitude, longitude, name, address])
 
@@ -106,12 +114,14 @@ export default function InteractiveMap({ latitude, longitude, name, address, cla
     <div className={`relative ${className}`}>
       <div ref={mapRef} className="w-full h-full rounded-lg" style={{ minHeight: "256px" }} />
       {/* Loading fallback */}
-      <div className="absolute inset-0 bg-muted rounded-lg flex items-center justify-center">
-        <div className="text-center text-muted-foreground">
-          <MapPin className="h-8 w-8 mx-auto mb-2 animate-pulse" />
-          <p className="text-sm">{t.loadingMap}</p>
+      {!isReady && (
+        <div className="absolute inset-0 bg-muted rounded-lg flex items-center justify-center pointer-events-none">
+          <div className="text-center text-muted-foreground">
+            <MapPin className="h-8 w-8 mx-auto mb-2 animate-pulse" />
+            <p className="text-sm">{t.loadingMap}</p>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   )
 }
