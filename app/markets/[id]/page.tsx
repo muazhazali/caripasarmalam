@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, use } from "react"
 import { notFound } from "next/navigation"
 import Link from "next/link"
 import {
@@ -24,9 +24,9 @@ import LanguageSwitcher from "@/components/language-switcher"
 import InteractiveMap from "@/components/interactive-map"
 
 interface MarketPageProps {
-  params: {
+  params: Promise<{
     id: string
-  }
+  }>
 }
 
 export default function MarketPage({ params }: MarketPageProps) {
@@ -34,7 +34,8 @@ export default function MarketPage({ params }: MarketPageProps) {
     typeof window !== "undefined" ? localStorage.getItem("language") || "ms" : "ms",
   )
   const t = useTranslation(language)
-  const market = getMarketById(params.id)
+  const resolvedParams = use(params)
+  const market = getMarketById(resolvedParams.id)
 
   if (!market) {
     notFound()

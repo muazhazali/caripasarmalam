@@ -66,23 +66,35 @@ export default function InteractiveMap({ latitude, longitude, name, address, cla
 
         // Handle resize
         const resizeObserver = new ResizeObserver(() => {
-          map.invalidateSize()
+          if (mapInstanceRef.current) {
+            mapInstanceRef.current.invalidateSize()
+          }
         })
         if (mapRef.current) {
           resizeObserver.observe(mapRef.current)
         }
 
-        return () => {
+        // Store cleanup function
+        const cleanup = () => {
           resizeObserver.disconnect()
         }
+        
+        return cleanup
       } catch (error) {
         console.error("Error loading map:", error)
       }
     }
 
-    loadMap()
+    let cleanup: (() => void) | undefined
+
+    loadMap().then((cleanupFn) => {
+      cleanup = cleanupFn
+    })
 
     return () => {
+      if (cleanup) {
+        cleanup()
+      }
       if (mapInstanceRef.current) {
         mapInstanceRef.current.remove()
         mapInstanceRef.current = null
