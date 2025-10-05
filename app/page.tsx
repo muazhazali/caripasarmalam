@@ -9,8 +9,8 @@ import {
   Users,
   Filter,
   Car,
-  PenTool as Restroom,
-  MSquare as Mosque,
+  Toilet as Restroom,
+  Home as Mosque,
   Map,
   Navigation2,
 } from "lucide-react"

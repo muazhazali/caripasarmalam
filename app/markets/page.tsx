@@ -4,8 +4,8 @@ import { useState, useMemo } from "react"
 import {
   Search,
   Car,
-  PenTool as Restroom,
-  MSquare as Mosque,
+  Toilet as Restroom,
+  Home as Mosque,
   ArrowUpDown,
   Grid,
   List,
