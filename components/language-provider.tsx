@@ -11,9 +11,15 @@ interface LanguageContextValue {
 
 const LanguageContext = createContext<LanguageContextValue | undefined>(undefined)
 
-export function LanguageProvider({ children }: { children: React.ReactNode }) {
+export function LanguageProvider({ 
+  children, 
+  initialLanguage = "ms" 
+}: { 
+  children: React.ReactNode
+  initialLanguage?: string 
+}) {
   const [language, setLanguageState] = useState<string>(
-    typeof window !== "undefined" ? localStorage.getItem("language") || "ms" : "ms",
+    typeof window !== "undefined" ? localStorage.getItem("language") || initialLanguage : initialLanguage,
   )
 
   const t = useTranslation(language)

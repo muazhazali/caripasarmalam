@@ -43,7 +43,9 @@ export default async function RootLayout({
         <LanguageProvider initialLanguage={initialLanguage}>
           <DesktopNavbar />
           <Suspense fallback={null}>
-            <div className="md:pb-0 pb-16">{children}</div>
+            <main className="md:pb-0 pb-16">
+              {children}
+            </main>
           </Suspense>
           <MobileTabBar />
         </LanguageProvider>
