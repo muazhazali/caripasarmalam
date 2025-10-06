@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect, useCallback } from "react"
 import {
   Search,
   MapPin,
@@ -88,9 +88,9 @@ export default function HomePage() {
   const [isRequestingLocation, setIsRequestingLocation] = useState(false)
   const suggestFormUrl = process.env.NEXT_PUBLIC_SUGGEST_MARKET_URL || "https://forms.gle/your-form"
 
-  const findNearestMarkets = () => {
-    if (!navigator.geolocation) {
-      alert("Geolocation is not supported by this browser.")
+  const findNearestMarkets = useCallback(() => {
+    if (typeof navigator === "undefined" || !navigator.geolocation) {
+      // Geolocation not available; silently skip
       return
     }
 
@@ -104,13 +104,19 @@ export default function HomePage() {
         setIsRequestingLocation(false)
       },
       (error) => {
-        console.error("Geolocation error:", error)
+        // Permission denied, unavailable, or timeout; silently skip
+        console.warn("Geolocation error:", error)
         setIsRequestingLocation(false)
-        // Fallback is handled by showing all markets; no blocking dialog
       },
       { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 },
     )
-  }
+  }, [])
+
+  // Attempt to get nearest market on first load. If location unavailable/denied, do nothing.
+  useEffect(() => {
+    if (!userLocation) findNearestMarkets()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const dayOrderCodes: string[] = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"]
 
