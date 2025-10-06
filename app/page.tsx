@@ -86,6 +86,7 @@ export default function HomePage() {
   const [showFilters, setShowFilters] = useState(false)
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null)
   const [isRequestingLocation, setIsRequestingLocation] = useState(false)
+  const suggestFormUrl = process.env.NEXT_PUBLIC_SUGGEST_MARKET_URL || "https://forms.gle/your-form"
 
   const findNearestMarkets = () => {
     if (!navigator.geolocation) {
@@ -318,6 +319,11 @@ export default function HomePage() {
               <Link href="/markets">
                 <Button>{t.viewAllMarkets}</Button>
               </Link>
+              <Button asChild variant="outline" className="bg-transparent">
+                <a href={suggestFormUrl} target="_blank" rel="noopener noreferrer">
+                  {t.suggestMarket}
+                </a>
+              </Button>
             </div>
           </div>
 
@@ -336,6 +342,21 @@ export default function HomePage() {
               </CardContent>
             </Card>
           )}
+
+          {/* Suggest Market CTA (mobile emphasis) */}
+          <Card className="mb-6 md:hidden">
+            <CardContent className="p-4 flex items-center justify-between gap-3">
+              <div className="text-left">
+                <div className="font-semibold text-foreground">{t.suggestMarket}</div>
+                <div className="text-sm text-muted-foreground">{t.addMarketCta}</div>
+              </div>
+              <Button asChild>
+                <a href={suggestFormUrl} target="_blank" rel="noopener noreferrer">
+                  {t.suggestMarket}
+                </a>
+              </Button>
+            </CardContent>
+          </Card>
 
           {filteredMarkets.length === 0 ? (
             <div className="text-center py-12">

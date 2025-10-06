@@ -112,6 +112,9 @@ export interface Translations {
   directoryTitle: string
   directorySubtitle: string
   footerText: string
+  // Contribution CTA
+  suggestMarket: string
+  addMarketCta: string
 }
 
 export const translations: Record<string, Translations> = {
@@ -229,6 +232,9 @@ export const translations: Record<string, Translations> = {
     directoryTitle: "Night Market Directory",
     directorySubtitle: "Browse all night markets across Malaysia",
     footerText: "© 2025 Malaysia Night Market Directory. An open-source project for the community.",
+    // Contribution CTA
+    suggestMarket: "Add or update a market",
+    addMarketCta: "Know a market we missed or info to update? Submit it here.",
   },
   ms: {
     // App/Home Titles
@@ -344,6 +350,9 @@ export const translations: Record<string, Translations> = {
     directoryTitle: "Direktori Pasar Malam",
     directorySubtitle: "Lihat semua pasar malam di seluruh Malaysia",
     footerText: "© 2025 Direktori Pasar Malam Malaysia. Projek sumber terbuka untuk komuniti.",
+    // Contribution CTA
+    suggestMarket: "Tambah atau kemas kini pasar",
+    addMarketCta: "Tahu pasar baharu atau maklumat perlu dikemas kini? Hantar di sini.",
   },
 }
 
