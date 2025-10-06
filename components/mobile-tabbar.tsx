@@ -3,9 +3,10 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
-import { Home, ShoppingBag, Map as MapIcon, Globe } from "lucide-react"
+import { Home, ShoppingBag, Map as MapIcon, Globe, MoreHorizontal, Info, Users, Github } from "lucide-react"
 import { useLanguage } from "@/components/language-provider"
 import { Button } from "@/components/ui/button"
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 
 function TabButton({
   href,
@@ -59,17 +60,58 @@ export default function MobileTabBar() {
               isActive={pathname === tab.href}
             />
           ))}
-          <button
-            aria-label="Toggle language"
-            className="flex flex-col items-center justify-center gap-1 px-3 py-2 rounded-md text-muted-foreground hover:text-foreground"
-            onClick={() => {
-              const next = language === "ms" ? "en" : "ms"
-              setLanguage(next)
-            }}
-          >
-            <Globe className="h-5 w-5" />
-            <span className="text-xs font-medium">{language.toUpperCase()}</span>
-          </button>
+          <Sheet>
+            <SheetTrigger asChild>
+              <button
+                aria-label="More options"
+                className="flex flex-col items-center justify-center gap-1 px-3 py-2 rounded-md text-muted-foreground hover:text-foreground"
+              >
+                <MoreHorizontal className="h-5 w-5" />
+                <span className="text-xs font-medium">{t.more}</span>
+              </button>
+            </SheetTrigger>
+            <SheetContent side="bottom" className="pb-6">
+              <SheetHeader>
+                <SheetTitle>{t.more}</SheetTitle>
+              </SheetHeader>
+              <div className="mt-4 grid grid-cols-2 gap-3">
+                <Link
+                  href="/about"
+                  className="flex items-center gap-2 rounded-md border border-border px-3 py-3 text-sm text-foreground hover:bg-muted/50"
+                >
+                  <Info className="h-4 w-4" />
+                  <span>{t.about}</span>
+                </Link>
+                <Link
+                  href="/contributors"
+                  className="flex items-center gap-2 rounded-md border border-border px-3 py-3 text-sm text-foreground hover:bg-muted/50"
+                >
+                  <Users className="h-4 w-4" />
+                  <span>{t.contributors}</span>
+                </Link>
+                <a
+                  href="https://github.com/muazhazali/caripasarmalam"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 rounded-md border border-border px-3 py-3 text-sm text-foreground hover:bg-muted/50"
+                >
+                  <Github className="h-4 w-4" />
+                  <span>{t.github}</span>
+                </a>
+                <button
+                  aria-label="Toggle language"
+                  className="flex items-center gap-2 rounded-md border border-border px-3 py-3 text-sm text-foreground hover:bg-muted/50"
+                  onClick={() => {
+                    const next = language === "ms" ? "en" : "ms"
+                    setLanguage(next)
+                  }}
+                >
+                  <Globe className="h-4 w-4" />
+                  <span>{t.languageLabel}: {language.toUpperCase()}</span>
+                </button>
+              </div>
+            </SheetContent>
+          </Sheet>
         </div>
       </div>
     </nav>

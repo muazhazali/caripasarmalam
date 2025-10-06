@@ -11,6 +11,16 @@ export interface Translations {
   markets: string
   mapView: string
   backToDirectory: string
+  about: string
+  contributors: string
+  more: string
+  github: string
+  languageLabel: string
+
+  // Static Pages
+  aboutTitle: string
+  contributorsTitle: string
+  contributorsSubtitle: string
 
   // Quick Stats
   statsMarketsListed: string
@@ -131,6 +141,16 @@ export const translations: Record<string, Translations> = {
     markets: "Markets",
     mapView: "Map View",
     backToDirectory: "Back to Directory",
+    about: "About",
+    contributors: "Contributors",
+    more: "More",
+    github: "GitHub",
+    languageLabel: "Language",
+
+    // Static Pages
+    aboutTitle: "About",
+    contributorsTitle: "Contributors",
+    contributorsSubtitle: "People who help build this project.",
 
     // Quick Stats
     statsMarketsListed: "Markets Listed",
@@ -249,6 +269,16 @@ export const translations: Record<string, Translations> = {
     markets: "Pasar",
     mapView: "Paparan Peta",
     backToDirectory: "Kembali ke Direktori",
+    about: "Tentang",
+    contributors: "Penyumbang",
+    more: "Lagi",
+    github: "GitHub",
+    languageLabel: "Bahasa",
+
+    // Static Pages
+    aboutTitle: "Tentang",
+    contributorsTitle: "Penyumbang",
+    contributorsSubtitle: "Mereka yang membantu membangunkan projek ini.",
 
     // Quick Stats
     statsMarketsListed: "Jumlah Pasar Tersenarai",
