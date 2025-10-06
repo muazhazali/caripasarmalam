@@ -39,6 +39,14 @@ export default async function RootLayout({
   const initialLanguage = cookieLang === "en" ? "en" : "ms"
   return (
     <html lang={initialLanguage}>
+      <head>
+        {process.env.NEXT_PUBLIC_ADSENSE_PUBLISHER_ID ? (
+          <meta
+            name="google-adsense-account"
+            content={process.env.NEXT_PUBLIC_ADSENSE_PUBLISHER_ID}
+          />
+        ) : null}
+      </head>
       <body className={`font-sans ${sourceSansPro.variable} ${playfairDisplay.variable} ${GeistMono.variable}`}>
         <LanguageProvider initialLanguage={initialLanguage}>
           <DesktopNavbar />
