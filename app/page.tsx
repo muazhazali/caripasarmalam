@@ -24,6 +24,7 @@ import Link from "next/link"
 import { getAllMarkets } from "@/lib/markets-data"
 import { formatScheduleRule, formatWeekday } from "@/lib/i18n"
 import { useLanguage } from "@/components/language-provider"
+import { getMarketOpenStatus } from "@/lib/utils"
 
 const malaysianStates = [
   "Semua Negeri",
@@ -177,17 +178,24 @@ export default function HomePage() {
       return matchesSearch && matchesState && matchesDay
     })
 
-    if (userLocation) {
-      filtered = filtered.sort((a, b) => {
+    // Sort: open now first, then by distance if available, otherwise by name
+    filtered = filtered.sort((a, b) => {
+      const aOpen = getMarketOpenStatus(a).status === "open"
+      const bOpen = getMarketOpenStatus(b).status === "open"
+      if (aOpen !== bOpen) return aOpen ? -1 : 1
+
+      if (userLocation) {
         const distanceA = a.location
           ? calculateDistance(userLocation.lat, userLocation.lng, a.location.latitude, a.location.longitude)
           : Number.POSITIVE_INFINITY
         const distanceB = b.location
           ? calculateDistance(userLocation.lat, userLocation.lng, b.location.latitude, b.location.longitude)
           : Number.POSITIVE_INFINITY
-        return distanceA - distanceB
-      })
-    }
+        if (distanceA !== distanceB) return distanceA - distanceB
+      }
+
+      return a.name.localeCompare(b.name)
+    })
 
     return filtered
   }, [searchQuery, selectedState, selectedDay, userLocation])
@@ -393,7 +401,22 @@ export default function HomePage() {
                           </Badge>
                         )}
                       </div>
-                      <CardTitle className="text-lg">{market.name}</CardTitle>
+                      <div className="flex items-center gap-2">
+                        <CardTitle className="text-lg">{market.name}</CardTitle>
+                        {(() => {
+                          const status = getMarketOpenStatus(
+                            market
+                          )
+                          if (status.status === "open") {
+                            return (
+                              <Badge className="bg-green-600 text-white border-transparent">{t.openNow}</Badge>
+                            )
+                          }
+                          return (
+                            <Badge variant="outline" className="text-xs">{t.closedNow}</Badge>
+                          )
+                        })()}
+                      </div>
                       <CardDescription>
                         {market.district}
                       </CardDescription>

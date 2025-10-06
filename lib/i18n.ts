@@ -125,6 +125,10 @@ export interface Translations {
   // Contribution CTA
   suggestMarket: string
   addMarketCta: string
+
+  // Open status
+  openNow: string
+  closedNow: string
 }
 
 export const translations: Record<string, Translations> = {
@@ -255,6 +259,10 @@ export const translations: Record<string, Translations> = {
     // Contribution CTA
     suggestMarket: "Add or update a market",
     addMarketCta: "Know a market we missed or info to update? Submit it here.",
+
+    // Open status
+    openNow: "Open now",
+    closedNow: "Closed",
   },
   ms: {
     // App/Home Titles
@@ -383,6 +391,10 @@ export const translations: Record<string, Translations> = {
     // Contribution CTA
     suggestMarket: "Tambah atau kemas kini pasar",
     addMarketCta: "Tahu pasar baharu atau maklumat perlu dikemas kini? Hantar di sini.",
+
+    // Open status
+    openNow: "Dibuka sekarang",
+    closedNow: "Tutup",
   },
 }
 

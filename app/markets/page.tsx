@@ -17,10 +17,12 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { getMarketOpenStatus } from "@/lib/utils"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import Link from "next/link"
+import { useRouter, useSearchParams } from "next/navigation"
 import { getAllMarkets } from "@/lib/markets-data"
 import { useLanguage } from "@/components/language-provider"
 
@@ -66,6 +68,9 @@ export default function MarketsPage() {
   const [sortBy, setSortBy] = useState("name")
   const [viewMode, setViewMode] = useState<"grid" | "list">("list") // Default to list view for better UX
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null)
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const [openNow, setOpenNow] = useState<boolean>(searchParams.get("open") === "1")
   const [filters, setFilters] = useState({
     parking: false,
     toilet: false,
@@ -73,6 +78,13 @@ export default function MarketsPage() {
     accessible_parking: false,
   })
   const [showFilters, setShowFilters] = useState(false)
+
+  const setQueryParam = (key: string, value: string | null) => {
+    const params = new URLSearchParams(searchParams.toString())
+    if (value === null) params.delete(key)
+    else params.set(key, value)
+    router.replace(`?${params.toString()}`)
+  }
 
   const findNearestMarkets = () => {
     if (navigator.geolocation) {
@@ -124,11 +136,17 @@ export default function MarketsPage() {
         (!filters.prayer_room || market.amenities.prayer_room) &&
         (!filters.accessible_parking || market.parking.accessible)
 
-      return matchesSearch && matchesState && matchesDay && matchesFilters
+      const matchesOpen = !openNow || getMarketOpenStatus(market).status === "open"
+
+      return matchesSearch && matchesState && matchesDay && matchesFilters && matchesOpen
     })
 
-    // Sort markets
+    // Sort markets: open now first, then selected sort
     filtered.sort((a, b) => {
+      const aOpen = getMarketOpenStatus(a).status === "open"
+      const bOpen = getMarketOpenStatus(b).status === "open"
+      if (aOpen !== bOpen) return aOpen ? -1 : 1
+
       switch (sortBy) {
         case "name":
           return a.name.localeCompare(b.name)
@@ -153,7 +171,7 @@ export default function MarketsPage() {
     })
 
     return filtered
-  }, [searchQuery, selectedState, selectedDay, sortBy, filters, userLocation])
+  }, [searchQuery, selectedState, selectedDay, sortBy, filters, userLocation, openNow])
 
   const clearAllFilters = () => {
     setSearchQuery("")
@@ -235,6 +253,24 @@ export default function MarketsPage() {
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="open-now"
+                    checked={openNow}
+                    onCheckedChange={(checked) => {
+                      const next = !!checked
+                      setOpenNow(next)
+                      setQueryParam("open", next ? "1" : null)
+                    }}
+                    className="size-5 border-2 shadow-sm hover:border-foreground data-[state=checked]:border-primary"
+                  />
+                  <label
+                    htmlFor="open-now"
+                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  >
+                    {t.openNow}
+                  </label>
+                </div>
                 <div className="flex items-center space-x-2">
                   <Checkbox
                     id="parking"
@@ -410,7 +446,22 @@ export default function MarketsPage() {
                     <CardHeader className="pb-3">
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
-                          <CardTitle className="text-lg mb-2">{market.name}</CardTitle>
+                          <div className="flex items-center gap-2 mb-1">
+                            <CardTitle className="text-lg">{market.name}</CardTitle>
+                            {(() => {
+                              const status = getMarketOpenStatus(
+                                market
+                              )
+                              if (status.status === "open") {
+                                return (
+                                  <Badge className="bg-green-600 text-white border-transparent">{t.openNow}</Badge>
+                                )
+                              }
+                              return (
+                                <Badge variant="outline" className="text-xs">{t.closedNow}</Badge>
+                              )
+                            })()}
+                          </div>
                           <div className="flex items-center gap-2 mb-2">
                             <Badge variant="secondary">{market.state}</Badge>
                             {distance && (
@@ -531,6 +582,21 @@ export default function MarketsPage() {
               </Select>
             </div>
             <div className="grid grid-cols-2 gap-3">
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="m-open-now"
+                  checked={openNow}
+                  onCheckedChange={(checked) => {
+                    const next = !!checked
+                    setOpenNow(next)
+                    setQueryParam("open", next ? "1" : null)
+                  }}
+                  className="size-5 border-2 shadow-sm hover:border-foreground data-[state=checked]:border-primary"
+                />
+                <label htmlFor="m-open-now" className="text-sm font-medium">
+                  {t.openNow}
+                </label>
+              </div>
               <div className="flex items-center space-x-2">
                 <Checkbox
                   id="m-parking"

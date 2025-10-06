@@ -22,6 +22,7 @@ import { getMarketById } from "@/lib/markets-data"
 import { useTranslation } from "@/lib/i18n"
 import LanguageSwitcher from "@/components/language-switcher"
 import InteractiveMap from "@/components/interactive-map"
+import { getMarketOpenStatus } from "@/lib/utils"
 
 interface MarketPageProps {
   params: Promise<{
@@ -100,9 +101,15 @@ export default function MarketPage({ params }: MarketPageProps) {
                     </span>
                   </div>
                 </div>
-                <Badge variant="secondary" className="text-sm">
-                  {t.active}
-                </Badge>
+                {(() => {
+                  const status = getMarketOpenStatus(
+                    market
+                  )
+                  if (status.status === "open") {
+                    return <Badge className="bg-green-600 text-white border-transparent">{t.openNow}</Badge>
+                  }
+                  return <Badge variant="outline" className="text-xs">{t.closedNow}</Badge>
+                })()}
               </div>
 
               {/* Description */}
