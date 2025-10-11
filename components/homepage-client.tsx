@@ -423,7 +423,7 @@ export default function HomepageClient({ markets }: HomepageClientProps) {
                           </Button>
                         )}
                         <Link href={`/markets/${market.id}`}>
-                          <Button variant="outline" size="sm">
+                          <Button variant="outline" >
                             {t.viewDetails}
                           </Button>
                         </Link>
