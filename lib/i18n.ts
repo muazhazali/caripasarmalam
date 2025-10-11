@@ -123,6 +123,7 @@ export interface Translations {
   directorySubtitle: string
   footerText: string
   // Contribution CTA
+  flaticonAttribution: string,
   suggestMarket: string
   addMarketCta: string
 
@@ -256,6 +257,7 @@ export const translations: Record<string, Translations> = {
     directoryTitle: "Night Market Directory",
     directorySubtitle: "Browse all night markets across Malaysia",
     footerText: "© 2025 Malaysia Night Market Directory. An open-source project for the community.",
+    flaticonAttribution: "Maps-and-location icons created by nawicon - Flaticon",
     // Contribution CTA
     suggestMarket: "Add or update a market",
     addMarketCta: "Know a market we missed or info to update? Submit it here.",
@@ -388,6 +390,7 @@ export const translations: Record<string, Translations> = {
     directoryTitle: "Direktori Pasar Malam",
     directorySubtitle: "Lihat semua pasar malam di seluruh Malaysia",
     footerText: "© 2025 Direktori Pasar Malam Malaysia. Projek sumber terbuka untuk komuniti.",
+    flaticonAttribution: "Ikon peta dan lokasi dicipta oleh nawicon - Flaticon",
     // Contribution CTA
     suggestMarket: "Tambah atau kemas kini pasar",
     addMarketCta: "Tahu pasar baharu atau maklumat perlu dikemas kini? Hantar di sini.",

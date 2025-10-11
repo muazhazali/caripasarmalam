@@ -22,6 +22,7 @@ export default async function ContributorsPage() {
   const contributors: Contributor[] = [
     { name: "John", role: "Contributor", link: "https://example.com/john" },
     { name: "Jane", role: "Contributor", link: "https://example.com/jane" },
+    { name: "nawicon", role: "Icon Designer", link: "https://www.flaticon.com/free-icon/shop_5193727?term=location&related_id=5193727" }
   ]
 
   return (
