@@ -9,8 +9,6 @@ import {
   ArrowUpDown,
   ArrowUp,
   ArrowDown,
-  Grid,
-  List,
   Map,
   Navigation2,
   Filter,
@@ -120,7 +118,6 @@ export default function MarketsFilterClient({ markets }: MarketsFilterClientProp
   const [selectedDay, setSelectedDay] = useState("All Days")
   const [sortBy, setSortBy] = useState("name")
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc")
-  const [viewMode, setViewMode] = useState<"grid" | "list">("list")
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null)
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -286,8 +283,8 @@ export default function MarketsFilterClient({ markets }: MarketsFilterClientProp
             </div>
             <div className="hidden md:flex gap-2">
               <Select value={selectedState} onValueChange={setSelectedState}>
-                <SelectTrigger className="w-48">
-                  <SelectValue />
+                <SelectTrigger className="w-48 h-11 md:h-12">
+                  <SelectValue placeholder={t.stateLabel} />
                 </SelectTrigger>
                 <SelectContent>
                   {malaysianStates.map((state) => (
@@ -298,8 +295,8 @@ export default function MarketsFilterClient({ markets }: MarketsFilterClientProp
                 </SelectContent>
               </Select>
               <Select value={selectedDay} onValueChange={setSelectedDay}>
-                <SelectTrigger className="w-40">
-                  <SelectValue />
+                <SelectTrigger className="w-40 h-11 md:h-12">
+                  <SelectValue placeholder={t.dayLabel} />
                 </SelectTrigger>
                 <SelectContent>
                   {daysOfWeek.map((day) => (
@@ -436,26 +433,6 @@ export default function MarketsFilterClient({ markets }: MarketsFilterClientProp
                 >
                   {sortOrder === "asc" ? <ArrowUp className="h-4 w-4" /> : <ArrowDown className="h-4 w-4" />}
                 </Button>
-                <div className="flex border rounded-md">
-                  <Button
-                    variant={viewMode === "grid" ? "default" : "ghost"}
-                    size="sm"
-                    onClick={() => setViewMode("grid")}
-                    className="rounded-r-none"
-                    aria-label="Grid view"
-                  >
-                    <Grid className="h-4 w-4" />
-                  </Button>
-                  <Button
-                    variant={viewMode === "list" ? "default" : "ghost"}
-                    size="sm"
-                    onClick={() => setViewMode("list")}
-                    className="rounded-l-none"
-                    aria-label="List view"
-                  >
-                    <List className="h-4 w-4" />
-                  </Button>
-                </div>
               </div>
             </div>
 
@@ -484,24 +461,6 @@ export default function MarketsFilterClient({ markets }: MarketsFilterClientProp
                   {sortOrder === "asc" ? <ArrowUp className="h-5 w-5" /> : <ArrowDown className="h-5 w-5" />}
                 </Button>
               </div>
-              <div className="flex border rounded-md overflow-hidden">
-                <Button
-                  variant={viewMode === "grid" ? "default" : "ghost"}
-                  className="h-11 flex-1 rounded-none"
-                  onClick={() => setViewMode("grid")}
-                  aria-label="Grid view"
-                >
-                  <Grid className="h-5 w-5" />
-                </Button>
-                <Button
-                  variant={viewMode === "list" ? "default" : "ghost"}
-                  className="h-11 flex-1 rounded-none border-l"
-                  onClick={() => setViewMode("list")}
-                  aria-label="List view"
-                >
-                  <List className="h-5 w-5" />
-                </Button>
-              </div>
             </div>
           </div>
         </div>
@@ -514,7 +473,7 @@ export default function MarketsFilterClient({ markets }: MarketsFilterClientProp
             <Button onClick={clearAllFilters}>{t.clearAllFilters}</Button>
           </div>
         ) : (
-          <div className={viewMode === "grid" ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" : "space-y-4"}>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredAndSortedMarkets.map((market) => {
               const distance =
                 userLocation && market.location
@@ -529,9 +488,7 @@ export default function MarketsFilterClient({ markets }: MarketsFilterClientProp
               return (
                 <Card
                   key={market.id}
-                  className={`overflow-hidden hover:shadow-lg transition-shadow ${
-                    viewMode === "list" ? "flex flex-col" : ""
-                  }`}
+                  className="overflow-hidden hover:shadow-lg transition-shadow"
                 >
                   <div className="flex-1">
                     <CardHeader className="pb-3">
@@ -616,9 +573,24 @@ export default function MarketsFilterClient({ markets }: MarketsFilterClientProp
                         </div>
                       </div>
 
-                      <Link href={`/markets/${market.id}`}>
-                        <Button className="w-full">{t.viewDetails}</Button>
-                      </Link>
+                      <div className="flex gap-2">
+                        {market.location?.gmaps_link && (
+                          <Button asChild className="flex-1">
+                            <a 
+                              href={market.location.gmaps_link} 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                            >
+                              {t.showDirection}
+                            </a>
+                          </Button>
+                        )}
+                        <Link href={`/markets/${market.id}`}>
+                          <Button variant="outline">
+                            {t.viewDetails}
+                          </Button>
+                        </Link>
+                      </div>
                     </CardContent>
                   </div>
                 </Card>

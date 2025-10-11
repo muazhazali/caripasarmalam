@@ -70,21 +70,21 @@ export default function MobileTabBar() {
                 <span className="text-xs font-medium">{t.more}</span>
               </button>
             </SheetTrigger>
-            <SheetContent side="bottom" className="pb-6">
+            <SheetContent side="bottom" className="pb-6 px-6">
               <SheetHeader>
                 <SheetTitle>{t.more}</SheetTitle>
               </SheetHeader>
-              <div className="mt-4 grid grid-cols-2 gap-3">
+              <div className="mt-6 grid grid-cols-2 gap-4">
                 <Link
                   href="/about"
-                  className="flex items-center gap-2 rounded-md border border-border px-3 py-3 text-sm text-foreground hover:bg-muted/50"
+                  className="flex items-center gap-3 rounded-lg border border-border px-4 py-4 text-sm text-foreground hover:bg-muted/50 transition-colors"
                 >
                   <Info className="h-4 w-4" />
                   <span>{t.about}</span>
                 </Link>
                 <Link
                   href="/contributors"
-                  className="flex items-center gap-2 rounded-md border border-border px-3 py-3 text-sm text-foreground hover:bg-muted/50"
+                  className="flex items-center gap-3 rounded-lg border border-border px-4 py-4 text-sm text-foreground hover:bg-muted/50 transition-colors"
                 >
                   <Users className="h-4 w-4" />
                   <span>{t.contributors}</span>
@@ -93,14 +93,14 @@ export default function MobileTabBar() {
                   href="https://github.com/muazhazali/caripasarmalam"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 rounded-md border border-border px-3 py-3 text-sm text-foreground hover:bg-muted/50"
+                  className="flex items-center gap-3 rounded-lg border border-border px-4 py-4 text-sm text-foreground hover:bg-muted/50 transition-colors"
                 >
                   <Github className="h-4 w-4" />
                   <span>{t.github}</span>
                 </a>
                 <button
                   aria-label="Toggle language"
-                  className="flex items-center gap-2 rounded-md border border-border px-3 py-3 text-sm text-foreground hover:bg-muted/50"
+                  className="flex items-center gap-3 rounded-lg border border-border px-4 py-4 text-sm text-foreground hover:bg-muted/50 transition-colors"
                   onClick={() => {
                     const next = language === "ms" ? "en" : "ms"
                     setLanguage(next)

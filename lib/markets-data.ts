@@ -379,7 +379,7 @@ export const marketsData: Market[] = [
   {
     id: "pasar-malam-sentul-pasar-dalam-4b",
     name: "Pasar Malam Sentul Pasar Dalam 4B",
-    address: "Jalan 1/48a, Bandar Baru Sentul, Batu, 51000 Kuala Lumpur, Wilayah Persekutuan Kuala Lumpur",
+    address: "65, Jalan 1/48a, Bandar Baru Sentul, 51000 Kuala Lumpur, Wilayah Persekutuan Kuala Lumpur",
     district: "Batu",
     state: "Kuala Lumpur",
     description: "A local night market in Bandar Baru Sentul, offering fresh produce and local food to the community.",
@@ -395,9 +395,9 @@ export const marketsData: Market[] = [
     area_m2: 2100,
     total_shop: 26,
     location: {
-      latitude: 3.1868429,
-      longitude: 101.6959855,
-      gmaps_link: "https://maps.app.goo.gl/73HuJG6uHwV7nxfr6",
+      latitude: 3.187065649,
+      longitude: 101.6985284,
+      gmaps_link: "https://maps.app.goo.gl/XUtCw8yvJC5QXFD36",
     },
   },
   {
@@ -593,7 +593,7 @@ export const marketsData: Market[] = [
     area_m2: 2000,
     total_shop: 25,
     location: {
-      latitude: 3.088015232,
+      latitude: 3.08801523211417,
       longitude: 101.72181013745377,
       gmaps_link: "https://maps.app.goo.gl/zo6sxNiM6xFA59bf6",
     },
@@ -1245,7 +1245,7 @@ export const marketsData: Market[] = [
     total_shop: 25,
     location: {
       latitude: 3.0899866137959426,
-      longitude: 101.6883139,
+      longitude: 101.688313887325,
       gmaps_link: "https://maps.app.goo.gl/z6B94mHnrrmXi6EM6",
     },
   },
@@ -1463,7 +1463,7 @@ export const marketsData: Market[] = [
     area_m2: 2000,
     total_shop: 25,
     location: {
-      latitude: 3.144736956,
+      latitude: 3.14473695646047,
       longitude: 101.73261794695115,
       gmaps_link: "https://maps.app.goo.gl/AssXZiipRFWLfCwLA",
     },
@@ -1559,7 +1559,7 @@ export const marketsData: Market[] = [
     area_m2: 2000,
     total_shop: 25,
     location: {
-      latitude: 3.209288514,
+      latitude: 3.20928851424591,
       longitude: 101.71985068612588,
       gmaps_link: "https://maps.app.goo.gl/NcKfRhUV1jwbWrbaA",
     },
@@ -1586,6 +1586,78 @@ export const marketsData: Market[] = [
       latitude: 3.2260145471849473,
       longitude: 101.72395846349006,
       gmaps_link: "https://maps.app.goo.gl/SppXjEJVmNHS29Ja8",
+    },
+  },
+  {
+    id: "pasar-malam-taman-sri-murni",
+    name: "Pasar Malam Taman Sri Murni",
+    address: "Taman Sri Murni, 68100 Kuala Lumpur, Wilayah Persekutuan Kuala Lumpur",
+    district: "Batu",
+    state: "Kuala Lumpur",
+    description: "A community night market in Taman Sri Murni, serving local residents with various food and goods.",
+    schedule: [
+      {
+        days: ["wed"],
+        times: [{ start: "17:00", end: "22:00", note: "Wednesday night market" }],
+      },
+    ],
+    parking: { available: true, accessible: true, notes: "Street parking available in the residential area." },
+    amenities: { toilet: false, prayer_room: false },
+    status: "Active",
+    area_m2: 2000,
+    total_shop: 25,
+    location: {
+      latitude: 3.2349203,
+      longitude: 101.660271,
+      gmaps_link: "https://maps.app.goo.gl/oZa631KDihLfara98",
+    },
+  },
+  {
+    id: "pasar-malam-taman-wilayah",
+    name: "Pasar Malam Taman Wilayah",
+    address: "Jalan 20/2A, Taman Wilayah, 68100 Kuala Lumpur, Wilayah Persekutuan Kuala Lumpur",
+    district: "Selayang",
+    state: "Kuala Lumpur",
+    description: "A community night market in Taman Wilayah, serving local residents with various food and goods.",
+    schedule: [
+      {
+        days: ["thu"],
+        times: [{ start: "17:00", end: "22:00", note: "Thursday night market" }],
+      },
+    ],
+    parking: { available: true, accessible: true, notes: "Street parking available in the residential area." },
+    amenities: { toilet: false, prayer_room: false },
+    status: "Active",
+    area_m2: 2000,
+    total_shop: 25,
+    location: {
+      latitude: 3.238067877,
+      longitude: 101.6623748,
+      gmaps_link: "https://maps.app.goo.gl/nDUbnfXUKYo45yqL9",
+    },
+  },
+  {
+    id: "pasar-malam-taman-wahyu",
+    name: "Pasar Malam Taman Wahyu",
+    address: "Taman Wahyu, 68100 Kuala Lumpur, Wilayah Persekutuan Kuala Lumpur",
+    district: "Batu",
+    state: "Kuala Lumpur",
+    description: "A community night market in Taman Wahyu, serving local residents with various food and goods.",
+    schedule: [
+      {
+        days: ["fri"],
+        times: [{ start: "17:00", end: "22:00", note: "Friday night market" }],
+      },
+    ],
+    parking: { available: true, accessible: true, notes: "Street parking available in the residential area." },
+    amenities: { toilet: false, prayer_room: false },
+    status: "Active",
+    area_m2: 2000,
+    total_shop: 25,
+    location: {
+      latitude: 3.212063703,
+      longitude: 101.6701867,
+      gmaps_link: "https://maps.app.goo.gl/5E1MiVda7CMhntzi7",
     },
   },
 ]
