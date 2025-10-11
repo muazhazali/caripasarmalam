@@ -14,12 +14,15 @@ import {
   ArrowUpDown,
   ArrowUp,
   ArrowDown,
+  Filter,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Checkbox } from "@/components/ui/checkbox"
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import Link from "next/link"
 import { getAllMarkets, Market } from "@/lib/markets-data"
 import { formatScheduleRule, formatWeekday } from "@/lib/i18n"
@@ -42,6 +45,28 @@ interface HomepageClientProps {
   markets: Market[]
 }
 
+const malaysianStates = [
+  "Semua Negeri",
+  "Johor",
+  "Kedah",
+  "Kelantan",
+  "Kuala Lumpur",
+  "Labuan",
+  "Melaka",
+  "Negeri Sembilan",
+  "Pahang",
+  "Pulau Pinang",
+  "Perak",
+  "Perlis",
+  "Putrajaya",
+  "Sabah",
+  "Sarawak",
+  "Selangor",
+  "Terengganu",
+]
+
+const daysOfWeek = ["Semua Hari", "Isnin", "Selasa", "Rabu", "Khamis", "Jumaat", "Sabtu", "Ahad"]
+
 export default function HomepageClient({ markets }: HomepageClientProps) {
   const { t } = useLanguage()
   const [searchQuery, setSearchQuery] = useState("")
@@ -49,6 +74,16 @@ export default function HomepageClient({ markets }: HomepageClientProps) {
   const [isRequestingLocation, setIsRequestingLocation] = useState(false)
   const [sortBy, setSortBy] = useState("smart")
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc")
+  const [selectedState, setSelectedState] = useState("All States")
+  const [selectedDay, setSelectedDay] = useState("All Days")
+  const [openNow, setOpenNow] = useState<boolean>(false)
+  const [filters, setFilters] = useState({
+    parking: false,
+    toilet: false,
+    prayer_room: false,
+    accessible_parking: false,
+  })
+  const [showFilters, setShowFilters] = useState(false)
   const suggestFormUrl = process.env.NEXT_PUBLIC_SUGGEST_MARKET_URL || "https://forms.gle/your-form"
 
   const findNearestMarkets = useCallback(() => {
@@ -72,6 +107,19 @@ export default function HomepageClient({ markets }: HomepageClientProps) {
       { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 },
     )
   }, [])
+
+  const clearAllFilters = () => {
+    setSearchQuery("")
+    setSelectedState("All States")
+    setSelectedDay("All Days")
+    setOpenNow(false)
+    setFilters({
+      parking: false,
+      toilet: false,
+      prayer_room: false,
+      accessible_parking: false,
+    })
+  }
 
   // Attempt to get nearest market on first load. If location unavailable/denied, do nothing.
   useEffect(() => {
@@ -126,7 +174,30 @@ export default function HomepageClient({ markets }: HomepageClientProps) {
         market.district.toLowerCase().includes(searchQuery.toLowerCase()) ||
         market.state.toLowerCase().includes(searchQuery.toLowerCase())
 
-      return matchesSearch
+      const matchesState = selectedState === "All States" || market.state === selectedState
+
+      const matchesDay = selectedDay === "All Days" || market.schedule.some((schedule) => schedule.days.some(day => {
+        const dayMap: { [key: string]: string } = {
+          "Isnin": "mon",
+          "Selasa": "tue", 
+          "Rabu": "wed",
+          "Khamis": "thu",
+          "Jumaat": "fri",
+          "Sabtu": "sat",
+          "Ahad": "sun"
+        }
+        return dayMap[selectedDay] === day
+      }))
+
+      const matchesFilters =
+        (!filters.parking || market.parking.available) &&
+        (!filters.toilet || market.amenities.toilet) &&
+        (!filters.prayer_room || market.amenities.prayer_room) &&
+        (!filters.accessible_parking || market.parking.accessible)
+
+      const matchesOpen = !openNow || getMarketOpenStatus(market).status === "open"
+
+      return matchesSearch && matchesState && matchesDay && matchesFilters && matchesOpen
     })
 
     // Sort by selected criteria and order
@@ -189,7 +260,7 @@ export default function HomepageClient({ markets }: HomepageClientProps) {
     })
 
     return filtered
-  }, [searchQuery, userLocation, sortBy, sortOrder, markets])
+  }, [searchQuery, userLocation, sortBy, sortOrder, markets, selectedState, selectedDay, filters, openNow])
 
   const formatArea = (areaM2: number) => {
     if (areaM2 >= 10000) {
@@ -491,6 +562,117 @@ export default function HomepageClient({ markets }: HomepageClientProps) {
           </p>
         </div>
       </footer>
+
+      {/* Mobile FAB + filter sheet */}
+      <Sheet open={showFilters} onOpenChange={setShowFilters}>
+        <SheetTrigger asChild>
+          <Button className="md:hidden fixed bottom-20 right-4 z-40 rounded-full h-12 w-12 p-0 shadow-lg">
+            <Filter className="h-5 w-5" />
+          </Button>
+        </SheetTrigger>
+        <SheetContent side="bottom" className="h-[75vh] p-4">
+          <SheetHeader>
+            <SheetTitle>{t.filters}</SheetTitle>
+          </SheetHeader>
+          <div className="mt-4 space-y-4">
+            <div>
+              <label className="text-sm font-medium text-foreground mb-2 block">{t.stateLabel}</label>
+              <Select value={selectedState} onValueChange={setSelectedState}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {malaysianStates.map((state) => (
+                    <SelectItem key={state} value={state}>
+                      {state === "All States" ? t.allStates : state}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <label className="text-sm font-medium text-foreground mb-2 block">{t.dayLabel}</label>
+              <Select value={selectedDay} onValueChange={setSelectedDay}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {daysOfWeek.map((day) => (
+                    <SelectItem key={day} value={day}>
+                      {day === "All Days" ? t.allDays : t[day.toLowerCase() as keyof typeof t] || day}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="m-open-now"
+                  checked={openNow}
+                  onCheckedChange={(checked) => setOpenNow(!!checked)}
+                  className="size-5 border-2 shadow-sm hover:border-foreground data-[state=checked]:border-primary"
+                />
+                <label htmlFor="m-open-now" className="text-sm font-medium">
+                  {t.openNow}
+                </label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="m-parking"
+                  checked={filters.parking}
+                  onCheckedChange={(checked) => setFilters((prev) => ({ ...prev, parking: !!checked }))}
+                  className="size-5 border-2 shadow-sm hover:border-foreground data-[state=checked]:border-primary"
+                />
+                <label htmlFor="m-parking" className="text-sm font-medium">
+                  {t.parkingAvailable}
+                </label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="m-accessible-parking"
+                  checked={filters.accessible_parking}
+                  onCheckedChange={(checked) => setFilters((prev) => ({ ...prev, accessible_parking: !!checked }))}
+                  className="size-5 border-2 shadow-sm hover:border-foreground data-[state=checked]:border-primary"
+                />
+                <label htmlFor="m-accessible-parking" className="text-sm font-medium">
+                  {t.accessibleParking}
+                </label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="m-toilet"
+                  checked={filters.toilet}
+                  onCheckedChange={(checked) => setFilters((prev) => ({ ...prev, toilet: !!checked }))}
+                  className="size-5 border-2 shadow-sm hover:border-foreground data-[state=checked]:border-primary"
+                />
+                <label htmlFor="m-toilet" className="text-sm font-medium">
+                  {t.toiletFacilities}
+                </label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="m-prayer-room"
+                  checked={filters.prayer_room}
+                  onCheckedChange={(checked) => setFilters((prev) => ({ ...prev, prayer_room: !!checked }))}
+                  className="size-5 border-2 shadow-sm hover:border-foreground data-[state=checked]:border-primary"
+                />
+                <label htmlFor="m-prayer-room" className="text-sm font-medium">
+                  {t.prayerRoom}
+                </label>
+              </div>
+            </div>
+            <div className="pt-2 flex gap-2">
+              <Button variant="outline" className="flex-1" onClick={clearAllFilters}>
+                {t.clearAllFilters}
+              </Button>
+              <Button className="flex-1" onClick={() => setShowFilters(false)}>
+                {t.applyFilters}
+              </Button>
+            </div>
+          </div>
+        </SheetContent>
+      </Sheet>
     </div>
   )
 }
