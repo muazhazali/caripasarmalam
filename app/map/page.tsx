@@ -55,7 +55,7 @@ export default function MapPage() {
       
 
       {/* Search Controls */}
-      <div className="border-b border-border bg-card">
+      <div className="border-b border-border bg-card relative z-10">
         <div className="container mx-auto px-4 py-3">
           <div className="flex flex-col sm:flex-row gap-3 md:gap-4">
             <div className="flex-1 relative">
@@ -68,10 +68,10 @@ export default function MapPage() {
               />
             </div>
             <Select value={selectedState} onValueChange={setSelectedState}>
-              <SelectTrigger className="w-48">
+              <SelectTrigger className="w-48 h-10 md:h-11">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="z-50">
                 {malaysianStates.map((state) => (
                   <SelectItem key={state} value={state}>
                     {state}
@@ -85,7 +85,7 @@ export default function MapPage() {
       </div>
 
       {/* Map */}
-      <div className="h-[calc(100vh-160px)] md:h-[calc(100vh-180px)]">
+      <div className="h-[calc(100vh-160px)] md:h-[calc(100vh-180px)] relative z-0">
         <MarketsMap
           markets={filteredMarkets}
           selectedMarket={selectedMarket}

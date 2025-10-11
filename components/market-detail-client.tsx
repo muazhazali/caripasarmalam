@@ -185,23 +185,24 @@ export default function MarketDetailClient({ market }: MarketDetailClientProps) 
           <div className="lg:col-span-2 space-y-6">
             {/* Hero Section */}
             <div>
-              <div className="flex items-start justify-between mb-4">
-                <div>
-                  <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2">{market.name}</h1>
-                  <div className="flex items-center gap-2 text-muted-foreground mb-2">
-                    <MapPin className="h-4 w-4" />
-                    <span>
-                      {market.district}, {market.state}
-                    </span>
-                  </div>
+              <div className="mb-4">
+                <div className="flex items-center justify-between mb-2">
+                  <Badge variant="secondary">{market.state}</Badge>
+                  {(() => {
+                    const status = getMarketOpenStatus(market)
+                    if (status.status === "open") {
+                      return <Badge className="bg-green-600 text-white border-transparent">{t.openNow}</Badge>
+                    }
+                    return <Badge variant="outline" className="text-xs">{t.closedNow}</Badge>
+                  })()}
                 </div>
-                {(() => {
-                  const status = getMarketOpenStatus(market)
-                  if (status.status === "open") {
-                    return <Badge className="bg-green-600 text-white border-transparent">{t.openNow}</Badge>
-                  }
-                  return <Badge variant="outline" className="text-xs">{t.closedNow}</Badge>
-                })()}
+                <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2">{market.name}</h1>
+                <div className="flex items-center gap-2 text-muted-foreground mb-2">
+                  <MapPin className="h-4 w-4" />
+                  <span>
+                    {market.district}, {market.state}
+                  </span>
+                </div>
               </div>
 
               {/* Description */}

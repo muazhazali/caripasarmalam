@@ -13,6 +13,9 @@ import {
   Home as Mosque,
   Map,
   Navigation2,
+  ArrowUpDown,
+  ArrowUp,
+  ArrowDown,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -90,6 +93,15 @@ export default function HomepageClient({ markets }: HomepageClientProps) {
   const [showFilters, setShowFilters] = useState(false)
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null)
   const [isRequestingLocation, setIsRequestingLocation] = useState(false)
+  const [openNow, setOpenNow] = useState<boolean>(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("filterOpenNow")
+      return saved !== null ? saved === "true" : true // default true
+    }
+    return true
+  })
+  const [sortBy, setSortBy] = useState("name")
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc")
   const suggestFormUrl = process.env.NEXT_PUBLIC_SUGGEST_MARKET_URL || "https://forms.gle/your-form"
 
   const findNearestMarkets = useCallback(() => {
@@ -178,30 +190,50 @@ export default function HomepageClient({ markets }: HomepageClientProps) {
           return code ? schedule.days.includes(code as any) : true
         })
 
-      return matchesSearch && matchesState && matchesDay
+      const matchesOpen = !openNow || getMarketOpenStatus(market).status === "open"
+
+      return matchesSearch && matchesState && matchesDay && matchesOpen
     })
 
-    // Sort: open now first, then by distance if available, otherwise by name
+    // Sort by selected criteria and order
     filtered = filtered.sort((a, b) => {
-      const aOpen = getMarketOpenStatus(a).status === "open"
-      const bOpen = getMarketOpenStatus(b).status === "open"
-      if (aOpen !== bOpen) return aOpen ? -1 : 1
-
-      if (userLocation) {
-        const distanceA = a.location
-          ? calculateDistance(userLocation.lat, userLocation.lng, a.location.latitude, a.location.longitude)
-          : Number.POSITIVE_INFINITY
-        const distanceB = b.location
-          ? calculateDistance(userLocation.lat, userLocation.lng, b.location.latitude, b.location.longitude)
-          : Number.POSITIVE_INFINITY
-        if (distanceA !== distanceB) return distanceA - distanceB
+      let comparison = 0
+      
+      switch (sortBy) {
+        case "name":
+          comparison = a.name.localeCompare(b.name)
+          break
+        case "state":
+          comparison = a.state.localeCompare(b.state) || a.district.localeCompare(b.district)
+          break
+        case "size":
+          comparison = (b.total_shop || 0) - (a.total_shop || 0)
+          break
+        case "area":
+          comparison = b.area_m2 - a.area_m2
+          break
+        case "distance":
+          if (userLocation) {
+            const distanceA = a.location
+              ? calculateDistance(userLocation.lat, userLocation.lng, a.location.latitude, a.location.longitude)
+              : Number.POSITIVE_INFINITY
+            const distanceB = b.location
+              ? calculateDistance(userLocation.lat, userLocation.lng, b.location.latitude, b.location.longitude)
+              : Number.POSITIVE_INFINITY
+            comparison = distanceA - distanceB
+          } else {
+            comparison = a.name.localeCompare(b.name)
+          }
+          break
+        default:
+          comparison = a.name.localeCompare(b.name)
       }
-
-      return a.name.localeCompare(b.name)
+      
+      return sortOrder === "asc" ? comparison : -comparison
     })
 
     return filtered
-  }, [searchQuery, selectedState, selectedDay, userLocation, markets])
+  }, [searchQuery, selectedState, selectedDay, userLocation, openNow, sortBy, sortOrder, markets])
 
   const formatArea = (areaM2: number) => {
     if (areaM2 >= 10000) {
@@ -277,6 +309,27 @@ export default function HomepageClient({ markets }: HomepageClientProps) {
                       </SelectContent>
                     </Select>
                   </div>
+                  <div className="flex items-center space-x-2">
+                    <input
+                      type="checkbox"
+                      id="open-now-homepage"
+                      checked={openNow}
+                      onChange={(e) => {
+                        const checked = e.target.checked
+                        setOpenNow(checked)
+                        if (typeof window !== "undefined") {
+                          localStorage.setItem("filterOpenNow", checked.toString())
+                        }
+                      }}
+                      className="h-4 w-4 rounded border-2 border-input bg-background text-primary focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                    />
+                    <label
+                      htmlFor="open-now-homepage"
+                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    >
+                      {t.openNow}
+                    </label>
+                  </div>
                 </div>
               )}
             </div>
@@ -318,7 +371,28 @@ export default function HomepageClient({ markets }: HomepageClientProps) {
                 : t.featuredMarkets}
             </h3>
             <div className="hidden md:flex gap-2">
-              {(searchQuery || selectedState !== "All States" || selectedDay !== "All Days" || userLocation) && (
+              <Select value={sortBy} onValueChange={setSortBy}>
+                <SelectTrigger className="w-48">
+                  <ArrowUpDown className="h-4 w-4 mr-2" />
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="name">{t.sortByName}</SelectItem>
+                  <SelectItem value="state">{t.sortByLocation}</SelectItem>
+                  <SelectItem value="size">{t.sortByStallCount}</SelectItem>
+                  <SelectItem value="area">{t.sortByAreaSize}</SelectItem>
+                  {userLocation && <SelectItem value="distance">{t.sortByDistance}</SelectItem>}
+                </SelectContent>
+              </Select>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
+                className="px-3"
+              >
+                {sortOrder === "asc" ? <ArrowUp className="h-4 w-4" /> : <ArrowDown className="h-4 w-4" />}
+              </Button>
+              {(searchQuery || selectedState !== "All States" || selectedDay !== "All Days" || userLocation || !openNow) && (
                 <Button
                   variant="outline"
                   onClick={() => {
@@ -326,6 +400,10 @@ export default function HomepageClient({ markets }: HomepageClientProps) {
                     setSelectedState("All States")
                     setSelectedDay("All Days")
                     setUserLocation(null)
+                    setOpenNow(true)
+                    if (typeof window !== "undefined") {
+                      localStorage.setItem("filterOpenNow", "true")
+                    }
                   }}
                 >
                   {t.clearAllFilters}
@@ -396,14 +474,6 @@ export default function HomepageClient({ markets }: HomepageClientProps) {
                     <CardHeader className="pb-3">
                       <div className="flex items-start justify-between mb-2">
                         <Badge variant="secondary">{market.state}</Badge>
-                        {distance && (
-                          <Badge variant="outline" className="text-xs">
-                            {distance.toFixed(1)} {t.kmFromHere}
-                          </Badge>
-                        )}
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <CardTitle className="text-lg">{market.name}</CardTitle>
                         {(() => {
                           const status = getMarketOpenStatus(market)
                           if (status.status === "open") {
@@ -416,6 +486,14 @@ export default function HomepageClient({ markets }: HomepageClientProps) {
                           )
                         })()}
                       </div>
+                      {distance && (
+                        <div className="mb-2">
+                          <Badge variant="outline" className="text-xs">
+                            {distance.toFixed(1)} {t.kmFromHere}
+                          </Badge>
+                        </div>
+                      )}
+                      <CardTitle className="text-lg">{market.name}</CardTitle>
                       <CardDescription>
                         {market.district}
                       </CardDescription>
@@ -464,6 +542,33 @@ export default function HomepageClient({ markets }: HomepageClientProps) {
               </Link>
             </div>
           )}
+          {/* Mobile sort controls */}
+          <div className="md:hidden mb-4">
+            <div className="flex gap-2">
+              <Select value={sortBy} onValueChange={setSortBy}>
+                <SelectTrigger className="flex-1">
+                  <ArrowUpDown className="h-4 w-4 mr-2" />
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="name">{t.sortByName}</SelectItem>
+                  <SelectItem value="state">{t.sortByLocation}</SelectItem>
+                  <SelectItem value="size">{t.sortByStallCount}</SelectItem>
+                  <SelectItem value="area">{t.sortByAreaSize}</SelectItem>
+                  {userLocation && <SelectItem value="distance">{t.sortByDistance}</SelectItem>}
+                </SelectContent>
+              </Select>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
+                className="px-3"
+              >
+                {sortOrder === "asc" ? <ArrowUp className="h-4 w-4" /> : <ArrowDown className="h-4 w-4" />}
+              </Button>
+            </div>
+          </div>
+
           {/* Mobile filter FAB + sheet */}
           <Sheet open={showFilters} onOpenChange={setShowFilters}>
             <SheetTrigger asChild>
@@ -506,6 +611,27 @@ export default function HomepageClient({ markets }: HomepageClientProps) {
                     </SelectContent>
                   </Select>
                 </div>
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    id="open-now-mobile-homepage"
+                    checked={openNow}
+                    onChange={(e) => {
+                      const checked = e.target.checked
+                      setOpenNow(checked)
+                      if (typeof window !== "undefined") {
+                        localStorage.setItem("filterOpenNow", checked.toString())
+                      }
+                    }}
+                    className="h-4 w-4 rounded border-2 border-input bg-background text-primary focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                  />
+                  <label
+                    htmlFor="open-now-mobile-homepage"
+                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  >
+                    {t.openNow}
+                  </label>
+                </div>
                 <div className="pt-2 flex gap-2">
                   <Button
                     variant="outline"
@@ -514,6 +640,10 @@ export default function HomepageClient({ markets }: HomepageClientProps) {
                       setSearchQuery("")
                       setSelectedState("All States")
                       setSelectedDay("All Days")
+                      setOpenNow(true)
+                      if (typeof window !== "undefined") {
+                        localStorage.setItem("filterOpenNow", "true")
+                      }
                     }}
                   >
                     {t.reset}

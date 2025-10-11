@@ -7,6 +7,8 @@ import {
   Toilet as Restroom,
   Home as Mosque,
   ArrowUpDown,
+  ArrowUp,
+  ArrowDown,
   Grid,
   List,
   Map,
@@ -117,6 +119,7 @@ export default function MarketsFilterClient({ markets }: MarketsFilterClientProp
   const [selectedState, setSelectedState] = useState("All States")
   const [selectedDay, setSelectedDay] = useState("All Days")
   const [sortBy, setSortBy] = useState("name")
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc")
   const [viewMode, setViewMode] = useState<"grid" | "list">("list")
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null)
   const router = useRouter()
@@ -192,42 +195,54 @@ export default function MarketsFilterClient({ markets }: MarketsFilterClientProp
       return matchesSearch && matchesState && matchesDay && matchesFilters && matchesOpen
     })
 
-    // Sort markets: open now first, then selected sort
+    // Sort markets by selected sort option and order
     filtered.sort((a, b) => {
-      const aOpen = getMarketOpenStatus(a).status === "open"
-      const bOpen = getMarketOpenStatus(b).status === "open"
-      if (aOpen !== bOpen) return aOpen ? -1 : 1
-
+      let comparison = 0
+      
       switch (sortBy) {
         case "name":
-          return a.name.localeCompare(b.name)
+          comparison = a.name.localeCompare(b.name)
+          break
         case "state":
-          return a.state.localeCompare(b.state) || a.district.localeCompare(b.district)
+          comparison = a.state.localeCompare(b.state) || a.district.localeCompare(b.district)
+          break
         case "size":
-          return (b.total_shop || 0) - (a.total_shop || 0)
+          comparison = (b.total_shop || 0) - (a.total_shop || 0)
+          break
         case "area":
-          return b.area_m2 - a.area_m2
+          comparison = b.area_m2 - a.area_m2
+          break
         case "distance":
-          if (!userLocation) return 0
-          const distanceA = a.location
-            ? calculateDistance(userLocation.lat, userLocation.lng, a.location.latitude, a.location.longitude)
-            : Number.POSITIVE_INFINITY
-          const distanceB = b.location
-            ? calculateDistance(userLocation.lat, userLocation.lng, b.location.latitude, b.location.longitude)
-            : Number.POSITIVE_INFINITY
-          return distanceA - distanceB
+          if (!userLocation) {
+            comparison = a.name.localeCompare(b.name)
+          } else {
+            const distanceA = a.location
+              ? calculateDistance(userLocation.lat, userLocation.lng, a.location.latitude, a.location.longitude)
+              : Number.POSITIVE_INFINITY
+            const distanceB = b.location
+              ? calculateDistance(userLocation.lat, userLocation.lng, b.location.latitude, b.location.longitude)
+              : Number.POSITIVE_INFINITY
+            comparison = distanceA - distanceB
+          }
+          break
         default:
-          return 0
+          comparison = a.name.localeCompare(b.name)
       }
+      
+      return sortOrder === "asc" ? comparison : -comparison
     })
 
     return filtered
-  }, [searchQuery, selectedState, selectedDay, sortBy, filters, userLocation, openNow, markets])
+  }, [searchQuery, selectedState, selectedDay, sortBy, sortOrder, filters, userLocation, openNow, markets])
 
   const clearAllFilters = () => {
     setSearchQuery("")
     setSelectedState("All States")
     setSelectedDay("All Days")
+    setOpenNow(true)
+    if (typeof window !== "undefined") {
+      localStorage.setItem("filterOpenNow", "true")
+    }
     setFilters({
       parking: false,
       toilet: false,
@@ -413,6 +428,14 @@ export default function MarketsFilterClient({ markets }: MarketsFilterClientProp
                     {userLocation && <SelectItem value="distance">{t.sortByDistance}</SelectItem>}
                   </SelectContent>
                 </Select>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
+                  className="px-3"
+                >
+                  {sortOrder === "asc" ? <ArrowUp className="h-4 w-4" /> : <ArrowDown className="h-4 w-4" />}
+                </Button>
                 <div className="flex border rounded-md">
                   <Button
                     variant={viewMode === "grid" ? "default" : "ghost"}
@@ -438,19 +461,29 @@ export default function MarketsFilterClient({ markets }: MarketsFilterClientProp
 
             {/* Mobile controls */}
             <div className="mt-3 grid grid-cols-1 gap-2 md:hidden">
-              <Select value={sortBy} onValueChange={setSortBy}>
-                <SelectTrigger className="h-11 w-full text-base">
-                  <ArrowUpDown className="h-5 w-5 mr-2" />
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="name">{t.sortByName}</SelectItem>
-                  <SelectItem value="state">{t.sortByLocation}</SelectItem>
-                  <SelectItem value="size">{t.sortByStallCount}</SelectItem>
-                  <SelectItem value="area">{t.sortByAreaSize}</SelectItem>
-                  {userLocation && <SelectItem value="distance">{t.sortByDistance}</SelectItem>}
-                </SelectContent>
-              </Select>
+              <div className="flex gap-2">
+                <Select value={sortBy} onValueChange={setSortBy}>
+                  <SelectTrigger className="flex-1 h-11 text-base">
+                    <ArrowUpDown className="h-5 w-5 mr-2" />
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="name">{t.sortByName}</SelectItem>
+                    <SelectItem value="state">{t.sortByLocation}</SelectItem>
+                    <SelectItem value="size">{t.sortByStallCount}</SelectItem>
+                    <SelectItem value="area">{t.sortByAreaSize}</SelectItem>
+                    {userLocation && <SelectItem value="distance">{t.sortByDistance}</SelectItem>}
+                  </SelectContent>
+                </Select>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
+                  className="px-3 h-11"
+                >
+                  {sortOrder === "asc" ? <ArrowUp className="h-5 w-5" /> : <ArrowDown className="h-5 w-5" />}
+                </Button>
+              </div>
               <div className="flex border rounded-md overflow-hidden">
                 <Button
                   variant={viewMode === "grid" ? "default" : "ghost"}
@@ -504,8 +537,8 @@ export default function MarketsFilterClient({ markets }: MarketsFilterClientProp
                     <CardHeader className="pb-3">
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-1">
-                            <CardTitle className="text-lg">{market.name}</CardTitle>
+                          <div className="flex items-center justify-between mb-1">
+                            <Badge variant="secondary">{market.state}</Badge>
                             {(() => {
                               const status = getMarketOpenStatus(market)
                               if (status.status === "open") {
@@ -518,14 +551,14 @@ export default function MarketsFilterClient({ markets }: MarketsFilterClientProp
                               )
                             })()}
                           </div>
-                          <div className="flex items-center gap-2 mb-2">
-                            <Badge variant="secondary">{market.state}</Badge>
-                            {distance && (
+                          {distance && (
+                            <div className="mb-2">
                               <Badge variant="outline" className="text-xs">
                                 {distance.toFixed(1)} {t.kmFromHere}
                               </Badge>
-                            )}
-                          </div>
+                            </div>
+                          )}
+                          <CardTitle className="text-lg">{market.name}</CardTitle>
                           <CardDescription className="text-sm">
                             {market.district} • {market.schedule[0]?.days[0] && (() => {
                               const dayMap: { [key: string]: string } = {
