@@ -18,9 +18,7 @@ export function LanguageProvider({
   children: React.ReactNode
   initialLanguage?: string 
 }) {
-  const [language, setLanguageState] = useState<string>(
-    typeof window !== "undefined" ? localStorage.getItem("language") || initialLanguage : initialLanguage,
-  )
+  const [language, setLanguageState] = useState<string>(initialLanguage)
 
   const t = useTranslation(language)
 
@@ -29,12 +27,24 @@ export function LanguageProvider({
     if (typeof window !== "undefined") localStorage.setItem("language", code)
   }, [])
 
+  // Sync with localStorage after hydration
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedLanguage = localStorage.getItem("language")
+      if (storedLanguage && storedLanguage !== language) {
+        setLanguageState(storedLanguage)
+      }
+    }
+  }, [language])
+
   useEffect(() => {
     function handleStorage(e: StorageEvent) {
       if (e.key === "language" && e.newValue) setLanguageState(e.newValue)
     }
-    window.addEventListener("storage", handleStorage)
-    return () => window.removeEventListener("storage", handleStorage)
+    if (typeof window !== "undefined") {
+      window.addEventListener("storage", handleStorage)
+      return () => window.removeEventListener("storage", handleStorage)
+    }
   }, [])
 
   const value = useMemo(() => ({ language, setLanguage, t }), [language, setLanguage, t])
