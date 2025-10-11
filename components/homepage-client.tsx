@@ -7,11 +7,9 @@ import {
   Clock,
   CalendarDays,
   Users,
-  Filter,
   Car,
   Toilet as Restroom,
   Home as Mosque,
-  Map,
   Navigation2,
   ArrowUpDown,
   ArrowUp,
@@ -22,53 +20,12 @@ import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import Link from "next/link"
 import { getAllMarkets, Market } from "@/lib/markets-data"
 import { formatScheduleRule, formatWeekday } from "@/lib/i18n"
 import { useLanguage } from "@/components/language-provider"
 import { getMarketOpenStatus } from "@/lib/utils"
 
-const malaysianStates = [
-  "Semua Negeri",
-  "Johor",
-  "Kedah",
-  "Kelantan",
-  "Kuala Lumpur",
-  "Labuan",
-  "Melaka",
-  "Negeri Sembilan",
-  "Pahang",
-  "Pulau Pinang",
-  "Perak",
-  "Perlis",
-  "Putrajaya",
-  "Sabah",
-  "Sarawak",
-  "Selangor",
-  "Terengganu",
-]
-
-const daysOfWeek = ["Semua Hari", "Isnin", "Selasa", "Rabu", "Khamis", "Jumaat", "Sabtu", "Ahad"]
-
-const dayStringToCode: Record<string, string> = {
-  // English
-  "Monday": "mon",
-  "Tuesday": "tue",
-  "Wednesday": "wed",
-  "Thursday": "thu",
-  "Friday": "fri",
-  "Saturday": "sat",
-  "Sunday": "sun",
-  // Malay
-  "Isnin": "mon",
-  "Selasa": "tue",
-  "Rabu": "wed",
-  "Khamis": "thu",
-  "Jumaat": "fri",
-  "Sabtu": "sat",
-  "Ahad": "sun",
-}
 
 function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
   const R = 6371 // Radius of the Earth in kilometers
@@ -88,19 +45,9 @@ interface HomepageClientProps {
 export default function HomepageClient({ markets }: HomepageClientProps) {
   const { t } = useLanguage()
   const [searchQuery, setSearchQuery] = useState("")
-  const [selectedState, setSelectedState] = useState("All States")
-  const [selectedDay, setSelectedDay] = useState("All Days")
-  const [showFilters, setShowFilters] = useState(false)
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null)
   const [isRequestingLocation, setIsRequestingLocation] = useState(false)
-  const [openNow, setOpenNow] = useState<boolean>(() => {
-    if (typeof window !== "undefined") {
-      const saved = localStorage.getItem("filterOpenNow")
-      return saved !== null ? saved === "true" : true // default true
-    }
-    return true
-  })
-  const [sortBy, setSortBy] = useState("name")
+  const [sortBy, setSortBy] = useState("smart")
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc")
   const suggestFormUrl = process.env.NEXT_PUBLIC_SUGGEST_MARKET_URL || "https://forms.gle/your-form"
 
@@ -115,8 +62,6 @@ export default function HomepageClient({ markets }: HomepageClientProps) {
       (position) => {
         setUserLocation({ lat: position.coords.latitude, lng: position.coords.longitude })
         setSearchQuery("")
-        setSelectedState("All States")
-        setSelectedDay("All Days")
         setIsRequestingLocation(false)
       },
       (error) => {
@@ -181,18 +126,7 @@ export default function HomepageClient({ markets }: HomepageClientProps) {
         market.district.toLowerCase().includes(searchQuery.toLowerCase()) ||
         market.state.toLowerCase().includes(searchQuery.toLowerCase())
 
-      const matchesState = selectedState === "All States" || market.state === selectedState
-
-      const matchesDay =
-        selectedDay === "All Days" ||
-        market.schedule.some((schedule) => {
-          const code = dayStringToCode[selectedDay] || dayStringToCode[selectedDay as keyof typeof dayStringToCode]
-          return code ? schedule.days.includes(code as any) : true
-        })
-
-      const matchesOpen = !openNow || getMarketOpenStatus(market).status === "open"
-
-      return matchesSearch && matchesState && matchesDay && matchesOpen
+      return matchesSearch
     })
 
     // Sort by selected criteria and order
@@ -200,6 +134,28 @@ export default function HomepageClient({ markets }: HomepageClientProps) {
       let comparison = 0
       
       switch (sortBy) {
+        case "smart":
+          // Multi-tier sort: Open status first, then distance, then name
+          const aOpen = getMarketOpenStatus(a).status === "open"
+          const bOpen = getMarketOpenStatus(b).status === "open"
+          
+          // Primary: Open status (open markets first)
+          if (aOpen !== bOpen) {
+            comparison = aOpen ? -1 : 1
+          } else if (userLocation) {
+            // Secondary: Distance from user (if location available)
+            const distanceA = a.location
+              ? calculateDistance(userLocation.lat, userLocation.lng, a.location.latitude, a.location.longitude)
+              : Number.POSITIVE_INFINITY
+            const distanceB = b.location
+              ? calculateDistance(userLocation.lat, userLocation.lng, b.location.latitude, b.location.longitude)
+              : Number.POSITIVE_INFINITY
+            comparison = distanceA - distanceB
+          } else {
+            // Tertiary: Name (alphabetical)
+            comparison = a.name.localeCompare(b.name)
+          }
+          break
         case "name":
           comparison = a.name.localeCompare(b.name)
           break
@@ -233,7 +189,7 @@ export default function HomepageClient({ markets }: HomepageClientProps) {
     })
 
     return filtered
-  }, [searchQuery, selectedState, selectedDay, userLocation, openNow, sortBy, sortOrder, markets])
+  }, [searchQuery, userLocation, sortBy, sortOrder, markets])
 
   const formatArea = (areaM2: number) => {
     if (areaM2 >= 10000) {
@@ -264,74 +220,8 @@ export default function HomepageClient({ markets }: HomepageClientProps) {
                     onChange={(e) => setSearchQuery(e.target.value)}
                   />
                 </div>
-                <div className="hidden md:block">
-                  <Button
-                    variant="outline"
-                    size="lg"
-                    className="h-12 px-6 bg-transparent"
-                    onClick={() => setShowFilters(!showFilters)}
-                  >
-                    <Filter className="h-5 w-5 mr-2" />
-                    {t.filters}
-                  </Button>
-                </div>
               </div>
 
-              {showFilters && (
-                <div className="hidden md:flex md:flex-row gap-4 p-4 bg-card rounded-lg border">
-                  <div className="flex-1">
-                    <label className="text-sm font-medium text-foreground mb-2 block">{t.state}</label>
-                    <Select value={selectedState} onValueChange={setSelectedState}>
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {malaysianStates.map((state) => (
-                          <SelectItem key={state} value={state}>
-                            {state === "All States" ? t.allStates : state}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="flex-1">
-                    <label className="text-sm font-medium text-foreground mb-2 block">{t.dayOfWeekLabel}</label>
-                    <Select value={selectedDay} onValueChange={setSelectedDay}>
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {daysOfWeek.map((day) => (
-                          <SelectItem key={day} value={day}>
-                            {day === "All Days" ? t.allDays : t[day.toLowerCase() as keyof typeof t] || day}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <input
-                      type="checkbox"
-                      id="open-now-homepage"
-                      checked={openNow}
-                      onChange={(e) => {
-                        const checked = e.target.checked
-                        setOpenNow(checked)
-                        if (typeof window !== "undefined") {
-                          localStorage.setItem("filterOpenNow", checked.toString())
-                        }
-                      }}
-                      className="h-4 w-4 rounded border-2 border-input bg-background text-primary focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                    />
-                    <label
-                      htmlFor="open-now-homepage"
-                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                    >
-                      {t.openNow}
-                    </label>
-                  </div>
-                </div>
-              )}
             </div>
           </div>
 
@@ -366,7 +256,7 @@ export default function HomepageClient({ markets }: HomepageClientProps) {
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between mb-6 md:mb-8">
             <h3 className="text-2xl md:text-3xl font-bold text-foreground">
-              {searchQuery || selectedState !== "All States" || selectedDay !== "All Days" || userLocation
+              {searchQuery || userLocation
                 ? `${t.searchResults} (${filteredMarkets.length})`
                 : t.featuredMarkets}
             </h3>
@@ -377,6 +267,7 @@ export default function HomepageClient({ markets }: HomepageClientProps) {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
+                  <SelectItem value="smart">Smart Sort (Open + Nearest)</SelectItem>
                   <SelectItem value="name">{t.sortByName}</SelectItem>
                   <SelectItem value="state">{t.sortByLocation}</SelectItem>
                   <SelectItem value="size">{t.sortByStallCount}</SelectItem>
@@ -392,18 +283,12 @@ export default function HomepageClient({ markets }: HomepageClientProps) {
               >
                 {sortOrder === "asc" ? <ArrowUp className="h-4 w-4" /> : <ArrowDown className="h-4 w-4" />}
               </Button>
-              {(searchQuery || selectedState !== "All States" || selectedDay !== "All Days" || userLocation || !openNow) && (
+              {(searchQuery || userLocation) && (
                 <Button
                   variant="outline"
                   onClick={() => {
                     setSearchQuery("")
-                    setSelectedState("All States")
-                    setSelectedDay("All Days")
                     setUserLocation(null)
-                    setOpenNow(true)
-                    if (typeof window !== "undefined") {
-                      localStorage.setItem("filterOpenNow", "true")
-                    }
                   }}
                 >
                   {t.clearAllFilters}
@@ -525,9 +410,24 @@ export default function HomepageClient({ markets }: HomepageClientProps) {
                           {market.total_shop} {t.totalStalls.toLowerCase()} • {formatArea(market.area_m2)}
                         </p>
                       )}
-                      <Link href={`/markets/${market.id}`}>
-                        <Button className="w-full">{t.viewDetails}</Button>
-                      </Link>
+                      <div className="flex gap-2">
+                        {market.location?.gmaps_link && (
+                          <Button asChild className="flex-1">
+                            <a 
+                              href={market.location.gmaps_link} 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                            >
+                              {t.showDirection}
+                            </a>
+                          </Button>
+                        )}
+                        <Link href={`/markets/${market.id}`}>
+                          <Button variant="outline" size="sm">
+                            {t.viewDetails}
+                          </Button>
+                        </Link>
+                      </div>
                     </CardContent>
                   </Card>
                 )
@@ -551,6 +451,7 @@ export default function HomepageClient({ markets }: HomepageClientProps) {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
+                  <SelectItem value="smart">Smart Sort (Open + Nearest)</SelectItem>
                   <SelectItem value="name">{t.sortByName}</SelectItem>
                   <SelectItem value="state">{t.sortByLocation}</SelectItem>
                   <SelectItem value="size">{t.sortByStallCount}</SelectItem>
@@ -569,92 +470,6 @@ export default function HomepageClient({ markets }: HomepageClientProps) {
             </div>
           </div>
 
-          {/* Mobile filter FAB + sheet */}
-          <Sheet open={showFilters} onOpenChange={setShowFilters}>
-            <SheetTrigger asChild>
-              <Button className="md:hidden fixed bottom-20 right-4 z-40 rounded-full h-12 w-12 p-0 shadow-lg">
-                <Filter className="h-5 w-5" />
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="bottom" className="h-[70vh] p-4">
-              <SheetHeader>
-                <SheetTitle>{t.filters}</SheetTitle>
-              </SheetHeader>
-              <div className="mt-4 space-y-4">
-                <div>
-                  <label className="text-sm font-medium text-foreground mb-2 block">{t.stateLabel}</label>
-                  <Select value={selectedState} onValueChange={setSelectedState}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {malaysianStates.map((state) => (
-                        <SelectItem key={state} value={state}>
-                          {state === "All States" ? t.allStates : state}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div>
-                  <label className="text-sm font-medium text-foreground mb-2 block">{t.dayLabel}</label>
-                  <Select value={selectedDay} onValueChange={setSelectedDay}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {daysOfWeek.map((day) => (
-                        <SelectItem key={day} value={day}>
-                          {day === "All Days" ? t.allDays : t[day.toLowerCase() as keyof typeof t] || day}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <input
-                    type="checkbox"
-                    id="open-now-mobile-homepage"
-                    checked={openNow}
-                    onChange={(e) => {
-                      const checked = e.target.checked
-                      setOpenNow(checked)
-                      if (typeof window !== "undefined") {
-                        localStorage.setItem("filterOpenNow", checked.toString())
-                      }
-                    }}
-                    className="h-4 w-4 rounded border-2 border-input bg-background text-primary focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                  />
-                  <label
-                    htmlFor="open-now-mobile-homepage"
-                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                  >
-                    {t.openNow}
-                  </label>
-                </div>
-                <div className="pt-2 flex gap-2">
-                  <Button
-                    variant="outline"
-                    className="flex-1"
-                    onClick={() => {
-                      setSearchQuery("")
-                      setSelectedState("All States")
-                      setSelectedDay("All Days")
-                      setOpenNow(true)
-                      if (typeof window !== "undefined") {
-                        localStorage.setItem("filterOpenNow", "true")
-                      }
-                    }}
-                  >
-                    {t.reset}
-                  </Button>
-                  <Button className="flex-1" onClick={() => setShowFilters(false)}>
-                    {t.applyFilters}
-                  </Button>
-                </div>
-              </div>
-            </SheetContent>
-          </Sheet>
 
         </div>
       </section>

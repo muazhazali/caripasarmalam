@@ -69,6 +69,7 @@ export interface Translations {
   contactInformation: string
   actions: string
   getDirections: string
+  showDirection: string
   shareMarket: string
   findNearest: string
   findNearestTitle: string
@@ -204,6 +205,7 @@ export const translations: Record<string, Translations> = {
     contactInformation: "Contact Information",
     actions: "Actions",
     getDirections: "Get Directions",
+    showDirection: "Show Direction",
     shareMarket: "Share Market",
     findNearest: "Find Nearest",
     findNearestTitle: "Find Nearby Markets",
@@ -275,9 +277,9 @@ export const translations: Record<string, Translations> = {
     featuredMarkets: "Pasar Pilihan",
     searchResults: "Hasil Carian",
     // Navigation
-    home: "Laman Utama",
+    home: "Utama",
     markets: "Pasar",
-    mapView: "Paparan Peta",
+    mapView: "Peta",
     backToDirectory: "Kembali ke Direktori",
     about: "Tentang",
     contributors: "Penyumbang",
@@ -337,6 +339,7 @@ export const translations: Record<string, Translations> = {
     contactInformation: "Maklumat Hubungan",
     actions: "Tindakan",
     getDirections: "Dapatkan Arah",
+    showDirection: "Tunjuk Arah",
     shareMarket: "Kongsi Pasar",
     findNearest: "Cari Terdekat",
     findNearestTitle: "Cari Pasar Terdekat",
