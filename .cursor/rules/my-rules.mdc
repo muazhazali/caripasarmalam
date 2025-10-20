@@ -33,6 +33,7 @@ alwaysApply: true
   Internationalization (i18n)
   - Support Malay and English languages.
   - Ensure text scaling and font adjustments for accessibility.
+  - Ensure everything is translated properly.
   
   Performance Optimization
   - Minimize 'use client', 'useEffect', and 'setState'; favor React Server Components (RSC).
