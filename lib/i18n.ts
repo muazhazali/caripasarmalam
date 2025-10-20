@@ -16,6 +16,8 @@ export interface Translations {
   more: string
   github: string
   languageLabel: string
+  lightMode: string
+  darkMode: string
 
   // Static Pages
   aboutTitle: string
@@ -152,6 +154,8 @@ export const translations: Record<string, Translations> = {
     more: "More",
     github: "GitHub",
     languageLabel: "Language",
+    lightMode: "Light Mode",
+    darkMode: "Dark Mode",
 
     // Static Pages
     aboutTitle: "About",
@@ -286,6 +290,8 @@ export const translations: Record<string, Translations> = {
     more: "Lagi",
     github: "GitHub",
     languageLabel: "Bahasa",
+    lightMode: "Mod Cerah",
+    darkMode: "Mod Gelap",
 
     // Static Pages
     aboutTitle: "Tentang",

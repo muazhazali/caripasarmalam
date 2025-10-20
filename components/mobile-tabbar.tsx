@@ -3,10 +3,11 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
-import { Home, ShoppingBag, Map as MapIcon, Globe, MoreHorizontal, Info, Users, Github } from "lucide-react"
+import { Home, ShoppingBag, Map as MapIcon, Globe, MoreHorizontal, Info, Users, Github, Sun, Moon } from "lucide-react"
 import { useLanguage } from "@/components/language-provider"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
+import { useTheme } from 'next-themes'
 
 function TabButton({
   href,
@@ -36,6 +37,7 @@ function TabButton({
 export default function MobileTabBar() {
   const pathname = usePathname()
   const { language, setLanguage, t } = useLanguage()
+  const { theme, setTheme } = useTheme()
 
   const tabs = [
     { href: "/", label: t.home, icon: Home },
@@ -108,6 +110,14 @@ export default function MobileTabBar() {
                 >
                   <Globe className="h-4 w-4" />
                   <span>{t.languageLabel}: {language.toUpperCase()}</span>
+                </button>
+                <button
+                  aria-label="Toggle theme"
+                  className="flex items-center gap-3 rounded-lg border border-border px-4 py-4 text-sm text-foreground hover:bg-muted/50 transition-colors"
+                  onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
+                >
+                  {theme === 'light' ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
+                  <span>{theme === 'light' ? t.darkMode : t.lightMode}</span>
                 </button>
               </div>
             </SheetContent>
