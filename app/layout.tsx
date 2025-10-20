@@ -10,6 +10,7 @@ import "./globals.css"
 import MobileTabBar from "@/components/mobile-tabbar"
 import DesktopNavbar from "@/components/desktop-navbar"
 import { LanguageProvider } from "@/components/language-provider"
+import { ThemeProvider } from "@/components/theme-provider"
 
 const sourceSansPro = Source_Sans_3({
   subsets: ["latin"],
@@ -82,7 +83,7 @@ export default async function RootLayout({
   const cookieLang = cookieStore.get("language")?.value
   const initialLanguage = cookieLang === "en" ? "en" : "ms"
   return (
-    <html lang={initialLanguage}>
+    <html lang={initialLanguage} suppressHydrationWarning>
       <head>
         {/* JSON-LD: Website */}
         <script
@@ -110,6 +111,7 @@ export default async function RootLayout({
         ) : null}
       </head>
       <body className={`font-sans ${sourceSansPro.variable} ${playfairDisplay.variable} ${GeistMono.variable}`}>
+         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
         <LanguageProvider initialLanguage={initialLanguage}>
           <DesktopNavbar />
           <Suspense fallback={null}>
@@ -119,6 +121,7 @@ export default async function RootLayout({
           </Suspense>
           <MobileTabBar />
         </LanguageProvider>
+        </ThemeProvider>
         <Analytics />
       </body>
     </html>

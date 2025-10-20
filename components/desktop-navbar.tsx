@@ -3,9 +3,11 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
-import { Home, ShoppingBag, Map as MapIcon, Github, Info, Users } from "lucide-react"
+import { Home, ShoppingBag, Map as MapIcon, Github, Info, Users, Moon, Sun } from "lucide-react"
 import { useLanguage } from "@/components/language-provider"
 import LanguageSwitcher from "@/components/language-switcher"
+import { ThemeToggle } from "@/components/ui/theme-toggle"
+
 
 function NavLink({ href, label, icon: Icon, isActive }: { href: string; label: string; icon: any; isActive: boolean }) {
   return (
@@ -34,6 +36,7 @@ export default function DesktopNavbar() {
     { href: "/map", label: t.mapView, icon: MapIcon },
     { href: "/about", label: t.about, icon: Info },
     { href: "/contributors", label: t.contributors, icon: Users },
+    
   ]
 
   return (
@@ -55,17 +58,20 @@ export default function DesktopNavbar() {
                 />
               ))}
             </nav>
+
+
             <Link
               href="https://github.com/muazhazali/caripasarmalam"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-3 py-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted/50"
               aria-label="GitHub Repository"
-            >
+              >
               <Github className="h-4 w-4" />
               <span className="text-sm font-medium hidden lg:inline">GitHub</span>
             </Link>
             <LanguageSwitcher currentLanguage={language} onLanguageChange={setLanguage} />
+            <ThemeToggle/>
           </div>
         </div>
       </div>
