@@ -481,36 +481,66 @@ export default function HomepageClient({ markets }: HomepageClientProps) {
             </div>
           </div>
 
-          {/* Nearest CTA card (shown when no location yet) */}
-          {!userLocation && (
+          {/* Mobile CTA buttons - side by side */}
+          <div className="mb-6 md:hidden">
+            <div className="grid grid-cols-2 gap-3">
+              {/* Find Nearest button */}
+              {!userLocation && (
+                <Button 
+                  onClick={findNearestMarkets} 
+                  disabled={isRequestingLocation} 
+                  className="gap-2 h-auto p-3 flex flex-col items-center justify-center"
+                >
+                  <Navigation2 className="h-4 w-4" />
+                  <span className="text-xs font-medium">
+                    {isRequestingLocation ? t.searching : t.findNearest}
+                  </span>
+                </Button>
+              )}
+              
+              {/* Add Market button */}
+              <Button asChild className="gap-2 h-auto p-3 flex flex-col items-center justify-center">
+                <a href={suggestFormUrl} target="_blank" rel="noopener noreferrer">
+                  <MapPin className="h-4 w-4" />
+                  <span className="text-xs font-medium">{t.suggestMarket}</span>
+                </a>
+              </Button>
+            </div>
+          </div>
+
+          {/* Desktop CTA cards */}
+          <div className="hidden md:block">
+            {/* Nearest CTA card (shown when no location yet) */}
+            {!userLocation && (
+              <Card className="mb-6 md:mb-8">
+                <CardContent className="p-4 md:p-6 flex items-center justify-between gap-3">
+                  <div className="text-left">
+                    <div className="font-semibold text-foreground">{t.findNearestTitle}</div>
+                    <div className="text-sm text-muted-foreground">{t.findNearestDescription}</div>
+                  </div>
+                  <Button onClick={findNearestMarkets} disabled={isRequestingLocation} className="gap-2">
+                    <Navigation2 className="h-4 w-4" />
+                    {isRequestingLocation ? t.searching : t.findNearest}
+                  </Button>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Suggest Market CTA */}
             <Card className="mb-6 md:mb-8">
               <CardContent className="p-4 md:p-6 flex items-center justify-between gap-3">
                 <div className="text-left">
-                  <div className="font-semibold text-foreground">{t.findNearestTitle}</div>
-                  <div className="text-sm text-muted-foreground">{t.findNearestDescription}</div>
+                  <div className="font-semibold text-foreground">{t.suggestMarket}</div>
+                  <div className="text-sm text-muted-foreground">{t.addMarketCta}</div>
                 </div>
-                <Button onClick={findNearestMarkets} disabled={isRequestingLocation} className="gap-2">
-                  <Navigation2 className="h-4 w-4" />
-                  {isRequestingLocation ? t.searching : t.findNearest}
+                <Button asChild>
+                  <a href={suggestFormUrl} target="_blank" rel="noopener noreferrer">
+                    {t.suggestMarket}
+                  </a>
                 </Button>
               </CardContent>
             </Card>
-          )}
-
-          {/* Suggest Market CTA (mobile emphasis) */}
-          <Card className="mb-6 md:hidden">
-            <CardContent className="p-4 flex items-center justify-between gap-3">
-              <div className="text-left">
-                <div className="font-semibold text-foreground">{t.suggestMarket}</div>
-                <div className="text-sm text-muted-foreground">{t.addMarketCta}</div>
-              </div>
-              <Button asChild>
-                <a href={suggestFormUrl} target="_blank" rel="noopener noreferrer">
-                  {t.suggestMarket}
-                </a>
-              </Button>
-            </CardContent>
-          </Card>
+          </div>
 
           {filteredMarkets.length === 0 ? (
             <div className="text-center py-12">
