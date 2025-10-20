@@ -331,6 +331,111 @@ export default function HomepageClient({ markets }: HomepageClientProps) {
                 ? `${t.searchResults} (${filteredMarkets.length})`
                 : t.featuredMarkets}
             </h3>
+            <div className="flex items-center gap-2">
+              {/* Mobile filter button */}
+              <Sheet open={showFilters} onOpenChange={setShowFilters}>
+                <SheetTrigger asChild>
+                  <Button className="md:hidden rounded-full h-10 w-10 p-0 shadow-lg">
+                    <Filter className="h-5 w-5" />
+                  </Button>
+                </SheetTrigger>
+                <SheetContent side="bottom" className="h-[75vh] p-4">
+                  <SheetHeader>
+                    <SheetTitle>{t.filters}</SheetTitle>
+                  </SheetHeader>
+                  <div className="mt-4 space-y-4">
+                    <div>
+                      <label className="text-sm font-medium text-foreground mb-2 block">{t.stateLabel}</label>
+                      <Select value={selectedState} onValueChange={setSelectedState}>
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {malaysianStates.map((state) => (
+                            <SelectItem key={state} value={state}>
+                              {state === "All States" ? t.allStates : state}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <label className="text-sm font-medium text-foreground mb-2 block">{t.dayLabel}</label>
+                      <Select value={selectedDay} onValueChange={setSelectedDay}>
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {daysOfWeek.map((day) => (
+                            <SelectItem key={day} value={day}>
+                              {day === "All Days" ? t.allDays : t[day.toLowerCase() as keyof typeof t] || day}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="flex items-center space-x-2">
+                        <Checkbox
+                          id="parking"
+                          checked={filters.parking}
+                          onCheckedChange={(checked) =>
+                            setFilters((prev) => ({ ...prev, parking: checked as boolean }))
+                          }
+                        />
+                        <label htmlFor="parking" className="text-sm font-medium">
+                          {t.parking}
+                        </label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Checkbox
+                          id="toilet"
+                          checked={filters.toilet}
+                          onCheckedChange={(checked) =>
+                            setFilters((prev) => ({ ...prev, toilet: checked as boolean }))
+                          }
+                        />
+                        <label htmlFor="toilet" className="text-sm font-medium">
+                          {t.toilet}
+                        </label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Checkbox
+                          id="prayer_room"
+                          checked={filters.prayer_room}
+                          onCheckedChange={(checked) =>
+                            setFilters((prev) => ({ ...prev, prayer_room: checked as boolean }))
+                          }
+                        />
+                        <label htmlFor="prayer_room" className="text-sm font-medium">
+                          {t.prayerRoom}
+                        </label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Checkbox
+                          id="accessible_parking"
+                          checked={filters.accessible_parking}
+                          onCheckedChange={(checked) =>
+                            setFilters((prev) => ({ ...prev, accessible_parking: checked as boolean }))
+                          }
+                        />
+                        <label htmlFor="accessible_parking" className="text-sm font-medium">
+                          {t.accessibleParking}
+                        </label>
+                      </div>
+                    </div>
+                    <div className="flex gap-2 pt-4">
+                      <Button variant="outline" onClick={clearAllFilters} className="flex-1">
+                        {t.clearAllFilters}
+                      </Button>
+                      <Button onClick={() => setShowFilters(false)} className="flex-1">
+                        {t.applyFilters}
+                      </Button>
+                    </div>
+                  </div>
+                </SheetContent>
+              </Sheet>
+            </div>
             <div className="hidden md:flex gap-2">
               <Select value={sortBy} onValueChange={setSortBy}>
                 <SelectTrigger className="w-48">
@@ -562,117 +667,6 @@ export default function HomepageClient({ markets }: HomepageClientProps) {
           </p>
         </div>
       </footer>
-
-      {/* Mobile FAB + filter sheet */}
-      <Sheet open={showFilters} onOpenChange={setShowFilters}>
-        <SheetTrigger asChild>
-          <Button className="md:hidden fixed bottom-20 right-4 z-40 rounded-full h-12 w-12 p-0 shadow-lg">
-            <Filter className="h-5 w-5" />
-          </Button>
-        </SheetTrigger>
-        <SheetContent side="bottom" className="h-[75vh] p-4">
-          <SheetHeader>
-            <SheetTitle>{t.filters}</SheetTitle>
-          </SheetHeader>
-          <div className="mt-4 space-y-4">
-            <div>
-              <label className="text-sm font-medium text-foreground mb-2 block">{t.stateLabel}</label>
-              <Select value={selectedState} onValueChange={setSelectedState}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {malaysianStates.map((state) => (
-                    <SelectItem key={state} value={state}>
-                      {state === "All States" ? t.allStates : state}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div>
-              <label className="text-sm font-medium text-foreground mb-2 block">{t.dayLabel}</label>
-              <Select value={selectedDay} onValueChange={setSelectedDay}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {daysOfWeek.map((day) => (
-                    <SelectItem key={day} value={day}>
-                      {day === "All Days" ? t.allDays : t[day.toLowerCase() as keyof typeof t] || day}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="grid grid-cols-2 gap-3">
-              <div className="flex items-center space-x-2">
-                <Checkbox
-                  id="m-open-now"
-                  checked={openNow}
-                  onCheckedChange={(checked) => setOpenNow(!!checked)}
-                  className="size-5 border-2 shadow-sm hover:border-foreground data-[state=checked]:border-primary"
-                />
-                <label htmlFor="m-open-now" className="text-sm font-medium">
-                  {t.openNow}
-                </label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox
-                  id="m-parking"
-                  checked={filters.parking}
-                  onCheckedChange={(checked) => setFilters((prev) => ({ ...prev, parking: !!checked }))}
-                  className="size-5 border-2 shadow-sm hover:border-foreground data-[state=checked]:border-primary"
-                />
-                <label htmlFor="m-parking" className="text-sm font-medium">
-                  {t.parkingAvailable}
-                </label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox
-                  id="m-accessible-parking"
-                  checked={filters.accessible_parking}
-                  onCheckedChange={(checked) => setFilters((prev) => ({ ...prev, accessible_parking: !!checked }))}
-                  className="size-5 border-2 shadow-sm hover:border-foreground data-[state=checked]:border-primary"
-                />
-                <label htmlFor="m-accessible-parking" className="text-sm font-medium">
-                  {t.accessibleParking}
-                </label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox
-                  id="m-toilet"
-                  checked={filters.toilet}
-                  onCheckedChange={(checked) => setFilters((prev) => ({ ...prev, toilet: !!checked }))}
-                  className="size-5 border-2 shadow-sm hover:border-foreground data-[state=checked]:border-primary"
-                />
-                <label htmlFor="m-toilet" className="text-sm font-medium">
-                  {t.toiletFacilities}
-                </label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox
-                  id="m-prayer-room"
-                  checked={filters.prayer_room}
-                  onCheckedChange={(checked) => setFilters((prev) => ({ ...prev, prayer_room: !!checked }))}
-                  className="size-5 border-2 shadow-sm hover:border-foreground data-[state=checked]:border-primary"
-                />
-                <label htmlFor="m-prayer-room" className="text-sm font-medium">
-                  {t.prayerRoom}
-                </label>
-              </div>
-            </div>
-            <div className="pt-2 flex gap-2">
-              <Button variant="outline" className="flex-1" onClick={clearAllFilters}>
-                {t.clearAllFilters}
-              </Button>
-              <Button className="flex-1" onClick={() => setShowFilters(false)}>
-                {t.applyFilters}
-              </Button>
-            </div>
-          </div>
-        </SheetContent>
-      </Sheet>
     </div>
   )
 }
