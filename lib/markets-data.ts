@@ -2294,30 +2294,6 @@ export const marketsData: Market[] = [
     },
   },
   {
-    id: "taman-bukit-subang",
-    name: "Taman Bukit Subang",
-    address: "Taman Bukit Subang, 40160 Shah Alam, Selangor",
-    district: "Shah Alam",
-    state: "Selangor",
-    description: "A community night market in Taman Bukit Subang, serving local residents with various food and goods.",
-    schedule: [
-      {
-        days: ["wed"],
-        times: [{ start: "17:00", end: "22:00", note: "Wednesday night market" }],
-      },
-    ],
-    parking: { available: true, accessible: true, notes: "Street parking available in the residential area." },
-    amenities: { toilet: false, prayer_room: false },
-    status: "Permanently Closed",
-    area_m2: 2000,
-    total_shop: 25,
-    location: {
-      latitude: 0,
-      longitude: 0,
-      gmaps_link: "https://maps.app.goo.gl/CRAa6JuFZudh6SUf9",
-    },
-  },
-  {
     id: "pasar-malam-jalan-perusahaan-u20",
     name: "Pasar Malam Jalan Perusahaan A/1, Seksyen U20",
     address: "Jalan Perusahaan A/1, Seksyen U20, Shah Alam, Selangor",
@@ -2336,8 +2312,8 @@ export const marketsData: Market[] = [
     area_m2: 2000,
     total_shop: 25,
     location: {
-      latitude: 0,
-      longitude: 0,
+      latitude: 3.20171768050148,
+      longitude: 101.55857507174704,
       gmaps_link: "",
     },
   },

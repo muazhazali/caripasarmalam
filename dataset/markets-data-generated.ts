@@ -3882,27 +3882,6 @@ export const marketsData: Market[] = [
     total_shop: null,
   },
   {
-    id: "jalan-perusahaan-a1",
-    name: "Jalan Perusahaan A/1",
-    address: "Seksyen U20",
-    district: "Shah Alam",
-    state: "Selangor",
-    schedule: [
-    ],
-    parking: {
-      available: false,
-      accessible: false,
-      notes: "No parking information available",
-    },
-    amenities: {
-      toilet: false,
-      prayer_room: false,
-    },
-    status: "",
-    area_m2: null,
-    total_shop: null,
-  },
-  {
     id: "pasar-malam-taman-harmoni",
     name: "Pasar Malam Taman Harmoni",
     address: "Jalan Utama, Taman Harmoni",
