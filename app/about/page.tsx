@@ -16,19 +16,28 @@ export default async function AboutPage() {
       <h1 className="text-2xl font-semibold tracking-tight">{t.aboutTitle}</h1>
       <div className="mt-6 space-y-4 text-muted-foreground leading-relaxed">
         <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante
-          dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris.
-          Fusce nec tellus sed augue semper porta.
+          Latar Belakang Projek
         </p>
         <p>
-          Mauris ipsum. Nulla metus metus, ullamcorper vel, tincidunt sed, euismod in, nibh. Quisque volutpat
-          condimentum velit. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos
-          himenaeos. Nam nec ante. Sed lacinia, urna non tincidunt mattis, tortor neque adipiscing diam, a cursus ipsum
-          ante quis turpis.
+          Masa saya duduk di UiTM Perlis, tak tahu mana pasar malam yang terdekat. 
         </p>
         <p>
-          Nulla facilisi. Ut fringilla. Suspendisse potenti. Nunc feugiat mi a tellus consequat imperdiet. Vestibulum
-          sapien. Proin quam. Etiam ultrices. Suspendisse in justo eu magna luctus suscipit. Sed lectus.
+          Ada pun time tu, hanya post dalam FB lokasi pasar secara kasar, dah hari operasi. 
+        </p>
+        <p>
+          Takde lokasi yang tepat dan masa operasi.
+        </p>
+        <p>
+          Takkan nak terjah je ke tempat tu kan? Buatnya datang tapi takde orang. Kan dah bazir masa, minyak, tenaga, duit. Huhu
+        </p>
+        <p>
+          Maka saya pun terfikir la nak buat projek ni untuk memudahkan orang cari pasar malam di sekitar Malaysia.
+        </p>
+        <br />
+        <p>
+          Harap projek ini membantu dalam misi food hunting anda!
+          <br />
+          Jangan lupa share kat kawan2, family, jiran, sepupu, sepapat, keluarga mentua dan kucing sebelah rumah 😽
         </p>
       </div>
     </div>
