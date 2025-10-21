@@ -3,11 +3,22 @@ import { cookies } from "next/headers"
 import { useTranslation } from "@/lib/i18n"
 import Link from "next/link"
 import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
+import { ExternalLink, Github, Linkedin } from "lucide-react"
 
 interface Contributor {
   name: string
   role?: string
   link?: string
+}
+
+function getLinkInfo(url: string) {
+  if (url.includes('linkedin.com')) {
+    return { text: 'LinkedIn', icon: Linkedin }
+  } else if (url.includes('github.com')) {
+    return { text: 'GitHub', icon: Github }
+  } else {
+    return { text: 'External Link', icon: ExternalLink }
+  }
 }
 
 export const metadata: Metadata = {
@@ -20,8 +31,13 @@ export default async function ContributorsPage() {
   const lang = cookieLang === "en" ? "en" : "ms"
   const t = useTranslation(lang)
   const contributors: Contributor[] = [
-    { name: "John", role: "Contributor", link: "https://example.com/john" },
-    { name: "Jane", role: "Contributor", link: "https://example.com/jane" },
+    { name: "Kamalin Annuar", role: "Data Collector, Cleaner", link: "https://www.linkedin.com/in/kamalin-annuar/" },
+    { name: "Nayli Umairah", role: "UI/UX Designer", link: "https://www.linkedin.com/in/nayli-u-24b90a272/" },
+    { name: "Safinah Rashid", role: "Manual Tester", link: "https://www.linkedin.com/in/safinah-rashid/" },
+    { name: "Ainur Farihah", role: "Data Contributor", link: "https://www.linkedin.com/in/ainur-farihah-957a9a266/" },
+    { name: "Meor Muhammad Hakimi", role: "Data Contributor", link: "https://www.linkedin.com/in/meor-hakimi-314b9024b/" },
+    { name: "Afifah", role: "Data Contributor", link: "https://www.linkedin.com/in/nurul-afifah-818a85169/" },
+    { name: "GitHub Contributors", role: "Developer & Maintainer", link: "https://github.com/muazhazali/caripasarmalam/graphs/contributors" },
     { name: "nawicon", role: "Icon Designer", link: "https://www.flaticon.com/free-icon/shop_5193727?term=location&related_id=5193727" }
   ]
 
@@ -44,9 +60,18 @@ export default async function ContributorsPage() {
                     href={c.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-primary hover:underline"
+                    className="text-primary hover:underline inline-flex items-center gap-1"
                   >
-                    {c.link}
+                    {(() => {
+                      const linkInfo = getLinkInfo(c.link)
+                      const IconComponent = linkInfo.icon
+                      return (
+                        <>
+                          <IconComponent className="h-4 w-4" />
+                          {linkInfo.text}
+                        </>
+                      )
+                    })()}
                   </Link>
                 </CardDescription>
               ) : null}
