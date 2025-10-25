@@ -3003,6 +3003,176 @@ export const marketsData: Market[] = [
       gmaps_link: "https://maps.app.goo.gl/UW2hMaAXeSMh5coVA",
     },
   },
+  {
+    id: "seksyen-27-shah-alam",
+    name: "Pasar Malam Seksyen 27 Shah Alam (Flat Proton)",
+    address: "Jalan Bukit Raya 27/8, Taman Bunga Negara, 40400 Shah Alam, Selangor",
+    district: "Shah Alam",
+    state: "Selangor",
+    description: "Berhadapan apartment sri ixora dan berhampiran sekolah smk seksyen 27 shah alam.",
+    schedule: [
+      {
+        days: ["thu"],
+        times: [{ start: "17:00", end: "22:30", note: "Pasar malam" }],
+      },
+    ],
+    parking: {
+      available: true,
+      accessible: false,
+      notes: "Parking di kedai dan sekitar flat proton",
+    },
+    amenities: { toilet: false, prayer_room: false },
+    status: "Active",
+    area_m2: 1050,
+    total_shop: 80,
+    location: {
+      latitude: 3.0241766,
+      longitude: 101.5668943,
+      gmaps_link: "https://maps.app.goo.gl/utt2sapWqTxD1uqw8?g_st=ipc",
+    },
+  },
+  {
+    id: "kota-damansara-jln-pekaka",
+    name: "Pasar Malam Kota Damansara",
+    address: "Jalan Pekaka 8/2, KOta Damansara",
+    district: "Petaling Jaya",
+    state: "Selangor",
+    description: "Pasar Malam Jln Pekaka",
+    schedule: [
+      {
+        days: ["sat"],
+        times: [{ start: "17:00", end: "22:30", note: "Pasar Malam" }],
+      },
+    ],
+    parking: {
+      available: true,
+      accessible: false,
+      notes: "Ada kawasan tempat letak kereta",
+    },
+    amenities: { toilet: false, prayer_room: false },
+    status: "Active",
+    area_m2: 900,
+    total_shop: 40,
+    location: {
+      latitude: 3.175477752,
+      longitude: 101.5756183,
+      gmaps_link: "https://maps.app.goo.gl/TneuKBQ7ZpPb3rtJ7",
+    },
+  },
+  {
+    id: "pinggiran-putra-seri-kembangan",
+    name: "Pasar Malam Pinggiran Putra",
+    address: "Jln PP 25, Tmn Pinggiran Putra, Bdr Putra Permai",
+    district: "Seri Kembangan",
+    state: "Selangor",
+    schedule: [
+      {
+        days: ["wed"],
+        times: [{ start: "18:00", end: "22:00", note: "Petang Pasar Malam" }],
+      },
+    ],
+    parking: {
+      available: true,
+      accessible: false,
+      notes: "Tepi jalan",
+    },
+    amenities: { toilet: false, prayer_room: false },
+    status: "Active",
+    area_m2: 0,
+    total_shop: null,
+    location: {
+      latitude: 2.990580962,
+      longitude: 101.6755066,
+      gmaps_link: "https://maps.app.goo.gl/vVV68LLRdwNxcozp6",
+    },
+  },
+  {
+    id: "puj-taman-puncak-jalil",
+    name: "Pasar Malam PUJ",
+    address: "Hadapan Hero Market, Jln PUJ 3, Taman Puncak Jalil",
+    district: "Seri Kembangan",
+    state: "Selangor",
+    schedule: [
+      {
+        days: ["fri"],
+        times: [{ start: "18:00", end: "22:00", note: "Petang pasar malam" }],
+      },
+    ],
+    parking: {
+      available: true,
+      accessible: true,
+      notes: "",
+    },
+    amenities: { toilet: false, prayer_room: false },
+    status: "Active",
+    area_m2: 0,
+    total_shop: null,
+    location: {
+      latitude: 3.022582422,
+      longitude: 101.674958,
+      gmaps_link: "https://maps.app.goo.gl/sDW9ByJtTxvsfKox8",
+    },
+  },
+  {
+    id: "kota-warisan-sepang",
+    name: "Pasar Malam Kota Warisan",
+    address: "Jalan Warisan Megah 1/5, Kota Warisan",
+    district: "Sepang",
+    state: "Selangor",
+    description: "Peniaga berbeza mengikut hari",
+    schedule: [
+      {
+        days: ["wed"],
+        times: [{ start: "16:30", end: "20:30", note: "Pasar malam" }],
+      },
+      {
+        days: ["sat"],
+        times: [{ start: "16:30", end: "20:30", note: "Pasar malam" }],
+      },
+    ],
+    parking: {
+      available: false,
+      accessible: false,
+      notes: "",
+    },
+    amenities: { toilet: true, prayer_room: true },
+    status: "Active",
+    area_m2: 0,
+    total_shop: 30,
+    location: {
+      latitude: 2.825027161,
+      longitude: 101.7071412,
+      gmaps_link: "https://maps.app.goo.gl/ErvagP2U56V4UCKh9",
+    },
+  },
+  {
+    id: "bandar-kinrara-puchong",
+    name: "Pasar Malam Bandar Kinrara",
+    address: "Jalan BK5a/1, Bandar Kinrara, 47180, Puchong",
+    district: "Petaling",
+    state: "Selangor",
+    description: "Pasar Tani & pasar ramadhan disini, aneka makanan, parking banyak, tepi masjid, hari selasa",
+    schedule: [
+      {
+        days: ["tue"],
+        times: [{ start: "15:00", end: "19:00", note: "Pasar Tani" }],
+      },
+    ],
+    parking: {
+      available: true,
+      accessible: true,
+      notes: "parking banyak cuma terhad",
+    },
+    amenities: { toilet: true, prayer_room: true },
+    status: "Active",
+    area_m2: 2000,
+    total_shop: 25,
+    location: {
+      latitude: 3.046160436,
+      longitude: 101.6447948,
+      gmaps_link: "https://maps.app.goo.gl/65mjiwGnfPnZyBJ26",
+    },
+  },
 ]
 
 export function getMarketById(id: string): Market | undefined {
