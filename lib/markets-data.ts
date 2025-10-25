@@ -3032,34 +3032,6 @@ export const marketsData: Market[] = [
     },
   },
   {
-    id: "kota-damansara-jln-pekaka",
-    name: "Pasar Malam Kota Damansara",
-    address: "Jalan Pekaka 8/2, KOta Damansara",
-    district: "Petaling Jaya",
-    state: "Selangor",
-    description: "Pasar Malam Jln Pekaka",
-    schedule: [
-      {
-        days: ["sat"],
-        times: [{ start: "17:00", end: "22:30", note: "Pasar Malam" }],
-      },
-    ],
-    parking: {
-      available: true,
-      accessible: false,
-      notes: "Ada kawasan tempat letak kereta",
-    },
-    amenities: { toilet: false, prayer_room: false },
-    status: "Active",
-    area_m2: 900,
-    total_shop: 40,
-    location: {
-      latitude: 3.175477752,
-      longitude: 101.5756183,
-      gmaps_link: "https://maps.app.goo.gl/TneuKBQ7ZpPb3rtJ7",
-    },
-  },
-  {
     id: "pinggiran-putra-seri-kembangan",
     name: "Pasar Malam Pinggiran Putra",
     address: "Jln PP 25, Tmn Pinggiran Putra, Bdr Putra Permai",
