@@ -74,85 +74,97 @@ function parseCsvLine(line: string): string[] {
 function loadMarkets(): Market[] {
   // Load only on the server where Node's fs and path are available
   // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const fs = require('fs');
+  const fs = eval('require')('fs');
   // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const path = require('path');
-  const csvPath = path.join(process.cwd(), 'dataset', 'pasar-malam-malaysia.csv');
-  const raw = fs.readFileSync(csvPath, { encoding: 'utf8' });
-  const lines: string[] = raw.split(/\r?\n/).filter((l: string) => l.trim().length > 0);
-  const dataLines: string[] = lines.slice(1); // skip header
+  const path = eval('require')('path');
 
-  return dataLines.map((line: string) => {
-    const fields = parseCsvLine(line);
-    const [
-      name = '',
-      address = '',
-      _cityTown = '',
-      district = '',
-      _postcode = '',
-      state = '',
-      latStr = '',
-      longStr = '',
-      gmaps = '',
-      operating_day = '',
-      operating_hour = '',
-      parkingStr = '',
-      areaStr = '',
-      amenitiesStr = '',
-      status = '',
-      totalShopStr = '',
-    ] = fields;
+  const datasetDir = path.join(process.cwd(), 'dataset');
+  const csvFiles = fs.readdirSync(datasetDir).filter((f: string) => f.endsWith('.csv'));
 
-    const id = name
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/^-+|-+$/g, '');
+  const allMarkets: Market[] = [];
 
-    const schedule: MarketSchedule[] = [];
-    if (operating_day && operating_hour) {
-      const days = operating_day
-        .split(/[,&]/)
-        .map((d) => d.trim().toLowerCase().substring(0, 3) as Weekday)
-        .filter(Boolean);
-      const [startRaw = '', endRaw = ''] = operating_hour.split('-').map((s) => s.trim());
-      schedule.push({ days, times: [{ start: startRaw, end: endRaw }] });
-    }
+  for (const file of csvFiles) {
+    const csvPath = path.join(datasetDir, file);
+    const raw = fs.readFileSync(csvPath, { encoding: 'utf8' });
+    const lines: string[] = raw.split(/\r?\n/).filter((l: string) => l.trim().length > 0);
+    const dataLines: string[] = lines.slice(1); // skip header
 
-    const parking = {
-      available: parkingStr.length > 0,
-      accessible: false,
-      notes: parkingStr,
-    };
+    const fileMarkets = dataLines.map((line: string) => {
+      const fields = parseCsvLine(line);
+      const [
+        name = '',
+        address = '',
+        _cityTown = '',
+        district = '',
+        _postcode = '',
+        state = '',
+        latStr = '',
+        longStr = '',
+        gmaps = '',
+        operating_day = '',
+        operating_hour = '',
+        parkingStr = '',
+        areaStr = '',
+        amenitiesStr = '',
+        status = '',
+        totalShopStr = '',
+      ] = fields;
 
-    const amenities = {
-      toilet: /toilet/i.test(amenitiesStr),
-      prayer_room: /prayer|room/i.test(amenitiesStr),
-    };
+      const id = name
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
 
-    const area_m2 = areaStr ? parseFloat(areaStr) : null;
-    const total_shop = totalShopStr ? parseInt(totalShopStr, 10) : null;
+      const schedule: MarketSchedule[] = [];
+      if (operating_day && operating_hour) {
+        const days = operating_day
+          .split(/[,&]/)
+          .map((d) => d.trim().toLowerCase().substring(0, 3) as Weekday)
+          .filter(Boolean);
+        const [startRaw = '', endRaw = ''] = operating_hour.split('-').map((s) => s.trim());
+        schedule.push({ days, times: [{ start: startRaw, end: endRaw }] });
+      }
 
-    const location = {
-      latitude: latStr ? parseFloat(latStr) : 0,
-      longitude: longStr ? parseFloat(longStr) : 0,
-      gmaps_link: gmaps,
-    };
+      const parking = {
+        available: parkingStr.length > 0,
+        accessible: false,
+        notes: parkingStr,
+      };
 
-    return {
-      id,
-      name,
-      address,
-      district,
-      state,
-      schedule,
-      parking,
-      amenities,
-      status: status || 'Active',
-      area_m2,
-      total_shop,
-      location,
-    };
-  });
+      const amenities = {
+        toilet: /toilet/i.test(amenitiesStr),
+        prayer_room: /prayer|room/i.test(amenitiesStr),
+      };
+
+      const area_m2 = areaStr ? parseFloat(areaStr) : null;
+      const total_shop = totalShopStr ? parseInt(totalShopStr, 10) : null;
+
+      const location = {
+        latitude: latStr ? parseFloat(latStr) : 0,
+        longitude: longStr ? parseFloat(longStr) : 0,
+        gmaps_link: gmaps,
+      };
+
+      return {
+        id,
+        name,
+        address,
+        district,
+        state,
+        schedule,
+        parking,
+        amenities,
+        status: status || 'Active',
+        area_m2,
+        total_shop,
+        location,
+      };
+    });
+
+    allMarkets.push(...fileMarkets);
+  }
+
+  return allMarkets;
 }
 
 export const marketsData: Market[] = typeof window === 'undefined' ? loadMarkets() : [];
