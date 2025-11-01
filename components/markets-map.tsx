@@ -1,8 +1,10 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import { useTranslation, formatScheduleRule } from "@/lib/i18n"
+import { formatScheduleRule } from "@/lib/i18n"
+import { useLanguage } from "@/components/language-provider"
 import { MapPin, Navigation, Loader2 } from "lucide-react"
+import openDirections from "@/lib/directions"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -22,7 +24,7 @@ export default function MarketsMap({ markets, selectedMarket, onMarketSelect, cl
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null)
   const [isReady, setIsReady] = useState(false)
   const [isUpdating, setIsUpdating] = useState(true)
-  const t = useTranslation(typeof window !== "undefined" ? localStorage.getItem("language") || "ms" : "ms")
+  const { t, language } = useLanguage()
 
   // Get user location
   useEffect(() => {
@@ -61,11 +63,16 @@ export default function MarketsMap({ markets, selectedMarket, onMarketSelect, cl
         })
 
         if (!mapInstanceRef.current) {
+          // Initialize map with center and zoom so subsequent flyTo calls are safe
           const map = L.map(mapRef.current).setView([3.139, 101.6869], 10)
           L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
             attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
           }).addTo(map)
           mapInstanceRef.current = map
+          // Expose the shared helper on window for popup markup (popup HTML calls window.openDirections)
+          if (typeof window !== "undefined") {
+            ;(window as any).openDirections = openDirections
+          }
           // ready after first paint
           setTimeout(() => {
             setIsReady(true)
@@ -99,7 +106,11 @@ export default function MarketsMap({ markets, selectedMarket, onMarketSelect, cl
   useEffect(() => {
     const updateMarkers = async () => {
       setIsUpdating(true)
-      if (!mapInstanceRef.current) return
+      if (!mapInstanceRef.current) {
+        // Map not yet initialized — don't leave the UI stuck in updating state
+        setIsUpdating(false)
+        return
+      }
       const map = mapInstanceRef.current
       const L = (await import("leaflet")).default
 
@@ -136,8 +147,7 @@ export default function MarketsMap({ markets, selectedMarket, onMarketSelect, cl
         })
         const marker = L.marker([market.location.latitude, market.location.longitude], { icon: markerIcon }).addTo(map)
 
-        const locale = typeof window !== "undefined" ? localStorage.getItem("language") || "ms" : "ms"
-        const scheduleText = market.schedule[0] ? formatScheduleRule(market.schedule[0], locale) : t.scheduleNotAvailable
+  const scheduleText = market.schedule[0] ? formatScheduleRule(market.schedule[0], language) : t.scheduleNotAvailable
 
         marker.bindPopup(`
           <div class="p-3 min-w-64">
@@ -149,33 +159,58 @@ export default function MarketsMap({ markets, selectedMarket, onMarketSelect, cl
               ${market.amenities.toilet ? `<span class=\"text-xs bg-blue-100 text-blue-800 px-1 rounded\">${t.toilet}</span>` : ""}
               ${market.amenities.prayer_room ? `<span class=\"text-xs bg-purple-100 text-purple-800 px-1 rounded\">${t.prayerRoom}</span>` : ""}
             </div>
-            <button onclick=\"window.location.href='/markets/${market.id}'\" class="text-xs bg-primary text-white px-2 py-1 rounded hover:bg-primary/90">
-              ${t.viewDetails}
-            </button>
+            <div class="flex gap-2">
+              <button onclick=\"window.openDirections(${market.location.latitude}, ${market.location.longitude})\" class=\"text-xs bg-primary text-white px-2 py-1 rounded hover:bg-primary/90\">${t.getDirections}</button>
+              <button onclick=\"window.location.href='/markets/${market.id}'\" class=\"text-xs bg-primary text-white px-2 py-1 rounded hover:bg-primary/90\">${t.viewDetails}</button>
+            </div>
           </div>
         `)
 
+        // If this market is currently selected, open its popup so the user sees details
+        if (isSelected) {
+          marker.openPopup()
+        }
+
         marker.on("click", () => {
+          // Always center on clicked marker immediately so the user sees it,
+          // even if the parent state doesn't change (same object reference).
+          if (market.location && map) {
+            try {
+              map.flyTo([market.location.latitude, market.location.longitude], 15, { animate: true, duration: 0.8 })
+            } catch (e) {
+              /* ignore */
+            }
+          }
           if (onMarketSelect) onMarketSelect(market)
         })
         markersRef.current.push(marker)
       })
 
-      // Fit bounds
+      // Fit bounds or center on selected market
       const markerCount = markersRef.current.length
       if (markerCount > 0) {
         const group = new L.featureGroup(markersRef.current)
-        map.fitBounds(group.getBounds().pad(0.1))
+        if (selectedMarket && selectedMarket.location) {
+          // Center on the selected market instead of fitting all markers
+          map.flyTo([selectedMarket.location.latitude, selectedMarket.location.longitude], 15, { animate: true, duration: 0.8 })
+        } else {
+          map.fitBounds(group.getBounds().pad(0.1))
+        }
       }
       setIsUpdating(false)
     }
 
     updateMarkers()
-  }, [markets, selectedMarket, userLocation, onMarketSelect, t])
+  // Also re-run when the map is ready so markers are added after initialization
+  }, [markets, selectedMarket, userLocation, onMarketSelect, t, isReady])
 
   const centerOnUserLocation = () => {
     if (userLocation && mapInstanceRef.current) {
-      mapInstanceRef.current.setView([userLocation.lat, userLocation.lng], 13)
+      try {
+        mapInstanceRef.current.flyTo([userLocation.lat, userLocation.lng], 13, { animate: true, duration: 0.8 })
+      } catch (e) {
+        /* ignore */
+      }
     }
   }
 
