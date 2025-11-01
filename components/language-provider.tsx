@@ -11,12 +11,12 @@ interface LanguageContextValue {
 
 const LanguageContext = createContext<LanguageContextValue | undefined>(undefined)
 
-export function LanguageProvider({ 
-  children, 
-  initialLanguage = "ms" 
-}: { 
+export function LanguageProvider({
+  children,
+  initialLanguage = "ms"
+}: {
   children: React.ReactNode
-  initialLanguage?: string 
+  initialLanguage?: string
 }) {
   const [language, setLanguageState] = useState<string>(initialLanguage)
 
@@ -25,6 +25,15 @@ export function LanguageProvider({
   const setLanguage = useCallback((code: string) => {
     setLanguageState(code)
     if (typeof window !== "undefined") localStorage.setItem("language", code)
+    // Also set a cookie so server-rendered pages can read the preference
+    if (typeof document !== "undefined") {
+      try {
+        // 1 year
+        document.cookie = `language=${code}; path=/; max-age=${60 * 60 * 24 * 365}`
+      } catch (e) {
+        // ignore
+      }
+    }
   }, [])
 
   // Sync with localStorage after hydration
@@ -33,6 +42,14 @@ export function LanguageProvider({
       const storedLanguage = localStorage.getItem("language")
       if (storedLanguage && storedLanguage !== language) {
         setLanguageState(storedLanguage)
+        // keep server cookie in sync when hydrating
+        if (typeof document !== "undefined") {
+          try {
+            document.cookie = `language=${storedLanguage}; path=/; max-age=${60 * 60 * 24 * 365}`
+          } catch (e) {
+            /* ignore */
+          }
+        }
       }
     }
   }, [language])
