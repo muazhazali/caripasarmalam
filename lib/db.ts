@@ -4,7 +4,7 @@
  */
 
 import { createClient } from './supabase'
-import { dbRowToMarket } from '@/scripts/migrate-typescript-to-db'
+import { dbRowToMarket } from './db-transform'
 import type { Market, Weekday } from './markets-data'
 import { getMarketOpenStatus } from './utils'
 

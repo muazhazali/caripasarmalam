@@ -32,6 +32,7 @@ import { useLanguage } from "@/components/language-provider"
 import { getMarketOpenStatus } from "@/lib/utils"
 import { getStateFromCoordinates } from "@/lib/geolocation"
 import { createBrowserSupabaseClient } from "@/lib/supabase-client"
+import { dbRowToMarket } from "@/lib/db-transform"
 
 
 function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
@@ -146,38 +147,7 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
 
       if (data) {
         // Transform database rows to Market objects
-        // We'll import dbRowToMarket - but since it's in scripts, let's do it inline for now
-        // Actually, we should create a shared utility, but for now let's just map it
-        const transformedMarkets = data.map((row: any) => ({
-          id: row.id,
-          name: row.name,
-          address: row.address,
-          district: row.district,
-          state: row.state,
-          status: row.status,
-          description: row.description || undefined,
-          area_m2: row.area_m2 || 0,
-          total_shop: row.total_shop || null,
-          parking: {
-            available: row.parking_available ?? false,
-            accessible: row.parking_accessible ?? false,
-            notes: row.parking_notes || '',
-          },
-          amenities: {
-            toilet: row.amen_toilet ?? false,
-            prayer_room: row.amen_prayer_room ?? false,
-          },
-          contact: row.contact 
-            ? (typeof row.contact === 'string' ? JSON.parse(row.contact) : row.contact)
-            : undefined,
-          location: row.location 
-            ? (typeof row.location === 'string' ? JSON.parse(row.location) : row.location)
-            : undefined,
-          schedule: typeof row.schedule === 'string' 
-            ? JSON.parse(row.schedule) 
-            : row.schedule || [],
-        })) as Market[]
-        
+        const transformedMarkets = data.map(dbRowToMarket)
         setMarkets(transformedMarkets)
       }
     } catch (error) {
