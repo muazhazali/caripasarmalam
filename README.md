@@ -68,6 +68,7 @@ pnpm start
 
 - **Framework**: [Next.js 15](https://nextjs.org/) (App Router, React Server Components)
 - **Language**: [TypeScript](https://www.typescriptlang.org/)
+- **Database**: [Supabase](https://supabase.com) (PostgreSQL with JSONB)
 - **Styling**: [Tailwind CSS](https://tailwindcss.com/)
 - **UI Components**: [Shadcn UI](https://ui.shadcn.com/) + [Radix UI](https://www.radix-ui.com/)
 - **Maps**: [Leaflet](https://leafletjs.com/)
@@ -87,7 +88,12 @@ caripasarmalam/
 │   ├── ui/                # Reusable UI components (Shadcn)
 │   └── *.tsx              # Feature-specific components
 ├── lib/                   # Utility functions and data
-│   ├── markets-data.ts    # Market data and utilities
+│   ├── markets-data.ts    # Market TypeScript types (deprecated functions)
+│   ├── db.ts             # Database query functions (Supabase)
+│   ├── db-transform.ts   # Database row transformation utilities
+│   ├── supabase.ts       # Supabase server client
+│   ├── supabase-client.ts # Supabase browser client
+│   ├── geolocation.ts    # Coordinate to state mapping
 │   ├── i18n.ts           # Internationalization
 │   └── utils.ts          # General utilities
 ├── dataset/               # Data processing scripts
@@ -211,8 +217,33 @@ The application is designed to be deployed on platforms like Netlify, or any Nod
 Create a `.env.local` file for local development:
 
 ```env
+# Supabase Configuration (Required)
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
+
+# Optional
 NEXT_PUBLIC_SUGGEST_MARKET_URL=https://forms.gle/9sXDZYQknTszNSJfA
+NEXT_PUBLIC_SITE_URL=https://pasarmalam.app
 ```
+
+#### Supabase Setup
+
+1. **Create a Supabase project** at [supabase.com](https://supabase.com)
+2. **Get your credentials** from Project Settings → API:
+   - `NEXT_PUBLIC_SUPABASE_URL`: Project URL
+   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`: anon/public key
+   - `SUPABASE_SERVICE_ROLE_KEY`: service_role key (keep secret!)
+3. **Run the database schema**:
+   ```bash
+   # Using Supabase SQL Editor or CLI
+   # Execute scripts/create-markets-table-jsonb-optimized.sql
+   ```
+4. **Migrate market data**:
+   ```bash
+   # Ensure .env.local has SUPABASE_SERVICE_ROLE_KEY set
+   npx tsx scripts/run-migration.ts
+   ```
 
 ## 📄 License
 
