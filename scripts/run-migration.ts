@@ -2,7 +2,7 @@
  * One-time migration script to populate Supabase database with markets data
  * 
  * Usage:
- * 1. Ensure environment variables are set:
+ * 1. Ensure environment variables are set in .env.local:
  *    - NEXT_PUBLIC_SUPABASE_URL
  *    - SUPABASE_SERVICE_ROLE_KEY
  * 
@@ -14,6 +14,12 @@
  * - Inserts markets into Supabase in batches
  * - Provides progress and error reporting
  */
+
+// Load environment variables from .env.local
+import { config } from 'dotenv'
+import { resolve } from 'path'
+
+config({ path: resolve(process.cwd(), '.env.local') })
 
 import { marketsData } from '@/lib/markets-data'
 import {
