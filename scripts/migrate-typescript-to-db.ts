@@ -38,55 +38,29 @@ export function marketToDbRow(market: Market) {
     amen_prayer_room: market.amenities?.prayer_room ?? false,
     
     // Contact: keep as JSONB (optional)
-    contact: market.contact ? JSON.stringify(market.contact) : null,
+    // Pass object directly - Supabase will handle JSONB conversion
+    contact: market.contact || null,
     
     // Location: keep as JSONB (optional)
-    location: market.location ? JSON.stringify(market.location) : null,
+    // Pass object directly - Supabase will handle JSONB conversion
+    location: market.location || null,
     
     // Schedule: keep as JSONB array
-    schedule: JSON.stringify(market.schedule),
+    // Pass array directly - Supabase will handle JSONB conversion
+    schedule: market.schedule,
   }
 }
 
 /**
  * Transform database row back to Market object format
+ * @deprecated Use dbRowToMarket from '@/lib/db-transform' instead
+ * Kept here for backward compatibility with migration scripts
  */
 export function dbRowToMarket(row: any): Market {
-  return {
-    id: row.id,
-    name: row.name,
-    address: row.address,
-    district: row.district,
-    state: row.state,
-    status: row.status,
-    description: row.description || undefined,
-    area_m2: row.area_m2 || 0,
-    total_shop: row.total_shop || null,
-    
-    // Reconstruct parking object
-    parking: {
-      available: row.parking_available ?? false,
-      accessible: row.parking_accessible ?? false,
-      notes: row.parking_notes || '',
-    },
-    
-    // Reconstruct amenities object
-    amenities: {
-      toilet: row.amen_toilet ?? false,
-      prayer_room: row.amen_prayer_room ?? false,
-    },
-    
-    // Parse JSONB back to objects (Supabase may return as objects or strings)
-    contact: row.contact 
-      ? (typeof row.contact === 'string' ? JSON.parse(row.contact) : row.contact)
-      : undefined,
-    location: row.location 
-      ? (typeof row.location === 'string' ? JSON.parse(row.location) : row.location)
-      : undefined,
-    schedule: typeof row.schedule === 'string' 
-      ? JSON.parse(row.schedule) 
-      : row.schedule || [],
-  }
+  // Re-export from shared utility for backward compatibility
+  // Import is done at the top level to avoid circular dependencies
+  const { dbRowToMarket: transform } = require('../lib/db-transform')
+  return transform(row)
 }
 
 /**
