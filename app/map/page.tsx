@@ -11,6 +11,7 @@ import { type Market } from "@/lib/markets-data"
 import { useLanguage } from "@/components/language-provider"
 import { createBrowserSupabaseClient } from "@/lib/supabase-client"
 import { getStateFromCoordinates } from "@/lib/geolocation"
+import { dbRowToMarket } from "@/lib/db-transform"
 
 const malaysianStates = [
   "Semua Negeri",
@@ -63,36 +64,7 @@ export default function MapPage() {
 
       if (data) {
         // Transform database rows to Market objects
-        const transformedMarkets = data.map((row: any) => ({
-          id: row.id,
-          name: row.name,
-          address: row.address,
-          district: row.district,
-          state: row.state,
-          status: row.status,
-          description: row.description || undefined,
-          area_m2: row.area_m2 || 0,
-          total_shop: row.total_shop || null,
-          parking: {
-            available: row.parking_available ?? false,
-            accessible: row.parking_accessible ?? false,
-            notes: row.parking_notes || '',
-          },
-          amenities: {
-            toilet: row.amen_toilet ?? false,
-            prayer_room: row.amen_prayer_room ?? false,
-          },
-          contact: row.contact 
-            ? (typeof row.contact === 'string' ? JSON.parse(row.contact) : row.contact)
-            : undefined,
-          location: row.location 
-            ? (typeof row.location === 'string' ? JSON.parse(row.location) : row.location)
-            : undefined,
-          schedule: typeof row.schedule === 'string' 
-            ? JSON.parse(row.schedule) 
-            : row.schedule || [],
-        })) as Market[]
-        
+        const transformedMarkets = data.map(dbRowToMarket)
         setMarkets(transformedMarkets)
       }
     } catch (error) {

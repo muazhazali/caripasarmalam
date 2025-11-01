@@ -3774,10 +3774,18 @@ export const marketsData: Market[] = [
   },
 ]
 
+/**
+ * @deprecated Use getMarketById from '@/lib/db' instead
+ * This function is kept for backward compatibility and migration scripts only
+ */
 export function getMarketById(id: string): Market | undefined {
   return marketsData.find((market) => market.id === id)
 }
 
+/**
+ * @deprecated Use getMarkets from '@/lib/db' instead
+ * This function is kept for backward compatibility and migration scripts only
+ */
 export function getAllMarkets(): Market[] {
   return marketsData
 }
