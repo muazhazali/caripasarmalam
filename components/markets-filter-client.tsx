@@ -23,8 +23,10 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import Link from "next/link"
 import { useRouter, useSearchParams } from "next/navigation"
-import { getAllMarkets, Market } from "@/lib/markets-data"
+import { Market } from "@/lib/markets-data"
 import { useLanguage } from "@/components/language-provider"
+import { createBrowserSupabaseClient } from "@/lib/supabase"
+import { Loader2 } from "lucide-react"
 
 const malaysianStates = [
   "Semua Negeri",
@@ -60,11 +62,27 @@ function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: numbe
 }
 
 interface MarketsFilterClientProps {
-  markets: Market[]
+  initialMarkets: Market[]
+  initialState?: string
 }
 
-export default function MarketsFilterClient({ markets }: MarketsFilterClientProps) {
+// Map localized day names to day codes
+const dayMap: Record<string, string> = {
+  "Isnin": "mon",
+  "Selasa": "tue",
+  "Rabu": "wed",
+  "Khamis": "thu",
+  "Jumaat": "fri",
+  "Sabtu": "sat",
+  "Ahad": "sun",
+}
+
+export default function MarketsFilterClient({ initialMarkets, initialState }: MarketsFilterClientProps) {
   const { t } = useLanguage()
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const [markets, setMarkets] = useState<Market[]>(initialMarkets)
+  const [isLoadingMarkets, setIsLoadingMarkets] = useState(false)
 
   // Generate ItemList structured data for the markets directory
   const itemListData = {
@@ -114,13 +132,11 @@ export default function MarketsFilterClient({ markets }: MarketsFilterClientProp
     }))
   }
   const [searchQuery, setSearchQuery] = useState("")
-  const [selectedState, setSelectedState] = useState("All States")
-  const [selectedDay, setSelectedDay] = useState("All Days")
+  const [selectedState, setSelectedState] = useState(initialState || searchParams.get("state") || "All States")
+  const [selectedDay, setSelectedDay] = useState(searchParams.get("day") || "All Days")
   const [sortBy, setSortBy] = useState("name")
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc")
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null)
-  const router = useRouter()
-  const searchParams = useSearchParams()
   const [openNow, setOpenNow] = useState<boolean>(searchParams.get("open") === "1")
   const [filters, setFilters] = useState({
     parking: false,
@@ -130,12 +146,97 @@ export default function MarketsFilterClient({ markets }: MarketsFilterClientProp
   })
   const [showFilters, setShowFilters] = useState(false)
 
-  const setQueryParam = (key: string, value: string | null) => {
+  // Fetch markets using browser client
+  const fetchMarkets = useCallback(async (state?: string, day?: string) => {
+    setIsLoadingMarkets(true)
+    try {
+      const supabase = createBrowserSupabaseClient()
+      let query = supabase.from('pasar_malams').select('*').eq('status', 'Active')
+
+      if (state && state !== "All States" && state !== "Semua Negeri") {
+        query = query.eq('state', state)
+      }
+
+      const dayCode = day && dayMap[day] ? dayMap[day] : undefined
+      if (dayCode) {
+        query = query.contains('schedule', [{ days: [dayCode] }])
+      }
+
+      query = query.limit(500)
+
+      const { data, error } = await query
+
+      if (error) {
+        console.error("Error fetching markets:", error)
+        return
+      }
+
+      if (data) {
+        const transformedMarkets = data.map((row: any) => ({
+          id: row.id,
+          name: row.name,
+          address: row.address,
+          district: row.district,
+          state: row.state,
+          status: row.status,
+          description: row.description || undefined,
+          area_m2: row.area_m2 || 0,
+          total_shop: row.total_shop || null,
+          parking: {
+            available: row.parking_available ?? false,
+            accessible: row.parking_accessible ?? false,
+            notes: row.parking_notes || '',
+          },
+          amenities: {
+            toilet: row.amen_toilet ?? false,
+            prayer_room: row.amen_prayer_room ?? false,
+          },
+          contact: row.contact 
+            ? (typeof row.contact === 'string' ? JSON.parse(row.contact) : row.contact)
+            : undefined,
+          location: row.location 
+            ? (typeof row.location === 'string' ? JSON.parse(row.location) : row.location)
+            : undefined,
+          schedule: typeof row.schedule === 'string' 
+            ? JSON.parse(row.schedule) 
+            : row.schedule || [],
+        })) as Market[]
+        
+        setMarkets(transformedMarkets)
+      }
+    } catch (error) {
+      console.error("Error fetching markets:", error)
+    } finally {
+      setIsLoadingMarkets(false)
+    }
+  }, [])
+
+  const setQueryParam = useCallback((key: string, value: string | null) => {
     const params = new URLSearchParams(searchParams.toString())
-    if (value === null) params.delete(key)
-    else params.set(key, value)
+    if (value === null || value === "All States" || value === "Semua Negeri" || value === "All Days" || value === "Semua Hari") {
+      params.delete(key)
+    } else {
+      params.set(key, value)
+    }
     router.replace(`?${params.toString()}`)
-  }
+    
+    // Update local state
+    if (key === "state") {
+      setSelectedState(value || "All States")
+    }
+    if (key === "day") {
+      setSelectedDay(value || "All Days")
+    }
+    
+    // Fetch markets when state/day changes
+    const newState = key === "state" ? (value || undefined) : selectedState
+    const newDay = key === "day" ? (value || undefined) : selectedDay
+    
+    fetchMarkets(
+      newState && newState !== "All States" && newState !== "Semua Negeri" ? newState : undefined,
+      newDay && newDay !== "All Days" && newDay !== "Semua Hari" ? newDay : undefined
+    )
+  }, [searchParams, router, selectedState, selectedDay, fetchMarkets])
 
   const findNearestMarkets = () => {
     if (navigator.geolocation) {
@@ -168,16 +269,7 @@ export default function MarketsFilterClient({ markets }: MarketsFilterClientProp
 
       const matchesState = selectedState === "All States" || market.state === selectedState
 
-      const matchesDay = selectedDay === "All Days" || market.schedule.some((schedule) => schedule.days.some(day => {
-        const dayMap: { [key: string]: string } = {
-          "Isnin": "mon",
-          "Selasa": "tue", 
-          "Rabu": "wed",
-          "Khamis": "thu",
-          "Jumaat": "fri",
-          "Sabtu": "sat",
-          "Ahad": "sun"
-        }
+      const matchesDay = selectedDay === "All Days" || selectedDay === "Semua Hari" || market.schedule.some((schedule) => schedule.days.some(day => {
         return dayMap[selectedDay] === day
       }))
 
@@ -282,7 +374,7 @@ export default function MarketsFilterClient({ markets }: MarketsFilterClientProp
               </div>
             </div>
             <div className="hidden md:flex gap-2">
-              <Select value={selectedState} onValueChange={setSelectedState}>
+              <Select value={selectedState} onValueChange={(value) => setQueryParam("state", value)}>
                 <SelectTrigger className="w-48 h-11 md:h-12">
                   <SelectValue placeholder={t.stateLabel} />
                 </SelectTrigger>
@@ -294,7 +386,7 @@ export default function MarketsFilterClient({ markets }: MarketsFilterClientProp
                   ))}
                 </SelectContent>
               </Select>
-              <Select value={selectedDay} onValueChange={setSelectedDay}>
+              <Select value={selectedDay} onValueChange={(value) => setQueryParam("day", value)}>
                 <SelectTrigger className="w-40 h-11 md:h-12">
                   <SelectValue placeholder={t.dayLabel} />
                 </SelectTrigger>
@@ -425,7 +517,7 @@ export default function MarketsFilterClient({ markets }: MarketsFilterClientProp
                     <div className="mt-4 space-y-4">
                       <div>
                         <label className="text-sm font-medium text-foreground mb-2 block">{t.stateLabel}</label>
-                        <Select value={selectedState} onValueChange={setSelectedState}>
+                        <Select value={selectedState} onValueChange={(value) => setQueryParam("state", value)}>
                           <SelectTrigger>
                             <SelectValue />
                           </SelectTrigger>
@@ -440,7 +532,7 @@ export default function MarketsFilterClient({ markets }: MarketsFilterClientProp
                       </div>
                       <div>
                         <label className="text-sm font-medium text-foreground mb-2 block">{t.dayLabel}</label>
-                        <Select value={selectedDay} onValueChange={setSelectedDay}>
+                        <Select value={selectedDay} onValueChange={(value) => setQueryParam("day", value)}>
                           <SelectTrigger>
                             <SelectValue />
                           </SelectTrigger>
@@ -571,7 +663,12 @@ export default function MarketsFilterClient({ markets }: MarketsFilterClientProp
         </div>
 
         {/* Results */}
-        {filteredAndSortedMarkets.length === 0 ? (
+        {isLoadingMarkets ? (
+          <div className="text-center py-12">
+            <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-primary" />
+            <p className="text-muted-foreground">Loading markets...</p>
+          </div>
+        ) : filteredAndSortedMarkets.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-muted-foreground text-lg mb-2">{t.noMarketsFound}</p>
             <p className="text-muted-foreground mb-4">{t.tryAdjustingFilters}</p>
