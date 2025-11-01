@@ -1,4 +1,9 @@
-import { createBrowserClient } from '@supabase/ssr'
+/**
+ * Supabase client for Server Components and API routes
+ * This file contains server-only functions that use next/headers
+ * DO NOT import this file in Client Components
+ */
+
 import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 import { createClient as createSupabaseClient } from '@supabase/supabase-js'
@@ -6,6 +11,13 @@ import { createClient as createSupabaseClient } from '@supabase/supabase-js'
 /**
  * Create a Supabase client for server-side usage (Server Components, API routes)
  * Uses cookies for session management with @supabase/ssr
+ * 
+ * @example
+ * ```ts
+ * // In a Server Component or API route
+ * import { createClient } from '@/lib/supabase'
+ * const supabase = await createClient()
+ * ```
  */
 export async function createClient() {
   const cookieStore = await cookies()
@@ -31,17 +43,6 @@ export async function createClient() {
         },
       },
     }
-  )
-}
-
-/**
- * Create a Supabase client for browser usage (Client Components)
- * Uses @supabase/ssr for cookie-based session management
- */
-export function createBrowserSupabaseClient() {
-  return createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
   )
 }
 
