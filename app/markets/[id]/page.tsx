@@ -2,6 +2,7 @@ import { notFound } from "next/navigation"
 import type { Metadata } from "next"
 import { getMarketById } from "@/lib/markets-data"
 import MarketDetailClient from "@/components/market-detail-client"
+import { cookies } from "next/headers"
 
 interface MarketPageProps {
   params: Promise<{
@@ -12,7 +13,7 @@ interface MarketPageProps {
 export async function generateMetadata({ params }: MarketPageProps): Promise<Metadata> {
   const resolvedParams = await params
   const market = getMarketById(resolvedParams.id)
-  
+
   if (!market) {
     return {
       title: "Market Not Found",
@@ -22,7 +23,7 @@ export async function generateMetadata({ params }: MarketPageProps): Promise<Met
 
   const base = process.env.NEXT_PUBLIC_SITE_URL || "https://pasarmalam.app"
   const url = `${base}/markets/${market.id}`
-  
+
   // Create location-based keywords for better local SEO
   const locationKeywords = [
     `pasar malam ${market.district}`,
@@ -37,8 +38,8 @@ export async function generateMetadata({ params }: MarketPageProps): Promise<Met
   const scheduleText = market.schedule
     .map((s) => `${s.days.join(", ")}: ${s.times.map((t) => `${t.start}-${t.end}`).join(", ")}`)
     .join("; ")
-  
-  const description = market.description || 
+
+  const description = market.description ||
     `Maklumat lengkap pasar malam ${market.name} di ${market.district}, ${market.state}. Waktu operasi: ${scheduleText}. Kemudahan: ${market.parking.available ? 'tempat letak kereta' : ''} ${market.amenities.toilet ? 'tandas' : ''} ${market.amenities.prayer_room ? 'surau' : ''}. Alamat: ${market.address}`
 
   const title = `${market.name} | Pasar Malam ${market.district}, ${market.state} | Waktu Operasi & Lokasi`
@@ -102,5 +103,7 @@ export default async function MarketPage({ params }: MarketPageProps) {
     notFound()
   }
 
+  // Read language cookie on the server (LanguageProvider in RootLayout already uses it)
+  // No need to pass initialLanguage; MarketDetailClient will use the shared context.
   return <MarketDetailClient market={market} />
 }

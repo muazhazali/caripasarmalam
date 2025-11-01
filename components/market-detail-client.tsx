@@ -1,15 +1,13 @@
 "use client"
 
-import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ArrowLeft, MapPin, Clock, Car, Toilet as Restroom, Home as Mosque, ExternalLink, Phone, Mail, Calendar } from "lucide-react"
 import Link from "next/link"
 import { Market } from "@/lib/markets-data"
-import { useTranslation } from "@/lib/i18n"
+import { useLanguage } from "@/components/language-provider"
 import openDirections from "@/lib/directions"
-import LanguageSwitcher from "@/components/language-switcher"
 import InteractiveMap from "@/components/interactive-map"
 import { getMarketOpenStatus } from "@/lib/utils"
 
@@ -18,10 +16,8 @@ interface MarketDetailClientProps {
 }
 
 export default function MarketDetailClient({ market }: MarketDetailClientProps) {
-  const [language, setLanguage] = useState(
-    typeof window !== "undefined" ? localStorage.getItem("language") || "ms" : "ms",
-  )
-  const t = useTranslation(language)
+  // Use the shared language context so translations stay consistent across the app
+  const { t } = useLanguage()
 
   // Generate structured data for LocalBusiness
   const structuredData = {
@@ -169,13 +165,6 @@ export default function MarketDetailClient({ market }: MarketDetailClientProps) 
                 <span className="text-foreground">{market.name}</span>
               </nav>
             </div>
-            <LanguageSwitcher
-              currentLanguage={language}
-              onLanguageChange={(code) => {
-                setLanguage(code)
-                if (typeof window !== "undefined") localStorage.setItem("language", code)
-              }}
-            />
           </div>
         </div>
       </header>

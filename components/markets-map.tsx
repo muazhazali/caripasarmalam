@@ -1,7 +1,8 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import { useTranslation, formatScheduleRule } from "@/lib/i18n"
+import { formatScheduleRule } from "@/lib/i18n"
+import { useLanguage } from "@/components/language-provider"
 import { MapPin, Navigation, Loader2 } from "lucide-react"
 import openDirections from "@/lib/directions"
 import { Button } from "@/components/ui/button"
@@ -23,7 +24,7 @@ export default function MarketsMap({ markets, selectedMarket, onMarketSelect, cl
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null)
   const [isReady, setIsReady] = useState(false)
   const [isUpdating, setIsUpdating] = useState(true)
-  const t = useTranslation(typeof window !== "undefined" ? localStorage.getItem("language") || "ms" : "ms")
+  const { t, language } = useLanguage()
 
   // Get user location
   useEffect(() => {
@@ -146,8 +147,7 @@ export default function MarketsMap({ markets, selectedMarket, onMarketSelect, cl
         })
         const marker = L.marker([market.location.latitude, market.location.longitude], { icon: markerIcon }).addTo(map)
 
-        const locale = typeof window !== "undefined" ? localStorage.getItem("language") || "ms" : "ms"
-        const scheduleText = market.schedule[0] ? formatScheduleRule(market.schedule[0], locale) : t.scheduleNotAvailable
+  const scheduleText = market.schedule[0] ? formatScheduleRule(market.schedule[0], language) : t.scheduleNotAvailable
 
         marker.bindPopup(`
           <div class="p-3 min-w-64">
