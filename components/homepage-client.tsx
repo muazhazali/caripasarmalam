@@ -31,7 +31,7 @@ import { formatScheduleRule, formatWeekday } from "@/lib/i18n"
 import { useLanguage } from "@/components/language-provider"
 import { getMarketOpenStatus } from "@/lib/utils"
 import { getStateFromCoordinates } from "@/lib/geolocation"
-import { createBrowserSupabaseClient } from "@/lib/supabase"
+import { createBrowserSupabaseClient } from "@/lib/supabase-client"
 
 
 function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {

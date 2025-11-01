@@ -25,7 +25,7 @@ import Link from "next/link"
 import { useRouter, useSearchParams } from "next/navigation"
 import { Market } from "@/lib/markets-data"
 import { useLanguage } from "@/components/language-provider"
-import { createBrowserSupabaseClient } from "@/lib/supabase"
+import { createBrowserSupabaseClient } from "@/lib/supabase-client"
 import { Loader2 } from "lucide-react"
 
 const malaysianStates = [
