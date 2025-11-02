@@ -133,6 +133,14 @@ export interface Translations {
   // Open status
   openNow: string
   closedNow: string
+  // About page paragraphs
+  aboutPara1: string
+  aboutPara2: string
+  aboutPara3: string
+  aboutPara4: string
+  aboutPara5: string
+  aboutPara6: string
+  aboutPara7: string
 }
 
 export const translations: Record<string, Translations> = {
@@ -271,6 +279,14 @@ export const translations: Record<string, Translations> = {
     // Open status
     openNow: "Open now",
     closedNow: "Closed",
+    // About page
+    aboutPara1: "Project background",
+    aboutPara2: "During my time (Muaz, the owner) as a student at UiTM Perlis, I encountered a significant challenge in locating the nearest night market (pasar malam). Information available at the time was limited to general postings on social media (Facebook), which only provided vague locations and operating days.",
+    aboutPara3: "Crucially, precise location details and specific operating hours were absent. This lack of accurate information required relying on guesswork, which could lead to wasted time, fuel, effort, and expense if the location was visited outside of operating hours.",
+    aboutPara4: "This recurring issue prompted the conception of this project. The primary objective is to facilitate the search for night markets across Malaysia for the benefit of the public.",
+    aboutPara5: "We sincerely hope this website will be a significant asset in your food exploration missions! We encourage you to share this project with your friends, family, neighbours, or just everyone!",
+    aboutPara6: "",
+    aboutPara7: "",
   },
   ms: {
     // App/Home Titles
@@ -407,6 +423,14 @@ export const translations: Record<string, Translations> = {
     // Open status
     openNow: "Dibuka sekarang",
     closedNow: "Tutup",
+    // About page (Malay)
+    aboutPara1: "Latar Belakang Projek",
+    aboutPara2: "Masa saya(Muaz) duduk di UiTM Perlis, tak tahu mana pasar malam yang terdekat.",
+    aboutPara3: "Ada pun time tu, hanya post dalam FB lokasi pasar secara kasar, dah hari operasi.",
+    aboutPara4: "Takde lokasi yang tepat dan masa operasi.",
+    aboutPara5: "Takkan nak terjah je ke tempat tu kan? Buatnya datang tapi takde orang. Kan dah bazir masa, minyak, tenaga, duit.",
+    aboutPara6: "Maka saya pun terfikir la nak buat projek ni untuk memudahkan orang cari pasar malam di sekitar Malaysia.",
+    aboutPara7: "Harap projek ini membantu dalam misi food hunting anda! Jangan lupa share kat kawan2, family, jiran, sepupu, sepapat, keluarga mentua dan kucing sebelah rumah 😽",
   },
 }
 

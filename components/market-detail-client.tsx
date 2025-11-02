@@ -1,14 +1,13 @@
 "use client"
 
-import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ArrowLeft, MapPin, Clock, Car, Toilet as Restroom, Home as Mosque, ExternalLink, Phone, Mail, Calendar } from "lucide-react"
 import Link from "next/link"
 import { Market } from "@/lib/markets-data"
-import { useTranslation } from "@/lib/i18n"
-import LanguageSwitcher from "@/components/language-switcher"
+import { useLanguage } from "@/components/language-provider"
+import openDirections from "@/lib/directions"
 import InteractiveMap from "@/components/interactive-map"
 import { getMarketOpenStatus } from "@/lib/utils"
 
@@ -17,10 +16,8 @@ interface MarketDetailClientProps {
 }
 
 export default function MarketDetailClient({ market }: MarketDetailClientProps) {
-  const [language, setLanguage] = useState(
-    typeof window !== "undefined" ? localStorage.getItem("language") || "ms" : "ms",
-  )
-  const t = useTranslation(language)
+  // Use the shared language context so translations stay consistent across the app
+  const { t } = useLanguage()
 
   // Generate structured data for LocalBusiness
   const structuredData = {
@@ -50,7 +47,7 @@ export default function MarketDetailClient({ market }: MarketDetailClientProps) 
       dayOfWeek: schedule.days.map(day => {
         const dayMap: { [key: string]: string } = {
           "mon": "Monday",
-          "tue": "Tuesday", 
+          "tue": "Tuesday",
           "wed": "Wednesday",
           "thu": "Thursday",
           "fri": "Friday",
@@ -69,7 +66,7 @@ export default function MarketDetailClient({ market }: MarketDetailClientProps) 
         value: true
       }] : []),
       ...(market.parking.accessible ? [{
-        "@type": "LocationFeatureSpecification", 
+        "@type": "LocationFeatureSpecification",
         name: "Accessible Parking",
         value: true
       }] : []),
@@ -107,7 +104,7 @@ export default function MarketDetailClient({ market }: MarketDetailClientProps) 
         item: process.env.NEXT_PUBLIC_SITE_URL || "https://pasarmalam.app"
       },
       {
-        "@type": "ListItem", 
+        "@type": "ListItem",
         position: 2,
         name: "Markets",
         item: `${process.env.NEXT_PUBLIC_SITE_URL || "https://pasarmalam.app"}/markets`
@@ -143,7 +140,7 @@ export default function MarketDetailClient({ market }: MarketDetailClientProps) 
           __html: JSON.stringify(breadcrumbData),
         }}
       />
-      
+
       <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="border-b border-border bg-card">
@@ -168,13 +165,6 @@ export default function MarketDetailClient({ market }: MarketDetailClientProps) 
                 <span className="text-foreground">{market.name}</span>
               </nav>
             </div>
-            <LanguageSwitcher
-              currentLanguage={language}
-              onLanguageChange={(code) => {
-                setLanguage(code)
-                if (typeof window !== "undefined") localStorage.setItem("language", code)
-              }}
-            />
           </div>
         </div>
       </header>
@@ -227,7 +217,7 @@ export default function MarketDetailClient({ market }: MarketDetailClientProps) 
                         {schedule.days.map(day => {
                           const dayMap: { [key: string]: string } = {
                             "mon": "Isnin",
-                            "tue": "Selasa", 
+                            "tue": "Selasa",
                             "wed": "Rabu",
                             "thu": "Khamis",
                             "fri": "Jumaat",
@@ -334,6 +324,10 @@ export default function MarketDetailClient({ market }: MarketDetailClientProps) 
 
                   {market.location && (
                     <div className="flex gap-2">
+                      <Button variant="outline" onClick={() => openDirections(market.location!.latitude, market.location!.longitude)}>
+                        <ExternalLink className="h-4 w-4 mr-2" />
+                        {t.getDirections}
+                      </Button>
                       <Button asChild variant="outline">
                         <a
                           href={market.location.gmaps_link}
@@ -341,7 +335,6 @@ export default function MarketDetailClient({ market }: MarketDetailClientProps) 
                           rel="noopener noreferrer"
                           className="flex items-center gap-2"
                         >
-                          <ExternalLink className="h-4 w-4" />
                           {t.openInGoogleMaps}
                         </a>
                       </Button>
@@ -415,11 +408,9 @@ export default function MarketDetailClient({ market }: MarketDetailClientProps) 
               </CardHeader>
               <CardContent className="space-y-3">
                 {market.location && (
-                  <Button asChild className="w-full">
-                    <a href={market.location.gmaps_link} target="_blank" rel="noopener noreferrer">
-                      <MapPin className="h-4 w-4 mr-2" />
-                      {t.getDirections}
-                    </a>
+                  <Button className="w-full" onClick={() => openDirections(market.location!.latitude, market.location!.longitude)}>
+                    <MapPin className="h-4 w-4 mr-2" />
+                    {t.getDirections}
                   </Button>
                 )}
                 <Button variant="outline" className="w-full bg-transparent">

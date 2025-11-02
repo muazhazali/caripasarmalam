@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import { useTranslation } from "@/lib/i18n"
+import { useLanguage } from "@/components/language-provider"
 import { MapPin } from "lucide-react"
 
 interface InteractiveMapProps {
@@ -16,7 +16,7 @@ export default function InteractiveMap({ latitude, longitude, name, address, cla
   const mapRef = useRef<HTMLDivElement>(null)
   const mapInstanceRef = useRef<any>(null)
   const [isReady, setIsReady] = useState(false)
-  const t = useTranslation(typeof window !== "undefined" ? localStorage.getItem("language") || "ms" : "ms")
+  const { t } = useLanguage()
 
   useEffect(() => {
     // Only load map on client side
@@ -85,7 +85,7 @@ export default function InteractiveMap({ latitude, longitude, name, address, cla
         const cleanup = () => {
           resizeObserver.disconnect()
         }
-        
+
         return cleanup
       } catch (error) {
         console.error("Error loading map:", error)
