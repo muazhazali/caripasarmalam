@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation"
 import type { Metadata } from "next"
-import { getMarketById } from "@/lib/markets-data"
+import { getMarketById } from "@/lib/db"
 import MarketDetailClient from "@/components/market-detail-client"
 import { cookies } from "next/headers"
 
@@ -12,8 +12,8 @@ interface MarketPageProps {
 
 export async function generateMetadata({ params }: MarketPageProps): Promise<Metadata> {
   const resolvedParams = await params
-  const market = getMarketById(resolvedParams.id)
-
+  const market = await getMarketById(resolvedParams.id)
+  
   if (!market) {
     return {
       title: "Market Not Found",
@@ -97,7 +97,7 @@ export async function generateMetadata({ params }: MarketPageProps): Promise<Met
 
 export default async function MarketPage({ params }: MarketPageProps) {
   const resolvedParams = await params
-  const market = getMarketById(resolvedParams.id)
+  const market = await getMarketById(resolvedParams.id)
 
   if (!market) {
     notFound()

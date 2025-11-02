@@ -15,6 +15,7 @@ import {
   ArrowUp,
   ArrowDown,
   Filter,
+  Loader2,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -24,10 +25,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import Link from "next/link"
-import { getAllMarkets, Market } from "@/lib/markets-data"
+import { useRouter } from "next/navigation"
+import { Market } from "@/lib/markets-data"
 import { formatScheduleRule, formatWeekday } from "@/lib/i18n"
 import { useLanguage } from "@/components/language-provider"
 import { getMarketOpenStatus } from "@/lib/utils"
+import { getStateFromCoordinates } from "@/lib/geolocation"
+import { createBrowserSupabaseClient } from "@/lib/supabase-client"
+import { dbRowToMarket } from "@/lib/db-transform"
 
 
 function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
@@ -42,7 +47,8 @@ function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: numbe
 }
 
 interface HomepageClientProps {
-  markets: Market[]
+  initialMarkets: Market[]
+  initialState?: string
 }
 
 const malaysianStates = [
@@ -67,14 +73,29 @@ const malaysianStates = [
 
 const daysOfWeek = ["Semua Hari", "Isnin", "Selasa", "Rabu", "Khamis", "Jumaat", "Sabtu", "Ahad"]
 
-export default function HomepageClient({ markets }: HomepageClientProps) {
+// Map localized day names to day codes
+const dayMap: Record<string, string> = {
+  "Isnin": "mon",
+  "Selasa": "tue",
+  "Rabu": "wed",
+  "Khamis": "thu",
+  "Jumaat": "fri",
+  "Sabtu": "sat",
+  "Ahad": "sun",
+}
+
+export default function HomepageClient({ initialMarkets, initialState }: HomepageClientProps) {
   const { t } = useLanguage()
+  const router = useRouter()
+  const [markets, setMarkets] = useState<Market[]>(initialMarkets)
+  const [isLoadingMarkets, setIsLoadingMarkets] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null)
+  const [detectedState, setDetectedState] = useState<string | null>(null)
   const [isRequestingLocation, setIsRequestingLocation] = useState(false)
   const [sortBy, setSortBy] = useState("smart")
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc")
-  const [selectedState, setSelectedState] = useState("All States")
+  const [selectedState, setSelectedState] = useState(initialState || "All States")
   const [selectedDay, setSelectedDay] = useState("All Days")
   const [openNow, setOpenNow] = useState<boolean>(false)
   const [filters, setFilters] = useState({
@@ -86,6 +107,91 @@ export default function HomepageClient({ markets }: HomepageClientProps) {
   const [showFilters, setShowFilters] = useState(false)
   const suggestFormUrl = process.env.NEXT_PUBLIC_SUGGEST_MARKET_URL || "https://forms.gle/9sXDZYQknTszNSJfA"
 
+  // Update URL params when state/day changes
+  const updateURLParams = useCallback((state: string, day: string) => {
+    const params = new URLSearchParams()
+    if (state && state !== "All States" && state !== "Semua Negeri") {
+      params.set("state", state)
+    }
+    if (day && day !== "All Days" && day !== "Semua Hari") {
+      params.set("day", day)
+    }
+    const queryString = params.toString()
+    router.replace(queryString ? `/?${queryString}` : "/", { scroll: false })
+  }, [router])
+
+  // Fetch markets using browser client (for client-side fetching)
+  const fetchMarkets = useCallback(async (state?: string, day?: string) => {
+    setIsLoadingMarkets(true)
+    try {
+      const supabase = createBrowserSupabaseClient()
+      let query = supabase.from('pasar_malams').select('*').eq('status', 'Active')
+
+      if (state && state !== "All States" && state !== "Semua Negeri") {
+        query = query.eq('state', state)
+      }
+
+      const dayCode = day && dayMap[day] ? dayMap[day] : undefined
+      if (dayCode) {
+        query = query.contains('schedule', [{ days: [dayCode] }])
+      }
+
+      query = query.limit(100)
+
+      const { data, error } = await query
+
+      if (error) {
+        console.error("Error fetching markets:", error)
+        return
+      }
+
+      if (data) {
+        // Transform database rows to Market objects
+        const transformedMarkets = data.map(dbRowToMarket)
+        setMarkets(transformedMarkets)
+      }
+    } catch (error) {
+      console.error("Error fetching markets:", error)
+    } finally {
+      setIsLoadingMarkets(false)
+    }
+  }, [])
+
+  // Handle state change - fetch from server and update URL
+  const handleStateChange = useCallback((newState: string) => {
+    setSelectedState(newState)
+    updateURLParams(newState, selectedDay)
+    fetchMarkets(
+      newState !== "All States" && newState !== "Semua Negeri" ? newState : undefined,
+      selectedDay !== "All Days" && selectedDay !== "Semua Hari" ? selectedDay : undefined
+    )
+  }, [selectedDay, updateURLParams, fetchMarkets])
+
+  // Handle day change - fetch from server and update URL
+  const handleDayChange = useCallback((newDay: string) => {
+    setSelectedDay(newDay)
+    updateURLParams(selectedState, newDay)
+    fetchMarkets(
+      selectedState !== "All States" && selectedState !== "Semua Negeri" ? selectedState : undefined,
+      newDay !== "All Days" && newDay !== "Semua Hari" ? newDay : undefined
+    )
+  }, [selectedState, updateURLParams, fetchMarkets])
+
+  // Handle "Browse More" - load more markets from current state
+  const handleBrowseMore = useCallback(() => {
+    fetchMarkets(
+      selectedState !== "All States" && selectedState !== "Semua Negeri" ? selectedState : undefined,
+      selectedDay !== "All Days" && selectedDay !== "Semua Hari" ? selectedDay : undefined
+    )
+  }, [selectedState, selectedDay, fetchMarkets])
+
+  // Handle "Browse All States" - clear state filter
+  const handleBrowseAllStates = useCallback(() => {
+    setSelectedState("All States")
+    updateURLParams("All States", selectedDay)
+    fetchMarkets(undefined, selectedDay !== "All Days" && selectedDay !== "Semua Hari" ? selectedDay : undefined)
+  }, [selectedDay, updateURLParams, fetchMarkets])
+
   const findNearestMarkets = useCallback(() => {
     if (typeof navigator === "undefined" || !navigator.geolocation) {
       // Geolocation not available; silently skip
@@ -95,8 +201,19 @@ export default function HomepageClient({ markets }: HomepageClientProps) {
     setIsRequestingLocation(true)
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        setUserLocation({ lat: position.coords.latitude, lng: position.coords.longitude })
+        const lat = position.coords.latitude
+        const lng = position.coords.longitude
+        setUserLocation({ lat, lng })
         setSearchQuery("")
+        
+        // Detect state from coordinates
+        const state = getStateFromCoordinates(lat, lng)
+        if (state) {
+          setDetectedState(state)
+          // Auto-filter by detected state
+          handleStateChange(state)
+        }
+        
         setIsRequestingLocation(false)
       },
       (error) => {
@@ -106,7 +223,7 @@ export default function HomepageClient({ markets }: HomepageClientProps) {
       },
       { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 },
     )
-  }, [])
+  }, [handleStateChange])
 
   const clearAllFilters = () => {
     setSearchQuery("")
@@ -119,6 +236,8 @@ export default function HomepageClient({ markets }: HomepageClientProps) {
       prayer_room: false,
       accessible_parking: false,
     })
+    updateURLParams("All States", "All Days")
+    fetchMarkets(undefined, undefined)
   }
 
   // Attempt to get nearest market on first load. If location unavailable/denied, do nothing.
@@ -346,14 +465,14 @@ export default function HomepageClient({ markets }: HomepageClientProps) {
                   <div className="mt-4 space-y-4">
                     <div>
                       <label className="text-sm font-medium text-foreground mb-2 block">{t.stateLabel}</label>
-                      <Select value={selectedState} onValueChange={setSelectedState}>
+                      <Select value={selectedState} onValueChange={handleStateChange}>
                         <SelectTrigger>
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
                           {malaysianStates.map((state) => (
                             <SelectItem key={state} value={state}>
-                              {state === "All States" ? t.allStates : state}
+                              {state === "All States" || state === "Semua Negeri" ? t.allStates : state}
                             </SelectItem>
                           ))}
                         </SelectContent>
@@ -361,7 +480,7 @@ export default function HomepageClient({ markets }: HomepageClientProps) {
                     </div>
                     <div>
                       <label className="text-sm font-medium text-foreground mb-2 block">{t.dayLabel}</label>
-                      <Select value={selectedDay} onValueChange={setSelectedDay}>
+                      <Select value={selectedDay} onValueChange={handleDayChange}>
                         <SelectTrigger>
                           <SelectValue />
                         </SelectTrigger>
@@ -542,12 +661,23 @@ export default function HomepageClient({ markets }: HomepageClientProps) {
             </Card>
           </div>
 
-          {filteredMarkets.length === 0 ? (
+          {isLoadingMarkets ? (
+            <div className="text-center py-12">
+              <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-primary" />
+              <p className="text-muted-foreground">{t.searching || "Loading markets..."}</p>
+            </div>
+          ) : filteredMarkets.length === 0 ? (
             <div className="text-center py-12">
               <p className="text-muted-foreground text-lg">{t.noMarketsFound}</p>
               <p className="text-muted-foreground">{t.tryAdjustingFilters}</p>
+              {selectedState !== "All States" && selectedState !== "Semua Negeri" && (
+                <Button onClick={handleBrowseAllStates} variant="outline" className="mt-4">
+                  {t.viewAllMarkets || "Browse All States"}
+                </Button>
+              )}
             </div>
           ) : (
+            <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
               {filteredMarkets.slice(0, 100).map((market) => {
                 const distance =
@@ -639,14 +769,33 @@ export default function HomepageClient({ markets }: HomepageClientProps) {
                 )
               })}
             </div>
-          )}
-
-          {filteredMarkets.length > 100 && (
-            <div className="text-center mt-8">
+            
+            {/* Action buttons */}
+            <div className="flex flex-col sm:flex-row gap-3 justify-center mt-8">
+              {selectedState !== "All States" && selectedState !== "Semua Negeri" && (
+                <>
+                  <Button onClick={handleBrowseMore} variant="outline" disabled={isLoadingMarkets}>
+                    {isLoadingMarkets ? (
+                      <>
+                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                        {t.searching || "Loading..."}
+                      </>
+                    ) : (
+                      "Browse More Markets"
+                    )}
+                  </Button>
+                  <Button onClick={handleBrowseAllStates} variant="outline">
+                    Browse All States
+                  </Button>
+                </>
+              )}
               <Link href="/markets">
-                <Button size="lg">{t.viewAll} {filteredMarkets.length} {t.markets}</Button>
+                <Button size="lg" variant="default">
+                  {t.viewAllMarkets || "View All Markets"}
+                </Button>
               </Link>
             </div>
+            </>
           )}
           {/* Mobile sort controls */}
           <div className="md:hidden mb-4">
