@@ -24,6 +24,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/co
 import Link from "next/link"
 import { useRouter, useSearchParams } from "next/navigation"
 import { getAllMarkets, Market } from "@/lib/markets-data"
+import openDirections from "@/lib/directions"
 import { useLanguage } from "@/components/language-provider"
 
 const malaysianStates = [
@@ -98,7 +99,7 @@ export default function MarketsFilterClient({ markets }: MarketsFilterClientProp
           dayOfWeek: schedule.days.map(day => {
             const dayMap: { [key: string]: string } = {
               "mon": "Monday",
-              "tue": "Tuesday", 
+              "tue": "Tuesday",
               "wed": "Wednesday",
               "thu": "Thursday",
               "fri": "Friday",
@@ -171,7 +172,7 @@ export default function MarketsFilterClient({ markets }: MarketsFilterClientProp
       const matchesDay = selectedDay === "All Days" || market.schedule.some((schedule) => schedule.days.some(day => {
         const dayMap: { [key: string]: string } = {
           "Isnin": "mon",
-          "Selasa": "tue", 
+          "Selasa": "tue",
           "Rabu": "wed",
           "Khamis": "thu",
           "Jumaat": "fri",
@@ -195,7 +196,7 @@ export default function MarketsFilterClient({ markets }: MarketsFilterClientProp
     // Sort markets by selected sort option and order
     filtered.sort((a, b) => {
       let comparison = 0
-      
+
       switch (sortBy) {
         case "name":
           comparison = a.name.localeCompare(b.name)
@@ -225,7 +226,7 @@ export default function MarketsFilterClient({ markets }: MarketsFilterClientProp
         default:
           comparison = a.name.localeCompare(b.name)
       }
-      
+
       return sortOrder === "asc" ? comparison : -comparison
     })
 
@@ -264,7 +265,7 @@ export default function MarketsFilterClient({ markets }: MarketsFilterClientProp
           __html: JSON.stringify(itemListData),
         }}
       />
-      
+
       <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8">
         {/* Search and Filters */}
@@ -327,7 +328,7 @@ export default function MarketsFilterClient({ markets }: MarketsFilterClientProp
                   <Checkbox
                     id="open-now"
                     checked={openNow}
-                    onCheckedChange={(checked) => {
+                    onCheckedChange={(checked: any) => {
                       const next = !!checked
                       setOpenNow(next)
                       setQueryParam("open", next ? "1" : null)
@@ -345,7 +346,7 @@ export default function MarketsFilterClient({ markets }: MarketsFilterClientProp
                   <Checkbox
                     id="parking"
                     checked={filters.parking}
-                    onCheckedChange={(checked) => setFilters((prev) => ({ ...prev, parking: !!checked }))}
+                    onCheckedChange={(checked: any) => setFilters((prev) => ({ ...prev, parking: !!checked }))}
                     className="size-5 border-2 shadow-sm hover:border-foreground data-[state=checked]:border-primary"
                   />
                   <label
@@ -359,7 +360,7 @@ export default function MarketsFilterClient({ markets }: MarketsFilterClientProp
                   <Checkbox
                     id="accessible-parking"
                     checked={filters.accessible_parking}
-                    onCheckedChange={(checked) => setFilters((prev) => ({ ...prev, accessible_parking: !!checked }))}
+                    onCheckedChange={(checked: any) => setFilters((prev) => ({ ...prev, accessible_parking: !!checked }))}
                     className="size-5 border-2 shadow-sm hover:border-foreground data-[state=checked]:border-primary"
                   />
                   <label
@@ -373,7 +374,7 @@ export default function MarketsFilterClient({ markets }: MarketsFilterClientProp
                   <Checkbox
                     id="toilet"
                     checked={filters.toilet}
-                    onCheckedChange={(checked) => setFilters((prev) => ({ ...prev, toilet: !!checked }))}
+                    onCheckedChange={(checked: any) => setFilters((prev) => ({ ...prev, toilet: !!checked }))}
                     className="size-5 border-2 shadow-sm hover:border-foreground data-[state=checked]:border-primary"
                   />
                   <label
@@ -387,7 +388,7 @@ export default function MarketsFilterClient({ markets }: MarketsFilterClientProp
                   <Checkbox
                     id="prayer-room"
                     checked={filters.prayer_room}
-                    onCheckedChange={(checked) => setFilters((prev) => ({ ...prev, prayer_room: !!checked }))}
+                    onCheckedChange={(checked: any) => setFilters((prev) => ({ ...prev, prayer_room: !!checked }))}
                     className="size-5 border-2 shadow-sm hover:border-foreground data-[state=checked]:border-primary"
                   />
                   <label
@@ -458,7 +459,7 @@ export default function MarketsFilterClient({ markets }: MarketsFilterClientProp
                           <Checkbox
                             id="parking"
                             checked={filters.parking}
-                            onCheckedChange={(checked) =>
+                            onCheckedChange={(checked: boolean) =>
                               setFilters((prev) => ({ ...prev, parking: checked as boolean }))
                             }
                           />
@@ -470,7 +471,7 @@ export default function MarketsFilterClient({ markets }: MarketsFilterClientProp
                           <Checkbox
                             id="toilet"
                             checked={filters.toilet}
-                            onCheckedChange={(checked) =>
+                            onCheckedChange={(checked: boolean) =>
                               setFilters((prev) => ({ ...prev, toilet: checked as boolean }))
                             }
                           />
@@ -482,7 +483,7 @@ export default function MarketsFilterClient({ markets }: MarketsFilterClientProp
                           <Checkbox
                             id="prayer_room"
                             checked={filters.prayer_room}
-                            onCheckedChange={(checked) =>
+                            onCheckedChange={(checked: boolean) =>
                               setFilters((prev) => ({ ...prev, prayer_room: checked as boolean }))
                             }
                           />
@@ -494,7 +495,7 @@ export default function MarketsFilterClient({ markets }: MarketsFilterClientProp
                           <Checkbox
                             id="accessible_parking"
                             checked={filters.accessible_parking}
-                            onCheckedChange={(checked) =>
+                            onCheckedChange={(checked: boolean) =>
                               setFilters((prev) => ({ ...prev, accessible_parking: checked as boolean }))
                             }
                           />
@@ -625,7 +626,7 @@ export default function MarketsFilterClient({ markets }: MarketsFilterClientProp
                             {market.district} • {market.schedule[0]?.days[0] && (() => {
                               const dayMap: { [key: string]: string } = {
                                 "mon": "Isnin",
-                                "tue": "Selasa", 
+                                "tue": "Selasa",
                                 "wed": "Rabu",
                                 "thu": "Khamis",
                                 "fri": "Jumaat",
@@ -679,22 +680,16 @@ export default function MarketsFilterClient({ markets }: MarketsFilterClientProp
                       </div>
 
                       <div className="flex gap-2">
-                        {market.location?.gmaps_link && (
-                          <Button asChild className="flex-1">
-                            <a 
-                              href={market.location.gmaps_link} 
-                              target="_blank" 
-                              rel="noopener noreferrer"
-                            >
+                          {market.location?.gmaps_link && (
+                            <Button className="flex-1" onClick={() => openDirections(market.location!.latitude, market.location!.longitude)}>
                               {t.showDirection}
-                            </a>
-                          </Button>
-                        )}
-                        <Link href={`/markets/${market.id}`}>
-                          <Button variant="outline">
-                            {t.viewDetails}
-                          </Button>
-                        </Link>
+                            </Button>
+                          )}
+                          <Link href={`/markets/${market.id}`}>
+                            <Button variant="outline">
+                              {t.viewDetails}
+                            </Button>
+                          </Link>
                       </div>
                     </CardContent>
                   </div>
