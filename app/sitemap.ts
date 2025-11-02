@@ -1,9 +1,9 @@
 import type { MetadataRoute } from "next"
-import { getAllMarkets } from "@/lib/markets-data"
+import { getMarkets } from "@/lib/db"
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = process.env.NEXT_PUBLIC_SITE_URL || "https://pasarmalam.app"
-  const markets = getAllMarkets()
+  const markets = await getMarkets({ status: "Active" })
   const now = new Date().toISOString()
 
   const routes: MetadataRoute.Sitemap = [

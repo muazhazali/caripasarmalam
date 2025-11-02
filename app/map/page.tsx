@@ -1,14 +1,17 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect, useCallback } from "react"
 import Link from "next/link"
-import { ArrowLeft, List, Search } from "lucide-react"
+import { ArrowLeft, List, Search, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import MarketsMap from "@/components/markets-map"
-import { getAllMarkets, type Market } from "@/lib/markets-data"
+import { type Market } from "@/lib/markets-data"
 import { useLanguage } from "@/components/language-provider"
+import { createBrowserSupabaseClient } from "@/lib/supabase-client"
+import { getStateFromCoordinates } from "@/lib/geolocation"
+import { dbRowToMarket } from "@/lib/db-transform"
 
 const malaysianStates = [
   "Semua Negeri",
@@ -31,22 +34,96 @@ const malaysianStates = [
 ]
 
 export default function MapPage() {
-  const allMarkets = getAllMarkets()
   const { t } = useLanguage()
+  const [markets, setMarkets] = useState<Market[]>([])
+  const [isLoadingMarkets, setIsLoadingMarkets] = useState(true)
+  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null)
   const [searchQuery, setSearchQuery] = useState("")
-  // Match the options list default to avoid filtering everything out
   const [selectedState, setSelectedState] = useState("Semua Negeri")
   const [selectedMarket, setSelectedMarket] = useState<Market | null>(null)
 
-  const filteredMarkets = allMarkets.filter((market) => {
+  // Fetch markets from server
+  const fetchMarkets = useCallback(async (state?: string) => {
+    setIsLoadingMarkets(true)
+    try {
+      const supabase = createBrowserSupabaseClient()
+      let query = supabase.from('pasar_malams').select('*').eq('status', 'Active')
+
+      if (state && state !== "Semua Negeri" && state !== "All States") {
+        query = query.eq('state', state)
+      }
+
+      query = query.limit(1000) // Higher limit for map view
+
+      const { data, error } = await query
+
+      if (error) {
+        console.error("Error fetching markets:", error)
+        return
+      }
+
+      if (data) {
+        // Transform database rows to Market objects
+        const transformedMarkets = data.map(dbRowToMarket)
+        setMarkets(transformedMarkets)
+      }
+    } catch (error) {
+      console.error("Error fetching markets:", error)
+    } finally {
+      setIsLoadingMarkets(false)
+    }
+  }, [])
+
+  // Handle state change - fetch from server
+  const handleStateChange = useCallback((newState: string) => {
+    setSelectedState(newState)
+    fetchMarkets(newState !== "Semua Negeri" && newState !== "All States" ? newState : undefined)
+  }, [fetchMarkets])
+
+  // Get user location on mount
+  useEffect(() => {
+    if (typeof navigator !== "undefined" && navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const lat = position.coords.latitude
+          const lng = position.coords.longitude
+          setUserLocation({ lat, lng })
+          
+          // Detect state and auto-filter
+          const state = getStateFromCoordinates(lat, lng)
+          if (state) {
+            setSelectedState(state)
+            fetchMarkets(state)
+          } else {
+            // Location outside Malaysia, fetch all
+            fetchMarkets()
+          }
+        },
+        (error) => {
+          // Permission denied or unavailable - fetch all markets
+          console.warn("Geolocation error:", error)
+          fetchMarkets()
+        },
+        { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+      )
+    } else {
+      // Geolocation not available - fetch all markets
+      fetchMarkets()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []) // Only run on mount
+
+  // Filter markets client-side (search, state, and coordinates only)
+  const filteredMarkets = markets.filter((market) => {
     const matchesSearch =
       searchQuery === "" ||
       market.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       market.district.toLowerCase().includes(searchQuery.toLowerCase()) ||
       market.state.toLowerCase().includes(searchQuery.toLowerCase())
 
-    const matchesState = selectedState === "Semua Negeri" || market.state === selectedState
+    const matchesState = selectedState === "Semua Negeri" || selectedState === "All States" || market.state === selectedState
 
+    // Only show markets with coordinates
     return matchesSearch && matchesState && market.location
   })
 
@@ -67,7 +144,7 @@ export default function MapPage() {
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
-            <Select value={selectedState} onValueChange={setSelectedState}>
+            <Select value={selectedState} onValueChange={handleStateChange} disabled={isLoadingMarkets}>
               <SelectTrigger className="w-48 h-10 md:h-11">
                 <SelectValue />
               </SelectTrigger>
@@ -80,7 +157,16 @@ export default function MapPage() {
               </SelectContent>
             </Select>
           </div>
-          <div className="mt-2 text-sm text-muted-foreground">{t.showingResults} {filteredMarkets.length} {t.markets}</div>
+          <div className="mt-2 text-sm text-muted-foreground">
+            {isLoadingMarkets ? (
+              <span className="flex items-center gap-2">
+                <Loader2 className="h-4 w-4 animate-spin" />
+                Loading markets...
+              </span>
+            ) : (
+              <span>{t.showingResults} {filteredMarkets.length} {t.markets}</span>
+            )}
+          </div>
         </div>
       </div>
 

@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { getAllMarkets } from "@/lib/markets-data"
+import { getMarkets } from "@/lib/db"
 import MarketsFilterClient from "@/components/markets-filter-client"
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -23,6 +23,9 @@ export async function generateMetadata(): Promise<Metadata> {
     "night market directory",
     "pasar malam Malaysia",
   ].join(", ")
+
+  // Get markets count for metadata
+  const markets = await getMarkets({ status: "Active", limit: 1 })
 
   return {
     title,
@@ -59,13 +62,42 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     other: {
       "page:type": "directory",
-      "page:markets_count": getAllMarkets().length.toString(),
     },
   }
 }
 
-export default function MarketsPage() {
-  const markets = getAllMarkets()
+interface MarketsPageProps {
+  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>
+}
+
+export default async function MarketsPage({ searchParams }: MarketsPageProps) {
+  // Extract filters from URL searchParams (await in Next.js 15)
+  const resolvedSearchParams = await searchParams
+  const state = resolvedSearchParams?.state as string | undefined
+  const day = resolvedSearchParams?.day as string | undefined
+
+  // Map localized day names to day codes
+  const dayMap: Record<string, string> = {
+    "Isnin": "mon",
+    "Selasa": "tue",
+    "Rabu": "wed",
+    "Khamis": "thu",
+    "Jumaat": "fri",
+    "Sabtu": "sat",
+    "Ahad": "sun",
+  }
   
-  return <MarketsFilterClient markets={markets} />
+  const dayCode = day && dayMap[day] ? (dayMap[day] as any) : undefined
+
+  // Fetch markets with server-side filters
+  const filters = {
+    state: state && state !== "All States" && state !== "Semua Negeri" ? state : undefined,
+    day: dayCode,
+    status: "Active" as const,
+    limit: 500, // Higher limit for markets page
+  }
+
+  const markets = await getMarkets(filters)
+  
+  return <MarketsFilterClient initialMarkets={markets} initialState={state} />
 }
