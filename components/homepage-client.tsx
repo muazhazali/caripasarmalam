@@ -123,7 +123,7 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
   }, [router])
 
   // Fetch markets using browser client (with optional search)
-  const fetchMarkets = useCallback(async (state?: string, day?: string, search?: string) => {
+  const fetchMarkets = useCallback(async (state?: string, day?: string, search?: string, limit: number = 100) => {
     setIsLoadingMarkets(true)
     try {
       const supabase = createBrowserSupabaseClient()
@@ -152,7 +152,7 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
         )
       }
 
-      query = query.limit(100)
+      query = query.limit(limit)
 
       const { data, error } = await query
 
@@ -174,15 +174,16 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
   }, [])
 
   // Handle state change - fetch from server and update URL
-  const handleStateChange = useCallback((newState: string) => {
+  const handleStateChange = useCallback((newState: string, limit?: number) => {
     setSelectedState(newState)
     updateURLParams(newState, selectedDay)
     fetchMarkets(
       newState !== "All States" && newState !== "Semua Negeri" ? newState : undefined,
       selectedDay !== "All Days" && selectedDay !== "Semua Hari" ? selectedDay : undefined,
-      searchQuery
+      searchQuery,
+      limit
     )
-  }, [selectedDay, updateURLParams, fetchMarkets])
+  }, [selectedDay, updateURLParams, fetchMarkets, searchQuery])
 
   // Handle day change - fetch from server and update URL
   const handleDayChange = useCallback((newDay: string) => {
@@ -229,8 +230,8 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
         const state = getStateFromCoordinates(lat, lng)
         if (state) {
           setDetectedState(state)
-          // Auto-filter by detected state
-          handleStateChange(state)
+          // Auto-filter by detected state with limit of 20 markets
+          handleStateChange(state, 20)
         }
         
         setIsRequestingLocation(false)

@@ -156,8 +156,8 @@ export const translations: Record<string, Translations> = {
   en: {
     // App/Home Titles
     appTitle: "Find Night Markets",
-    heroTitle: "Find Your Perfect Night Market",
-    heroDescription: "Explore authentic Malaysian night markets with operating hours, amenities, and locations",
+    heroTitle: "Find Your Nearest Night Market",
+    heroDescription: "Explore Malaysian night markets with operating hours, amenities, and locations",
     homeSubtitle: "Discover night markets across Malaysia",
     featuredMarkets: "Featured Markets",
     searchResults: "Search Results",
@@ -309,8 +309,8 @@ export const translations: Record<string, Translations> = {
   ms: {
     // App/Home Titles
     appTitle: "Cari Pasar Malam",
-    heroTitle: "Cari Pasar Malam Pilihan Anda",
-    heroDescription: "Jelajahi pasar malam autentik Malaysia dengan maklumat waktu operasi, kemudahan dan lokasi",
+    heroTitle: "Cari Pasar Malam Terdekat Anda",
+    heroDescription: "Jelajahi pasar malam Malaysia dengan maklumat waktu operasi, kemudahan dan lokasi",
     homeSubtitle: "Terokai pasar malam di seluruh Malaysia",
     featuredMarkets: "Pasar Pilihan",
     searchResults: "Hasil Carian",
