@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useMemo, useCallback } from "react"
+import { useState, useMemo, useCallback, useEffect } from "react"
 import {
   Search,
   Car,
@@ -147,6 +147,9 @@ export default function MarketsFilterClient({ initialMarkets, initialState }: Ma
     accessible_parking: false,
   })
   const [showFilters, setShowFilters] = useState(false)
+  // Pagination
+  const [visibleCount, setVisibleCount] = useState(24)
+  const PAGE_SIZE = 24
 
   // Fetch markets using browser client
   const fetchMarkets = useCallback(async (state?: string, day?: string) => {
@@ -270,10 +273,10 @@ export default function MarketsFilterClient({ initialMarkets, initialState }: Ma
           comparison = a.state.localeCompare(b.state) || a.district.localeCompare(b.district)
           break
         case "size":
-          comparison = (b.total_shop || 0) - (a.total_shop || 0)
+          comparison = (a.total_shop || 0) - (b.total_shop || 0)
           break
         case "area":
-          comparison = b.area_m2 - a.area_m2
+          comparison = (a.area_m2 || 0) - (b.area_m2 || 0)
           break
         case "distance":
           if (!userLocation) {
@@ -297,6 +300,11 @@ export default function MarketsFilterClient({ initialMarkets, initialState }: Ma
 
     return filtered
   }, [searchQuery, selectedState, selectedDay, sortBy, sortOrder, filters, userLocation, openNow, markets])
+
+  // Reset visible results when filters or sorting change
+  useEffect(() => {
+    setVisibleCount(PAGE_SIZE)
+  }, [searchQuery, selectedState, selectedDay, sortBy, sortOrder, filters, userLocation, openNow])
 
   const clearAllFilters = () => {
     setSearchQuery("")
@@ -473,7 +481,7 @@ export default function MarketsFilterClient({ initialMarkets, initialState }: Ma
               <div>
                 <h2 className="text-2xl font-bold text-foreground">{t.directoryTitle}</h2>
                 <p className="text-muted-foreground">
-                  {t.showingResults} {filteredAndSortedMarkets.length} {t.of} {markets.length} {t.markets}
+                  {t.showingResults} {Math.min(visibleCount, filteredAndSortedMarkets.length)} {t.of} {filteredAndSortedMarkets.length} {t.markets}
                 </p>
               </div>
               {/* Mobile filter button */}
@@ -649,8 +657,9 @@ export default function MarketsFilterClient({ initialMarkets, initialState }: Ma
             <Button onClick={clearAllFilters}>{t.clearAllFilters}</Button>
           </div>
         ) : (
+          <>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredAndSortedMarkets.map((market) => {
+            {filteredAndSortedMarkets.slice(0, visibleCount).map((market) => {
               const distance =
                 userLocation && market.location
                   ? calculateDistance(
@@ -767,6 +776,14 @@ export default function MarketsFilterClient({ initialMarkets, initialState }: Ma
               )
             })}
           </div>
+          {filteredAndSortedMarkets.length > visibleCount && (
+            <div className="flex justify-center mt-8">
+              <Button onClick={() => setVisibleCount((c) => c + PAGE_SIZE)} variant="outline">
+                {t.showMore}
+              </Button>
+            </div>
+          )}
+          </>
         )}
       </div>
       </div>

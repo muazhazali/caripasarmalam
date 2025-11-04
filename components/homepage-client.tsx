@@ -382,10 +382,10 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
           comparison = a.state.localeCompare(b.state) || a.district.localeCompare(b.district)
           break
         case "size":
-          comparison = (b.total_shop || 0) - (a.total_shop || 0)
+          comparison = (a.total_shop || 0) - (b.total_shop || 0)
           break
         case "area":
-          comparison = b.area_m2 - a.area_m2
+          comparison = (a.area_m2 || 0) - (b.area_m2 || 0)
           break
         case "distance":
           if (userLocation) {

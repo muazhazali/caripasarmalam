@@ -18,6 +18,7 @@ export interface Translations {
   languageLabel: string
   lightMode: string
   darkMode: string
+  showMore: string
 
   // Static Pages
   aboutTitle: string
@@ -164,6 +165,7 @@ export const translations: Record<string, Translations> = {
     languageLabel: "Language",
     lightMode: "Light Mode",
     darkMode: "Dark Mode",
+    showMore: "Show more",
 
     // Static Pages
     aboutTitle: "About",
@@ -308,6 +310,7 @@ export const translations: Record<string, Translations> = {
     languageLabel: "Bahasa",
     lightMode: "Mod Cerah",
     darkMode: "Mod Gelap",
+    showMore: "Tunjukkan lagi",
 
     // Static Pages
     aboutTitle: "Tentang",
