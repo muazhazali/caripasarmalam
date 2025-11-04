@@ -33,6 +33,7 @@ import { getMarketOpenStatus } from "@/lib/utils"
 import { getStateFromCoordinates } from "@/lib/geolocation"
 import { createBrowserSupabaseClient } from "@/lib/supabase-client"
 import { dbRowToMarket } from "@/lib/db-transform"
+import MarketCard from "@/components/market-card"
 
 
 function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
@@ -417,6 +418,13 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
     return `${Math.round(areaM2)} m²`
   }
 
+  function isPositiveNumber(value: unknown): boolean {
+    if (value === null || value === undefined) return false
+    const n = typeof value === "string" ? Number(value) : (value as number)
+    if (Number.isNaN(n)) return false
+    return n > 0
+  }
+
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
@@ -708,95 +716,9 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
           ) : (
             <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-              {filteredMarkets.slice(0, 20).map((market) => {
-                const distance =
-                  userLocation && market.location
-                    ? calculateDistance(
-                        userLocation.lat,
-                        userLocation.lng,
-                        market.location.latitude,
-                        market.location.longitude,
-                      )
-                    : null
-
-                return (
-                  <Card key={market.id} className="overflow-hidden hover:shadow-lg transition-shadow">
-                    <CardHeader className="pb-3">
-                      <div className="flex items-start justify-between mb-2">
-                        <Badge variant="secondary">{market.state}</Badge>
-                        {(() => {
-                          const status = getMarketOpenStatus(market)
-                          if (status.status === "open") {
-                            return (
-                              <Badge className="bg-green-600 text-white border-transparent">{t.openNow}</Badge>
-                            )
-                          }
-                          return (
-                            <Badge variant="outline" className="text-xs">{t.closedNow}</Badge>
-                          )
-                        })()}
-                      </div>
-                      {distance && (
-                        <div className="mb-2">
-                          <Badge variant="outline" className="text-xs">
-                            {distance.toFixed(1)} {t.kmFromHere}
-                          </Badge>
-                        </div>
-                      )}
-                      <CardTitle className="text-lg">{market.name}</CardTitle>
-                      <CardDescription>
-                        {market.district}
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      {renderScheduleBadges(market)}
-                      <div className="flex flex-wrap gap-3 text-sm text-muted-foreground mb-4">
-                        {market.parking.available && (
-                          <div className="flex items-center gap-1">
-                            <Car className="h-4 w-4" />
-                            <span>{t.parking}</span>
-                          </div>
-                        )}
-                        {market.amenities.toilet && (
-                          <div className="flex items-center gap-1">
-                            <Restroom className="h-4 w-4" />
-                            <span>{t.toilet}</span>
-                          </div>
-                        )}
-                        {market.amenities.prayer_room && (
-                          <div className="flex items-center gap-1">
-                            <Mosque className="h-4 w-4" />
-                            <span>{t.prayerRoom}</span>
-                          </div>
-                        )}
-                      </div>
-                      {market.total_shop && (
-                        <p className="text-sm text-muted-foreground mb-4">
-                          {market.total_shop} {t.totalStalls.toLowerCase()} • {formatArea(market.area_m2)}
-                        </p>
-                      )}
-                      <div className="flex gap-2">
-                        {market.location?.gmaps_link && (
-                          <Button asChild className="flex-1">
-                            <a 
-                              href={market.location.gmaps_link} 
-                              target="_blank" 
-                              rel="noopener noreferrer"
-                            >
-                              {t.showDirection}
-                            </a>
-                          </Button>
-                        )}
-                        <Link href={`/markets/${market.id}`}>
-                          <Button variant="outline" >
-                            {t.viewDetails}
-                          </Button>
-                        </Link>
-                      </div>
-                    </CardContent>
-                  </Card>
-                )
-              })}
+              {filteredMarkets.slice(0, 20).map((market) => (
+                <MarketCard key={market.id} market={market} userLocation={userLocation} showAddress={false} />
+              ))}
             </div>
             
             {/* Action buttons */}
