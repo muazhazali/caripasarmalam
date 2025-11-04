@@ -94,7 +94,8 @@ export default async function MarketsPage({ searchParams }: MarketsPageProps) {
     state: state && state !== "All States" && state !== "Semua Negeri" ? state : undefined,
     day: dayCode,
     status: "Active" as const,
-    limit: 500, // Higher limit for markets page
+    // Reduce server work; client paginates display
+    limit: 150,
   }
 
   const markets = await getMarkets(filters)

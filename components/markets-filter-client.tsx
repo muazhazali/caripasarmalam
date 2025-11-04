@@ -29,6 +29,7 @@ import { useLanguage } from "@/components/language-provider"
 import { createBrowserSupabaseClient } from "@/lib/supabase-client"
 import { Loader2 } from "lucide-react"
 import { dbRowToMarket } from "@/lib/db-transform"
+import MarketCard from "@/components/market-card"
 
 const malaysianStates = [
   "Semua Negeri",
@@ -136,7 +137,8 @@ export default function MarketsFilterClient({ initialMarkets, initialState }: Ma
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedState, setSelectedState] = useState(initialState || searchParams.get("state") || "All States")
   const [selectedDay, setSelectedDay] = useState(searchParams.get("day") || "All Days")
-  const [sortBy, setSortBy] = useState("name")
+  // Default to distance; if location unavailable, sorter falls back to name
+  const [sortBy, setSortBy] = useState("distance")
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc")
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null)
   const [openNow, setOpenNow] = useState<boolean>(searchParams.get("open") === "1")
@@ -150,6 +152,22 @@ export default function MarketsFilterClient({ initialMarkets, initialState }: Ma
   // Pagination
   const [visibleCount, setVisibleCount] = useState(24)
   const PAGE_SIZE = 24
+
+  // Attempt to get user location on first load to enable nearest sorting by default
+  useEffect(() => {
+    if (!userLocation && typeof window !== "undefined" && navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setUserLocation({ lat: position.coords.latitude, lng: position.coords.longitude })
+          setSortBy("distance")
+        },
+        () => {
+          // keep default behavior (falls back to name when distance w/o location)
+        },
+        { enableHighAccuracy: true, maximumAge: 60_000, timeout: 10_000 }
+      )
+    }
+  }, [])
 
   // Fetch markets using browser client
   const fetchMarkets = useCallback(async (state?: string, day?: string) => {
@@ -167,7 +185,8 @@ export default function MarketsFilterClient({ initialMarkets, initialState }: Ma
         query = query.contains('schedule', [{ days: [dayCode] }])
       }
 
-      query = query.limit(500)
+      // Reduce server load by limiting result set; UI paginates on client
+      query = query.limit(150)
 
       const { data, error } = await query
 
@@ -327,6 +346,13 @@ export default function MarketsFilterClient({ initialMarkets, initialState }: Ma
       return `${(areaM2 / 1000000).toFixed(2)} ${t.kmSquared}`
     }
     return `${Math.round(areaM2)} m²`
+  }
+
+  function isPositiveNumber(value: unknown): boolean {
+    if (value === null || value === undefined) return false
+    const n = typeof value === "string" ? Number(value) : (value as number)
+    if (Number.isNaN(n)) return false
+    return n > 0
   }
 
   return (
@@ -601,7 +627,7 @@ export default function MarketsFilterClient({ initialMarkets, initialState }: Ma
                     <SelectItem value="state">{t.sortByLocation}</SelectItem>
                     <SelectItem value="size">{t.sortByStallCount}</SelectItem>
                     <SelectItem value="area">{t.sortByAreaSize}</SelectItem>
-                    {userLocation && <SelectItem value="distance">{t.sortByDistance}</SelectItem>}
+                    <SelectItem value="distance">{t.sortByDistance}</SelectItem>
                   </SelectContent>
                 </Select>
                 <Button
@@ -628,7 +654,7 @@ export default function MarketsFilterClient({ initialMarkets, initialState }: Ma
                     <SelectItem value="state">{t.sortByLocation}</SelectItem>
                     <SelectItem value="size">{t.sortByStallCount}</SelectItem>
                     <SelectItem value="area">{t.sortByAreaSize}</SelectItem>
-                    {userLocation && <SelectItem value="distance">{t.sortByDistance}</SelectItem>}
+                    <SelectItem value="distance">{t.sortByDistance}</SelectItem>
                   </SelectContent>
                 </Select>
                 <Button
@@ -659,122 +685,9 @@ export default function MarketsFilterClient({ initialMarkets, initialState }: Ma
         ) : (
           <>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredAndSortedMarkets.slice(0, visibleCount).map((market) => {
-              const distance =
-                userLocation && market.location
-                  ? calculateDistance(
-                      userLocation.lat,
-                      userLocation.lng,
-                      market.location.latitude,
-                      market.location.longitude,
-                    )
-                  : null
-
-              return (
-                <Card
-                  key={market.id}
-                  className="overflow-hidden hover:shadow-lg transition-shadow"
-                >
-                  <div className="flex-1">
-                    <CardHeader className="pb-3">
-                      <div className="flex items-start justify-between">
-                        <div className="flex-1">
-                          <div className="flex items-center justify-between mb-1">
-                            <Badge variant="secondary">{market.state}</Badge>
-                            {(() => {
-                              const status = getMarketOpenStatus(market)
-                              if (status.status === "open") {
-                                return (
-                                  <Badge className="bg-green-600 text-white border-transparent">{t.openNow}</Badge>
-                                )
-                              }
-                              return (
-                                <Badge variant="outline" className="text-xs">{t.closedNow}</Badge>
-                              )
-                            })()}
-                          </div>
-                          {distance && (
-                            <div className="mb-2">
-                              <Badge variant="outline" className="text-xs">
-                                {distance.toFixed(1)} {t.kmFromHere}
-                              </Badge>
-                            </div>
-                          )}
-                          <CardTitle className="text-lg">{market.name}</CardTitle>
-                          <CardDescription className="text-sm">
-                            {market.district} • {market.schedule[0]?.days[0] && (() => {
-                              const dayMap: { [key: string]: string } = {
-                                "mon": "Isnin",
-                                "tue": "Selasa",
-                                "wed": "Rabu",
-                                "thu": "Khamis",
-                                "fri": "Jumaat",
-                                "sat": "Sabtu",
-                                "sun": "Ahad"
-                              }
-                              return dayMap[market.schedule[0].days[0]]
-                            })()} {market.schedule[0]?.times[0]?.start}-
-                            {market.schedule[0]?.times[market.schedule[0]?.times.length - 1]?.end}
-                          </CardDescription>
-                        </div>
-                      </div>
-                    </CardHeader>
-                    <CardContent className="pt-0">
-                      <p className="text-sm text-muted-foreground mb-4 line-clamp-2">{market.address}</p>
-
-                      <div className="flex flex-wrap gap-3 text-sm text-muted-foreground mb-4">
-                        {market.parking.available && (
-                          <div className="flex items-center gap-1">
-                            <Car className="h-4 w-4" />
-                            <span>{t.parking}</span>
-                          </div>
-                        )}
-                        {market.amenities.toilet && (
-                          <div className="flex items-center gap-1">
-                            <Restroom className="h-4 w-4" />
-                            <span>{t.toilet}</span>
-                          </div>
-                        )}
-                        {market.amenities.prayer_room && (
-                          <div className="flex items-center gap-1">
-                            <Mosque className="h-4 w-4" />
-                            <span>{t.prayerRoom}</span>
-                          </div>
-                        )}
-                      </div>
-
-                      <div className="grid grid-cols-2 gap-4 text-sm text-muted-foreground mb-4">
-                        {market.total_shop && (
-                          <div>
-                            <span className="font-medium">{t.totalStalls}:</span>
-                            <br />
-                            <span>{market.total_shop}</span>
-                          </div>
-                        )}
-                        <div>
-                          <span className="font-medium">{t.areaSize}:</span>
-                          <br />
-                          <span>{formatArea(market.area_m2)}</span>
-                        </div>
-                      </div>
-
-                      <div className="flex gap-2">
-                          {market.location?.gmaps_link && (
-                            <Button className="flex-1" onClick={() => openDirections(market.location!.latitude, market.location!.longitude)}>
-                              {t.showDirection}
-                            </Button>
-                          )}
-                          <Link href={`/markets/${market.id}`}>
-                            <Button variant="outline">
-                              {t.viewDetails}
-                            </Button>
-                          </Link>
-                      </div>
-                    </CardContent>
-                  </div>
-                </Card>
-              )
-            })}
+            {filteredAndSortedMarkets.slice(0, visibleCount).map((market) => (
+              <MarketCard key={market.id} market={market} userLocation={userLocation} showAddress={true} />
+            ))}
           </div>
           {filteredAndSortedMarkets.length > visibleCount && (
             <div className="flex justify-center mt-8">
