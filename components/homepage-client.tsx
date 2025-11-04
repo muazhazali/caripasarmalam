@@ -708,7 +708,7 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
           ) : (
             <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-              {filteredMarkets.slice(0, 100).map((market) => {
+              {filteredMarkets.slice(0, 20).map((market) => {
                 const distance =
                   userLocation && market.location
                     ? calculateDistance(
@@ -818,41 +818,17 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
                   </Button>
                 </>
               )}
-              <Link href="/markets">
-                <Button size="lg" variant="default">
-                  {t.viewAllMarkets || "View All Markets"}
-                </Button>
-              </Link>
+              {filteredMarkets.length > 20 && (
+                <Link href="/markets">
+                  <Button size="lg" variant="default">
+                    {t.viewAllMarkets || "View All Markets"}
+                  </Button>
+                </Link>
+              )}
             </div>
             </>
           )}
-          {/* Mobile sort controls */}
-          <div className="md:hidden mb-4">
-            <div className="flex gap-2">
-              <Select value={sortBy} onValueChange={setSortBy}>
-                <SelectTrigger className="flex-1">
-                  <ArrowUpDown className="h-4 w-4 mr-2" />
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="smart">Smart Sort (Open + Nearest)</SelectItem>
-                  <SelectItem value="name">{t.sortByName}</SelectItem>
-                  <SelectItem value="state">{t.sortByLocation}</SelectItem>
-                  <SelectItem value="size">{t.sortByStallCount}</SelectItem>
-                  <SelectItem value="area">{t.sortByAreaSize}</SelectItem>
-                  {userLocation && <SelectItem value="distance">{t.sortByDistance}</SelectItem>}
-                </SelectContent>
-              </Select>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
-                className="px-3"
-              >
-                {sortOrder === "asc" ? <ArrowUp className="h-4 w-4" /> : <ArrowDown className="h-4 w-4" />}
-              </Button>
-            </div>
-          </div>
+          {/* Mobile sort controls removed */}
 
 
         </div>
