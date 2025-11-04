@@ -131,6 +131,13 @@ export interface Translations {
   suggestMarket: string
   addMarketCta: string
 
+  // Location prompt
+  enableLocationTitle: string
+  enableLocationDescription: string
+  enableLocationButton: string
+  chooseStateButton: string
+  showingTopMarkets: string
+
   // Open status
   openNow: string
   closedNow: string
@@ -278,6 +285,13 @@ export const translations: Record<string, Translations> = {
     suggestMarket: "Add or update a market",
     addMarketCta: "Know a market we missed or info to update? Submit it here.",
 
+    // Location prompt
+    enableLocationTitle: "See nearby markets",
+    enableLocationDescription: "Turn on location to sort by distance and find the closest markets.",
+    enableLocationButton: "Use my location",
+    chooseStateButton: "Choose state",
+    showingTopMarkets: "Showing top 20 markets (enable location for nearest)",
+
     // Open status
     openNow: "Open now",
     closedNow: "Closed",
@@ -422,6 +436,13 @@ export const translations: Record<string, Translations> = {
     // Contribution CTA
     suggestMarket: "Tambah atau kemas kini pasar",
     addMarketCta: "Tahu pasar baharu atau maklumat perlu dikemas kini? Hantar di sini.",
+
+    // Location prompt
+    enableLocationTitle: "Lihat pasar berdekatan",
+    enableLocationDescription: "Hidupkan lokasi untuk susun ikut jarak dan cari pasar terdekat.",
+    enableLocationButton: "Guna lokasi saya",
+    chooseStateButton: "Pilih negeri",
+    showingTopMarkets: "Menunjukkan 20 pasar teratas (hidupkan lokasi untuk terdekat)",
 
     // Open status
     openNow: "Dibuka sekarang",

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect, useCallback, useMemo } from "react"
 import Link from "next/link"
 import { ArrowLeft, List, Search, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -38,12 +38,13 @@ export default function MapPage() {
   const [markets, setMarkets] = useState<Market[]>([])
   const [isLoadingMarkets, setIsLoadingMarkets] = useState(true)
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null)
+  const [locationDenied, setLocationDenied] = useState<boolean>(false)
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedState, setSelectedState] = useState("Semua Negeri")
   const [selectedMarket, setSelectedMarket] = useState<Market | null>(null)
 
   // Fetch markets from server
-  const fetchMarkets = useCallback(async (state?: string) => {
+  const fetchMarkets = useCallback(async (state?: string, limitOverride?: number) => {
     setIsLoadingMarkets(true)
     try {
       const supabase = createBrowserSupabaseClient()
@@ -53,7 +54,10 @@ export default function MapPage() {
         query = query.eq('state', state)
       }
 
-      query = query.limit(1000) // Higher limit for map view
+      const limit = typeof limitOverride === 'number'
+        ? limitOverride
+        : (state && state !== "Semua Negeri" && state !== "All States" ? 1000 : 1000)
+      query = query.limit(limit)
 
       const { data, error } = await query
 
@@ -88,6 +92,7 @@ export default function MapPage() {
           const lat = position.coords.latitude
           const lng = position.coords.longitude
           setUserLocation({ lat, lng })
+          setLocationDenied(false)
           
           // Detect state and auto-filter
           const state = getStateFromCoordinates(lat, lng)
@@ -102,13 +107,16 @@ export default function MapPage() {
         (error) => {
           // Permission denied or unavailable - fetch all markets
           console.warn("Geolocation error:", error)
-          fetchMarkets()
+          setLocationDenied(true)
+          // Show a limited set by default when no location permission
+          fetchMarkets(undefined, 20)
         },
         { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
       )
     } else {
       // Geolocation not available - fetch all markets
-      fetchMarkets()
+      setLocationDenied(true)
+      fetchMarkets(undefined, 20)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []) // Only run on mount
@@ -126,6 +134,63 @@ export default function MapPage() {
     // Only show markets with coordinates
     return matchesSearch && matchesState && market.location
   })
+
+  // Distance calculation
+  function getDistanceKm(aLat: number, aLng: number, bLat: number, bLng: number): number {
+    const toRad = (v: number) => (v * Math.PI) / 180
+    const R = 6371
+    const dLat = toRad(bLat - aLat)
+    const dLng = toRad(bLng - aLng)
+    const lat1 = toRad(aLat)
+    const lat2 = toRad(bLat)
+    const sinDLat = Math.sin(dLat / 2)
+    const sinDLng = Math.sin(dLng / 2)
+    const a = sinDLat * sinDLat + Math.cos(lat1) * Math.cos(lat2) * sinDLng * sinDLng
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+    return R * c
+  }
+
+  // Sort by distance when userLocation is available
+  const sortedMarkets = useMemo(() => {
+    if (!userLocation) return filteredMarkets
+    const withDistance = filteredMarkets.map((m) => ({
+      market: m,
+      distance: m.location ? getDistanceKm(userLocation.lat, userLocation.lng, m.location.latitude, m.location.longitude) : Infinity,
+    }))
+    withDistance.sort((a, b) => a.distance - b.distance)
+    return withDistance.map((x) => x.market)
+  }, [filteredMarkets, userLocation])
+
+  // If location permission denied and no state filter, cap to top 100
+  const displayedMarkets = useMemo(() => {
+    const isAllStates = selectedState === "Semua Negeri" || selectedState === "All States"
+    if (locationDenied && isAllStates) return sortedMarkets.slice(0, 100)
+    return sortedMarkets
+  }, [sortedMarkets, locationDenied, selectedState])
+
+  const reRequestLocation = useCallback(() => {
+    if (typeof navigator === "undefined" || !navigator.geolocation) return
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const lat = position.coords.latitude
+        const lng = position.coords.longitude
+        setUserLocation({ lat, lng })
+        setLocationDenied(false)
+        const state = getStateFromCoordinates(lat, lng)
+        if (state) {
+          setSelectedState(state)
+          fetchMarkets(state)
+        } else {
+          fetchMarkets()
+        }
+      },
+      (error) => {
+        console.warn("Geolocation error:", error)
+        setLocationDenied(true)
+      },
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+    )
+  }, [fetchMarkets])
 
   return (
     <div className="min-h-screen bg-background">
@@ -157,6 +222,18 @@ export default function MapPage() {
               </SelectContent>
             </Select>
           </div>
+          {locationDenied && (
+            <div className="mt-3 flex flex-col md:flex-row items-start md:items-center gap-3 rounded-md border bg-muted/50 p-3">
+              <div className="flex-1">
+                <div className="text-sm font-medium">{t.enableLocationTitle}</div>
+                <div className="text-xs text-muted-foreground">{t.enableLocationDescription}</div>
+              </div>
+              <div className="flex gap-2">
+                <Button size="sm" onClick={reRequestLocation}>{t.enableLocationButton}</Button>
+                {/* The state selector above serves as the choose state action */}
+              </div>
+            </div>
+          )}
           <div className="mt-2 text-sm text-muted-foreground">
             {isLoadingMarkets ? (
               <span className="flex items-center gap-2">
@@ -164,7 +241,10 @@ export default function MapPage() {
                 Loading markets...
               </span>
             ) : (
-              <span>{t.showingResults} {filteredMarkets.length} {t.markets}</span>
+              <span>
+                {t.showingResults} {displayedMarkets.length} {t.markets}
+                {locationDenied && (selectedState === "Semua Negeri" || selectedState === "All States") ? ` · ${t.showingTopMarkets}` : ""}
+              </span>
             )}
           </div>
         </div>
@@ -173,7 +253,7 @@ export default function MapPage() {
       {/* Map */}
       <div className="h-[calc(100vh-160px)] md:h-[calc(100vh-180px)] relative z-0">
         <MarketsMap
-          markets={filteredMarkets}
+          markets={displayedMarkets}
           selectedMarket={selectedMarket}
           onMarketSelect={setSelectedMarket}
           className="h-full"
