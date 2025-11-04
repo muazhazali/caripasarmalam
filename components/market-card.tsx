@@ -63,7 +63,7 @@ export function MarketCard({ market, userLocation, showAddress = false }: Market
   const status = getMarketOpenStatus(market)
 
   return (
-    <Card className="overflow-hidden hover:shadow-lg transition-shadow">
+    <Card className="overflow-hidden hover:shadow-lg transition-shadow h-full flex flex-col">
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between mb-2">
           <Badge variant="secondary">{market.state}</Badge>
@@ -85,7 +85,7 @@ export function MarketCard({ market, userLocation, showAddress = false }: Market
           {market.district}
         </CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="flex flex-col h-full">
         {/* Schedule badges */}
         <div className="flex flex-wrap gap-2 mb-4">
           {orderedSchedule.map((sch) => {
@@ -94,12 +94,12 @@ export function MarketCard({ market, userLocation, showAddress = false }: Market
             const dayLabel = sch.days.map((d) => getLocalizedDayFromCode(d)).join(", ")
             const aria = `${dayLabel}, ${times}`
             return (
-              <Badge key={`${market.id}-${sch.days.join('-')}`} variant="outline" className="flex items-center gap-1" aria-label={aria}>
+              <Badge key={`${market.id}-${sch.days.join('-')}`} variant="outline" className="flex items-center gap-1 whitespace-normal break-words" aria-label={aria}>
                 <CalendarDays className="h-3.5 w-3.5" aria-hidden="true" />
-                <span className="whitespace-nowrap">{dayLabel}</span>
+                <span className="whitespace-normal break-words">{dayLabel}</span>
                 <span className="text-muted-foreground">•</span>
                 <Clock className="h-3.5 w-3.5" aria-hidden="true" />
-                <span className="whitespace-nowrap">{times}</span>
+                <span className="whitespace-normal break-words">{times}</span>
               </Badge>
             )
           })}
@@ -142,6 +142,9 @@ export function MarketCard({ market, userLocation, showAddress = false }: Market
               .join(" • ")}
           </p>
         )}
+
+        {/* Spacer to push actions to bottom for consistent alignment */}
+        <div className="mt-auto" />
 
         <div className="flex gap-2">
           {market.location?.gmaps_link && (
