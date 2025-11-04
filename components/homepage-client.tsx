@@ -6,7 +6,6 @@ import {
   MapPin,
   Clock,
   CalendarDays,
-  Users,
   Car,
   Toilet as Restroom,
   Home as Mosque,
@@ -19,11 +18,11 @@ import {
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
+import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Market } from "@/lib/markets-data"
@@ -428,14 +427,14 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
-      <section className="bg-gradient-to-b from-card to-background py-8 md:py-16">
+      <section className="bg-gradient-to-b from-card to-background pt-8 md:pt-16 pb-2 md:pb-4">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl md:text-5xl font-bold text-foreground mb-4 md:mb-6 text-balance">{t.heroTitle}</h2>
           <p className="text-base md:text-xl text-muted-foreground mb-6 md:mb-8 max-w-2xl mx-auto text-pretty">
             {t.heroDescription}
           </p>
 
-          <div className="max-w-4xl mx-auto mb-4 md:mb-8">
+          <div className="max-w-4xl mx-auto mb-2 md:mb-4">
             <div className="flex flex-col gap-3 md:gap-4">
               <div className="flex gap-2">
                 <div className="flex-1 relative">
@@ -452,46 +451,88 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
             </div>
           </div>
 
-          {/* Quick Stats (desktop only) */}
-          <div className="hidden md:grid md:grid-cols-3 gap-4 max-w-3xl mx-auto">
-            <Card>
-              <CardContent className="p-3 md:p-4 text-center">
-                <MapPin className="h-6 w-6 text-primary mx-auto mb-1.5" />
-                <div className="text-xl font-bold text-foreground">{markets.length}+</div>
-                <div className="text-muted-foreground text-sm">{t.statsMarketsListed}</div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent className="p-3 md:p-4 text-center">
-                <Clock className="h-6 w-6 text-primary mx-auto mb-1.5" />
-                <div className="text-xl font-bold text-foreground">7 {t.days}</div>
-                <div className="text-muted-foreground text-sm">{t.statsWeeklyCoverage}</div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent className="p-3 md:p-4 text-center">
-                <Users className="h-6 w-6 text-primary mx-auto mb-1.5" />
-                <div className="text-xl font-bold text-foreground">13 {t.states}</div>
-                <div className="text-muted-foreground text-sm">{t.statsNationwide}</div>
-              </CardContent>
-            </Card>
-          </div>
+          
         </div>
       </section>
 
-      <section className="py-8 md:py-16">
+      <section className="pt-4 md:pt-6 pb-8 md:pb-16">
         <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between mb-6 md:mb-8">
-            <h3 className="text-2xl md:text-3xl font-bold text-foreground">
-              {searchQuery || userLocation
-                ? `${t.searchResults} (${filteredMarkets.length})`
-                : t.featuredMarkets}
-            </h3>
-            <div className="flex items-center gap-2">
+          {/* Header Section */}
+          <div className="mb-6 md:mb-8">
+            {/* Title and Action Buttons Row */}
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
+              <div className="flex-1">
+                <h3 className="text-2xl md:text-3xl font-bold text-foreground mb-3 md:mb-0">
+                  {searchQuery || userLocation
+                    ? `${t.searchResults} (${filteredMarkets.length})`
+                    : t.featuredMarkets}
+                </h3>
+              </div>
+              
+              {/* Desktop Action Buttons */}
+              <div className="hidden md:flex items-center gap-2">
+                {!userLocation && (
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button 
+                        onClick={findNearestMarkets} 
+                        disabled={isRequestingLocation} 
+                        variant="default"
+                        className="gap-2"
+                      >
+                        <Navigation2 className="h-4 w-4" />
+                        {isRequestingLocation ? t.searching : t.findNearest}
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>{t.findNearestDescription}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                )}
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button asChild variant="outline" className="gap-2">
+                      <a href={suggestFormUrl} target="_blank" rel="noopener noreferrer">
+                        <MapPin className="h-4 w-4" />
+                        {t.suggestMarket}
+                      </a>
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>{t.addMarketCta}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </div>
+            </div>
+
+            {/* Mobile Action Buttons */}
+            <div className="md:hidden grid grid-cols-2 gap-3 mb-4">
+              {!userLocation && (
+                <Button 
+                  onClick={findNearestMarkets} 
+                  disabled={isRequestingLocation} 
+                  className="gap-2 h-auto p-3 flex flex-col items-center justify-center"
+                >
+                  <Navigation2 className="h-4 w-4" />
+                  <span className="text-xs font-medium">
+                    {isRequestingLocation ? t.searching : t.findNearest}
+                  </span>
+                </Button>
+              )}
+              <Button asChild className="gap-2 h-auto p-3 flex flex-col items-center justify-center">
+                <a href={suggestFormUrl} target="_blank" rel="noopener noreferrer">
+                  <MapPin className="h-4 w-4" />
+                  <span className="text-xs font-medium">{t.suggestMarket}</span>
+                </a>
+              </Button>
+            </div>
+
+            {/* Filter and Sort Controls */}
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pt-4 border-t border-border">
               {/* Mobile filter button */}
               <Sheet open={showFilters} onOpenChange={setShowFilters}>
                 <SheetTrigger asChild>
-                  <Button className="md:hidden rounded-full h-10 w-10 p-0 shadow-lg">
+                  <Button className="md:hidden rounded-full h-10 w-10 p-0" variant="outline">
                     <Filter className="h-5 w-5" />
                   </Button>
                 </SheetTrigger>
@@ -591,111 +632,51 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
                   </div>
                 </SheetContent>
               </Sheet>
-            </div>
-            <div className="hidden md:flex gap-2">
-              <Select value={sortBy} onValueChange={setSortBy}>
-                <SelectTrigger className="w-48">
-                  <ArrowUpDown className="h-4 w-4 mr-2" />
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="smart">Smart Sort (Open + Nearest)</SelectItem>
-                  <SelectItem value="name">{t.sortByName}</SelectItem>
-                  <SelectItem value="state">{t.sortByLocation}</SelectItem>
-                  <SelectItem value="size">{t.sortByStallCount}</SelectItem>
-                  <SelectItem value="area">{t.sortByAreaSize}</SelectItem>
-                  {userLocation && <SelectItem value="distance">{t.sortByDistance}</SelectItem>}
-                </SelectContent>
-              </Select>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
-                className="px-3"
-              >
-                {sortOrder === "asc" ? <ArrowUp className="h-4 w-4" /> : <ArrowDown className="h-4 w-4" />}
-              </Button>
-              {(searchQuery || userLocation) && (
+
+              {/* Desktop Filter and Sort Controls */}
+              <div className="hidden md:flex items-center gap-2 flex-wrap">
+                <Select value={sortBy} onValueChange={setSortBy}>
+                  <SelectTrigger className="w-[180px]">
+                    <ArrowUpDown className="h-4 w-4 mr-2" />
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="smart">Smart Sort (Open + Nearest)</SelectItem>
+                    <SelectItem value="name">{t.sortByName}</SelectItem>
+                    <SelectItem value="state">{t.sortByLocation}</SelectItem>
+                    <SelectItem value="size">{t.sortByStallCount}</SelectItem>
+                    <SelectItem value="area">{t.sortByAreaSize}</SelectItem>
+                    {userLocation && <SelectItem value="distance">{t.sortByDistance}</SelectItem>}
+                  </SelectContent>
+                </Select>
                 <Button
                   variant="outline"
-                  onClick={() => {
-                    setSearchQuery("")
-                    setUserLocation(null)
-                  }}
+                  size="sm"
+                  onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
+                  className="px-3"
+                  aria-label={sortOrder === "asc" ? "Sort ascending" : "Sort descending"}
                 >
-                  {t.clearAllFilters}
+                  {sortOrder === "asc" ? <ArrowUp className="h-4 w-4" /> : <ArrowDown className="h-4 w-4" />}
                 </Button>
-              )}
-              <Link href="/markets">
-                <Button>{t.viewAllMarkets}</Button>
-              </Link>
-              <Button asChild variant="outline" className="bg-transparent">
-                <a href={suggestFormUrl} target="_blank" rel="noopener noreferrer">
-                  {t.suggestMarket}
-                </a>
-              </Button>
-            </div>
-          </div>
-
-          {/* Mobile CTA buttons - side by side */}
-          <div className="mb-6 md:hidden">
-            <div className="grid grid-cols-2 gap-3">
-              {/* Find Nearest button */}
-              {!userLocation && (
-                <Button 
-                  onClick={findNearestMarkets} 
-                  disabled={isRequestingLocation} 
-                  className="gap-2 h-auto p-3 flex flex-col items-center justify-center"
-                >
-                  <Navigation2 className="h-4 w-4" />
-                  <span className="text-xs font-medium">
-                    {isRequestingLocation ? t.searching : t.findNearest}
-                  </span>
-                </Button>
-              )}
-              
-              {/* Add Market button */}
-              <Button asChild className="gap-2 h-auto p-3 flex flex-col items-center justify-center">
-                <a href={suggestFormUrl} target="_blank" rel="noopener noreferrer">
-                  <MapPin className="h-4 w-4" />
-                  <span className="text-xs font-medium">{t.suggestMarket}</span>
-                </a>
-              </Button>
-            </div>
-          </div>
-
-          {/* Desktop CTA cards */}
-          <div className="hidden md:block">
-            {/* Nearest CTA card (shown when no location yet) */}
-            {!userLocation && (
-              <Card className="mb-6 md:mb-8">
-                <CardContent className="p-4 md:p-6 flex items-center justify-between gap-3">
-                  <div className="text-left">
-                    <div className="font-semibold text-foreground">{t.findNearestTitle}</div>
-                    <div className="text-sm text-muted-foreground">{t.findNearestDescription}</div>
-                  </div>
-                  <Button onClick={findNearestMarkets} disabled={isRequestingLocation} className="gap-2">
-                    <Navigation2 className="h-4 w-4" />
-                    {isRequestingLocation ? t.searching : t.findNearest}
+                {(searchQuery || userLocation) && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      setSearchQuery("")
+                      setUserLocation(null)
+                    }}
+                  >
+                    {t.clearAllFilters}
                   </Button>
-                </CardContent>
-              </Card>
-            )}
-
-            {/* Suggest Market CTA */}
-            <Card className="mb-6 md:mb-8">
-              <CardContent className="p-4 md:p-6 flex items-center justify-between gap-3">
-                <div className="text-left">
-                  <div className="font-semibold text-foreground">{t.suggestMarket}</div>
-                  <div className="text-sm text-muted-foreground">{t.addMarketCta}</div>
-                </div>
-                <Button asChild>
-                  <a href={suggestFormUrl} target="_blank" rel="noopener noreferrer">
-                    {t.suggestMarket}
-                  </a>
-                </Button>
-              </CardContent>
-            </Card>
+                )}
+                <Link href="/markets">
+                  <Button variant="default" size="sm">
+                    {t.viewAllMarkets}
+                  </Button>
+                </Link>
+              </div>
+            </div>
           </div>
 
           {isLoadingMarkets ? (
