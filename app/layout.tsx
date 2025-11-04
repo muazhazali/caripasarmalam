@@ -6,7 +6,7 @@ import { GeistMono } from "geist/font/mono"
 import { Analytics } from "@vercel/analytics/next"
 import { Suspense } from "react"
 import { cookies } from "next/headers"
-import Adsense from "@eisberg-labs/next-google-adsense"
+import Script from "next/script"
 import "./globals.css"
 import MobileTabBar from "@/components/mobile-tabbar"
 import DesktopNavbar from "@/components/desktop-navbar"
@@ -104,7 +104,13 @@ export default async function RootLayout({
             }),
           }}
         />
-        <Adsense client_id="ca-pub-3393623405576068" />
+        <Script
+          id="adsbygoogle-init"
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3393623405576068"
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
         {process.env.NEXT_PUBLIC_ADSENSE_PUBLISHER_ID ? (
           <meta
             name="google-adsense-account"
