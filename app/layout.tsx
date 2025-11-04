@@ -6,7 +6,7 @@ import { GeistMono } from "geist/font/mono"
 import { Analytics } from "@vercel/analytics/next"
 import { Suspense } from "react"
 import { cookies } from "next/headers"
-import { GoogleAdSense } from "nextjs-google-adsense"
+import Adsense from "@eisberg-labs/next-google-adsense"
 import "./globals.css"
 import MobileTabBar from "@/components/mobile-tabbar"
 import DesktopNavbar from "@/components/desktop-navbar"
@@ -104,7 +104,7 @@ export default async function RootLayout({
             }),
           }}
         />
-        <GoogleAdSense publisherId="ca-pub-3393623405576068" />
+        <Adsense client_id="ca-pub-3393623405576068" />
         {process.env.NEXT_PUBLIC_ADSENSE_PUBLISHER_ID ? (
           <meta
             name="google-adsense-account"
