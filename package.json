@@ -9,6 +9,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@eisberg-labs/next-google-adsense": "^4.0.2",
     "@hookform/resolvers": "^3.10.0",
     "@radix-ui/react-accordion": "1.2.2",
     "@radix-ui/react-alert-dialog": "1.1.4",

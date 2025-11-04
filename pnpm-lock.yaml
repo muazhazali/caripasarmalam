@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@eisberg-labs/next-google-adsense':
+        specifier: ^4.0.2
+        version: 4.0.2(next@15.5.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@hookform/resolvers':
         specifier: ^3.10.0
         version: 3.10.0(react-hook-form@7.62.0(react@18.3.1))
@@ -252,6 +255,13 @@ packages:
 
   '@date-fns/tz@1.2.0':
     resolution: {integrity: sha512-LBrd7MiJZ9McsOgxqWX7AaxrDjcFVjWH/tIKJd7pnR7McaslGYOP1QmmiBXdJH/H/yLCT+rcQ7FaPBUxRGUtrg==}
+
+  '@eisberg-labs/next-google-adsense@4.0.2':
+    resolution: {integrity: sha512-tzA5dY8JFpP2NvrD47Bol0cY0ubeQF4fMvv9FTBT2kk9DyBvb74U/GyQCIQVI79osvnNaUK8ynjAieUGmNq/HA==}
+    peerDependencies:
+      next: ^12.0.0 || ^13.0.0
+      react: ^17.0.0 || ^18.0.0
+      react-dom: ^17.0.0 || ^18.0.0
 
   '@emnapi/runtime@1.5.0':
     resolution: {integrity: sha512-97/BJ3iXHww3djw6hYIfErCZFee7qCtrneuLa20UXFCOTCfBM2cvQHjWJ2EG0s0MtdNwInarqCTz35i4wWXHsQ==}
@@ -2549,6 +2559,12 @@ snapshots:
       '@babel/helper-validator-identifier': 7.27.1
 
   '@date-fns/tz@1.2.0': {}
+
+  '@eisberg-labs/next-google-adsense@4.0.2(next@15.5.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+    dependencies:
+      next: 15.5.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
 
   '@emnapi/runtime@1.5.0':
     dependencies:
