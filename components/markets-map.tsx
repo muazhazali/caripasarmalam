@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react"
 import { formatScheduleRule } from "@/lib/i18n"
 import { useLanguage } from "@/components/language-provider"
 import { MapPin, Navigation, Loader2 } from "lucide-react"
+import { useTheme } from "next-themes"
 import openDirections from "@/lib/directions"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -21,10 +22,43 @@ export default function MarketsMap({ markets, selectedMarket, onMarketSelect, cl
   const mapRef = useRef<HTMLDivElement>(null)
   const mapInstanceRef = useRef<any>(null)
   const markersRef = useRef<any[]>([])
+  const lightTilesRef = useRef<any | null>(null)
+  const darkTilesRef = useRef<any | null>(null)
+  const hasUserInteractedRef = useRef<boolean>(false)
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null)
   const [isReady, setIsReady] = useState(false)
   const [isUpdating, setIsUpdating] = useState(true)
+  const [useDarkTiles, setUseDarkTiles] = useState<boolean>(false)
   const { t, language } = useLanguage()
+  const { theme, systemTheme } = useTheme()
+
+  function resolveIsDark(): boolean {
+    const pref = theme === "system" ? systemTheme : theme
+    if (pref === "dark") return true
+    if (pref === "light") return false
+    if (typeof window !== "undefined" && window.matchMedia) {
+      return window.matchMedia("(prefers-color-scheme: dark)").matches
+    }
+    return false
+  }
+
+  useEffect(() => {
+    const resolved = resolveIsDark()
+    setUseDarkTiles(resolved)
+    // If map already exists, swap tile layers to match the theme
+    if (!mapInstanceRef.current || !lightTilesRef.current || !darkTilesRef.current) return
+    try {
+      if (resolved) {
+        if (lightTilesRef.current) mapInstanceRef.current.removeLayer(lightTilesRef.current)
+        darkTilesRef.current.addTo(mapInstanceRef.current)
+      } else {
+        if (darkTilesRef.current) mapInstanceRef.current.removeLayer(darkTilesRef.current)
+        lightTilesRef.current.addTo(mapInstanceRef.current)
+      }
+    } catch (_) {
+      /* ignore */
+    }
+  }, [theme, systemTheme, isReady])
 
   // Get user location
   useEffect(() => {
@@ -65,10 +99,35 @@ export default function MarketsMap({ markets, selectedMarket, onMarketSelect, cl
         if (!mapInstanceRef.current) {
           // Initialize map with center and zoom so subsequent flyTo calls are safe
           const map = L.map(mapRef.current).setView([3.139, 101.6869], 10)
-          L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+          // Prepare light and dark tile layers
+          lightTilesRef.current = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
             attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-          }).addTo(map)
+          })
+          darkTilesRef.current = L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
+            attribution:
+              '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+            subdomains: "abcd",
+            maxZoom: 20,
+          })
+          const resolvedDark = (() => {
+            const pref = (theme === "system" ? systemTheme : theme) as string | undefined
+            if (pref === "dark") return true
+            if (pref === "light") return false
+            if (typeof window !== "undefined" && window.matchMedia) {
+              return window.matchMedia("(prefers-color-scheme: dark)").matches
+            }
+            return false
+          })()
+          if (resolvedDark && darkTilesRef.current) darkTilesRef.current.addTo(map)
+          else if (lightTilesRef.current) lightTilesRef.current.addTo(map)
           mapInstanceRef.current = map
+          // Track interaction to preserve viewport
+          map.on("zoomstart", () => {
+            hasUserInteractedRef.current = true
+          })
+          map.on("dragstart", () => {
+            hasUserInteractedRef.current = true
+          })
           // Expose the shared helper on window for popup markup (popup HTML calls window.openDirections)
           if (typeof window !== "undefined") {
             ;(window as any).openDirections = openDirections
@@ -193,7 +252,7 @@ export default function MarketsMap({ markets, selectedMarket, onMarketSelect, cl
         if (selectedMarket && selectedMarket.location) {
           // Center on the selected market instead of fitting all markers
           map.flyTo([selectedMarket.location.latitude, selectedMarket.location.longitude], 15, { animate: true, duration: 0.8 })
-        } else {
+        } else if (!hasUserInteractedRef.current) {
           map.fitBounds(group.getBounds().pad(0.1))
         }
       }
@@ -214,17 +273,63 @@ export default function MarketsMap({ markets, selectedMarket, onMarketSelect, cl
     }
   }
 
+  const fitToMarkers = async () => {
+    if (!mapInstanceRef.current || markersRef.current.length === 0) return
+    const L = (await import("leaflet")).default
+    const group = new L.featureGroup(markersRef.current)
+    try {
+      mapInstanceRef.current.fitBounds(group.getBounds().pad(0.1))
+    } catch (e) {
+      /* ignore */
+    }
+  }
+
+  const zoomIn = () => {
+    if (!mapInstanceRef.current) return
+    try {
+      mapInstanceRef.current.zoomIn()
+    } catch (e) {
+      /* ignore */
+    }
+  }
+
+  const zoomOut = () => {
+    if (!mapInstanceRef.current) return
+    try {
+      mapInstanceRef.current.zoomOut()
+    } catch (e) {
+      /* ignore */
+    }
+  }
+
+  // Theme is handled automatically via next-themes effect above
+
   return (
     <div className={`relative ${className}`}>
       <div ref={mapRef} className="w-full h-full rounded-lg" style={{ minHeight: "400px" }} />
 
       {/* Map controls */}
-      <div className="absolute top-4 right-4 space-y-2">
+      <div className="absolute top-4 right-4 flex flex-col gap-2 z-[1001]">
         {userLocation && (
-          <Button size="sm" variant="secondary" onClick={centerOnUserLocation} className="shadow-lg">
+          <Button
+            size="sm"
+            variant="default"
+            onClick={centerOnUserLocation}
+            className="shadow-lg"
+            aria-label="Locate me"
+          >
             <Navigation className="h-4 w-4" />
           </Button>
         )}
+        <Button size="sm" variant="default" onClick={zoomIn} className="shadow-lg" aria-label="Zoom in">
+          +
+        </Button>
+        <Button size="sm" variant="default" onClick={zoomOut} className="shadow-lg" aria-label="Zoom out">
+          −
+        </Button>
+        <Button size="sm" variant="default" onClick={fitToMarkers} className="shadow-lg" aria-label="Fit to markers">
+          Fit
+        </Button>
       </div>
 
       {/* Loading fallback */}
@@ -239,51 +344,13 @@ export default function MarketsMap({ markets, selectedMarket, onMarketSelect, cl
 
       {/* Updating indicator (non-blocking) */}
       {isReady && isUpdating && (
-        <div className="absolute top-4 left-4 flex items-center gap-2 rounded-md bg-card/90 border px-3 py-1.5 text-sm text-muted-foreground pointer-events-none shadow-sm">
+        <div className="absolute top-4 left-4 z-[1001] flex items-center gap-2 rounded-md bg-card/90 border px-3 py-1.5 text-sm text-muted-foreground pointer-events-none shadow-sm">
           <Loader2 className="h-4 w-4 animate-spin" />
           <span>{t.loadingMap}</span>
         </div>
       )}
 
-      {/* Selected market info */}
-      {selectedMarket && (
-        <div className="absolute bottom-4 left-4 right-4">
-          <Card className="shadow-lg">
-            <CardHeader className="pb-2">
-              <div className="flex items-start justify-between">
-                <div>
-                  <CardTitle className="text-sm">{selectedMarket.name}</CardTitle>
-                  <p className="text-xs text-muted-foreground">
-                    {selectedMarket.district}, {selectedMarket.state}
-                  </p>
-                </div>
-                <Badge variant="secondary" className="text-xs">
-                  {selectedMarket.status}
-                </Badge>
-              </div>
-            </CardHeader>
-            <CardContent className="pt-0">
-              <div className="flex items-center justify-between">
-                <div className="flex gap-1">
-                  {selectedMarket.parking.available && (
-                    <Badge variant="outline" className="text-xs">
-                      Parking
-                    </Badge>
-                  )}
-                  {selectedMarket.amenities.toilet && (
-                    <Badge variant="outline" className="text-xs">
-                      Toilet
-                    </Badge>
-                  )}
-                </div>
-                <Button size="sm" asChild>
-                  <a href={`/markets/${selectedMarket.id}`}>View Details</a>
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      )}
+      {/* Selected market bottom card removed per requirement */}
     </div>
   )
 }
