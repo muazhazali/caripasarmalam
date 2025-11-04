@@ -120,8 +120,8 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
     router.replace(queryString ? `/?${queryString}` : "/", { scroll: false })
   }, [router])
 
-  // Fetch markets using browser client (for client-side fetching)
-  const fetchMarkets = useCallback(async (state?: string, day?: string) => {
+  // Fetch markets using browser client (with optional search)
+  const fetchMarkets = useCallback(async (state?: string, day?: string, search?: string) => {
     setIsLoadingMarkets(true)
     try {
       const supabase = createBrowserSupabaseClient()
@@ -134,6 +134,20 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
       const dayCode = day && dayMap[day] ? dayMap[day] : undefined
       if (dayCode) {
         query = query.contains('schedule', [{ days: [dayCode] }])
+      }
+
+      const q = (search || '').trim()
+      if (q.length > 0) {
+        // Perform case-insensitive partial match across key text columns
+        const like = `%${q}%`
+        query = query.or(
+          [
+            `name.ilike.${like}`,
+            `district.ilike.${like}`,
+            `state.ilike.${like}`,
+            `address.ilike.${like}`,
+          ].join(',')
+        )
       }
 
       query = query.limit(100)
@@ -163,7 +177,8 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
     updateURLParams(newState, selectedDay)
     fetchMarkets(
       newState !== "All States" && newState !== "Semua Negeri" ? newState : undefined,
-      selectedDay !== "All Days" && selectedDay !== "Semua Hari" ? selectedDay : undefined
+      selectedDay !== "All Days" && selectedDay !== "Semua Hari" ? selectedDay : undefined,
+      searchQuery
     )
   }, [selectedDay, updateURLParams, fetchMarkets])
 
@@ -173,7 +188,8 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
     updateURLParams(selectedState, newDay)
     fetchMarkets(
       selectedState !== "All States" && selectedState !== "Semua Negeri" ? selectedState : undefined,
-      newDay !== "All Days" && newDay !== "Semua Hari" ? newDay : undefined
+      newDay !== "All Days" && newDay !== "Semua Hari" ? newDay : undefined,
+      searchQuery
     )
   }, [selectedState, updateURLParams, fetchMarkets])
 
@@ -181,9 +197,10 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
   const handleBrowseMore = useCallback(() => {
     fetchMarkets(
       selectedState !== "All States" && selectedState !== "Semua Negeri" ? selectedState : undefined,
-      selectedDay !== "All Days" && selectedDay !== "Semua Hari" ? selectedDay : undefined
+      selectedDay !== "All Days" && selectedDay !== "Semua Hari" ? selectedDay : undefined,
+      searchQuery
     )
-  }, [selectedState, selectedDay, fetchMarkets])
+  }, [selectedState, selectedDay, searchQuery, fetchMarkets])
 
   // Handle "Browse All States" - clear state filter
   const handleBrowseAllStates = useCallback(() => {
@@ -237,7 +254,7 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
       accessible_parking: false,
     })
     updateURLParams("All States", "All Days")
-    fetchMarkets(undefined, undefined)
+    fetchMarkets(undefined, undefined, undefined)
   }
 
   // Attempt to get nearest market on first load. If location unavailable/denied, do nothing.
@@ -245,6 +262,18 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
     if (!userLocation) findNearestMarkets()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  // Debounce search to reduce load: query only after user stops typing
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      fetchMarkets(
+        selectedState !== "All States" && selectedState !== "Semua Negeri" ? selectedState : undefined,
+        selectedDay !== "All Days" && selectedDay !== "Semua Hari" ? selectedDay : undefined,
+        searchQuery || undefined
+      )
+    }, 600)
+    return () => clearTimeout(timer)
+  }, [searchQuery, selectedState, selectedDay, fetchMarkets])
 
   const dayOrderCodes: string[] = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"]
 
