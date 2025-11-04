@@ -135,6 +135,7 @@ export interface Translations {
   enableLocationTitle: string
   enableLocationDescription: string
   enableLocationButton: string
+  skipLocationButton: string
   chooseStateButton: string
   showingTopMarkets: string
 
@@ -289,6 +290,7 @@ export const translations: Record<string, Translations> = {
     enableLocationTitle: "See nearby markets",
     enableLocationDescription: "Turn on location to sort by distance and find the closest markets.",
     enableLocationButton: "Use my location",
+    skipLocationButton: "Not now",
     chooseStateButton: "Choose state",
     showingTopMarkets: "Showing top 20 markets (enable location for nearest)",
 
@@ -300,7 +302,7 @@ export const translations: Record<string, Translations> = {
     aboutPara2: "During my time (Muaz, the owner) as a student at UiTM Perlis, I encountered a significant challenge in locating the nearest night market (pasar malam). Information available at the time was limited to general postings on social media (Facebook), which only provided vague locations and operating days.",
     aboutPara3: "Crucially, precise location details and specific operating hours were absent. This lack of accurate information required relying on guesswork, which could lead to wasted time, fuel, effort, and expense if the location was visited outside of operating hours.",
     aboutPara4: "This recurring issue prompted the conception of this project. The primary objective is to facilitate the search for night markets across Malaysia for the benefit of the public.",
-    aboutPara5: "We sincerely hope this website will be a significant asset in your food exploration missions! We encourage you to share this project with your friends, family, neighbours, or just everyone!",
+    aboutPara5: "We sincerely hope this website will be a significant asset in your food exploration missions! We encourage you to share this project with your friends, family, neighbours, and even your cats! 😽",
     aboutPara6: "",
     aboutPara7: "",
   },
@@ -441,6 +443,7 @@ export const translations: Record<string, Translations> = {
     enableLocationTitle: "Lihat pasar berdekatan",
     enableLocationDescription: "Hidupkan lokasi untuk susun ikut jarak dan cari pasar terdekat.",
     enableLocationButton: "Guna lokasi saya",
+    skipLocationButton: "Lain kali",
     chooseStateButton: "Pilih negeri",
     showingTopMarkets: "Menunjukkan 20 pasar teratas (hidupkan lokasi untuk terdekat)",
 
@@ -454,7 +457,7 @@ export const translations: Record<string, Translations> = {
     aboutPara4: "Takde lokasi yang tepat dan masa operasi.",
     aboutPara5: "Takkan nak terjah je ke tempat tu kan? Buatnya datang tapi takde orang. Kan dah bazir masa, minyak, tenaga, duit.",
     aboutPara6: "Maka saya pun terfikir la nak buat projek ni untuk memudahkan orang cari pasar malam di sekitar Malaysia.",
-    aboutPara7: "Harap projek ini membantu dalam misi food hunting anda! Jangan lupa share kat kawan2, family, jiran, sepupu, sepapat, keluarga mentua dan kucing sebelah rumah 😽",
+    aboutPara7: "Harap projek ini membantu dalam misi food hunting anda! Jangan lupa share kat kawan2, family, jiran, sepupu, sepapat, keluarga mentua dan anak2 bulus 😽",
   },
 }
 

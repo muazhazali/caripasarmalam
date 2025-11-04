@@ -23,6 +23,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip"
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Market } from "@/lib/markets-data"
@@ -105,6 +106,7 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
     accessible_parking: false,
   })
   const [showFilters, setShowFilters] = useState(false)
+  const [showLocationModal, setShowLocationModal] = useState(false)
   const suggestFormUrl = process.env.NEXT_PUBLIC_SUGGEST_MARKET_URL || "https://forms.gle/9sXDZYQknTszNSJfA"
 
   // Update URL params when state/day changes
@@ -232,6 +234,8 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
         }
         
         setIsRequestingLocation(false)
+        // Close modal if open
+        setShowLocationModal(false)
       },
       (error) => {
         // Permission denied, unavailable, or timeout; silently skip
@@ -241,6 +245,27 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
       { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 },
     )
   }, [handleStateChange])
+
+  // Mark location modal as seen
+  const markLocationModalSeen = useCallback(() => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("locationModalSeen", "true")
+    }
+  }, [])
+
+  // Handle location permission from modal
+  const handleEnableLocation = useCallback(() => {
+    // Mark modal as seen
+    markLocationModalSeen()
+    // Request location
+    findNearestMarkets()
+  }, [findNearestMarkets, markLocationModalSeen])
+
+  // Handle skip location
+  const handleSkipLocation = useCallback(() => {
+    markLocationModalSeen()
+    setShowLocationModal(false)
+  }, [markLocationModalSeen])
 
   const clearAllFilters = () => {
     setSearchQuery("")
@@ -257,9 +282,18 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
     fetchMarkets(undefined, undefined, undefined)
   }
 
-  // Attempt to get nearest market on first load. If location unavailable/denied, do nothing.
+  // Show location modal on first visit if not already seen
   useEffect(() => {
-    if (!userLocation) findNearestMarkets()
+    if (typeof window !== "undefined" && !userLocation) {
+      const hasSeenLocationModal = localStorage.getItem("locationModalSeen") === "true"
+      if (!hasSeenLocationModal) {
+        // Small delay to ensure page is loaded
+        const timer = setTimeout(() => {
+          setShowLocationModal(true)
+        }, 500)
+        return () => clearTimeout(timer)
+      }
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -754,6 +788,56 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
           </p>
         </div>
       </footer>
+
+      {/* Location Permission Modal */}
+      <Dialog 
+        open={showLocationModal} 
+        onOpenChange={(open) => {
+          setShowLocationModal(open)
+          if (!open) {
+            // Mark as seen when modal is closed
+            markLocationModalSeen()
+          }
+        }}
+      >
+        <DialogContent className="sm:max-w-md" showCloseButton={false}>
+          <DialogHeader>
+            <div className="flex items-center justify-center mb-2">
+              <Navigation2 className="h-8 w-8 text-primary" />
+            </div>
+            <DialogTitle className="text-center">{t.enableLocationTitle}</DialogTitle>
+            <DialogDescription className="text-center">
+              {t.enableLocationDescription}
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="flex flex-col sm:flex-row gap-2 sm:gap-0">
+            <Button
+              variant="outline"
+              onClick={handleSkipLocation}
+              className="w-full sm:w-auto"
+            >
+              {t.skipLocationButton}
+            </Button>
+            <Button
+              onClick={handleEnableLocation}
+              disabled={isRequestingLocation}
+              className="w-full sm:w-auto"
+            >
+              {isRequestingLocation ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  {t.searching}
+                </>
+              ) : (
+                <>
+                  <Navigation2 className="h-4 w-4 mr-2" />
+                  {t.enableLocationButton}
+                </>
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
