@@ -10,7 +10,7 @@ import MarketsMap from "@/components/markets-map"
 import { type Market } from "@/lib/markets-data"
 import { useLanguage } from "@/components/language-provider"
 import { createBrowserSupabaseClient } from "@/lib/supabase-client"
-import { getStateFromCoordinates } from "@/lib/geolocation"
+import { getStateFromCoordinates, requestUserLocation } from "@/lib/geolocation"
 import { dbRowToMarket } from "@/lib/db-transform"
 
 const malaysianStates = [
@@ -168,28 +168,28 @@ export default function MapPage() {
     return sortedMarkets
   }, [sortedMarkets, locationDenied, selectedState])
 
-  const reRequestLocation = useCallback(() => {
-    if (typeof navigator === "undefined" || !navigator.geolocation) return
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const lat = position.coords.latitude
-        const lng = position.coords.longitude
-        setUserLocation({ lat, lng })
-        setLocationDenied(false)
-        const state = getStateFromCoordinates(lat, lng)
-        if (state) {
-          setSelectedState(state)
-          fetchMarkets(state)
-        } else {
-          fetchMarkets()
-        }
-      },
-      (error) => {
-        console.warn("Geolocation error:", error)
-        setLocationDenied(true)
-      },
-      { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
-    )
+  const reRequestLocation = useCallback(async () => {
+    try {
+      const { lat, lng } = await requestUserLocation({ enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 })
+      setUserLocation({ lat, lng })
+      setLocationDenied(false)
+      const state = getStateFromCoordinates(lat, lng)
+      if (state) {
+        setSelectedState(state)
+        fetchMarkets(state)
+      } else {
+        fetchMarkets()
+      }
+    } catch (err) {
+      console.warn("Geolocation request failed:", err)
+      setLocationDenied(true)
+      // Helpful guidance when permission is blocked/denied
+      if (typeof window !== "undefined") {
+        alert(
+          "Location access is blocked or denied. Please enable location for this site in your browser settings and try again."
+        )
+      }
+    }
   }, [fetchMarkets])
 
   return (

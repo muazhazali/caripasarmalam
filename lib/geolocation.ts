@@ -77,3 +77,36 @@ export function isWithinMalaysia(latitude: number, longitude: number): boolean {
   return getStateFromCoordinates(latitude, longitude) !== null
 }
 
+/**
+ * Request the user's current position, triggering the browser permission prompt when eligible.
+ * If permission was previously denied, this will reject so the caller can show guidance.
+ */
+export async function requestUserLocation(options?: PositionOptions): Promise<{ lat: number; lng: number }> {
+  if (typeof navigator === "undefined" || !("geolocation" in navigator)) {
+    throw new Error("Geolocation unsupported")
+  }
+
+  // Best-effort Permissions API check to avoid silent failures when already denied
+  try {
+    if ("permissions" in navigator && typeof (navigator as any).permissions?.query === "function") {
+      const status: PermissionStatus = await (navigator as any).permissions.query({ name: "geolocation" as PermissionName })
+      if (status.state === "denied") {
+        throw new Error("Geolocation denied")
+      }
+      // If "prompt" or "granted", proceed to request which will surface the browser prompt if needed
+    }
+  } catch (_) {
+    // Ignore Permissions API errors and proceed to request; older browsers may not support it
+  }
+
+  const position = await new Promise<GeolocationPosition>((resolve, reject) => {
+    navigator.geolocation.getCurrentPosition(
+      resolve,
+      reject,
+      options ?? { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 },
+    )
+  })
+
+  return { lat: position.coords.latitude, lng: position.coords.longitude }
+}
+
