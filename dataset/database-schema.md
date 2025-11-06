@@ -42,6 +42,12 @@
     "column_default": null
   },
   {
+    "column_name": "shop_list",
+    "data_type": "text",
+    "is_nullable": "YES",
+    "column_default": null
+  },
+  {
     "column_name": "area_m2",
     "data_type": "numeric",
     "is_nullable": "YES",

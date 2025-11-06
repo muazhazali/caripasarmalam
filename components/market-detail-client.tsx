@@ -201,6 +201,24 @@ export default function MarketDetailClient({ market }: MarketDetailClientProps) 
               )}
             </div>
 
+            {/* Shop List */}
+            {market.shop_list && market.shop_list.length > 0 && (
+              <Card>
+                <CardHeader>
+                  <CardTitle>{t.shopList}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex flex-wrap gap-2">
+                    {market.shop_list.map((item, idx) => (
+                      <Badge key={`${item}-${idx}`} variant="secondary">
+                        {item}
+                      </Badge>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
             {/* Schedule */}
             <Card>
               <CardHeader>
