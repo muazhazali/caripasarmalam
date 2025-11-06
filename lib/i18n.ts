@@ -59,6 +59,7 @@ export interface Translations {
   // Market Info
   operatingSchedule: string
   amenitiesFacilities: string
+  shopList: string
   parking: string
   toilet: string
   otherFacilities: string
@@ -214,6 +215,7 @@ export const translations: Record<string, Translations> = {
     // Market Info
     operatingSchedule: "Operating Schedule",
     amenitiesFacilities: "Amenities & Facilities",
+    shopList: "Stalls & Items",
     parking: "Parking",
     toilet: "Toilet",
     otherFacilities: "Other Facilities",
@@ -367,6 +369,7 @@ export const translations: Record<string, Translations> = {
     // Market Info
     operatingSchedule: "Jadual Operasi",
     amenitiesFacilities: "Kemudahan & Fasiliti",
+    shopList: "Senarai Gerai/Item",
     parking: "Tempat Letak Kereta",
     toilet: "Tandas",
     otherFacilities: "Kemudahan Lain",

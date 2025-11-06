@@ -21,6 +21,11 @@ export function dbRowToMarket(row: any): Market {
     area_m2: row.area_m2 || 0,
     total_shop: row.total_shop || null,
     
+    // Parse comma-separated shop list into array
+    shop_list: typeof row.shop_list === 'string' && row.shop_list.trim().length > 0
+      ? row.shop_list.split(',').map((s: string) => s.trim()).filter(Boolean)
+      : undefined,
+    
     // Reconstruct parking object
     parking: {
       available: row.parking_available ?? false,

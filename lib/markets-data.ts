@@ -28,6 +28,8 @@ export interface Market {
   status: string
   area_m2: number
   total_shop: number | null
+  // Optional list of stall types or popular items, split from comma-separated text
+  shop_list?: string[]
   description?: string
   contact?: {
     phone?: string
