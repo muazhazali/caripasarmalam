@@ -60,7 +60,7 @@ export function MarketCard({
   userLocation,
   showAddress = false
 }: MarketCardProps) {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
 
   const distance =
     userLocation && market.location
@@ -82,11 +82,7 @@ export function MarketCard({
     DayCode.Sun
   ];
   function getLocalizedDayFromCode(code: DayCode): string {
-    const locale =
-      typeof window !== 'undefined'
-        ? localStorage.getItem('language') || 'ms'
-        : 'ms';
-    return formatWeekday(code, locale);
+    return formatWeekday(code, language);
   }
 
   const orderedSchedule = [...market.schedule].sort((a, b) => {
