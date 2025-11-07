@@ -411,12 +411,7 @@ export default function HomepageClient({
   ];
 
   function getLocalizedDayFromCode(code: DayCode): string {
-    // Map code to localized label via i18n helpers
-    const locale =
-      typeof window !== 'undefined'
-        ? localStorage.getItem('language') || 'ms'
-        : 'ms';
-    return formatWeekday(code as DayCode, locale);
+    return formatWeekday(code as DayCode, language);
   }
 
   const filteredMarkets = useMemo(() => {
