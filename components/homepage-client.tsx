@@ -1,6 +1,6 @@
-"use client"
+'use client';
 
-import { useState, useMemo, useEffect, useCallback } from "react"
+import { useState, useMemo, useEffect, useCallback } from 'react';
 import {
   Search,
   MapPin,
@@ -14,449 +14,558 @@ import {
   ArrowUp,
   ArrowDown,
   Filter,
-  Loader2,
-} from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Badge } from "@/components/ui/badge"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
-import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip"
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import Link from "next/link"
-import { useRouter } from "next/navigation"
-import { Market } from "@/lib/markets-data"
-import { formatScheduleRule, formatWeekday } from "@/lib/i18n"
-import { useLanguage } from "@/components/language-provider"
-import { getMarketOpenStatus } from "@/lib/utils"
-import { getStateFromCoordinates } from "@/lib/geolocation"
-import { createBrowserSupabaseClient } from "@/lib/supabase-client"
-import { dbRowToMarket } from "@/lib/db-transform"
-import MarketCard from "@/components/market-card"
+  Loader2
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from '@/components/ui/select';
+import { Checkbox } from '@/components/ui/checkbox';
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger
+} from '@/components/ui/sheet';
+import {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent
+} from '@/components/ui/tooltip';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle
+} from '@/components/ui/dialog';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { Market } from '@/lib/markets-data';
+import { formatScheduleRule, formatWeekday } from '@/lib/i18n';
+import { useLanguage } from '@/components/language-provider';
+import { getMarketOpenStatus } from '@/lib/utils';
+import { getStateFromCoordinates } from '@/lib/geolocation';
+import { createBrowserSupabaseClient } from '@/lib/supabase-client';
+import { dbRowToMarket } from '@/lib/db-transform';
+import MarketCard from '@/components/market-card';
+import { DayCode } from '@/app/enums';
 
-
-function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
-  const R = 6371 // Radius of the Earth in kilometers
-  const dLat = ((lat2 - lat1) * Math.PI) / 180
-  const dLon = ((lon2 - lon1) * Math.PI) / 180
+function calculateDistance(
+  lat1: number,
+  lon1: number,
+  lat2: number,
+  lon2: number
+): number {
+  const R = 6371; // Radius of the Earth in kilometers
+  const dLat = ((lat2 - lat1) * Math.PI) / 180;
+  const dLon = ((lon2 - lon1) * Math.PI) / 180;
   const a =
     Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos((lat1 * Math.PI) / 180) * Math.cos((lat2 * Math.PI) / 180) * Math.sin(dLon / 2) * Math.sin(dLon / 2)
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
-  return R * c // Distance in kilometers
+    Math.cos((lat1 * Math.PI) / 180) *
+      Math.cos((lat2 * Math.PI) / 180) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c; // Distance in kilometers
 }
 
 interface HomepageClientProps {
-  initialMarkets: Market[]
-  initialState?: string
+  initialMarkets: Market[];
+  initialState?: string;
 }
 
 const malaysianStates = [
-  "Semua Negeri",
-  "Johor",
-  "Kedah",
-  "Kelantan",
-  "Kuala Lumpur",
-  "Labuan",
-  "Melaka",
-  "Negeri Sembilan",
-  "Pahang",
-  "Pulau Pinang",
-  "Perak",
-  "Perlis",
-  "Putrajaya",
-  "Sabah",
-  "Sarawak",
-  "Selangor",
-  "Terengganu",
-]
+  'Semua Negeri',
+  'Johor',
+  'Kedah',
+  'Kelantan',
+  'Kuala Lumpur',
+  'Labuan',
+  'Melaka',
+  'Negeri Sembilan',
+  'Pahang',
+  'Pulau Pinang',
+  'Perak',
+  'Perlis',
+  'Putrajaya',
+  'Sabah',
+  'Sarawak',
+  'Selangor',
+  'Terengganu'
+];
 
-const daysOfWeek = ["Semua Hari", "Isnin", "Selasa", "Rabu", "Khamis", "Jumaat", "Sabtu", "Ahad"]
+const daysOfWeek = [
+  'Semua Hari',
+  'Isnin',
+  'Selasa',
+  'Rabu',
+  'Khamis',
+  'Jumaat',
+  'Sabtu',
+  'Ahad'
+];
 
 // Map localized day names to day codes
 const dayMap: Record<string, string> = {
-  "Isnin": "mon",
-  "Selasa": "tue",
-  "Rabu": "wed",
-  "Khamis": "thu",
-  "Jumaat": "fri",
-  "Sabtu": "sat",
-  "Ahad": "sun",
-}
+  Isnin: 'mon',
+  Selasa: 'tue',
+  Rabu: 'wed',
+  Khamis: 'thu',
+  Jumaat: 'fri',
+  Sabtu: 'sat',
+  Ahad: 'sun'
+};
 
-export default function HomepageClient({ initialMarkets, initialState }: HomepageClientProps) {
-  const { t } = useLanguage()
-  const router = useRouter()
-  const [markets, setMarkets] = useState<Market[]>(initialMarkets)
-  const [isLoadingMarkets, setIsLoadingMarkets] = useState(false)
-  const [searchQuery, setSearchQuery] = useState("")
-  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null)
-  const [detectedState, setDetectedState] = useState<string | null>(null)
-  const [isRequestingLocation, setIsRequestingLocation] = useState(false)
-  const [sortBy, setSortBy] = useState("smart")
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc")
-  const [selectedState, setSelectedState] = useState(initialState || "All States")
-  const [selectedDay, setSelectedDay] = useState("All Days")
-  const [openNow, setOpenNow] = useState<boolean>(false)
+export default function HomepageClient({
+  initialMarkets,
+  initialState
+}: HomepageClientProps) {
+  const { t, language } = useLanguage();
+  const router = useRouter();
+  const [markets, setMarkets] = useState<Market[]>(initialMarkets);
+  const [isLoadingMarkets, setIsLoadingMarkets] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [userLocation, setUserLocation] = useState<{
+    lat: number;
+    lng: number;
+  } | null>(null);
+  const [detectedState, setDetectedState] = useState<string | null>(null);
+  const [isRequestingLocation, setIsRequestingLocation] = useState(false);
+  const [sortBy, setSortBy] = useState('smart');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
+  const [selectedState, setSelectedState] = useState(
+    initialState || 'All States'
+  );
+  const [selectedDay, setSelectedDay] = useState('All Days');
+  const [openNow, setOpenNow] = useState<boolean>(false);
   const [filters, setFilters] = useState({
     parking: false,
     toilet: false,
     prayer_room: false,
-    accessible_parking: false,
-  })
-  const [showFilters, setShowFilters] = useState(false)
-  const [showLocationModal, setShowLocationModal] = useState(false)
-  const suggestFormUrl = process.env.NEXT_PUBLIC_SUGGEST_MARKET_URL || "https://forms.gle/9sXDZYQknTszNSJfA"
+    accessible_parking: false
+  });
+  const [showFilters, setShowFilters] = useState(false);
+  const [showLocationModal, setShowLocationModal] = useState(false);
+  const suggestFormUrl =
+    process.env.NEXT_PUBLIC_SUGGEST_MARKET_URL ||
+    'https://forms.gle/9sXDZYQknTszNSJfA';
 
   // Update URL params when state/day changes
-  const updateURLParams = useCallback((state: string, day: string) => {
-    const params = new URLSearchParams()
-    if (state && state !== "All States" && state !== "Semua Negeri") {
-      params.set("state", state)
-    }
-    if (day && day !== "All Days" && day !== "Semua Hari") {
-      params.set("day", day)
-    }
-    const queryString = params.toString()
-    router.replace(queryString ? `/?${queryString}` : "/", { scroll: false })
-  }, [router])
+  const updateURLParams = useCallback(
+    (state: string, day: string) => {
+      const params = new URLSearchParams();
+      if (state && state !== 'All States' && state !== 'Semua Negeri') {
+        params.set('state', state);
+      }
+      if (day && day !== 'All Days' && day !== 'Semua Hari') {
+        params.set('day', day);
+      }
+      const queryString = params.toString();
+      router.replace(queryString ? `/?${queryString}` : '/', { scroll: false });
+    },
+    [router]
+  );
 
   // Fetch markets using browser client (with optional search)
-  const fetchMarkets = useCallback(async (state?: string, day?: string, search?: string, limit: number = 100) => {
-    setIsLoadingMarkets(true)
-    try {
-      const supabase = createBrowserSupabaseClient()
-      let query = supabase.from('pasar_malams').select('*').eq('status', 'Active')
+  const fetchMarkets = useCallback(
+    async (
+      state?: string,
+      day?: string,
+      search?: string,
+      limit: number = 100
+    ) => {
+      setIsLoadingMarkets(true);
+      try {
+        const supabase = createBrowserSupabaseClient();
+        let query = supabase
+          .from('pasar_malams')
+          .select('*')
+          .eq('status', 'Active');
 
-      if (state && state !== "All States" && state !== "Semua Negeri") {
-        query = query.eq('state', state)
+        if (state && state !== 'All States' && state !== 'Semua Negeri') {
+          query = query.eq('state', state);
+        }
+
+        const dayCode = day && dayMap[day] ? dayMap[day] : undefined;
+        if (dayCode) {
+          query = query.contains('schedule', [{ days: [dayCode] }]);
+        }
+
+        const q = (search || '').trim();
+        if (q.length > 0) {
+          // Perform case-insensitive partial match across key text columns
+          const like = `%${q}%`;
+          query = query.or(
+            [
+              `name.ilike.${like}`,
+              `district.ilike.${like}`,
+              `state.ilike.${like}`,
+              `address.ilike.${like}`
+            ].join(',')
+          );
+        }
+
+        query = query.limit(limit);
+
+        const { data, error } = await query;
+
+        if (error) {
+          console.error('Error fetching markets:', error);
+          return;
+        }
+
+        if (data) {
+          // Transform database rows to Market objects
+          const transformedMarkets = data.map(dbRowToMarket);
+          setMarkets(transformedMarkets);
+        }
+      } catch (error) {
+        console.error('Error fetching markets:', error);
+      } finally {
+        setIsLoadingMarkets(false);
       }
-
-      const dayCode = day && dayMap[day] ? dayMap[day] : undefined
-      if (dayCode) {
-        query = query.contains('schedule', [{ days: [dayCode] }])
-      }
-
-      const q = (search || '').trim()
-      if (q.length > 0) {
-        // Perform case-insensitive partial match across key text columns
-        const like = `%${q}%`
-        query = query.or(
-          [
-            `name.ilike.${like}`,
-            `district.ilike.${like}`,
-            `state.ilike.${like}`,
-            `address.ilike.${like}`,
-          ].join(',')
-        )
-      }
-
-      query = query.limit(limit)
-
-      const { data, error } = await query
-
-      if (error) {
-        console.error("Error fetching markets:", error)
-        return
-      }
-
-      if (data) {
-        // Transform database rows to Market objects
-        const transformedMarkets = data.map(dbRowToMarket)
-        setMarkets(transformedMarkets)
-      }
-    } catch (error) {
-      console.error("Error fetching markets:", error)
-    } finally {
-      setIsLoadingMarkets(false)
-    }
-  }, [])
+    },
+    []
+  );
 
   // Handle state change - fetch from server and update URL
-  const handleStateChange = useCallback((newState: string, limit?: number) => {
-    setSelectedState(newState)
-    updateURLParams(newState, selectedDay)
-    fetchMarkets(
-      newState !== "All States" && newState !== "Semua Negeri" ? newState : undefined,
-      selectedDay !== "All Days" && selectedDay !== "Semua Hari" ? selectedDay : undefined,
-      searchQuery,
-      limit
-    )
-  }, [selectedDay, updateURLParams, fetchMarkets, searchQuery])
+  const handleStateChange = useCallback(
+    (newState: string, limit?: number) => {
+      setSelectedState(newState);
+      updateURLParams(newState, selectedDay);
+      fetchMarkets(
+        newState !== 'All States' && newState !== 'Semua Negeri'
+          ? newState
+          : undefined,
+        selectedDay !== 'All Days' && selectedDay !== 'Semua Hari'
+          ? selectedDay
+          : undefined,
+        searchQuery,
+        limit
+      );
+    },
+    [selectedDay, updateURLParams, fetchMarkets, searchQuery]
+  );
 
   // Handle day change - fetch from server and update URL
-  const handleDayChange = useCallback((newDay: string) => {
-    setSelectedDay(newDay)
-    updateURLParams(selectedState, newDay)
-    fetchMarkets(
-      selectedState !== "All States" && selectedState !== "Semua Negeri" ? selectedState : undefined,
-      newDay !== "All Days" && newDay !== "Semua Hari" ? newDay : undefined,
-      searchQuery
-    )
-  }, [selectedState, updateURLParams, fetchMarkets])
+  const handleDayChange = useCallback(
+    (newDay: string) => {
+      setSelectedDay(newDay);
+      updateURLParams(selectedState, newDay);
+      fetchMarkets(
+        selectedState !== 'All States' && selectedState !== 'Semua Negeri'
+          ? selectedState
+          : undefined,
+        newDay !== 'All Days' && newDay !== 'Semua Hari' ? newDay : undefined,
+        searchQuery
+      );
+    },
+    [selectedState, updateURLParams, fetchMarkets]
+  );
 
   // Handle "Browse More" - load more markets from current state
   const handleBrowseMore = useCallback(() => {
     fetchMarkets(
-      selectedState !== "All States" && selectedState !== "Semua Negeri" ? selectedState : undefined,
-      selectedDay !== "All Days" && selectedDay !== "Semua Hari" ? selectedDay : undefined,
+      selectedState !== 'All States' && selectedState !== 'Semua Negeri'
+        ? selectedState
+        : undefined,
+      selectedDay !== 'All Days' && selectedDay !== 'Semua Hari'
+        ? selectedDay
+        : undefined,
       searchQuery
-    )
-  }, [selectedState, selectedDay, searchQuery, fetchMarkets])
+    );
+  }, [selectedState, selectedDay, searchQuery, fetchMarkets]);
 
   // Handle "Browse All States" - clear state filter
   const handleBrowseAllStates = useCallback(() => {
-    setSelectedState("All States")
-    updateURLParams("All States", selectedDay)
-    fetchMarkets(undefined, selectedDay !== "All Days" && selectedDay !== "Semua Hari" ? selectedDay : undefined)
-  }, [selectedDay, updateURLParams, fetchMarkets])
+    setSelectedState('All States');
+    updateURLParams('All States', selectedDay);
+    fetchMarkets(
+      undefined,
+      selectedDay !== 'All Days' && selectedDay !== 'Semua Hari'
+        ? selectedDay
+        : undefined
+    );
+  }, [selectedDay, updateURLParams, fetchMarkets]);
 
   const findNearestMarkets = useCallback(() => {
-    if (typeof navigator === "undefined" || !navigator.geolocation) {
+    if (typeof navigator === 'undefined' || !navigator.geolocation) {
       // Geolocation not available; silently skip
-      return
+      return;
     }
 
-    setIsRequestingLocation(true)
+    setIsRequestingLocation(true);
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        const lat = position.coords.latitude
-        const lng = position.coords.longitude
-        setUserLocation({ lat, lng })
-        setSearchQuery("")
-        
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+        setUserLocation({ lat, lng });
+        setSearchQuery('');
+
         // Detect state from coordinates
-        const state = getStateFromCoordinates(lat, lng)
+        const state = getStateFromCoordinates(lat, lng);
         if (state) {
-          setDetectedState(state)
+          setDetectedState(state);
           // Auto-filter by detected state with limit of 20 markets
-          handleStateChange(state, 20)
+          handleStateChange(state, 20);
         }
-        
-        setIsRequestingLocation(false)
+
+        setIsRequestingLocation(false);
         // Close modal if open
-        setShowLocationModal(false)
+        setShowLocationModal(false);
       },
       (error) => {
         // Permission denied, unavailable, or timeout; silently skip
-        console.warn("Geolocation error:", error)
-        setIsRequestingLocation(false)
+        console.warn('Geolocation error:', error);
+        setIsRequestingLocation(false);
       },
-      { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 },
-    )
-  }, [handleStateChange])
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+    );
+  }, [handleStateChange]);
 
   // Mark location modal as seen
   const markLocationModalSeen = useCallback(() => {
-    if (typeof window !== "undefined") {
-      localStorage.setItem("locationModalSeen", "true")
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('locationModalSeen', 'true');
     }
-  }, [])
+  }, []);
 
   // Handle location permission from modal
   const handleEnableLocation = useCallback(() => {
     // Mark modal as seen
-    markLocationModalSeen()
+    markLocationModalSeen();
     // Request location
-    findNearestMarkets()
-  }, [findNearestMarkets, markLocationModalSeen])
+    findNearestMarkets();
+  }, [findNearestMarkets, markLocationModalSeen]);
 
   // Handle skip location
   const handleSkipLocation = useCallback(() => {
-    markLocationModalSeen()
-    setShowLocationModal(false)
-  }, [markLocationModalSeen])
+    markLocationModalSeen();
+    setShowLocationModal(false);
+  }, [markLocationModalSeen]);
 
   const clearAllFilters = () => {
-    setSearchQuery("")
-    setSelectedState("All States")
-    setSelectedDay("All Days")
-    setOpenNow(false)
+    setSearchQuery('');
+    setSelectedState('All States');
+    setSelectedDay('All Days');
+    setOpenNow(false);
     setFilters({
       parking: false,
       toilet: false,
       prayer_room: false,
-      accessible_parking: false,
-    })
-    updateURLParams("All States", "All Days")
-    fetchMarkets(undefined, undefined, undefined)
-  }
+      accessible_parking: false
+    });
+    updateURLParams('All States', 'All Days');
+    fetchMarkets(undefined, undefined, undefined);
+  };
 
   // Show location modal on first visit if not already seen
   useEffect(() => {
-    if (typeof window !== "undefined" && !userLocation) {
-      const hasSeenLocationModal = localStorage.getItem("locationModalSeen") === "true"
+    if (typeof window !== 'undefined' && !userLocation) {
+      const hasSeenLocationModal =
+        localStorage.getItem('locationModalSeen') === 'true';
       if (!hasSeenLocationModal) {
         // Small delay to ensure page is loaded
         const timer = setTimeout(() => {
-          setShowLocationModal(true)
-        }, 500)
-        return () => clearTimeout(timer)
+          setShowLocationModal(true);
+        }, 500);
+        return () => clearTimeout(timer);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, []);
 
   // Debounce search to reduce load: query only after user stops typing
   useEffect(() => {
     const timer = setTimeout(() => {
       fetchMarkets(
-        selectedState !== "All States" && selectedState !== "Semua Negeri" ? selectedState : undefined,
-        selectedDay !== "All Days" && selectedDay !== "Semua Hari" ? selectedDay : undefined,
+        selectedState !== 'All States' && selectedState !== 'Semua Negeri'
+          ? selectedState
+          : undefined,
+        selectedDay !== 'All Days' && selectedDay !== 'Semua Hari'
+          ? selectedDay
+          : undefined,
         searchQuery || undefined
-      )
-    }, 600)
-    return () => clearTimeout(timer)
-  }, [searchQuery, selectedState, selectedDay, fetchMarkets])
+      );
+    }, 600);
+    return () => clearTimeout(timer);
+  }, [searchQuery, selectedState, selectedDay, fetchMarkets]);
 
-  const dayOrderCodes: string[] = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"]
+  const dayOrderCodes: DayCode[] = [
+    DayCode.Mon,
+    DayCode.Tue,
+    DayCode.Wed,
+    DayCode.Thu,
+    DayCode.Fri,
+    DayCode.Sat,
+    DayCode.Sun
+  ];
 
-  function getLocalizedDayFromCode(code: string): string {
-    // Map code to localized label via i18n helpers
-    const locale = typeof window !== "undefined" ? localStorage.getItem("language") || "ms" : "ms"
-    return formatWeekday(code as any, locale)
-  }
-
-  function renderScheduleBadges(market: Market) {
-    const ordered = [...market.schedule].sort((a, b) => {
-      const aIdx = Math.min(
-        ...a.days.map((d) => dayOrderCodes.indexOf(d)).filter((i) => i >= 0),
-      )
-      const bIdx = Math.min(
-        ...b.days.map((d) => dayOrderCodes.indexOf(d)).filter((i) => i >= 0),
-      )
-      return aIdx - bIdx
-    })
-    return (
-      <div className="flex flex-wrap gap-2 mb-4">
-        {ordered.map((sch) => {
-          const locale = typeof window !== "undefined" ? localStorage.getItem("language") || "ms" : "ms"
-          const times = sch.times.map((s) => `${s.start}–${s.end}`).join(", ")
-          const dayLabel = sch.days.map((d) => getLocalizedDayFromCode(d)).join(", ")
-          const aria = `${dayLabel}, ${times}`
-          return (
-            <Badge key={`${market.id}-${sch.days.join('-')}`} variant="outline" className="flex items-center gap-1" aria-label={aria}>
-              <CalendarDays className="h-3.5 w-3.5" aria-hidden="true" />
-              <span className="whitespace-nowrap">{dayLabel}</span>
-              <span className="text-muted-foreground">•</span>
-              <Clock className="h-3.5 w-3.5" aria-hidden="true" />
-              <span className="whitespace-nowrap">{times}</span>
-            </Badge>
-          )
-        })}
-      </div>
-    )
+  function getLocalizedDayFromCode(code: DayCode): string {
+    return formatWeekday(code as DayCode, language);
   }
 
   const filteredMarkets = useMemo(() => {
     let filtered = markets.filter((market) => {
       const matchesSearch =
-        searchQuery === "" ||
+        searchQuery === '' ||
         market.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         market.district.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        market.state.toLowerCase().includes(searchQuery.toLowerCase())
+        market.state.toLowerCase().includes(searchQuery.toLowerCase());
 
-      const matchesState = selectedState === "All States" || market.state === selectedState
+      const matchesState =
+        selectedState === 'All States' || market.state === selectedState;
 
-      const matchesDay = selectedDay === "All Days" || market.schedule.some((schedule) => schedule.days.some(day => {
-        const dayMap: { [key: string]: string } = {
-          "Isnin": "mon",
-          "Selasa": "tue", 
-          "Rabu": "wed",
-          "Khamis": "thu",
-          "Jumaat": "fri",
-          "Sabtu": "sat",
-          "Ahad": "sun"
-        }
-        return dayMap[selectedDay] === day
-      }))
+      const matchesDay =
+        selectedDay === 'All Days' ||
+        market.schedule.some((schedule) =>
+          schedule.days.some((day) => {
+            const dayMap: { [key: string]: string } = {
+              Isnin: 'mon',
+              Selasa: 'tue',
+              Rabu: 'wed',
+              Khamis: 'thu',
+              Jumaat: 'fri',
+              Sabtu: 'sat',
+              Ahad: 'sun'
+            };
+            return dayMap[selectedDay] === day;
+          })
+        );
 
       const matchesFilters =
         (!filters.parking || market.parking.available) &&
         (!filters.toilet || market.amenities.toilet) &&
         (!filters.prayer_room || market.amenities.prayer_room) &&
-        (!filters.accessible_parking || market.parking.accessible)
+        (!filters.accessible_parking || market.parking.accessible);
 
-      const matchesOpen = !openNow || getMarketOpenStatus(market).status === "open"
+      const matchesOpen =
+        !openNow || getMarketOpenStatus(market).status === 'open';
 
-      return matchesSearch && matchesState && matchesDay && matchesFilters && matchesOpen
-    })
+      return (
+        matchesSearch &&
+        matchesState &&
+        matchesDay &&
+        matchesFilters &&
+        matchesOpen
+      );
+    });
 
     // Sort by selected criteria and order
     filtered = filtered.sort((a, b) => {
-      let comparison = 0
-      
+      let comparison = 0;
+
       switch (sortBy) {
-        case "smart":
+        case 'smart':
           // Multi-tier sort: Open status first, then distance, then name
-          const aOpen = getMarketOpenStatus(a).status === "open"
-          const bOpen = getMarketOpenStatus(b).status === "open"
-          
+          const aOpen = getMarketOpenStatus(a).status === 'open';
+          const bOpen = getMarketOpenStatus(b).status === 'open';
+
           // Primary: Open status (open markets first)
           if (aOpen !== bOpen) {
-            comparison = aOpen ? -1 : 1
+            comparison = aOpen ? -1 : 1;
           } else if (userLocation) {
             // Secondary: Distance from user (if location available)
             const distanceA = a.location
-              ? calculateDistance(userLocation.lat, userLocation.lng, a.location.latitude, a.location.longitude)
-              : Number.POSITIVE_INFINITY
+              ? calculateDistance(
+                  userLocation.lat,
+                  userLocation.lng,
+                  a.location.latitude,
+                  a.location.longitude
+                )
+              : Number.POSITIVE_INFINITY;
             const distanceB = b.location
-              ? calculateDistance(userLocation.lat, userLocation.lng, b.location.latitude, b.location.longitude)
-              : Number.POSITIVE_INFINITY
-            comparison = distanceA - distanceB
+              ? calculateDistance(
+                  userLocation.lat,
+                  userLocation.lng,
+                  b.location.latitude,
+                  b.location.longitude
+                )
+              : Number.POSITIVE_INFINITY;
+            comparison = distanceA - distanceB;
           } else {
             // Tertiary: Name (alphabetical)
-            comparison = a.name.localeCompare(b.name)
+            comparison = a.name.localeCompare(b.name);
           }
-          break
-        case "name":
-          comparison = a.name.localeCompare(b.name)
-          break
-        case "state":
-          comparison = a.state.localeCompare(b.state) || a.district.localeCompare(b.district)
-          break
-        case "size":
-          comparison = (a.total_shop || 0) - (b.total_shop || 0)
-          break
-        case "area":
-          comparison = (a.area_m2 || 0) - (b.area_m2 || 0)
-          break
-        case "distance":
+          break;
+        case 'name':
+          comparison = a.name.localeCompare(b.name);
+          break;
+        case 'state':
+          comparison =
+            a.state.localeCompare(b.state) ||
+            a.district.localeCompare(b.district);
+          break;
+        case 'size':
+          comparison = (a.total_shop || 0) - (b.total_shop || 0);
+          break;
+        case 'area':
+          comparison = (a.area_m2 || 0) - (b.area_m2 || 0);
+          break;
+        case 'distance':
           if (userLocation) {
             const distanceA = a.location
-              ? calculateDistance(userLocation.lat, userLocation.lng, a.location.latitude, a.location.longitude)
-              : Number.POSITIVE_INFINITY
+              ? calculateDistance(
+                  userLocation.lat,
+                  userLocation.lng,
+                  a.location.latitude,
+                  a.location.longitude
+                )
+              : Number.POSITIVE_INFINITY;
             const distanceB = b.location
-              ? calculateDistance(userLocation.lat, userLocation.lng, b.location.latitude, b.location.longitude)
-              : Number.POSITIVE_INFINITY
-            comparison = distanceA - distanceB
+              ? calculateDistance(
+                  userLocation.lat,
+                  userLocation.lng,
+                  b.location.latitude,
+                  b.location.longitude
+                )
+              : Number.POSITIVE_INFINITY;
+            comparison = distanceA - distanceB;
           } else {
-            comparison = a.name.localeCompare(b.name)
+            comparison = a.name.localeCompare(b.name);
           }
-          break
+          break;
         default:
-          comparison = a.name.localeCompare(b.name)
+          comparison = a.name.localeCompare(b.name);
       }
-      
-      return sortOrder === "asc" ? comparison : -comparison
-    })
 
-    return filtered
-  }, [searchQuery, userLocation, sortBy, sortOrder, markets, selectedState, selectedDay, filters, openNow])
+      return sortOrder === 'asc' ? comparison : -comparison;
+    });
+
+    return filtered;
+  }, [
+    searchQuery,
+    userLocation,
+    sortBy,
+    sortOrder,
+    markets,
+    selectedState,
+    selectedDay,
+    filters,
+    openNow
+  ]);
 
   const formatArea = (areaM2: number) => {
     if (areaM2 >= 10000) {
-      return `${(areaM2 / 1000000).toFixed(2)} ${t.kmSquared}`
+      return `${(areaM2 / 1000000).toFixed(2)} ${t.kmSquared}`;
     }
-    return `${Math.round(areaM2)} m²`
-  }
+    return `${Math.round(areaM2)} m²`;
+  };
 
   function isPositiveNumber(value: unknown): boolean {
-    if (value === null || value === undefined) return false
-    const n = typeof value === "string" ? Number(value) : (value as number)
-    if (Number.isNaN(n)) return false
-    return n > 0
+    if (value === null || value === undefined) return false;
+    const n = typeof value === 'string' ? Number(value) : (value as number);
+    if (Number.isNaN(n)) return false;
+    return n > 0;
   }
 
   return (
@@ -464,7 +573,9 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
       {/* Hero Section */}
       <section className="bg-gradient-to-b from-card to-background pt-8 md:pt-16 pb-2 md:pb-4">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl md:text-5xl font-bold text-foreground mb-4 md:mb-6 text-balance">{t.heroTitle}</h2>
+          <h2 className="text-3xl md:text-5xl font-bold text-foreground mb-4 md:mb-6 text-balance">
+            {t.heroTitle}
+          </h2>
           <p className="text-base md:text-xl text-muted-foreground mb-6 md:mb-8 max-w-2xl mx-auto text-pretty">
             {t.heroDescription}
           </p>
@@ -482,11 +593,8 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
                   />
                 </div>
               </div>
-
             </div>
           </div>
-
-          
         </div>
       </section>
 
@@ -503,15 +611,15 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
                     : t.featuredMarkets}
                 </h3>
               </div>
-              
+
               {/* Desktop Action Buttons */}
               <div className="hidden md:flex items-center gap-2">
                 {!userLocation && (
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <Button 
-                        onClick={findNearestMarkets} 
-                        disabled={isRequestingLocation} 
+                      <Button
+                        onClick={findNearestMarkets}
+                        disabled={isRequestingLocation}
                         variant="default"
                         className="gap-2"
                       >
@@ -527,7 +635,11 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <Button asChild variant="outline" className="gap-2">
-                      <a href={suggestFormUrl} target="_blank" rel="noopener noreferrer">
+                      <a
+                        href={suggestFormUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
                         <MapPin className="h-4 w-4" />
                         {t.suggestMarket}
                       </a>
@@ -543,9 +655,9 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
             {/* Mobile Action Buttons */}
             <div className="md:hidden grid grid-cols-2 gap-3 mb-4">
               {!userLocation && (
-                <Button 
-                  onClick={findNearestMarkets} 
-                  disabled={isRequestingLocation} 
+                <Button
+                  onClick={findNearestMarkets}
+                  disabled={isRequestingLocation}
                   className="gap-2 h-auto p-3 flex flex-col items-center justify-center"
                 >
                   <Navigation2 className="h-4 w-4" />
@@ -554,8 +666,15 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
                   </span>
                 </Button>
               )}
-              <Button asChild className="gap-2 h-auto p-3 flex flex-col items-center justify-center">
-                <a href={suggestFormUrl} target="_blank" rel="noopener noreferrer">
+              <Button
+                asChild
+                className="gap-2 h-auto p-3 flex flex-col items-center justify-center"
+              >
+                <a
+                  href={suggestFormUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <MapPin className="h-4 w-4" />
                   <span className="text-xs font-medium">{t.suggestMarket}</span>
                 </a>
@@ -567,7 +686,10 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
               {/* Mobile filter button */}
               <Sheet open={showFilters} onOpenChange={setShowFilters}>
                 <SheetTrigger asChild>
-                  <Button className="md:hidden rounded-full h-10 w-10 p-0" variant="outline">
+                  <Button
+                    className="md:hidden rounded-full h-10 w-10 p-0"
+                    variant="outline"
+                  >
                     <Filter className="h-5 w-5" />
                   </Button>
                 </SheetTrigger>
@@ -577,30 +699,45 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
                   </SheetHeader>
                   <div className="mt-4 space-y-4">
                     <div>
-                      <label className="text-sm font-medium text-foreground mb-2 block">{t.stateLabel}</label>
-                      <Select value={selectedState} onValueChange={handleStateChange}>
+                      <label className="text-sm font-medium text-foreground mb-2 block">
+                        {t.stateLabel}
+                      </label>
+                      <Select
+                        value={selectedState}
+                        onValueChange={handleStateChange}
+                      >
                         <SelectTrigger>
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
                           {malaysianStates.map((state) => (
                             <SelectItem key={state} value={state}>
-                              {state === "All States" || state === "Semua Negeri" ? t.allStates : state}
+                              {state === 'All States' ||
+                              state === 'Semua Negeri'
+                                ? t.allStates
+                                : state}
                             </SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
                     </div>
                     <div>
-                      <label className="text-sm font-medium text-foreground mb-2 block">{t.dayLabel}</label>
-                      <Select value={selectedDay} onValueChange={handleDayChange}>
+                      <label className="text-sm font-medium text-foreground mb-2 block">
+                        {t.dayLabel}
+                      </label>
+                      <Select
+                        value={selectedDay}
+                        onValueChange={handleDayChange}
+                      >
                         <SelectTrigger>
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
                           {daysOfWeek.map((day) => (
                             <SelectItem key={day} value={day}>
-                              {day === "All Days" ? t.allDays : t[day.toLowerCase() as keyof typeof t] || day}
+                              {day === 'All Days'
+                                ? t.allDays
+                                : t[day.toLowerCase() as keyof typeof t] || day}
                             </SelectItem>
                           ))}
                         </SelectContent>
@@ -612,10 +749,16 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
                           id="parking"
                           checked={filters.parking}
                           onCheckedChange={(checked) =>
-                            setFilters((prev) => ({ ...prev, parking: checked as boolean }))
+                            setFilters((prev) => ({
+                              ...prev,
+                              parking: checked as boolean
+                            }))
                           }
                         />
-                        <label htmlFor="parking" className="text-sm font-medium">
+                        <label
+                          htmlFor="parking"
+                          className="text-sm font-medium"
+                        >
                           {t.parking}
                         </label>
                       </div>
@@ -624,7 +767,10 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
                           id="toilet"
                           checked={filters.toilet}
                           onCheckedChange={(checked) =>
-                            setFilters((prev) => ({ ...prev, toilet: checked as boolean }))
+                            setFilters((prev) => ({
+                              ...prev,
+                              toilet: checked as boolean
+                            }))
                           }
                         />
                         <label htmlFor="toilet" className="text-sm font-medium">
@@ -636,10 +782,16 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
                           id="prayer_room"
                           checked={filters.prayer_room}
                           onCheckedChange={(checked) =>
-                            setFilters((prev) => ({ ...prev, prayer_room: checked as boolean }))
+                            setFilters((prev) => ({
+                              ...prev,
+                              prayer_room: checked as boolean
+                            }))
                           }
                         />
-                        <label htmlFor="prayer_room" className="text-sm font-medium">
+                        <label
+                          htmlFor="prayer_room"
+                          className="text-sm font-medium"
+                        >
                           {t.prayerRoom}
                         </label>
                       </div>
@@ -648,19 +800,32 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
                           id="accessible_parking"
                           checked={filters.accessible_parking}
                           onCheckedChange={(checked) =>
-                            setFilters((prev) => ({ ...prev, accessible_parking: checked as boolean }))
+                            setFilters((prev) => ({
+                              ...prev,
+                              accessible_parking: checked as boolean
+                            }))
                           }
                         />
-                        <label htmlFor="accessible_parking" className="text-sm font-medium">
+                        <label
+                          htmlFor="accessible_parking"
+                          className="text-sm font-medium"
+                        >
                           {t.accessibleParking}
                         </label>
                       </div>
                     </div>
                     <div className="flex gap-2 pt-4">
-                      <Button variant="outline" onClick={clearAllFilters} className="flex-1">
+                      <Button
+                        variant="outline"
+                        onClick={clearAllFilters}
+                        className="flex-1"
+                      >
                         {t.clearAllFilters}
                       </Button>
-                      <Button onClick={() => setShowFilters(false)} className="flex-1">
+                      <Button
+                        onClick={() => setShowFilters(false)}
+                        className="flex-1"
+                      >
                         {t.applyFilters}
                       </Button>
                     </div>
@@ -676,30 +841,44 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="smart">Smart Sort (Open + Nearest)</SelectItem>
+                    <SelectItem value="smart">
+                      Smart Sort (Open + Nearest)
+                    </SelectItem>
                     <SelectItem value="name">{t.sortByName}</SelectItem>
                     <SelectItem value="state">{t.sortByLocation}</SelectItem>
                     <SelectItem value="size">{t.sortByStallCount}</SelectItem>
                     <SelectItem value="area">{t.sortByAreaSize}</SelectItem>
-                    {userLocation && <SelectItem value="distance">{t.sortByDistance}</SelectItem>}
+                    {userLocation && (
+                      <SelectItem value="distance">
+                        {t.sortByDistance}
+                      </SelectItem>
+                    )}
                   </SelectContent>
                 </Select>
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
+                  onClick={() =>
+                    setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')
+                  }
                   className="px-3"
-                  aria-label={sortOrder === "asc" ? "Sort ascending" : "Sort descending"}
+                  aria-label={
+                    sortOrder === 'asc' ? 'Sort ascending' : 'Sort descending'
+                  }
                 >
-                  {sortOrder === "asc" ? <ArrowUp className="h-4 w-4" /> : <ArrowDown className="h-4 w-4" />}
+                  {sortOrder === 'asc' ? (
+                    <ArrowUp className="h-4 w-4" />
+                  ) : (
+                    <ArrowDown className="h-4 w-4" />
+                  )}
                 </Button>
                 {(searchQuery || userLocation) && (
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={() => {
-                      setSearchQuery("")
-                      setUserLocation(null)
+                      setSearchQuery('');
+                      setUserLocation(null);
                     }}
                   >
                     {t.clearAllFilters}
@@ -717,58 +896,75 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
           {isLoadingMarkets ? (
             <div className="text-center py-12">
               <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-primary" />
-              <p className="text-muted-foreground">{t.searching || "Loading markets..."}</p>
+              <p className="text-muted-foreground">
+                {t.searching || 'Loading markets...'}
+              </p>
             </div>
           ) : filteredMarkets.length === 0 ? (
             <div className="text-center py-12">
-              <p className="text-muted-foreground text-lg">{t.noMarketsFound}</p>
+              <p className="text-muted-foreground text-lg">
+                {t.noMarketsFound}
+              </p>
               <p className="text-muted-foreground">{t.tryAdjustingFilters}</p>
-              {selectedState !== "All States" && selectedState !== "Semua Negeri" && (
-                <Button onClick={handleBrowseAllStates} variant="outline" className="mt-4">
-                  {t.viewAllMarkets || "Browse All States"}
-                </Button>
-              )}
+              {selectedState !== 'All States' &&
+                selectedState !== 'Semua Negeri' && (
+                  <Button
+                    onClick={handleBrowseAllStates}
+                    variant="outline"
+                    className="mt-4"
+                  >
+                    {t.viewAllMarkets || 'Browse All States'}
+                  </Button>
+                )}
             </div>
           ) : (
             <>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-              {filteredMarkets.slice(0, 20).map((market) => (
-                <MarketCard key={market.id} market={market} userLocation={userLocation} showAddress={false} />
-              ))}
-            </div>
-            
-            {/* Action buttons */}
-            <div className="flex flex-col sm:flex-row gap-3 justify-center mt-8">
-              {selectedState !== "All States" && selectedState !== "Semua Negeri" && (
-                <>
-                  <Button onClick={handleBrowseMore} variant="outline" disabled={isLoadingMarkets}>
-                    {isLoadingMarkets ? (
-                      <>
-                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                        {t.searching || "Loading..."}
-                      </>
-                    ) : (
-                      "Browse More Markets"
-                    )}
-                  </Button>
-                  <Button onClick={handleBrowseAllStates} variant="outline">
-                    Browse All States
-                  </Button>
-                </>
-              )}
-              {filteredMarkets.length > 20 && (
-                <Link href="/markets">
-                  <Button size="lg" variant="default">
-                    {t.viewAllMarkets || "View All Markets"}
-                  </Button>
-                </Link>
-              )}
-            </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+                {filteredMarkets.slice(0, 20).map((market) => (
+                  <MarketCard
+                    key={market.id}
+                    market={market}
+                    userLocation={userLocation}
+                    showAddress={false}
+                  />
+                ))}
+              </div>
+
+              {/* Action buttons */}
+              <div className="flex flex-col sm:flex-row gap-3 justify-center mt-8">
+                {selectedState !== 'All States' &&
+                  selectedState !== 'Semua Negeri' && (
+                    <>
+                      <Button
+                        onClick={handleBrowseMore}
+                        variant="outline"
+                        disabled={isLoadingMarkets}
+                      >
+                        {isLoadingMarkets ? (
+                          <>
+                            <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                            {t.searching || 'Loading...'}
+                          </>
+                        ) : (
+                          'Browse More Markets'
+                        )}
+                      </Button>
+                      <Button onClick={handleBrowseAllStates} variant="outline">
+                        Browse All States
+                      </Button>
+                    </>
+                  )}
+                {filteredMarkets.length > 20 && (
+                  <Link href="/markets">
+                    <Button size="lg" variant="default">
+                      {t.viewAllMarkets || 'View All Markets'}
+                    </Button>
+                  </Link>
+                )}
+              </div>
             </>
           )}
           {/* Mobile sort controls removed */}
-
-
         </div>
       </section>
 
@@ -777,8 +973,8 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
         <div className="container mx-auto px-4 text-center space-y-2">
           <p className="text-muted-foreground">{t.footerText}</p>
           <p className="text-xs text-muted-foreground">
-            <a 
-              href="https://www.flaticon.com/free-icon/shop_5193727?term=location&related_id=5193727" 
+            <a
+              href="https://www.flaticon.com/free-icon/shop_5193727?term=location&related_id=5193727"
               title="maps-and-location icons"
               target="_blank"
               rel="noopener noreferrer"
@@ -791,13 +987,13 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
       </footer>
 
       {/* Location Permission Modal */}
-      <Dialog 
-        open={showLocationModal} 
+      <Dialog
+        open={showLocationModal}
         onOpenChange={(open) => {
-          setShowLocationModal(open)
+          setShowLocationModal(open);
           if (!open) {
             // Mark as seen when modal is closed
-            markLocationModalSeen()
+            markLocationModalSeen();
           }
         }}
       >
@@ -806,7 +1002,9 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
             <div className="flex items-center justify-center mb-2">
               <Navigation2 className="h-8 w-8 text-primary" />
             </div>
-            <DialogTitle className="text-center">{t.enableLocationTitle}</DialogTitle>
+            <DialogTitle className="text-center">
+              {t.enableLocationTitle}
+            </DialogTitle>
             <DialogDescription className="text-center">
               {t.enableLocationDescription}
             </DialogDescription>
@@ -840,5 +1038,5 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
         </DialogContent>
       </Dialog>
     </div>
-  )
+  );
 }
