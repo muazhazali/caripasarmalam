@@ -129,7 +129,7 @@ export default function HomepageClient({
   initialMarkets,
   initialState
 }: HomepageClientProps) {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const router = useRouter();
   const [markets, setMarkets] = useState<Market[]>(initialMarkets);
   const [isLoadingMarkets, setIsLoadingMarkets] = useState(false);
