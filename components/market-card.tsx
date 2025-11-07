@@ -133,10 +133,6 @@ export function MarketCard({
         {/* Schedule badges */}
         <div className="flex flex-wrap gap-2 mb-4">
           {orderedSchedule.map((sch) => {
-            const locale =
-              typeof window !== 'undefined'
-                ? localStorage.getItem('language') || 'ms'
-                : 'ms';
             const times = sch.times
               .map((s) => `${s.start}–${s.end}`)
               .join(', ');
