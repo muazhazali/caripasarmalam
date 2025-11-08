@@ -21,6 +21,7 @@ CREATE TABLE IF NOT EXISTS pasar_malams (
   
   -- Optional text fields
   description      TEXT,
+  shop_list        TEXT,
   
   -- Numeric fields
   area_m2          DECIMAL(12, 2),
@@ -34,9 +35,6 @@ CREATE TABLE IF NOT EXISTS pasar_malams (
   -- Amenities (stored as columns for efficient boolean filtering)
   amen_toilet          BOOLEAN NOT NULL DEFAULT FALSE,
   amen_prayer_room     BOOLEAN NOT NULL DEFAULT FALSE,
-  
-  -- Contact information (JSONB for optional nested object)
-  contact             JSONB,
   
   -- Location data (JSONB for optional nested object with coordinates)
   location            JSONB,
@@ -143,10 +141,10 @@ CREATE POLICY "Authenticated users can delete" ON pasar_malams
 
 INSERT INTO pasar_malams (
   id, name, address, district, state, status, description,
-  area_m2, total_shop,
+  shop_list, area_m2, total_shop,
   parking_available, parking_accessible, parking_notes,
   amen_toilet, amen_prayer_room,
-  contact, location, schedule
+  location, schedule
 ) VALUES (
   'taman-melawati-kl',
   'Pasar Malam Taman Melawati',
@@ -155,6 +153,7 @@ INSERT INTO pasar_malams (
   'Kuala Lumpur',
   'Active',
   'One of the most popular night markets in Kuala Lumpur, Pasar Malam Taman Melawati offers a wide variety of local street food, fresh produce, and household items. Known for its vibrant atmosphere and authentic Malaysian cuisine.',
+  'Sate, Apam Balik, Burger, Nasi Campur, Buah, Sayur, Baju, Air Kordial, Peneram, Putu Mayam',
   4590.72,
   45,
   true, 
@@ -162,7 +161,6 @@ INSERT INTO pasar_malams (
   'Limited roadside parking available. Best to arrive early for better parking spots.',
   true, 
   true,
-  NULL,
   '{"latitude": 3.2104933, "longitude": 101.7493301, "gmaps_link": "https://maps.app.goo.gl/QmFnDaXLgfLxY8LM8"}'::jsonb,
   '[
     {"days": ["tue"], "times": [{"start": "17:00", "end": "22:00", "note": "Night market"}]},
