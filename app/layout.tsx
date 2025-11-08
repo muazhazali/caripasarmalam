@@ -59,14 +59,21 @@ export const metadata: Metadata = {
     title: "Cari Pasar Malam Malaysia",
     description:
       "Direktori pasar malam Malaysia. Cari pasar malam di seluruh negara dengan waktu operasi, kemudahan dan lokasi.",
-    images: [{ url: "/placeholder.jpg", width: 1200, height: 630, alt: "Cari Pasar Malam" }],
+    images: [
+      {
+        url: "/opengraph-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Cari pasar malam terdekat di Malaysia melalui PasarMalam.app — lengkap dengan waktu operasi, lokasi dan kemudahan",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Cari Pasar Malam Malaysia",
     description:
       "Direktori pasar malam Malaysia. Cari pasar malam di seluruh negara dengan waktu operasi, kemudahan dan lokasi.",
-    images: ["/placeholder.jpg"],
+    images: ["/opengraph-image.png"],
   },
   robots: {
     index: true,
