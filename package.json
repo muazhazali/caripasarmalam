@@ -72,6 +72,8 @@
     "zod": "3.25.67"
   },
   "devDependencies": {
+    "@snaplet/copycat": "^6.0.0",
+    "@snaplet/seed": "0.98.0",
     "@tailwindcss/postcss": "^4.1.13",
     "@types/node": "^22.18.1",
     "@types/pg": "^8.15.6",
