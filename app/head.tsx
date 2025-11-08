@@ -13,7 +13,7 @@ export default function Head() {
     "night market Malaysia",
   ].join(", ")
   const url = (process.env.NEXT_PUBLIC_SITE_URL || "https://pasarmalam.app") + "/"
-  const image = "/placeholder.jpg"
+  const image = "/opengraph-image.png"
   return (
     <>
       <title>{title}</title>
