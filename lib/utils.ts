@@ -58,7 +58,6 @@ export function getMarketOpenStatus(market: Market, now?: Date): OpenStatus {
   const ranges: Range[] = [];
 
   for (const rule of market.schedule || []) {
-    // @ts-ignore schedule.days may exist in data but not declared; align at use sites
     const days: Weekday[] = (rule as any).days || [];
     for (const day of days) {
       for (const t of rule.times || []) {
