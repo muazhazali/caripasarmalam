@@ -745,6 +745,23 @@ export default function HomepageClient({
                         </SelectContent>
                       </Select>
                     </div>
+                    <div>
+                      <div className="flex items-center space-x-2">
+                        <Checkbox
+                          id="open-now-mobile"
+                          checked={openNow}
+                          onCheckedChange={(checked) =>
+                            setOpenNow(checked as boolean)
+                          }
+                        />
+                        <label
+                          htmlFor="open-now-mobile"
+                          className="text-sm font-medium"
+                        >
+                          {t.openNow}
+                        </label>
+                      </div>
+                    </div>
                     <div className="grid grid-cols-2 gap-3">
                       <div className="flex items-center space-x-2">
                         <Checkbox
