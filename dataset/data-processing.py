@@ -20,6 +20,52 @@ DAY_MAPPING = {
 ALL_DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 ALL_DAYS_ABBR = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
 
+# Short forms that should remain uppercase
+SHORT_FORMS = {'AU2', 'ASSB', 'KT', 'KB', 'LRT', 'MDDM', 'FAMA', 'JPS', 'UTC'}
+
+
+def clean_quotes(text: str) -> str:
+    """
+    Remove leading and trailing quotes from text.
+    """
+    if pd.isna(text) or text == '':
+        return text
+    
+    text = str(text).strip()
+    
+    # Remove leading and trailing quotes (both single and double)
+    if text.startswith('"') and text.endswith('"') and len(text) >= 2:
+        text = text[1:-1]
+    elif text.startswith("'") and text.endswith("'") and len(text) >= 2:
+        text = text[1:-1]
+    
+    return text
+
+
+def title_case_with_exceptions(text: str) -> str:
+    """
+    Convert text to title case, but keep short forms in uppercase.
+    """
+    if pd.isna(text) or text == '':
+        return text
+    
+    text = clean_quotes(text)  # Clean quotes first
+    text = str(text).lower()
+    
+    # Split into words
+    words = text.split()
+    result_words = []
+    
+    for word in words:
+        # Check if the word is a short form
+        if word.upper() in SHORT_FORMS:
+            result_words.append(word.upper())
+        else:
+            # Apply title case to the word
+            result_words.append(word.capitalize())
+    
+    return ' '.join(result_words)
+
 
 def parse_time_range(time_str: str) -> Optional[Dict[str, str]]:
     """
@@ -267,6 +313,15 @@ print(f"Filtered out {initial_count - filtered_count} rows (temporarily/permanen
 columns_to_remove_existing = [col for col in columns_to_remove if col in df.columns]
 df = df.drop(columns=columns_to_remove_existing, errors='ignore')
 print(f"Removed {len(columns_to_remove_existing)} columns")
+
+# Apply quote cleaning and title case to name and address columns
+if 'name' in df.columns:
+    print("\nCleaning quotes and applying title case to 'name' column...")
+    df['name'] = df['name'].apply(title_case_with_exceptions)
+
+if 'address' in df.columns:
+    print("Applying title case to 'address' column...")
+    df['address'] = df['address'].apply(title_case_with_exceptions)
 
 # Rename columns
 rename_map = {}
