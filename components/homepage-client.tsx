@@ -197,7 +197,9 @@ export default function HomepageClient({
 
         const dayCode = day && dayMap[day] ? dayMap[day] : undefined;
         if (dayCode) {
-          query = query.contains('schedule', [{ days: [dayCode] }]);
+          // Use filter with 'cs' (contains) operator for JSONB to avoid serialization issues
+          const dayFilterValue = `[{"days":["${dayCode}"]}]`
+          query = query.filter('schedule', 'cs', dayFilterValue)
         }
 
         const q = (search || '').trim();

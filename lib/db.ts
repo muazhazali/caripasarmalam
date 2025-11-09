@@ -74,10 +74,13 @@ export async function getMarkets(filters: MarketFilters = {}): Promise<Market[]>
   // This uses the GIN index on schedule
   // The schedule structure is: [{"days": ["mon", "tue"], "times": [...]}]
   // We check if any element has the specified day in its days array
+  // PostgreSQL query: schedule @> '[{"days": ["mon"]}]'::jsonb
   if (filters.day) {
-    // Use contains operator to check if schedule array contains an object with the day
-    // This will match if any schedule entry has the day in its days array
-    query = query.contains('schedule', [{ days: [filters.day] }])
+    // Use filter with 'cs' (contains) operator for JSONB
+    // Format the value as a JSON string to avoid serialization issues
+    // The 'cs' operator in PostgREST corresponds to the @> operator in PostgreSQL
+    const dayFilterValue = `[{"days":["${filters.day}"]}]`
+    query = query.filter('schedule', 'cs', dayFilterValue)
   }
 
   // Pagination
