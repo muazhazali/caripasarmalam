@@ -6,7 +6,8 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 // Time helpers for market open status
-import type { Market, Weekday } from "@/lib/markets-data";
+import type { Market, MarketSchedule, Weekday } from "@/lib/markets-data";
+import { DayCode } from "@/app/enums";
 
 interface OpenStatus {
   status: "open" | "closed";
@@ -29,19 +30,19 @@ function parseTimeToMinutes(time24: string): number {
 
 function weekdayIndex(code: Weekday): number {
   switch (code) {
-    case "mon":
+    case DayCode.Mon:
       return 1;
-    case "tue":
+    case DayCode.Tue:
       return 2;
-    case "wed":
+    case DayCode.Wed:
       return 3;
-    case "thu":
+    case DayCode.Thu:
       return 4;
-    case "fri":
+    case DayCode.Fri:
       return 5;
-    case "sat":
+    case DayCode.Sat:
       return 6;
-    case "sun":
+    case DayCode.Sun:
       return 0;
     default:
       return 0;
@@ -58,7 +59,7 @@ export function getMarketOpenStatus(market: Market, now?: Date): OpenStatus {
   const ranges: Range[] = [];
 
   for (const rule of market.schedule || []) {
-    const days: Weekday[] = (rule as any).days || [];
+    const days: Weekday[] = (rule as MarketSchedule).days || [];
     for (const day of days) {
       for (const t of rule.times || []) {
         const start = parseTimeToMinutes(t.start);
