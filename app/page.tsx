@@ -1,6 +1,6 @@
-import { getMarkets } from '@/lib/db';
-import HomepageClient from '@/components/homepage-client';
-import { DayCode } from './enums';
+import { getMarkets } from "@/lib/db";
+import HomepageClient from "@/components/homepage-client";
+import { DayCode } from "./enums";
 
 interface HomePageProps {
   searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -20,20 +20,17 @@ export default async function HomePage({ searchParams }: HomePageProps) {
     Khamis: DayCode.Thu,
     Jumaat: DayCode.Fri,
     Sabtu: DayCode.Sat,
-    Ahad: DayCode.Sun
+    Ahad: DayCode.Sun,
   };
 
   const dayCode = day && dayMap[day] ? (dayMap[day] as DayCode) : undefined;
 
   // Fetch markets with server-side filters
   const filters = {
-    state:
-      state && state !== 'All States' && state !== 'Semua Negeri'
-        ? state
-        : undefined,
+    state: state && state !== "All States" && state !== "Semua Negeri" ? state : undefined,
     day: dayCode,
-    status: 'Active' as const,
-    limit: 50 // Initial load limit
+    status: "Active" as const,
+    limit: 50, // Initial load limit
   };
 
   const markets = await getMarkets(filters);

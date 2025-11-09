@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useEffect, useRef, useState } from 'react';
-import { useLanguage } from '@/components/language-provider';
-import { MapPin } from 'lucide-react';
+import { useEffect, useRef, useState } from "react";
+import { useLanguage } from "@/components/language-provider";
+import { MapPin } from "lucide-react";
 
 interface InteractiveMapProps {
   latitude: number;
@@ -12,13 +12,7 @@ interface InteractiveMapProps {
   className?: string;
 }
 
-export default function InteractiveMap({
-  latitude,
-  longitude,
-  name,
-  address,
-  className = ''
-}: InteractiveMapProps) {
+export default function InteractiveMap({ latitude, longitude, name, address, className = "" }: InteractiveMapProps) {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<any>(null);
   const [isReady, setIsReady] = useState(false);
@@ -26,25 +20,22 @@ export default function InteractiveMap({
 
   useEffect(() => {
     // Only load map on client side
-    if (typeof window === 'undefined' || !mapRef.current) return;
+    if (typeof window === "undefined" || !mapRef.current) return;
 
     const loadMap = async () => {
       try {
         // Dynamically import Leaflet to avoid SSR issues
-        const L = (await import('leaflet')).default;
+        const L = (await import("leaflet")).default;
 
         // Import CSS
-        await import('leaflet/dist/leaflet.css');
+        await import("leaflet/dist/leaflet.css");
 
         // Fix for default markers in Leaflet with webpack
         delete (L.Icon.Default.prototype as any)._getIconUrl;
         L.Icon.Default.mergeOptions({
-          iconRetinaUrl:
-            'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
-          iconUrl:
-            'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
-          shadowUrl:
-            'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png'
+          iconRetinaUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png",
+          iconUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png",
+          shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
         });
 
         // Initialize map
@@ -55,9 +46,8 @@ export default function InteractiveMap({
         const map = L.map(mapRef.current).setView([latitude, longitude], 15);
 
         // Add OpenStreetMap tiles
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          attribution:
-            '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+          attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
         }).addTo(map);
 
         // Add marker for the market
@@ -71,7 +61,7 @@ export default function InteractiveMap({
             <h3 class="font-semibold text-sm mb-1">${name}</h3>
             <p class="text-xs text-gray-600">${address}</p>
           </div>
-        `
+        `,
           )
           .openPopup();
 
@@ -100,7 +90,7 @@ export default function InteractiveMap({
 
         return cleanup;
       } catch (error) {
-        console.error('Error loading map:', error);
+        console.error("Error loading map:", error);
       }
     };
 
@@ -124,11 +114,7 @@ export default function InteractiveMap({
 
   return (
     <div className={`relative ${className}`}>
-      <div
-        ref={mapRef}
-        className="w-full h-full rounded-lg"
-        style={{ minHeight: '256px' }}
-      />
+      <div ref={mapRef} className="w-full h-full rounded-lg" style={{ minHeight: "256px" }} />
       {/* Loading fallback */}
       {!isReady && (
         <div className="absolute inset-0 bg-muted rounded-lg flex items-center justify-center pointer-events-none">

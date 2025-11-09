@@ -1,20 +1,25 @@
-"use client"
-import { Button } from "@/components/ui/button"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { Globe } from "lucide-react"
+"use client";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Globe } from "lucide-react";
 
 interface LanguageSwitcherProps {
-  currentLanguage: string
-  onLanguageChange: (language: string) => void
+  currentLanguage: string;
+  onLanguageChange: (language: string) => void;
 }
 
 export default function LanguageSwitcher({ currentLanguage, onLanguageChange }: LanguageSwitcherProps) {
   const languages = [
     { code: "ms", name: "Bahasa Melayu", flag: "🇲🇾" },
     { code: "en", name: "English", flag: "🇬🇧" },
-  ]
+  ];
 
-  const currentLang = languages.find((lang) => lang.code === currentLanguage) || languages[0]
+  const currentLang = languages.find((lang) => lang.code === currentLanguage) || languages[0];
 
   return (
     <DropdownMenu>
@@ -40,5 +45,5 @@ export default function LanguageSwitcher({ currentLanguage, onLanguageChange }: 
         ))}
       </DropdownMenuContent>
     </DropdownMenu>
-  )
+  );
 }

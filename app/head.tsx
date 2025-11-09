@@ -1,7 +1,7 @@
 export default function Head() {
-  const title = "Cari Pasar Malam Malaysia | Direktori Pasar Malam Malaysia"
+  const title = "Cari Pasar Malam Malaysia | Direktori Pasar Malam Malaysia";
   const description =
-    "Cari pasar malam di Malaysia (KL, Selangor, Johor, Pulau Pinang, Negeri Sembilan dan lain-lain). Waktu operasi, kemudahan, alamat dan lokasi peta."
+    "Cari pasar malam di Malaysia (KL, Selangor, Johor, Pulau Pinang, Negeri Sembilan dan lain-lain). Waktu operasi, kemudahan, alamat dan lokasi peta.";
   const keywords = [
     "pasar malam",
     "pasar malam Malaysia",
@@ -11,9 +11,9 @@ export default function Head() {
     "pasar malam Negeri",
     "direktori pasar malam",
     "night market Malaysia",
-  ].join(", ")
-  const url = (process.env.NEXT_PUBLIC_SITE_URL || "https://pasarmalam.app") + "/"
-  const image = "/opengraph-image.png"
+  ].join(", ");
+  const url = (process.env.NEXT_PUBLIC_SITE_URL || "https://pasarmalam.app") + "/";
+  const image = "/opengraph-image.png";
   return (
     <>
       <title>{title}</title>
@@ -35,7 +35,5 @@ export default function Head() {
       <link rel="alternate" hrefLang="ms-MY" href={url} />
       <link rel="alternate" hrefLang="en-MY" href={`${url}?lang=en`} />
     </>
-  )
+  );
 }
-
-
