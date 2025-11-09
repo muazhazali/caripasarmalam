@@ -1,7 +1,7 @@
-import type { MetadataRoute } from "next"
+import type { MetadataRoute } from "next";
 
 export default function robots(): MetadataRoute.Robots {
-  const base = process.env.NEXT_PUBLIC_SITE_URL || "https://pasarmalam.app"
+  const base = process.env.NEXT_PUBLIC_SITE_URL || "https://pasarmalam.app";
   return {
     rules: {
       userAgent: "*",
@@ -13,7 +13,5 @@ export default function robots(): MetadataRoute.Robots {
     // Content-signal: search=yes,ai-train=no
     // These directives are for Cloudflare's AI training policies
     // and are not part of the standard robots.txt specification
-  }
+  };
 }
-
-

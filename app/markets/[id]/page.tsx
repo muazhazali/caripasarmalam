@@ -1,28 +1,28 @@
-import { notFound } from "next/navigation"
-import type { Metadata } from "next"
-import { getMarketById } from "@/lib/db"
-import MarketDetailClient from "@/components/market-detail-client"
-import { cookies } from "next/headers"
+import { notFound } from "next/navigation";
+import type { Metadata } from "next";
+import { getMarketById } from "@/lib/db";
+import MarketDetailClient from "@/components/market-detail-client";
+import { cookies } from "next/headers";
 
 interface MarketPageProps {
   params: Promise<{
-    id: string
-  }>
+    id: string;
+  }>;
 }
 
 export async function generateMetadata({ params }: MarketPageProps): Promise<Metadata> {
-  const resolvedParams = await params
-  const market = await getMarketById(resolvedParams.id)
-  
+  const resolvedParams = await params;
+  const market = await getMarketById(resolvedParams.id);
+
   if (!market) {
     return {
       title: "Market Not Found",
       description: "The requested market could not be found.",
-    }
+    };
   }
 
-  const base = process.env.NEXT_PUBLIC_SITE_URL || "https://pasarmalam.app"
-  const url = `${base}/markets/${market.id}`
+  const base = process.env.NEXT_PUBLIC_SITE_URL || "https://pasarmalam.app";
+  const url = `${base}/markets/${market.id}`;
 
   // Create location-based keywords for better local SEO
   const locationKeywords = [
@@ -31,18 +31,21 @@ export async function generateMetadata({ params }: MarketPageProps): Promise<Met
     `night market ${market.district}`,
     `night market ${market.state}`,
     market.name,
-    market.address.split(',')[0], // Street name
-  ].filter(Boolean).join(", ")
+    market.address.split(",")[0], // Street name
+  ]
+    .filter(Boolean)
+    .join(", ");
 
   // Enhanced description with location and schedule info
   const scheduleText = market.schedule
     .map((s) => `${s.days.join(", ")}: ${s.times.map((t) => `${t.start}-${t.end}`).join(", ")}`)
-    .join("; ")
+    .join("; ");
 
-  const description = market.description ||
-    `Maklumat lengkap pasar malam ${market.name} di ${market.district}, ${market.state}. Waktu operasi: ${scheduleText}. Kemudahan: ${market.parking.available ? 'tempat letak kereta' : ''} ${market.amenities.toilet ? 'tandas' : ''} ${market.amenities.prayer_room ? 'surau' : ''}. Alamat: ${market.address}`
+  const description =
+    market.description ||
+    `Maklumat lengkap pasar malam ${market.name} di ${market.district}, ${market.state}. Waktu operasi: ${scheduleText}. Kemudahan: ${market.parking.available ? "tempat letak kereta" : ""} ${market.amenities.toilet ? "tandas" : ""} ${market.amenities.prayer_room ? "surau" : ""}. Alamat: ${market.address}`;
 
-  const title = `${market.name} | Pasar Malam ${market.district}, ${market.state} | Waktu Operasi & Lokasi`
+  const title = `${market.name} | Pasar Malam ${market.district}, ${market.state} | Waktu Operasi & Lokasi`;
 
   return {
     title,
@@ -92,18 +95,18 @@ export async function generateMetadata({ params }: MarketPageProps): Promise<Met
       "market:area": `${market.area_m2} m²`,
       "market:stalls": market.total_shop?.toString() || "N/A",
     },
-  }
+  };
 }
 
 export default async function MarketPage({ params }: MarketPageProps) {
-  const resolvedParams = await params
-  const market = await getMarketById(resolvedParams.id)
+  const resolvedParams = await params;
+  const market = await getMarketById(resolvedParams.id);
 
   if (!market) {
-    notFound()
+    notFound();
   }
 
   // Read language cookie on the server (LanguageProvider in RootLayout already uses it)
   // No need to pass initialLanguage; MarketDetailClient will use the shared context.
-  return <MarketDetailClient market={market} />
+  return <MarketDetailClient market={market} />;
 }
