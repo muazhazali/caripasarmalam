@@ -1,17 +1,17 @@
-"use client"
+"use client";
 
-import { useState, useEffect, useCallback, useMemo } from "react"
-import Link from "next/link"
-import { ArrowLeft, List, Search, Loader2 } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import MarketsMap from "@/components/markets-map"
-import { type Market } from "@/lib/markets-data"
-import { useLanguage } from "@/components/language-provider"
-import { createBrowserSupabaseClient } from "@/lib/supabase-client"
-import { getStateFromCoordinates, requestUserLocation } from "@/lib/geolocation"
-import { dbRowToMarket } from "@/lib/db-transform"
+import { useState, useEffect, useCallback, useMemo } from "react";
+import Link from "next/link";
+import { ArrowLeft, List, Search, Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import MarketsMap from "@/components/markets-map";
+import { type Market } from "@/lib/markets-data";
+import { useLanguage } from "@/components/language-provider";
+import { createBrowserSupabaseClient } from "@/lib/supabase-client";
+import { getStateFromCoordinates, requestUserLocation } from "@/lib/geolocation";
+import { dbRowToMarket } from "@/lib/db-transform";
 
 const malaysianStates = [
   "Semua Negeri",
@@ -31,97 +31,105 @@ const malaysianStates = [
   "Sarawak",
   "Selangor",
   "Terengganu",
-]
+];
 
 export default function MapPage() {
-  const { t } = useLanguage()
-  const [markets, setMarkets] = useState<Market[]>([])
-  const [isLoadingMarkets, setIsLoadingMarkets] = useState(true)
-  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null)
-  const [locationDenied, setLocationDenied] = useState<boolean>(false)
-  const [searchQuery, setSearchQuery] = useState("")
-  const [selectedState, setSelectedState] = useState("Semua Negeri")
-  const [selectedMarket, setSelectedMarket] = useState<Market | null>(null)
+  const { t } = useLanguage();
+  const [markets, setMarkets] = useState<Market[]>([]);
+  const [isLoadingMarkets, setIsLoadingMarkets] = useState(true);
+  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
+  const [locationDenied, setLocationDenied] = useState<boolean>(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedState, setSelectedState] = useState("Semua Negeri");
+  const [selectedMarket, setSelectedMarket] = useState<Market | null>(null);
 
   // Fetch markets from server
   const fetchMarkets = useCallback(async (state?: string, limitOverride?: number) => {
-    setIsLoadingMarkets(true)
+    setIsLoadingMarkets(true);
     try {
-      const supabase = createBrowserSupabaseClient()
-      let query = supabase.from('pasar_malams').select('*').eq('status', 'Active')
+      const supabase = createBrowserSupabaseClient();
+      let query = supabase.from("pasar_malams").select("*").eq("status", "Active");
 
       if (state && state !== "Semua Negeri" && state !== "All States") {
-        query = query.eq('state', state)
+        query = query.eq("state", state);
       }
 
-      const limit = typeof limitOverride === 'number'
-        ? limitOverride
-        : (state && state !== "Semua Negeri" && state !== "All States" ? 1000 : 1000)
-      query = query.limit(limit)
+      const limit =
+        typeof limitOverride === "number"
+          ? limitOverride
+          : state && state !== "Semua Negeri" && state !== "All States"
+            ? 1000
+            : 1000;
+      query = query.limit(limit);
 
-      const { data, error } = await query
+      const { data, error } = await query;
 
       if (error) {
-        console.error("Error fetching markets:", error)
-        return
+        console.error("Error fetching markets:", error);
+        return;
       }
 
       if (data) {
         // Transform database rows to Market objects
-        const transformedMarkets = data.map(dbRowToMarket)
-        setMarkets(transformedMarkets)
+        const transformedMarkets = data.map(dbRowToMarket);
+        setMarkets(transformedMarkets);
       }
     } catch (error) {
-      console.error("Error fetching markets:", error)
+      console.error("Error fetching markets:", error);
     } finally {
-      setIsLoadingMarkets(false)
+      setIsLoadingMarkets(false);
     }
-  }, [])
+  }, []);
 
   // Handle state change - fetch from server
-  const handleStateChange = useCallback((newState: string) => {
-    // Normalize "All States" to "Semua Negeri" for consistency
-    const normalizedState = newState === "All States" ? malaysianStates[0] : newState
-    setSelectedState(normalizedState)
-    fetchMarkets(normalizedState !== "Semua Negeri" && normalizedState !== "All States" ? normalizedState : undefined)
-  }, [fetchMarkets])
+  const handleStateChange = useCallback(
+    (newState: string) => {
+      // Normalize "All States" to "Semua Negeri" for consistency
+      const normalizedState = newState === "All States" ? malaysianStates[0] : newState;
+      setSelectedState(normalizedState);
+      fetchMarkets(
+        normalizedState !== "Semua Negeri" && normalizedState !== "All States" ? normalizedState : undefined,
+      );
+    },
+    [fetchMarkets],
+  );
 
   // Get user location on mount
   useEffect(() => {
     if (typeof navigator !== "undefined" && navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          const lat = position.coords.latitude
-          const lng = position.coords.longitude
-          setUserLocation({ lat, lng })
-          setLocationDenied(false)
-          
+          const lat = position.coords.latitude;
+          const lng = position.coords.longitude;
+          setUserLocation({ lat, lng });
+          setLocationDenied(false);
+
           // Detect state and auto-filter
-          const state = getStateFromCoordinates(lat, lng)
+          const state = getStateFromCoordinates(lat, lng);
           if (state) {
-            setSelectedState(state)
-            fetchMarkets(state)
+            setSelectedState(state);
+            fetchMarkets(state);
           } else {
             // Location outside Malaysia, fetch all
-            fetchMarkets()
+            fetchMarkets();
           }
         },
         (error) => {
           // Permission denied or unavailable - fetch all markets
-          console.warn("Geolocation error:", error)
-          setLocationDenied(true)
+          console.warn("Geolocation error:", error);
+          setLocationDenied(true);
           // Show a limited set by default when no location permission
-          fetchMarkets(undefined, 20)
+          fetchMarkets(undefined, 20);
         },
-        { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
-      )
+        { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 },
+      );
     } else {
       // Geolocation not available - fetch all markets
-      setLocationDenied(true)
-      fetchMarkets(undefined, 20)
+      setLocationDenied(true);
+      fetchMarkets(undefined, 20);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []) // Only run on mount
+  }, []); // Only run on mount
 
   // Filter markets client-side (search, state, and coordinates only)
   const filteredMarkets = markets.filter((market) => {
@@ -129,75 +137,76 @@ export default function MapPage() {
       searchQuery === "" ||
       market.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       market.district.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      market.state.toLowerCase().includes(searchQuery.toLowerCase())
+      market.state.toLowerCase().includes(searchQuery.toLowerCase());
 
-    const matchesState = selectedState === "Semua Negeri" || selectedState === "All States" || market.state === selectedState
+    const matchesState =
+      selectedState === "Semua Negeri" || selectedState === "All States" || market.state === selectedState;
 
     // Only show markets with coordinates
-    return matchesSearch && matchesState && market.location
-  })
+    return matchesSearch && matchesState && market.location;
+  });
 
   // Distance calculation
   function getDistanceKm(aLat: number, aLng: number, bLat: number, bLng: number): number {
-    const toRad = (v: number) => (v * Math.PI) / 180
-    const R = 6371
-    const dLat = toRad(bLat - aLat)
-    const dLng = toRad(bLng - aLng)
-    const lat1 = toRad(aLat)
-    const lat2 = toRad(bLat)
-    const sinDLat = Math.sin(dLat / 2)
-    const sinDLng = Math.sin(dLng / 2)
-    const a = sinDLat * sinDLat + Math.cos(lat1) * Math.cos(lat2) * sinDLng * sinDLng
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
-    return R * c
+    const toRad = (v: number) => (v * Math.PI) / 180;
+    const R = 6371;
+    const dLat = toRad(bLat - aLat);
+    const dLng = toRad(bLng - aLng);
+    const lat1 = toRad(aLat);
+    const lat2 = toRad(bLat);
+    const sinDLat = Math.sin(dLat / 2);
+    const sinDLng = Math.sin(dLng / 2);
+    const a = sinDLat * sinDLat + Math.cos(lat1) * Math.cos(lat2) * sinDLng * sinDLng;
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
   }
 
   // Sort by distance when userLocation is available
   const sortedMarkets = useMemo(() => {
-    if (!userLocation) return filteredMarkets
+    if (!userLocation) return filteredMarkets;
     const withDistance = filteredMarkets.map((m) => ({
       market: m,
-      distance: m.location ? getDistanceKm(userLocation.lat, userLocation.lng, m.location.latitude, m.location.longitude) : Infinity,
-    }))
-    withDistance.sort((a, b) => a.distance - b.distance)
-    return withDistance.map((x) => x.market)
-  }, [filteredMarkets, userLocation])
+      distance: m.location
+        ? getDistanceKm(userLocation.lat, userLocation.lng, m.location.latitude, m.location.longitude)
+        : Infinity,
+    }));
+    withDistance.sort((a, b) => a.distance - b.distance);
+    return withDistance.map((x) => x.market);
+  }, [filteredMarkets, userLocation]);
 
   // If location permission denied and no state filter, cap to top 100
   const displayedMarkets = useMemo(() => {
-    const isAllStates = selectedState === "Semua Negeri" || selectedState === "All States"
-    if (locationDenied && isAllStates) return sortedMarkets.slice(0, 100)
-    return sortedMarkets
-  }, [sortedMarkets, locationDenied, selectedState])
+    const isAllStates = selectedState === "Semua Negeri" || selectedState === "All States";
+    if (locationDenied && isAllStates) return sortedMarkets.slice(0, 100);
+    return sortedMarkets;
+  }, [sortedMarkets, locationDenied, selectedState]);
 
   const reRequestLocation = useCallback(async () => {
     try {
-      const { lat, lng } = await requestUserLocation({ enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 })
-      setUserLocation({ lat, lng })
-      setLocationDenied(false)
-      const state = getStateFromCoordinates(lat, lng)
+      const { lat, lng } = await requestUserLocation({ enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 });
+      setUserLocation({ lat, lng });
+      setLocationDenied(false);
+      const state = getStateFromCoordinates(lat, lng);
       if (state) {
-        setSelectedState(state)
-        fetchMarkets(state)
+        setSelectedState(state);
+        fetchMarkets(state);
       } else {
-        fetchMarkets()
+        fetchMarkets();
       }
     } catch (err) {
-      console.warn("Geolocation request failed:", err)
-      setLocationDenied(true)
+      console.warn("Geolocation request failed:", err);
+      setLocationDenied(true);
       // Helpful guidance when permission is blocked/denied
       if (typeof window !== "undefined") {
         alert(
-          "Location access is blocked or denied. Please enable location for this site in your browser settings and try again."
-        )
+          "Location access is blocked or denied. Please enable location for this site in your browser settings and try again.",
+        );
       }
     }
-  }, [fetchMarkets])
+  }, [fetchMarkets]);
 
   return (
     <div className="min-h-screen bg-background">
-      
-
       {/* Search Controls */}
       <div className="border-b border-border bg-card relative z-10">
         <div className="container mx-auto px-4 py-3">
@@ -233,7 +242,9 @@ export default function MapPage() {
                 <div className="text-xs text-muted-foreground">{t.enableLocationDescription}</div>
               </div>
               <div className="flex gap-2">
-                <Button size="sm" onClick={reRequestLocation}>{t.enableLocationButton}</Button>
+                <Button size="sm" onClick={reRequestLocation}>
+                  {t.enableLocationButton}
+                </Button>
                 {/* The state selector above serves as the choose state action */}
               </div>
             </div>
@@ -247,7 +258,9 @@ export default function MapPage() {
             ) : (
               <span>
                 {t.showingResults} {displayedMarkets.length} {t.markets}
-                {locationDenied && (selectedState === "Semua Negeri" || selectedState === "All States") ? ` · ${t.showingTopMarkets}` : ""}
+                {locationDenied && (selectedState === "Semua Negeri" || selectedState === "All States")
+                  ? ` · ${t.showingTopMarkets}`
+                  : ""}
               </span>
             )}
           </div>
@@ -264,7 +277,5 @@ export default function MapPage() {
         />
       </div>
     </div>
-  )
+  );
 }
-
-
