@@ -135,8 +135,18 @@ export default function MarketsFilterClient({ initialMarkets, initialState }: Ma
     }))
   }
   const [searchQuery, setSearchQuery] = useState("")
-  const [selectedState, setSelectedState] = useState(initialState || searchParams.get("state") || "All States")
-  const [selectedDay, setSelectedDay] = useState(searchParams.get("day") || "All Days")
+  // Default to "Semua Negeri" (first item in array) instead of "All States"
+  const stateFromUrl = searchParams.get("state")
+  // Normalize "All States" to "Semua Negeri" for consistency
+  const normalizedState = stateFromUrl === "All States" ? malaysianStates[0] : stateFromUrl
+  const defaultState = normalizedState || initialState || malaysianStates[0] // "Semua Negeri"
+  const [selectedState, setSelectedState] = useState(defaultState)
+  // Default to "Semua Hari" (first item in array) instead of "All Days"
+  const dayFromUrl = searchParams.get("day")
+  // Normalize "All Days" to "Semua Hari" for consistency
+  const normalizedDay = dayFromUrl === "All Days" ? daysOfWeek[0] : dayFromUrl
+  const defaultDay = normalizedDay || daysOfWeek[0] // "Semua Hari"
+  const [selectedDay, setSelectedDay] = useState(defaultDay)
   // Default to distance; if location unavailable, sorter falls back to name
   const [sortBy, setSortBy] = useState("distance")
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc")
@@ -152,6 +162,7 @@ export default function MarketsFilterClient({ initialMarkets, initialState }: Ma
   // Pagination
   const [visibleCount, setVisibleCount] = useState(24)
   const PAGE_SIZE = 24
+
 
   // Attempt to get user location on first load to enable nearest sorting by default
   useEffect(() => {
@@ -216,12 +227,12 @@ export default function MarketsFilterClient({ initialMarkets, initialState }: Ma
     }
     router.replace(`?${params.toString()}`)
     
-    // Update local state
+    // Update local state - use first item from arrays as default
     if (key === "state") {
-      setSelectedState(value || "All States")
+      setSelectedState(value || malaysianStates[0]) // "Semua Negeri"
     }
     if (key === "day") {
-      setSelectedDay(value || "All Days")
+      setSelectedDay(value || daysOfWeek[0]) // "Semua Hari"
     }
     
     // Fetch markets when state/day changes
@@ -263,7 +274,7 @@ export default function MarketsFilterClient({ initialMarkets, initialState }: Ma
         market.state.toLowerCase().includes(searchQuery.toLowerCase()) ||
         market.address.toLowerCase().includes(searchQuery.toLowerCase())
 
-      const matchesState = selectedState === "All States" || market.state === selectedState
+      const matchesState = selectedState === "All States" || selectedState === "Semua Negeri" || market.state === selectedState
 
       const matchesDay = selectedDay === "All Days" || selectedDay === "Semua Hari" || market.schedule.some((schedule) => schedule.days.some(day => {
         return dayMap[selectedDay] === day
@@ -327,8 +338,8 @@ export default function MarketsFilterClient({ initialMarkets, initialState }: Ma
 
   const clearAllFilters = () => {
     setSearchQuery("")
-    setSelectedState("All States")
-    setSelectedDay("All Days")
+    setSelectedState(malaysianStates[0]) // "Semua Negeri"
+    setSelectedDay(daysOfWeek[0]) // "Semua Hari"
     setOpenNow(true)
     if (typeof window !== "undefined") {
       localStorage.setItem("filterOpenNow", "true")
@@ -389,7 +400,7 @@ export default function MarketsFilterClient({ initialMarkets, initialState }: Ma
                 <SelectContent>
                   {malaysianStates.map((state) => (
                     <SelectItem key={state} value={state}>
-                      {state === "All States" ? t.allStates : state}
+                      {state === "All States" || state === "Semua Negeri" ? t.allStates : state}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -401,7 +412,7 @@ export default function MarketsFilterClient({ initialMarkets, initialState }: Ma
                 <SelectContent>
                   {daysOfWeek.map((day) => (
                     <SelectItem key={day} value={day}>
-                      {day === "All Days" ? t.allDays : t[day.toLowerCase() as keyof typeof t] || day}
+                      {day === "All Days" || day === "Semua Hari" ? t.allDays : t[day.toLowerCase() as keyof typeof t] || day}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -532,7 +543,7 @@ export default function MarketsFilterClient({ initialMarkets, initialState }: Ma
                           <SelectContent>
                             {malaysianStates.map((state) => (
                               <SelectItem key={state} value={state}>
-                                {state === "All States" ? t.allStates : state}
+                                {state === "All States" || state === "Semua Negeri" ? t.allStates : state}
                               </SelectItem>
                             ))}
                           </SelectContent>
@@ -547,7 +558,7 @@ export default function MarketsFilterClient({ initialMarkets, initialState }: Ma
                           <SelectContent>
                             {daysOfWeek.map((day) => (
                               <SelectItem key={day} value={day}>
-                                {day === "All Days" ? t.allDays : t[day.toLowerCase() as keyof typeof t] || day}
+                                {day === "All Days" || day === "Semua Hari" ? t.allDays : t[day.toLowerCase() as keyof typeof t] || day}
                               </SelectItem>
                             ))}
                           </SelectContent>
