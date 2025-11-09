@@ -80,8 +80,10 @@ export default function MapPage() {
 
   // Handle state change - fetch from server
   const handleStateChange = useCallback((newState: string) => {
-    setSelectedState(newState)
-    fetchMarkets(newState !== "Semua Negeri" && newState !== "All States" ? newState : undefined)
+    // Normalize "All States" to "Semua Negeri" for consistency
+    const normalizedState = newState === "All States" ? malaysianStates[0] : newState
+    setSelectedState(normalizedState)
+    fetchMarkets(normalizedState !== "Semua Negeri" && normalizedState !== "All States" ? normalizedState : undefined)
   }, [fetchMarkets])
 
   // Get user location on mount
@@ -211,12 +213,14 @@ export default function MapPage() {
             </div>
             <Select value={selectedState} onValueChange={handleStateChange} disabled={isLoadingMarkets}>
               <SelectTrigger className="w-48 h-10 md:h-11">
-                <SelectValue />
+                <SelectValue>
+                  {selectedState === "All States" || selectedState === "Semua Negeri" ? t.allStates : selectedState}
+                </SelectValue>
               </SelectTrigger>
               <SelectContent className="z-50">
                 {malaysianStates.map((state) => (
                   <SelectItem key={state} value={state}>
-                    {state}
+                    {state === "All States" || state === "Semua Negeri" ? t.allStates : state}
                   </SelectItem>
                 ))}
               </SelectContent>
