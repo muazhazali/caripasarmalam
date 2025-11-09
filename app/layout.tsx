@@ -1,29 +1,29 @@
-import type React from "react"
-import type { Metadata } from "next"
-import { Source_Sans_3 } from "next/font/google"
-import { Playfair_Display } from "next/font/google"
-import { GeistMono } from "geist/font/mono"
-import { Analytics } from "@vercel/analytics/next"
-import { Suspense } from "react"
-import { cookies } from "next/headers"
-import Script from "next/script"
-import "./globals.css"
-import MobileTabBar from "@/components/mobile-tabbar"
-import DesktopNavbar from "@/components/desktop-navbar"
-import { LanguageProvider } from "@/components/language-provider"
-import { ThemeProvider } from "@/components/theme-provider"
+import type React from "react";
+import type { Metadata } from "next";
+import { Source_Sans_3 } from "next/font/google";
+import { Playfair_Display } from "next/font/google";
+import { GeistMono } from "geist/font/mono";
+import { Analytics } from "@vercel/analytics/next";
+import { Suspense } from "react";
+import { cookies } from "next/headers";
+import Script from "next/script";
+import "./globals.css";
+import MobileTabBar from "@/components/mobile-tabbar";
+import DesktopNavbar from "@/components/desktop-navbar";
+import { LanguageProvider } from "@/components/language-provider";
+import { ThemeProvider } from "@/components/theme-provider";
 
 const sourceSansPro = Source_Sans_3({
   subsets: ["latin"],
   variable: "--font-source-sans-pro",
   display: "swap",
-})
+});
 
 const playfairDisplay = Playfair_Display({
   subsets: ["latin"],
   variable: "--font-playfair-display",
   display: "swap",
-})
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://pasarmalam.app"),
@@ -80,16 +80,16 @@ export const metadata: Metadata = {
     follow: true,
   },
   generator: "caripasarmalam",
-}
+};
 
 export default async function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode
+  children: React.ReactNode;
 }>) {
-  const cookieStore = await cookies()
-  const cookieLang = cookieStore.get("language")?.value
-  const initialLanguage = cookieLang === "en" ? "en" : "ms"
+  const cookieStore = await cookies();
+  const cookieLang = cookieStore.get("language")?.value;
+  const initialLanguage = cookieLang === "en" ? "en" : "ms";
   return (
     <html lang={initialLanguage} suppressHydrationWarning>
       <head>
@@ -101,7 +101,7 @@ export default async function RootLayout({
               "@context": "https://schema.org",
               "@type": "WebSite",
               name: "Cari Pasar Malam Malaysia",
-              url: (process.env.NEXT_PUBLIC_SITE_URL || "https://pasarmalam.app"),
+              url: process.env.NEXT_PUBLIC_SITE_URL || "https://pasarmalam.app",
               inLanguage: "ms-MY",
               potentialAction: {
                 "@type": "SearchAction",
@@ -119,26 +119,21 @@ export default async function RootLayout({
           strategy="afterInteractive"
         />
         {process.env.NEXT_PUBLIC_ADSENSE_PUBLISHER_ID ? (
-          <meta
-            name="google-adsense-account"
-            content={process.env.NEXT_PUBLIC_ADSENSE_PUBLISHER_ID}
-          />
+          <meta name="google-adsense-account" content={process.env.NEXT_PUBLIC_ADSENSE_PUBLISHER_ID} />
         ) : null}
       </head>
       <body className={`font-sans ${sourceSansPro.variable} ${playfairDisplay.variable} ${GeistMono.variable}`}>
-         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-        <LanguageProvider initialLanguage={initialLanguage}>
-          <DesktopNavbar />
-          <Suspense fallback={null}>
-            <main className="md:pb-0 pb-16">
-              {children}
-            </main>
-          </Suspense>
-          <MobileTabBar />
-        </LanguageProvider>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <LanguageProvider initialLanguage={initialLanguage}>
+            <DesktopNavbar />
+            <Suspense fallback={null}>
+              <main className="md:pb-0 pb-16">{children}</main>
+            </Suspense>
+            <MobileTabBar />
+          </LanguageProvider>
         </ThemeProvider>
         <Analytics />
       </body>
     </html>
-  )
+  );
 }

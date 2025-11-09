@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import { useLanguage } from "@/components/language-provider"
+import { useLanguage } from "@/components/language-provider";
 
 export default function AboutClient() {
-  const { t } = useLanguage()
+  const { t } = useLanguage();
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-8">
@@ -18,5 +18,5 @@ export default function AboutClient() {
         <p>{t.aboutPara7}</p>
       </div>
     </div>
-  )
+  );
 }
