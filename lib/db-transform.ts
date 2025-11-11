@@ -3,13 +3,18 @@
  * This avoids code duplication across client and server components
  */
 
-import type { Market } from "./markets-data";
+import type { Market, MarketSchedule } from "./markets-data";
+
+/**
+ * Database row structure from Supabase
+ * Represents the flattened schema where nested objects are stored as JSONB or separate columns
+ */
 
 /**
  * Transform a database row to a Market object
  * Handles JSONB parsing (both string and object formats)
  */
-export function dbRowToMarket(row: any): Market {
+export function dbRowToMarket(row: DatabaseRow): Market {
   return {
     id: row.id,
     name: row.name,
@@ -53,6 +58,33 @@ export function dbRowToMarket(row: any): Market {
 /**
  * Transform multiple database rows to Market objects
  */
-export function dbRowsToMarkets(rows: any[]): Market[] {
+export function dbRowsToMarkets(rows: DatabaseRow[]): Market[] {
   return rows.map(dbRowToMarket);
+}
+
+export interface DatabaseRow {
+  id: string;
+  name: string;
+  address: string;
+  district: string;
+  state: string;
+  status: string;
+  description?: string | null;
+  area_m2?: number | null;
+  total_shop?: number | null;
+  shop_list?: string | null;
+
+  // Parking fields (flattened)
+  parking_available?: boolean | null;
+  parking_accessible?: boolean | null;
+  parking_notes?: string | null;
+
+  // Amenities fields (flattened)
+  amen_toilet?: boolean | null;
+  amen_prayer_room?: boolean | null;
+
+  // JSONB fields (can be string or already parsed object)
+  contact?: string | { phone?: string; email?: string } | null;
+  location?: string | { latitude: number; longitude: number; gmaps_link: string } | null;
+  schedule?: string | MarketSchedule[] | null;
 }

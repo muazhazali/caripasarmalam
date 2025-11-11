@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useLanguage } from "@/components/language-provider";
 import { MapPin } from "lucide-react";
+import type { Map } from "leaflet";
 
 interface InteractiveMapProps {
   latitude: number;
@@ -14,7 +15,7 @@ interface InteractiveMapProps {
 
 export default function InteractiveMap({ latitude, longitude, name, address, className = "" }: InteractiveMapProps) {
   const mapRef = useRef<HTMLDivElement>(null);
-  const mapInstanceRef = useRef<any>(null);
+  const mapInstanceRef = useRef<Map | null>(null);
   const [isReady, setIsReady] = useState(false);
   const { t } = useLanguage();
 
@@ -31,7 +32,7 @@ export default function InteractiveMap({ latitude, longitude, name, address, cla
         await import("leaflet/dist/leaflet.css");
 
         // Fix for default markers in Leaflet with webpack
-        delete (L.Icon.Default.prototype as any)._getIconUrl;
+        delete (L.Icon.Default.prototype as Record<string, unknown>)._getIconUrl;
         L.Icon.Default.mergeOptions({
           iconRetinaUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png",
           iconUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png",
