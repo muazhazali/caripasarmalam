@@ -10,6 +10,14 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import type { Market } from "@/lib/markets-data";
+import type { Map, Marker, TileLayer } from "leaflet";
+
+// Extend Window interface to include openDirections
+declare global {
+  interface Window {
+    openDirections: typeof openDirections;
+  }
+}
 
 interface MarketsMapProps {
   markets: Market[];
@@ -20,10 +28,10 @@ interface MarketsMapProps {
 
 export default function MarketsMap({ markets, selectedMarket, onMarketSelect, className = "" }: MarketsMapProps) {
   const mapRef = useRef<HTMLDivElement>(null);
-  const mapInstanceRef = useRef<any>(null);
-  const markersRef = useRef<any[]>([]);
-  const lightTilesRef = useRef<any | null>(null);
-  const darkTilesRef = useRef<any | null>(null);
+  const mapInstanceRef = useRef<Map | null>(null);
+  const markersRef = useRef<Marker[]>([]);
+  const lightTilesRef = useRef<TileLayer | null>(null);
+  const darkTilesRef = useRef<TileLayer | null>(null);
   const hasUserInteractedRef = useRef<boolean>(false);
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [isReady, setIsReady] = useState(false);
@@ -89,7 +97,7 @@ export default function MarketsMap({ markets, selectedMarket, onMarketSelect, cl
         await import("leaflet/dist/leaflet.css");
 
         // Fix for default markers
-        delete (L.Icon.Default.prototype as any)._getIconUrl;
+        delete (L.Icon.Default.prototype as Record<string, unknown>)._getIconUrl;
         L.Icon.Default.mergeOptions({
           iconRetinaUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png",
           iconUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png",
@@ -130,7 +138,7 @@ export default function MarketsMap({ markets, selectedMarket, onMarketSelect, cl
           });
           // Expose the shared helper on window for popup markup (popup HTML calls window.openDirections)
           if (typeof window !== "undefined") {
-            (window as any).openDirections = openDirections;
+            window.openDirections = openDirections;
           }
           // ready after first paint
           setTimeout(() => {
@@ -250,7 +258,7 @@ export default function MarketsMap({ markets, selectedMarket, onMarketSelect, cl
       // Fit bounds or center on selected market
       const markerCount = markersRef.current.length;
       if (markerCount > 0) {
-        const group = new L.featureGroup(markersRef.current);
+        const group = L.featureGroup(markersRef.current);
         if (selectedMarket && selectedMarket.location) {
           // Center on the selected market instead of fitting all markers
           map.flyTo([selectedMarket.location.latitude, selectedMarket.location.longitude], 15, {
@@ -281,7 +289,7 @@ export default function MarketsMap({ markets, selectedMarket, onMarketSelect, cl
   const fitToMarkers = async () => {
     if (!mapInstanceRef.current || markersRef.current.length === 0) return;
     const L = (await import("leaflet")).default;
-    const group = new L.featureGroup(markersRef.current);
+    const group = L.featureGroup(markersRef.current);
     try {
       mapInstanceRef.current.fitBounds(group.getBounds().pad(0.1));
     } catch (e) {

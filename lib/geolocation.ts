@@ -80,8 +80,8 @@ export async function requestUserLocation(options?: PositionOptions): Promise<{ 
 
   // Best-effort Permissions API check to avoid silent failures when already denied
   try {
-    if ("permissions" in navigator && typeof (navigator as any).permissions?.query === "function") {
-      const status: PermissionStatus = await (navigator as any).permissions.query({
+    if ("permissions" in navigator && typeof navigator.permissions?.query === "function") {
+      const status: PermissionStatus = await navigator.permissions.query({
         name: "geolocation" as PermissionName,
       });
       if (status.state === "denied") {
