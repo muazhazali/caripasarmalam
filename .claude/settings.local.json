@@ -13,7 +13,11 @@
       "Bash(head:*)",
       "Bash(gh repo:*)",
       "Bash(git remote:*)",
-      "Bash(gh issue:*)"
+      "Bash(gh issue:*)",
+      "Bash(echo not found:*)",
+      "Bash(ls:*)",
+      "Bash(cd C:/GitHub/caripasarmalam && pnpm add sharp --save-dev 2>&1)",
+      "Bash(cd /c/GitHub/caripasarmalam && pnpm build 2>&1)"
     ]
   }
 }

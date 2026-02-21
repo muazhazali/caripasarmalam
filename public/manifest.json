@@ -1,0 +1,31 @@
+{
+  "name": "Cari Pasar Malam Malaysia",
+  "short_name": "PasarMalam",
+  "description": "Direktori pasar malam Malaysia. Cari pasar malam di seluruh negara dengan waktu operasi, kemudahan dan lokasi.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#f97316",
+  "orientation": "portrait",
+  "categories": ["lifestyle", "travel"],
+  "lang": "ms-MY",
+  "icons": [
+    {
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
