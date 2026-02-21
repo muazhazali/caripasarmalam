@@ -4,7 +4,13 @@
       "Bash(node:*)",
       "Bash(cd:*)",
       "Bash(tail:*)",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "Bash(cd /c/GitHub/caripasarmalam && pnpm install 2>&1)",
+      "Bash(cd /c/GitHub/caripasarmalam && pnpm audit 2>&1)",
+      "Bash(cd /c/GitHub/caripasarmalam && pnpm install 2>&1 && pnpm audit 2>&1)",
+      "Bash(cd /c/GitHub/caripasarmalam && find node_modules -name \"package.json\" -path \"*/vite/package.json\" 2>/dev/null | head -5 | xargs -I{} node -p \"require\\('{}'\\).version\" 2>/dev/null)",
+      "Bash(cd /c/GitHub/caripasarmalam && pnpm list vite 2>&1)",
+      "Bash(head:*)"
     ]
   }
 }
