@@ -175,24 +175,24 @@ export default function MarketDetailClient({ market }: MarketDetailClientProps) 
         {/* Header */}
         <header className="border-b border-border bg-card">
           <div className="container mx-auto px-4 py-6">
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 min-w-0">
               <Link href="/markets">
                 <Button variant="ghost" size="sm">
                   <ArrowLeft className="h-4 w-4 mr-2" />
                   {t.backToDirectory}
                 </Button>
               </Link>
-              <div className="flex-1">
-                <nav className="text-sm text-muted-foreground">
-                  <Link href="/" className="hover:text-foreground">
+              <div className="flex-1 min-w-0">
+                <nav className="text-sm text-muted-foreground flex flex-wrap items-center gap-x-1">
+                  <Link href="/" className="hover:text-foreground shrink-0">
                     {t.home}
                   </Link>
-                  <span className="mx-2">/</span>
-                  <Link href="/markets" className="hover:text-foreground">
+                  <span>/</span>
+                  <Link href="/markets" className="hover:text-foreground shrink-0">
                     {t.markets}
                   </Link>
-                  <span className="mx-2">/</span>
-                  <span className="text-foreground">{market.name}</span>
+                  <span>/</span>
+                  <span className="text-foreground truncate min-w-0">{market.name}</span>
                 </nav>
               </div>
             </div>
