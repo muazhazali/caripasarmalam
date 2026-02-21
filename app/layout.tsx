@@ -79,6 +79,7 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
+  manifest: "/manifest.json",
   generator: "caripasarmalam",
 };
 
@@ -93,6 +94,11 @@ export default async function RootLayout({
   return (
     <html lang={initialLanguage} suppressHydrationWarning>
       <head>
+        <meta name="theme-color" content="#f97316" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="PasarMalam" />
+        <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
         {/* JSON-LD: Website */}
         <script
           type="application/ld+json"
