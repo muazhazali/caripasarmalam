@@ -97,7 +97,15 @@
       "@langchain/core@<0.3.80": ">=0.3.80",
       "minimatch@<10.2.1": ">=10.2.1",
       "ajv@<6.14.0": ">=6.14.0"
-    }
+    },
+    "onlyBuiltDependencies": [
+      "@prisma/engines",
+      "@snaplet/seed",
+      "@tailwindcss/oxide",
+      "esbuild",
+      "sharp",
+      "unrs-resolver"
+    ]
   },
   "devDependencies": {
     "@snaplet/copycat": "^6.0.0",
