@@ -118,6 +118,12 @@ export default async function RootLayout({
           }}
         />
         <Script
+          defer
+          src="https://umami.muaz.app/script.js"
+          data-website-id="e9608536-210c-47a7-bcb3-0109c583bef9"
+          strategy="afterInteractive"
+        />
+        <Script
           id="adsbygoogle-init"
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3393623405576068"
