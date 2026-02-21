@@ -14,6 +14,7 @@ import {
   Phone,
   Mail,
   Calendar,
+  Share2,
 } from "lucide-react";
 import Link from "next/link";
 import { Market } from "@/lib/markets-data";
@@ -476,8 +477,19 @@ export default function MarketDetailClient({ market }: MarketDetailClientProps) 
                       {t.getDirections}
                     </Button>
                   )}
-                  <Button variant="outline" className="w-full bg-transparent">
-                    <Phone className="h-4 w-4 mr-2" />
+                  <Button
+                    variant="outline"
+                    className="w-full bg-transparent"
+                    onClick={async () => {
+                      const url = window.location.href;
+                      if (navigator.share) {
+                        await navigator.share({ title: market.name, url });
+                      } else {
+                        await navigator.clipboard.writeText(url);
+                      }
+                    }}
+                  >
+                    <Share2 className="h-4 w-4 mr-2" />
                     {t.shareMarket}
                   </Button>
                 </CardContent>
