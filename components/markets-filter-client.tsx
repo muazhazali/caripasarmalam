@@ -16,12 +16,10 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { getMarketOpenStatus } from "@/lib/utils";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Market } from "@/lib/markets-data";
 import openDirections from "@/lib/directions";
@@ -82,6 +80,31 @@ const dayMap: Record<string, string> = {
 
 export default function MarketsFilterClient({ initialMarkets, initialState }: MarketsFilterClientProps) {
   const { t } = useLanguage();
+  // Localized day label for UI (supports Malay and English inputs)
+  function getDayLabel(day: string) {
+    if (!day) return day;
+    if (day === "All Days" || day === "Semua Hari") return t.allDays;
+    const map: Record<string, keyof typeof t | undefined> = {
+      // Malay
+      Isnin: "monday",
+      Selasa: "tuesday",
+      Rabu: "wednesday",
+      Khamis: "thursday",
+      Jumaat: "friday",
+      Sabtu: "saturday",
+      Ahad: "sunday",
+      // English
+      Monday: "monday",
+      Tuesday: "tuesday",
+      Wednesday: "wednesday",
+      Thursday: "thursday",
+      Friday: "friday",
+      Saturday: "saturday",
+      Sunday: "sunday",
+    };
+    const key = map[day];
+    return key ? (t[key] as string) : day;
+  }
   const router = useRouter();
   const searchParams = useSearchParams();
   const [markets, setMarkets] = useState<Market[]>(initialMarkets);
@@ -111,10 +134,10 @@ export default function MarketsFilterClient({ initialMarkets, initialState }: Ma
         url: `${process.env.NEXT_PUBLIC_SITE_URL || "https://pasarmalam.app"}/markets/${market.id}`,
         geo: market.location
           ? {
-              "@type": "GeoCoordinates",
-              latitude: market.location.latitude,
-              longitude: market.location.longitude,
-            }
+            "@type": "GeoCoordinates",
+            latitude: market.location.latitude,
+            longitude: market.location.longitude,
+          }
           : undefined,
         openingHoursSpecification: market.schedule.map((schedule) => ({
           "@type": "OpeningHoursSpecification",
@@ -418,7 +441,7 @@ export default function MarketsFilterClient({ initialMarkets, initialState }: Ma
               </div>
               <div className="hidden md:flex gap-2">
                 <Select value={selectedState} onValueChange={(value) => setQueryParam("state", value)}>
-                  <SelectTrigger className="w-48 h-11 md:h-12">
+                  <SelectTrigger className="w-48 h-12!">
                     <SelectValue placeholder={t.stateLabel} />
                   </SelectTrigger>
                   <SelectContent>
@@ -430,15 +453,13 @@ export default function MarketsFilterClient({ initialMarkets, initialState }: Ma
                   </SelectContent>
                 </Select>
                 <Select value={selectedDay} onValueChange={(value) => setQueryParam("day", value)}>
-                  <SelectTrigger className="w-40 h-11 md:h-12">
+                  <SelectTrigger className="w-40 h-12!">
                     <SelectValue placeholder={t.dayLabel} />
                   </SelectTrigger>
                   <SelectContent>
                     {daysOfWeek.map((day) => (
                       <SelectItem key={day} value={day}>
-                        {day === "All Days" || day === "Semua Hari"
-                          ? t.allDays
-                          : t[day.toLowerCase() as keyof typeof t] || day}
+                        {getDayLabel(day)}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -452,7 +473,7 @@ export default function MarketsFilterClient({ initialMarkets, initialState }: Ma
                 <div className="flex items-center justify-between">
                   <CardTitle className="text-lg">{t.filtersAmenities}</CardTitle>
                   <div className="flex items-center gap-2">
-                    <Button variant="outline" size="sm" onClick={clearAllFilters}>
+                    <Button variant="outline" size="sm" onClick={clearAllFilters} className="dark:text-white dark:hover:bg-gray-800">
                       {t.clearAllFilters}
                     </Button>
                   </div>
@@ -566,71 +587,63 @@ export default function MarketsFilterClient({ initialMarkets, initialState }: Ma
                         <Filter className="h-5 w-5" />
                       </Button>
                     </SheetTrigger>
-                    <SheetContent side="bottom" className="h-[75vh] p-4">
-                      <SheetHeader>
+                    <SheetContent side="bottom" className="rounded-t-4xl p-4">
+                      <SheetHeader className="p-[1rem_0]">
                         <SheetTitle>{t.filters}</SheetTitle>
                       </SheetHeader>
-                      <div className="mt-4 space-y-4">
-                        <div>
-                          <label className="text-sm font-medium text-foreground mb-2 block">{t.stateLabel}</label>
-                          <Select value={selectedState} onValueChange={(value) => setQueryParam("state", value)}>
-                            <SelectTrigger>
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {malaysianStates.map((state) => (
-                                <SelectItem key={state} value={state}>
-                                  {state === "All States" || state === "Semua Negeri" ? t.allStates : state}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </div>
-                        <div>
-                          <label className="text-sm font-medium text-foreground mb-2 block">{t.dayLabel}</label>
-                          <Select value={selectedDay} onValueChange={(value) => setQueryParam("day", value)}>
-                            <SelectTrigger>
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {daysOfWeek.map((day) => (
-                                <SelectItem key={day} value={day}>
-                                  {day === "All Days" || day === "Semua Hari"
-                                    ? t.allDays
-                                    : t[day.toLowerCase() as keyof typeof t] || day}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </div>
-                        <div>
-                          <div className="flex items-center space-x-2">
-                            <Checkbox
-                              id="open-now-mobile"
-                              checked={openNow}
-                              onCheckedChange={(checked: boolean) => {
-                                const next = !!checked;
-                                setOpenNow(next);
-                                setQueryParam("open", next ? "1" : null);
-                              }}
-                            />
-                            <label htmlFor="open-now-mobile" className="text-sm font-medium">
-                              {t.openNow}
-                            </label>
+                      <div className="space-y-4">
+                        <div className="flex gap-2">
+                          <div className="flex-1">
+                            <label className="text-sm font-medium text-foreground mb-2 block">{t.stateLabel}</label>
+                            <Select value={selectedState} onValueChange={(value) => setQueryParam("state", value)}>
+                              <SelectTrigger>
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {malaysianStates.map((state) => (
+                                  <SelectItem key={state} value={state}>
+                                    {state === "All States" || state === "Semua Negeri" ? t.allStates : state}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </div>
+                          <div className="flex-1">
+                            <label className="text-sm font-medium text-foreground mb-2 block">{t.dayLabel}</label>
+                            <Select value={selectedDay} onValueChange={(value) => setQueryParam("day", value)}>
+                              <SelectTrigger>
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {daysOfWeek.map((day) => (
+                                  <SelectItem key={day} value={day}>
+                                    {getDayLabel(day)}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
                           </div>
                         </div>
+                        <div>
+                          <label className="text-sm font-medium text-foreground mb-2 block">{t.amenitiesFacilities}</label>
+                        </div>
                         <div className="grid grid-cols-2 gap-3">
-                          <div className="flex items-center space-x-2">
-                            <Checkbox
-                              id="parking"
-                              checked={filters.parking}
-                              onCheckedChange={(checked: boolean) =>
-                                setFilters((prev) => ({ ...prev, parking: checked as boolean }))
-                              }
-                            />
-                            <label htmlFor="parking" className="text-sm font-medium">
-                              {t.parking}
-                            </label>
+                          <div>
+                            <div className="flex items-center space-x-2">
+                              <Checkbox
+                                id="open-now-mobile"
+                                checked={openNow}
+                                onCheckedChange={(checked: boolean) => {
+                                  const next = !!checked;
+                                  setOpenNow(next);
+                                  setQueryParam("open", next ? "1" : null);
+                                }}
+                                className="inset-shadow-xs border-gray-100"
+                              />
+                              <label htmlFor="open-now-mobile" className="text-sm font-medium">
+                                {t.openNow}
+                              </label>
+                            </div>
                           </div>
                           <div className="flex items-center space-x-2">
                             <Checkbox
@@ -639,6 +652,7 @@ export default function MarketsFilterClient({ initialMarkets, initialState }: Ma
                               onCheckedChange={(checked: boolean) =>
                                 setFilters((prev) => ({ ...prev, toilet: checked as boolean }))
                               }
+                              className="inset-shadow-xs border-gray-100"
                             />
                             <label htmlFor="toilet" className="text-sm font-medium">
                               {t.toilet}
@@ -651,9 +665,23 @@ export default function MarketsFilterClient({ initialMarkets, initialState }: Ma
                               onCheckedChange={(checked: boolean) =>
                                 setFilters((prev) => ({ ...prev, prayer_room: checked as boolean }))
                               }
+                              className="inset-shadow-xs border-gray-100"
                             />
                             <label htmlFor="prayer_room" className="text-sm font-medium">
                               {t.prayerRoom}
+                            </label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <Checkbox
+                              id="parking"
+                              checked={filters.parking}
+                              onCheckedChange={(checked: boolean) =>
+                                setFilters((prev) => ({ ...prev, parking: checked as boolean }))
+                              }
+                              className="inset-shadow-xs border-gray-100"
+                            />
+                            <label htmlFor="parking" className="text-sm font-medium">
+                              {t.parking}
                             </label>
                           </div>
                           <div className="flex items-center space-x-2">
@@ -663,6 +691,7 @@ export default function MarketsFilterClient({ initialMarkets, initialState }: Ma
                               onCheckedChange={(checked: boolean) =>
                                 setFilters((prev) => ({ ...prev, accessible_parking: checked as boolean }))
                               }
+                              className="inset-shadow-xs border-gray-100"
                             />
                             <label htmlFor="accessible_parking" className="text-sm font-medium">
                               {t.accessibleParking}
@@ -684,7 +713,7 @@ export default function MarketsFilterClient({ initialMarkets, initialState }: Ma
                 {/* Desktop controls */}
                 <div className="hidden md:flex items-center gap-2">
                   <Select value={sortBy} onValueChange={setSortBy}>
-                    <SelectTrigger className="w-48">
+                    <SelectTrigger>
                       <ArrowUpDown className="h-4 w-4 mr-2" />
                       <SelectValue />
                     </SelectTrigger>
@@ -700,7 +729,7 @@ export default function MarketsFilterClient({ initialMarkets, initialState }: Ma
                     variant="outline"
                     size="sm"
                     onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
-                    className="px-3"
+                    className="px-3 dark:text-white dark:hover:bg-gray-800"
                   >
                     {sortOrder === "asc" ? <ArrowUp className="h-4 w-4" /> : <ArrowDown className="h-4 w-4" />}
                   </Button>
@@ -711,7 +740,7 @@ export default function MarketsFilterClient({ initialMarkets, initialState }: Ma
               <div className="mt-3 grid grid-cols-1 gap-2 md:hidden">
                 <div className="flex gap-2">
                   <Select value={sortBy} onValueChange={setSortBy}>
-                    <SelectTrigger className="flex-1 h-11 text-base">
+                    <SelectTrigger className="border border-gray flex-1 h-11! text-base">
                       <ArrowUpDown className="h-5 w-5 mr-2" />
                       <SelectValue />
                     </SelectTrigger>

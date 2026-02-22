@@ -18,7 +18,6 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
@@ -32,7 +31,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Market } from "@/lib/markets-data";
 import { formatScheduleRule, formatWeekday } from "@/lib/i18n";
 import { useLanguage } from "@/components/language-provider";
@@ -41,7 +40,6 @@ import { getStateFromCoordinates } from "@/lib/geolocation";
 import { createBrowserSupabaseClient } from "@/lib/supabase-client";
 import { dbRowToMarket } from "@/lib/db-transform";
 import MarketCard from "@/components/market-card";
-import { DayCode } from "@/app/enums";
 
 function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
   const R = 6371; // Radius of the Earth in kilometers
@@ -81,8 +79,9 @@ const malaysianStates = [
 
 const daysOfWeek = ["Semua Hari", "Isnin", "Selasa", "Rabu", "Khamis", "Jumaat", "Sabtu", "Ahad"];
 
-// Map localized day names to day codes
+// Map localized day names (Malay and English) to day codes
 const dayMap: Record<string, string> = {
+  // Malay
   Isnin: "mon",
   Selasa: "tue",
   Rabu: "wed",
@@ -90,11 +89,51 @@ const dayMap: Record<string, string> = {
   Jumaat: "fri",
   Sabtu: "sat",
   Ahad: "sun",
+  // English
+  Monday: "mon",
+  Tuesday: "tue",
+  Wednesday: "wed",
+  Thursday: "thu",
+  Friday: "fri",
+  Saturday: "sat",
+  Sunday: "sun",
+  // Variants representing "all"
+  "All Days": "",
+  "Semua Hari": "",
 };
 
+function dayNameToCode(name?: string | null) {
+  if (!name) return undefined;
+  if (dayMap[name]) return dayMap[name] || undefined;
+  const key = name.trim();
+  if (dayMap[key]) return dayMap[key] || undefined;
+  const normalized = key.charAt(0).toUpperCase() + key.slice(1).toLowerCase();
+  if (dayMap[normalized]) return dayMap[normalized] || undefined;
+  return undefined;
+}
+
 export default function HomepageClient({ initialMarkets, initialState }: HomepageClientProps) {
-  const { t, language } = useLanguage();
+  const { t } = useLanguage();
+
+  // Return a localized label for a day name (supports Malay and English inputs)
+  function getDayLabel(dayName: string) {
+    if (!dayName) return dayName;
+    if (dayName === "All Days" || dayName === "Semua Hari") return t.allDays;
+    const code = dayNameToCode(dayName);
+    if (!code) return dayName;
+    const map: Record<string, string> = {
+      mon: t.monday,
+      tue: t.tuesday,
+      wed: t.wednesday,
+      thu: t.thursday,
+      fri: t.friday,
+      sat: t.saturday,
+      sun: t.sunday,
+    };
+    return map[code] || dayName;
+  }
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [markets, setMarkets] = useState<Market[]>(initialMarkets);
   const [isLoadingMarkets, setIsLoadingMarkets] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -106,8 +145,16 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
   const [isRequestingLocation, setIsRequestingLocation] = useState(false);
   const [sortBy, setSortBy] = useState("smart");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
-  const [selectedState, setSelectedState] = useState(initialState || "All States");
-  const [selectedDay, setSelectedDay] = useState("All Days");
+  // Normalize defaults to Malay labels (same behaviour as markets-filter-client)
+  const stateFromUrl = searchParams.get("state");
+  const normalizedState = stateFromUrl === "All States" ? malaysianStates[0] : stateFromUrl;
+  const defaultState = normalizedState || (initialState === "All States" ? malaysianStates[0] : initialState) || malaysianStates[0];
+  const [selectedState, setSelectedState] = useState(defaultState);
+
+  const dayFromUrl = searchParams.get("day");
+  const normalizedDay = dayFromUrl === "All Days" ? daysOfWeek[0] : dayFromUrl;
+  const defaultDay = normalizedDay || daysOfWeek[0];
+  const [selectedDay, setSelectedDay] = useState(defaultDay);
   const [openNow, setOpenNow] = useState<boolean>(false);
   const [filters, setFilters] = useState({
     parking: false,
@@ -146,7 +193,7 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
         query = query.eq("state", state);
       }
 
-      const dayCode = day && dayMap[day] ? dayMap[day] : undefined;
+      const dayCode = dayNameToCode(day);
       if (dayCode) {
         // Use filter with 'cs' (contains) operator for JSONB to avoid serialization issues
         const dayFilterValue = `[{"days":["${dayCode}"]}]`;
@@ -221,10 +268,46 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
     );
   }, [selectedState, selectedDay, searchQuery, fetchMarkets]);
 
+  const setQueryParam = useCallback(
+    (key: string, value: string | null) => {
+      const params = new URLSearchParams(searchParams.toString());
+      if (
+        value === null ||
+        value === "All States" ||
+        value === "Semua Negeri" ||
+        value === "All Days" ||
+        value === "Semua Hari"
+      ) {
+        params.delete(key);
+      } else {
+        params.set(key, value);
+      }
+      router.replace(`?${params.toString()}`);
+
+      // Update local state - use first item from arrays as default
+      if (key === "state") {
+        setSelectedState(value || malaysianStates[0]); // "Semua Negeri"
+      }
+      if (key === "day") {
+        setSelectedDay(value || daysOfWeek[0]); // "Semua Hari"
+      }
+
+      // Fetch markets when state/day changes
+      const newState = key === "state" ? value || undefined : selectedState;
+      const newDay = key === "day" ? value || undefined : selectedDay;
+
+      fetchMarkets(
+        newState && newState !== "All States" && newState !== "Semua Negeri" ? newState : undefined,
+        newDay && newDay !== "All Days" && newDay !== "Semua Hari" ? newDay : undefined,
+      );
+    },
+    [searchParams, router, selectedState, selectedDay, fetchMarkets],
+  );
+
   // Handle "Browse All States" - clear state filter
   const handleBrowseAllStates = useCallback(() => {
-    setSelectedState("All States");
-    updateURLParams("All States", selectedDay);
+    setSelectedState(malaysianStates[0]);
+    updateURLParams(malaysianStates[0], selectedDay);
     fetchMarkets(undefined, selectedDay !== "All Days" && selectedDay !== "Semua Hari" ? selectedDay : undefined);
   }, [selectedDay, updateURLParams, fetchMarkets]);
 
@@ -286,8 +369,8 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
 
   const clearAllFilters = () => {
     setSearchQuery("");
-    setSelectedState("All States");
-    setSelectedDay("All Days");
+    setSelectedState(malaysianStates[0]);
+    setSelectedDay(daysOfWeek[0]);
     setOpenNow(false);
     setFilters({
       parking: false,
@@ -295,7 +378,7 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
       prayer_room: false,
       accessible_parking: false,
     });
-    updateURLParams("All States", "All Days");
+    updateURLParams(malaysianStates[0], daysOfWeek[0]);
     fetchMarkets(undefined, undefined, undefined);
   };
 
@@ -326,20 +409,6 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
     return () => clearTimeout(timer);
   }, [searchQuery, selectedState, selectedDay, fetchMarkets]);
 
-  const dayOrderCodes: DayCode[] = [
-    DayCode.Mon,
-    DayCode.Tue,
-    DayCode.Wed,
-    DayCode.Thu,
-    DayCode.Fri,
-    DayCode.Sat,
-    DayCode.Sun,
-  ];
-
-  function getLocalizedDayFromCode(code: DayCode): string {
-    return formatWeekday(code as DayCode, language);
-  }
-
   const filteredMarkets = useMemo(() => {
     let filtered = markets.filter((market) => {
       const matchesSearch =
@@ -348,22 +417,15 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
         market.district.toLowerCase().includes(searchQuery.toLowerCase()) ||
         market.state.toLowerCase().includes(searchQuery.toLowerCase());
 
-      const matchesState = selectedState === "All States" || market.state === selectedState;
+      const matchesState =
+        selectedState === "All States" || selectedState === "Semua Negeri" || market.state === selectedState;
 
       const matchesDay =
         selectedDay === "All Days" ||
+        selectedDay === "Semua Hari" ||
         market.schedule.some((schedule) =>
-          schedule.days.some((day) => {
-            const dayMap: { [key: string]: string } = {
-              Isnin: "mon",
-              Selasa: "tue",
-              Rabu: "wed",
-              Khamis: "thu",
-              Jumaat: "fri",
-              Sabtu: "sat",
-              Ahad: "sun",
-            };
-            return dayMap[selectedDay] === day;
+          schedule.days.some((d) => {
+            return dayNameToCode(selectedDay) === d;
           }),
         );
 
@@ -471,7 +533,7 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
                   <Input
                     placeholder={t.searchPlaceholder}
-                    className="pl-10 h-11 md:h-12 text-base md:text-lg"
+                    className="pl-10 h-11 md:h-12 text-base md:text-lg bg-primary/10"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                   />
@@ -516,7 +578,7 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
                 )}
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Button asChild variant="outline" className="gap-2">
+                    <Button asChild variant="outline" className="gap-2 dark:hover:text-white dark:hover:bg-gray-900">
                       <a href={suggestFormUrl} target="_blank" rel="noopener noreferrer">
                         <MapPin className="h-4 w-4" />
                         {t.suggestMarket}
@@ -551,7 +613,7 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
             </div>
 
             {/* Filter and Sort Controls */}
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pt-4 border-t border-border">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-end gap-3 pt-4 border-t border-border">
               {/* Mobile filter button */}
               <Sheet open={showFilters} onOpenChange={setShowFilters}>
                 <SheetTrigger asChild>
@@ -559,54 +621,58 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
                     <Filter className="h-5 w-5" />
                   </Button>
                 </SheetTrigger>
-                <SheetContent side="bottom" className="h-[75vh] p-4">
-                  <SheetHeader>
+                <SheetContent side="bottom" className="rounded-t-4xl p-4">
+                  <SheetHeader className="p-[1rem_0]">
                     <SheetTitle>{t.filters}</SheetTitle>
                   </SheetHeader>
-                  <div className="mt-4 space-y-4">
-                    <div>
-                      <label className="text-sm font-medium text-foreground mb-2 block">{t.stateLabel}</label>
-                      <Select value={selectedState} onValueChange={handleStateChange}>
-                        <SelectTrigger>
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {malaysianStates.map((state) => (
-                            <SelectItem key={state} value={state}>
-                              {state === "All States" || state === "Semua Negeri" ? t.allStates : state}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                  <div className="space-y-4">
+                    <div className="flex gap-2">
+                      <div className="flex-1">
+                        <label className="text-sm font-medium text-foreground mb-2 block">{t.stateLabel}</label>
+                        <Select value={selectedState} onValueChange={(value) => setQueryParam("state", value)}>
+                          <SelectTrigger>
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {malaysianStates.map((state) => (
+                              <SelectItem key={state} value={state}>
+                                {state === "All States" || state === "Semua Negeri" ? t.allStates : state}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="flex-1">
+                        <label className="text-sm font-medium text-foreground mb-2 block">{t.dayLabel}</label>
+                        <Select value={selectedDay} onValueChange={(value) => setQueryParam("day", value)}>
+                          <SelectTrigger>
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {daysOfWeek.map((day) => (
+                              <SelectItem key={day} value={day}>
+                                {getDayLabel(day)}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
                     </div>
                     <div>
-                      <label className="text-sm font-medium text-foreground mb-2 block">{t.dayLabel}</label>
-                      <Select value={selectedDay} onValueChange={handleDayChange}>
-                        <SelectTrigger>
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {daysOfWeek.map((day) => (
-                            <SelectItem key={day} value={day}>
-                              {day === "All Days" ? t.allDays : t[day.toLowerCase() as keyof typeof t] || day}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                      <label className="text-sm font-bold text-foreground mb-2 block">{t.amenitiesFacilities}</label>
                     </div>
-                    <div>
+                    <div className="grid grid-cols-2 gap-3">
                       <div className="flex items-center space-x-2">
                         <Checkbox
                           id="open-now-mobile"
                           checked={openNow}
                           onCheckedChange={(checked) => setOpenNow(checked as boolean)}
+                          className="inset-shadow-xs border-gray-100"
                         />
                         <label htmlFor="open-now-mobile" className="text-sm font-medium">
                           {t.openNow}
                         </label>
                       </div>
-                    </div>
-                    <div className="grid grid-cols-2 gap-3">
                       <div className="flex items-center space-x-2">
                         <Checkbox
                           id="parking"
@@ -617,6 +683,7 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
                               parking: checked as boolean,
                             }))
                           }
+                          className="inset-shadow-xs border-gray-100"
                         />
                         <label htmlFor="parking" className="text-sm font-medium">
                           {t.parking}
@@ -632,6 +699,7 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
                               toilet: checked as boolean,
                             }))
                           }
+                          className="inset-shadow-xs border-gray-100"
                         />
                         <label htmlFor="toilet" className="text-sm font-medium">
                           {t.toilet}
@@ -647,6 +715,7 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
                               prayer_room: checked as boolean,
                             }))
                           }
+                          className="inset-shadow-xs border-gray-100"
                         />
                         <label htmlFor="prayer_room" className="text-sm font-medium">
                           {t.prayerRoom}
@@ -662,6 +731,7 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
                               accessible_parking: checked as boolean,
                             }))
                           }
+                          className="inset-shadow-xs border-gray-100"
                         />
                         <label htmlFor="accessible_parking" className="text-sm font-medium">
                           {t.accessibleParking}
@@ -683,12 +753,12 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
               {/* Desktop Filter and Sort Controls */}
               <div className="hidden md:flex items-center gap-2 flex-wrap">
                 <Select value={sortBy} onValueChange={setSortBy}>
-                  <SelectTrigger className="w-[180px]">
+                  <SelectTrigger>
                     <ArrowUpDown className="h-4 w-4 mr-2" />
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="smart">Smart Sort (Open + Nearest)</SelectItem>
+                    <SelectItem value="smart">{t.smartSort}</SelectItem>
                     <SelectItem value="name">{t.sortByName}</SelectItem>
                     <SelectItem value="state">{t.sortByLocation}</SelectItem>
                     <SelectItem value="size">{t.sortByStallCount}</SelectItem>
@@ -700,7 +770,7 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
                   variant="outline"
                   size="sm"
                   onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
-                  className="px-3"
+                  className="dark:text-white dark:hover:bg-gray-800 px-3"
                   aria-label={sortOrder === "asc" ? "Sort ascending" : "Sort descending"}
                 >
                   {sortOrder === "asc" ? <ArrowUp className="h-4 w-4" /> : <ArrowDown className="h-4 w-4" />}
