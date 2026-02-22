@@ -36,6 +36,7 @@ export interface Translations {
   searchPlaceholder: string;
   allStates: string;
   allDays: string;
+  smartSort: string;
   sortByName: string;
   sortByLocation: string;
   sortByStallCount: string;
@@ -192,6 +193,7 @@ export const translations: Record<string, Translations> = {
     searchPlaceholder: "Search markets, locations, or addresses...",
     allStates: "All States",
     allDays: "All Days",
+    smartSort: "Smart Sort (Nearest Open)",
     sortByName: "Sort by Name",
     sortByLocation: "Sort by Location",
     sortByStallCount: "Sort by Stall Count",
@@ -350,6 +352,7 @@ export const translations: Record<string, Translations> = {
     searchPlaceholder: "Cari pasar, lokasi, atau alamat...",
     allStates: "Semua Negeri",
     allDays: "Semua Hari",
+    smartSort: "Susun Pintar (Terdekat dibuka)",
     sortByName: "Susun mengikut Nama",
     sortByLocation: "Susun mengikut Lokasi",
     sortByStallCount: "Susun mengikut Bilangan Gerai",

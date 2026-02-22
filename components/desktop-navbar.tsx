@@ -2,8 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
-import { Home, ShoppingBag, Map as MapIcon, Github, Info, Users, Moon, Sun } from "lucide-react";
+import { Home, ShoppingBag, Map as MapIcon, Github, Info, Users } from "lucide-react";
 import { useLanguage } from "@/components/language-provider";
 import LanguageSwitcher from "@/components/language-switcher";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
@@ -22,11 +21,10 @@ function NavLink({
   return (
     <Link
       href={href}
-      className={`inline-flex items-center gap-2 px-4 py-2 rounded-md transition-colors ${
-        isActive
+      className={`inline-flex items-center gap-2 px-4 py-2 rounded-md transition-colors ${isActive
           ? "text-primary bg-primary/10 border border-primary/20"
-          : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
-      }`}
+          : "text-muted-foreground hover:text-foreground hover:bg-gray-100"
+        }`}
       aria-current={isActive ? "page" : undefined}
     >
       <Icon className="h-4 w-4" />
@@ -44,12 +42,12 @@ export default function DesktopNavbar() {
     label: string;
     icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
   }[] = [
-    { href: "/", label: t.home, icon: Home },
-    { href: "/markets", label: t.markets, icon: ShoppingBag },
-    { href: "/map", label: t.mapView, icon: MapIcon },
-    { href: "/about", label: t.about, icon: Info },
-    { href: "/contributors", label: t.contributors, icon: Users },
-  ];
+      { href: "/", label: t.home, icon: Home },
+      { href: "/markets", label: t.markets, icon: ShoppingBag },
+      { href: "/map", label: t.mapView, icon: MapIcon },
+      { href: "/about", label: t.about, icon: Info },
+      { href: "/contributors", label: t.contributors, icon: Users },
+    ];
 
   return (
     <header className="sticky top-0 z-50 hidden border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 md:block shadow-sm">
@@ -71,18 +69,18 @@ export default function DesktopNavbar() {
               ))}
             </nav>
 
+            <LanguageSwitcher currentLanguage={language} onLanguageChange={setLanguage} />
+            <ThemeToggle />
             <Link
               href="https://github.com/muazhazali/caripasarmalam"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-3 py-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted/50"
+              className="items-center px-3 py-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted/50"
               aria-label="GitHub Repository"
             >
               <Github className="h-4 w-4" />
-              <span className="text-sm font-medium hidden lg:inline">GitHub</span>
+              {/* <span className="text-sm font-medium hidden lg:inline">GitHub</span> */}
             </Link>
-            <LanguageSwitcher currentLanguage={language} onLanguageChange={setLanguage} />
-            <ThemeToggle />
           </div>
         </div>
       </div>
