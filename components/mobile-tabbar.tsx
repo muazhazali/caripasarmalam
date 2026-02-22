@@ -2,12 +2,11 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
-import { Home, ShoppingBag, Map as MapIcon, Globe, MoreHorizontal, Info, Users, Github, Sun, Moon } from "lucide-react";
+import { Home, ShoppingBag, Map as MapIcon, MoreHorizontal, Info, Users, Github, Sun, Moon } from "lucide-react";
 import { useLanguage } from "@/components/language-provider";
-import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { useTheme } from "next-themes";
+import { GB, MY } from "country-flag-icons/react/3x2";
 
 function TabButton({
   href,
@@ -72,11 +71,11 @@ export default function MobileTabBar() {
                 <span className="text-xs font-medium">{t.more}</span>
               </button>
             </SheetTrigger>
-            <SheetContent side="bottom" className="pb-6 px-6">
-              <SheetHeader>
+            <SheetContent side="bottom" className="rounded-t-4xl py-4 px-6">
+              <SheetHeader className="p-[1rem_0]">
                 <SheetTitle>{t.more}</SheetTitle>
               </SheetHeader>
-              <div className="mt-6 grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-4">
                 <Link
                   href="/about"
                   className="flex items-center gap-3 rounded-lg border border-border px-4 py-4 text-sm text-foreground hover:bg-muted/50 transition-colors"
@@ -108,7 +107,7 @@ export default function MobileTabBar() {
                     setLanguage(next);
                   }}
                 >
-                  <Globe className="h-4 w-4" />
+                  {language === "ms" ? <MY className="h-4 w-4" /> : <GB className="h-4 w-4" />}
                   <span>
                     {t.languageLabel}: {language.toUpperCase()}
                   </span>
