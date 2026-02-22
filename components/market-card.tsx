@@ -10,6 +10,9 @@ import { useLanguage } from "@/components/language-provider";
 import { getMarketOpenStatus } from "@/lib/utils";
 import { formatWeekday } from "@/lib/i18n";
 import { DayCode } from "@/app/enums";
+import { openDirections } from "@/lib/directions";
+import { useState } from "react";
+import { DirectionsChooserDialog } from "./directions-chooser-dialog";
 
 interface MarketCardProps {
   market: Market;
@@ -37,6 +40,7 @@ function isPositiveNumber(value: unknown): boolean {
 
 export function MarketCard({ market, userLocation, showAddress = false }: MarketCardProps) {
   const { t, language } = useLanguage();
+  const [showDirectionsDialog, setShowDirectionsDialog] = useState(false);
 
   const distance =
     userLocation && market.location
@@ -70,15 +74,19 @@ export function MarketCard({ market, userLocation, showAddress = false }: Market
 
   const status = getMarketOpenStatus(market);
 
+  const handleShowDirections = () => {
+    openDirections(market.location!.latitude, market.location!.longitude, () => setShowDirectionsDialog(true));
+  };
+
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-shadow h-full flex flex-col">
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between mb-2">
-          <Badge variant="secondary">{market.state}</Badge>
+          <Badge variant="secondary" className="bg-amber-400 dark:bg-gray-600/30">{market.state}</Badge>
           {status.status === "open" ? (
             <Badge className="bg-green-600 text-white border-transparent">{t.openNow}</Badge>
           ) : (
-            <Badge variant="outline" className="text-xs">
+            <Badge variant="outline" className="bg-red-600 text-white text-xs">
               {t.closedNow}
             </Badge>
           )}
@@ -157,19 +165,26 @@ export function MarketCard({ market, userLocation, showAddress = false }: Market
         <div className="mt-auto" />
 
         <div className="flex gap-2">
-          {market.location?.gmaps_link && (
-            <Button asChild className="flex-1">
-              <a href={market.location.gmaps_link} target="_blank" rel="noopener noreferrer">
-                {t.showDirection}
-              </a>
+          {market.location && (
+            <Button className="flex-1" onClick={handleShowDirections}>
+              <a href={market.location.gmaps_link} target="_blank" rel="noopener noreferrer"></a>
+              {t.showDirection}
             </Button>
           )}
           <Link href={`/markets/${market.id}`}>
             <Button variant="outline">{t.viewDetails}</Button>
           </Link>
         </div>
+        {/* Render the mobile-only directions chooser. */}
+        <DirectionsChooserDialog
+          open={showDirectionsDialog}
+          onOpenChange={setShowDirectionsDialog}
+          latitude={market.location?.latitude || 0}
+          longitude={market.location?.longitude || 0}
+        />
       </CardContent>
     </Card>
+
   );
 }
 
