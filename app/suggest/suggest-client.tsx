@@ -183,7 +183,18 @@ export function SuggestClient({ markets, states }: SuggestClientProps) {
           </div>
 
           {/* Honeypot — hidden from real users, bots fill this */}
-          <div aria-hidden="true" style={{ position: "absolute", left: "-9999px", opacity: 0, pointerEvents: "none", tabIndex: -1 } as React.CSSProperties}>
+          <div
+            aria-hidden="true"
+            style={
+              {
+                position: "absolute",
+                left: "-9999px",
+                opacity: 0,
+                pointerEvents: "none",
+                tabIndex: -1,
+              } as React.CSSProperties
+            }
+          >
             <label htmlFor="website">Website</label>
             <input
               id="website"
