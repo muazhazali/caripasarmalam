@@ -9,7 +9,7 @@ import { marketFormSchema, type MarketFormValues } from "@/lib/admin-schema";
 // For production with multiple instances, replace with Redis/Upstash.
 // ---------------------------------------------------------------------------
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
-const RATE_LIMIT_MAX = 5;          // max submissions per window
+const RATE_LIMIT_MAX = 5; // max submissions per window
 const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000; // 1 hour
 
 function checkRateLimit(ip: string): boolean {
@@ -43,9 +43,8 @@ export async function submitSuggestion(
   targetId: string | null,
   data: MarketFormValues,
   submitterEmail?: string,
-  honeypot?: string,          // must be empty — bots fill it, humans don't see it
+  honeypot?: string, // must be empty — bots fill it, humans don't see it
 ): Promise<{ error?: string }> {
-
   // 1. Honeypot check — if filled, silently succeed (don't tell bots they failed)
   if (honeypot && honeypot.trim().length > 0) {
     return {};
@@ -53,10 +52,7 @@ export async function submitSuggestion(
 
   // 2. Rate limit by IP
   const headersList = await headers();
-  const ip =
-    headersList.get("x-forwarded-for")?.split(",")[0]?.trim() ??
-    headersList.get("x-real-ip") ??
-    "unknown";
+  const ip = headersList.get("x-forwarded-for")?.split(",")[0]?.trim() ?? headersList.get("x-real-ip") ?? "unknown";
 
   pruneRateLimitMap();
 
