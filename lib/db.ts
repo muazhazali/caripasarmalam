@@ -172,6 +172,34 @@ export async function getAllStates(): Promise<string[]> {
 }
 
 /**
+ * Fetch all markets for admin (no status filter), paginated
+ * Returns markets and total count
+ */
+export async function getAdminMarkets(
+  page = 1,
+  pageSize = 50
+): Promise<{ markets: Market[]; count: number }> {
+  const supabase = await createClient();
+  const offset = (page - 1) * pageSize;
+
+  const { data, error, count } = await supabase
+    .from("pasar_malams")
+    .select("*", { count: "exact" })
+    .order("name")
+    .range(offset, offset + pageSize - 1);
+
+  if (error) {
+    console.error("Error fetching admin markets:", error);
+    throw new Error(`Failed to fetch markets: ${error.message}`);
+  }
+
+  return {
+    markets: (data ?? []).map(dbRowToMarket),
+    count: count ?? 0,
+  };
+}
+
+/**
  * Get all distinct districts for a given state
  *
  * @param state - State name
