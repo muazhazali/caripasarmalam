@@ -29,6 +29,7 @@ export function SuggestClient({ markets, states }: SuggestClientProps) {
   const [type, setType] = useState<SuggestType>(null);
   const [selectedMarket, setSelectedMarket] = useState<Market | null>(null);
   const [email, setEmail] = useState("");
+  const [honeypot, setHoneypot] = useState("");
   const [open, setOpen] = useState(false);
   const [success, setSuccess] = useState(false);
   const [isPending, startTransition] = useTransition();
@@ -47,6 +48,7 @@ export function SuggestClient({ markets, states }: SuggestClientProps) {
         selectedMarket?.id ?? null,
         data,
         email || undefined,
+        honeypot,
       );
       if (result.error) {
         toast.error(result.error);
@@ -77,7 +79,10 @@ export function SuggestClient({ markets, states }: SuggestClientProps) {
     <div className="max-w-2xl mx-auto px-4 py-10 pb-20 md:pb-10">
       <div className="mb-8">
         <h1 className="text-2xl font-bold mb-2">{t.suggestPageTitle || "Suggest a Market"}</h1>
-        <p className="text-muted-foreground text-sm">{t.suggestPageSubtitle || "Help us keep the directory up to date by suggesting a new market or an update to an existing one."}</p>
+        <p className="text-muted-foreground text-sm">
+          {t.suggestPageSubtitle ||
+            "Help us keep the directory up to date by suggesting a new market or an update to an existing one."}
+        </p>
       </div>
 
       {/* Step 1: Type selector */}
@@ -88,14 +93,18 @@ export function SuggestClient({ markets, states }: SuggestClientProps) {
             className="text-left rounded-xl border-2 border-border hover:border-primary hover:bg-primary/5 transition-colors p-6 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
           >
             <div className="text-lg font-semibold mb-1">{t.suggestTypeNew || "Suggest a New Market"}</div>
-            <div className="text-sm text-muted-foreground">{t.suggestTypeNewDesc || "Know a pasar malam that isn't listed yet?"}</div>
+            <div className="text-sm text-muted-foreground">
+              {t.suggestTypeNewDesc || "Know a pasar malam that isn't listed yet?"}
+            </div>
           </button>
           <button
             onClick={() => setType("update")}
             className="text-left rounded-xl border-2 border-border hover:border-primary hover:bg-primary/5 transition-colors p-6 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
           >
             <div className="text-lg font-semibold mb-1">{t.suggestTypeUpdate || "Update an Existing Market"}</div>
-            <div className="text-sm text-muted-foreground">{t.suggestTypeUpdateDesc || "See outdated info? Help us fix it."}</div>
+            <div className="text-sm text-muted-foreground">
+              {t.suggestTypeUpdateDesc || "See outdated info? Help us fix it."}
+            </div>
           </button>
         </div>
       )}
@@ -171,6 +180,20 @@ export function SuggestClient({ markets, states }: SuggestClientProps) {
                 — updating <span className="font-medium text-foreground">{selectedMarket.name}</span>
               </span>
             )}
+          </div>
+
+          {/* Honeypot — hidden from real users, bots fill this */}
+          <div aria-hidden="true" style={{ position: "absolute", left: "-9999px", opacity: 0, pointerEvents: "none", tabIndex: -1 } as React.CSSProperties}>
+            <label htmlFor="website">Website</label>
+            <input
+              id="website"
+              name="website"
+              type="text"
+              autoComplete="off"
+              tabIndex={-1}
+              value={honeypot}
+              onChange={(e) => setHoneypot(e.target.value)}
+            />
           </div>
 
           {/* Email field */}
