@@ -5,13 +5,14 @@ import { Playfair_Display } from "next/font/google";
 import { GeistMono } from "geist/font/mono";
 import { Analytics } from "@vercel/analytics/next";
 import { Suspense } from "react";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import Script from "next/script";
 import "./globals.css";
 import MobileTabBar from "@/components/mobile-tabbar";
 import DesktopNavbar from "@/components/desktop-navbar";
 import { LanguageProvider } from "@/components/language-provider";
 import { ThemeProvider } from "@/components/theme-provider";
+import { Toaster } from "@/components/ui/sonner";
 
 const sourceSansPro = Source_Sans_3({
   subsets: ["latin"],
@@ -91,6 +92,9 @@ export default async function RootLayout({
   const cookieStore = await cookies();
   const cookieLang = cookieStore.get("language")?.value;
   const initialLanguage = cookieLang === "en" ? "en" : "ms";
+  const headersList = await headers();
+  const pathname = headersList.get("x-pathname") ?? "";
+  const isAdmin = pathname.startsWith("/admin");
   return (
     <html lang={initialLanguage} suppressHydrationWarning>
       <head>
@@ -137,11 +141,12 @@ export default async function RootLayout({
       <body className={`font-sans ${sourceSansPro.variable} ${playfairDisplay.variable} ${GeistMono.variable}`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <LanguageProvider initialLanguage={initialLanguage}>
-            <DesktopNavbar />
+            {!isAdmin && <DesktopNavbar />}
             <Suspense fallback={null}>
-              <main className="md:pb-0 pb-16">{children}</main>
+              <main className={isAdmin ? "" : "md:pb-0 pb-16"}>{children}</main>
             </Suspense>
-            <MobileTabBar />
+            {!isAdmin && <MobileTabBar />}
+            <Toaster />
           </LanguageProvider>
         </ThemeProvider>
         <Analytics />
