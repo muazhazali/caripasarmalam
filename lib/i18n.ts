@@ -311,7 +311,8 @@ export const translations: Record<string, Translations> = {
 
     // Suggest page
     suggestPageTitle: "Suggest a Market",
-    suggestPageSubtitle: "Help us keep the directory up to date by suggesting a new market or an update to an existing one.",
+    suggestPageSubtitle:
+      "Help us keep the directory up to date by suggesting a new market or an update to an existing one.",
     suggestTypeNew: "Suggest a New Market",
     suggestTypeNewDesc: "Know a pasar malam that isn't listed yet?",
     suggestTypeUpdate: "Update an Existing Market",
@@ -489,7 +490,8 @@ export const translations: Record<string, Translations> = {
 
     // Suggest page
     suggestPageTitle: "Cadang Pasar",
-    suggestPageSubtitle: "Bantu kami kemas kini direktori dengan mencadangkan pasar baharu atau kemas kini maklumat sedia ada.",
+    suggestPageSubtitle:
+      "Bantu kami kemas kini direktori dengan mencadangkan pasar baharu atau kemas kini maklumat sedia ada.",
     suggestTypeNew: "Cadang Pasar Baharu",
     suggestTypeNewDesc: "Tahu pasar malam yang belum disenaraikan?",
     suggestTypeUpdate: "Kemas Kini Pasar Sedia Ada",

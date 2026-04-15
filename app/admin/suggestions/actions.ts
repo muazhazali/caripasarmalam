@@ -25,10 +25,7 @@ export async function approveSuggestion(id: string): Promise<{ error?: string }>
     }
   } else {
     if (!suggestion.target_id) return { error: "Missing target market ID." };
-    const { error } = await supabase
-      .from("pasar_malams")
-      .update(row)
-      .eq("id", suggestion.target_id);
+    const { error } = await supabase.from("pasar_malams").update(row).eq("id", suggestion.target_id);
     if (error) {
       console.error("Error updating market from suggestion:", error);
       return { error: error.message };

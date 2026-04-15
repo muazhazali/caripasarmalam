@@ -46,7 +46,7 @@ export function SuggestClient({ markets, states }: SuggestClientProps) {
         type === "update" ? "update" : "new",
         selectedMarket?.id ?? null,
         data,
-        email || undefined
+        email || undefined,
       );
       if (result.error) {
         toast.error(result.error);
@@ -76,8 +76,8 @@ export function SuggestClient({ markets, states }: SuggestClientProps) {
   return (
     <div className="max-w-2xl mx-auto px-4 py-10 pb-20 md:pb-10">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold mb-2">{t.suggestPageTitle}</h1>
-        <p className="text-muted-foreground text-sm">{t.suggestPageSubtitle}</p>
+        <h1 className="text-2xl font-bold mb-2">{t.suggestPageTitle || "Suggest a Market"}</h1>
+        <p className="text-muted-foreground text-sm">{t.suggestPageSubtitle || "Help us keep the directory up to date by suggesting a new market or an update to an existing one."}</p>
       </div>
 
       {/* Step 1: Type selector */}
@@ -87,15 +87,15 @@ export function SuggestClient({ markets, states }: SuggestClientProps) {
             onClick={() => setType("new")}
             className="text-left rounded-xl border-2 border-border hover:border-primary hover:bg-primary/5 transition-colors p-6 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
           >
-            <div className="text-lg font-semibold mb-1">{t.suggestTypeNew}</div>
-            <div className="text-sm text-muted-foreground">{t.suggestTypeNewDesc}</div>
+            <div className="text-lg font-semibold mb-1">{t.suggestTypeNew || "Suggest a New Market"}</div>
+            <div className="text-sm text-muted-foreground">{t.suggestTypeNewDesc || "Know a pasar malam that isn't listed yet?"}</div>
           </button>
           <button
             onClick={() => setType("update")}
             className="text-left rounded-xl border-2 border-border hover:border-primary hover:bg-primary/5 transition-colors p-6 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
           >
-            <div className="text-lg font-semibold mb-1">{t.suggestTypeUpdate}</div>
-            <div className="text-sm text-muted-foreground">{t.suggestTypeUpdateDesc}</div>
+            <div className="text-lg font-semibold mb-1">{t.suggestTypeUpdate || "Update an Existing Market"}</div>
+            <div className="text-sm text-muted-foreground">{t.suggestTypeUpdateDesc || "See outdated info? Help us fix it."}</div>
           </button>
         </div>
       )}
@@ -113,12 +113,7 @@ export function SuggestClient({ markets, states }: SuggestClientProps) {
             <Label>{t.suggestSelectMarket}</Label>
             <Popover open={open} onOpenChange={setOpen}>
               <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  role="combobox"
-                  aria-expanded={open}
-                  className="w-full justify-between"
-                >
+                <Button variant="outline" role="combobox" aria-expanded={open} className="w-full justify-between">
                   {t.suggestSelectMarketPlaceholder}
                   <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
@@ -139,14 +134,13 @@ export function SuggestClient({ markets, states }: SuggestClientProps) {
                           }}
                         >
                           <Check
-                            className={cn(
-                              "mr-2 h-4 w-4",
-                              selectedMarket?.id === m.id ? "opacity-100" : "opacity-0"
-                            )}
+                            className={cn("mr-2 h-4 w-4", selectedMarket?.id === m.id ? "opacity-100" : "opacity-0")}
                           />
                           <div>
                             <div className="font-medium text-sm">{m.name}</div>
-                            <div className="text-xs text-muted-foreground">{m.district}, {m.state}</div>
+                            <div className="text-xs text-muted-foreground">
+                              {m.district}, {m.state}
+                            </div>
                           </div>
                         </CommandItem>
                       ))}
@@ -193,11 +187,7 @@ export function SuggestClient({ markets, states }: SuggestClientProps) {
           </div>
 
           <MarketForm
-            defaultValues={
-              type === "update" && selectedMarket
-                ? marketToFormValues(selectedMarket)
-                : undefined
-            }
+            defaultValues={type === "update" && selectedMarket ? marketToFormValues(selectedMarket) : undefined}
             onSubmit={handleSubmit}
             states={states}
             isSubmitting={isPending}

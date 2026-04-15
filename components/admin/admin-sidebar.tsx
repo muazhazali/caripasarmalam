@@ -49,7 +49,10 @@ export function AdminSidebar({ pendingCount = 0 }: AdminSidebarProps) {
           <Inbox className="w-4 h-4" />
           Suggestions
           {pendingCount > 0 && (
-            <Badge variant="destructive" className="ml-auto text-xs px-1.5 py-0 h-5 min-w-5 flex items-center justify-center">
+            <Badge
+              variant="destructive"
+              className="ml-auto text-xs px-1.5 py-0 h-5 min-w-5 flex items-center justify-center"
+            >
               {pendingCount}
             </Badge>
           )}

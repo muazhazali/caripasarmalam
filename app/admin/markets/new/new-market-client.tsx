@@ -29,12 +29,5 @@ export function NewMarketClient({ states }: NewMarketClientProps) {
     router.push("/admin/markets");
   }
 
-  return (
-    <MarketForm
-      onSubmit={handleSubmit}
-      states={states}
-      isSubmitting={isSubmitting}
-      submitLabel="Create Market"
-    />
-  );
+  return <MarketForm onSubmit={handleSubmit} states={states} isSubmitting={isSubmitting} submitLabel="Create Market" />;
 }

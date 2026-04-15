@@ -134,10 +134,10 @@ export default function MarketsFilterClient({ initialMarkets, initialState }: Ma
         url: `${process.env.NEXT_PUBLIC_SITE_URL || "https://pasarmalam.app"}/markets/${market.id}`,
         geo: market.location
           ? {
-            "@type": "GeoCoordinates",
-            latitude: market.location.latitude,
-            longitude: market.location.longitude,
-          }
+              "@type": "GeoCoordinates",
+              latitude: market.location.latitude,
+              longitude: market.location.longitude,
+            }
           : undefined,
         openingHoursSpecification: market.schedule.map((schedule) => ({
           "@type": "OpeningHoursSpecification",
@@ -473,7 +473,12 @@ export default function MarketsFilterClient({ initialMarkets, initialState }: Ma
                 <div className="flex items-center justify-between">
                   <CardTitle className="text-lg">{t.filtersAmenities}</CardTitle>
                   <div className="flex items-center gap-2">
-                    <Button variant="outline" size="sm" onClick={clearAllFilters} className="dark:text-white dark:hover:bg-gray-800">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={clearAllFilters}
+                      className="dark:text-white dark:hover:bg-gray-800"
+                    >
                       {t.clearAllFilters}
                     </Button>
                   </div>
@@ -625,7 +630,9 @@ export default function MarketsFilterClient({ initialMarkets, initialState }: Ma
                           </div>
                         </div>
                         <div>
-                          <label className="text-sm font-medium text-foreground mb-2 block">{t.amenitiesFacilities}</label>
+                          <label className="text-sm font-medium text-foreground mb-2 block">
+                            {t.amenitiesFacilities}
+                          </label>
                         </div>
                         <div className="grid grid-cols-2 gap-3">
                           <div>

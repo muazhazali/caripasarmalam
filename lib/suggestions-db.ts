@@ -18,10 +18,7 @@ export interface MarketSuggestion {
 
 export async function getSuggestions(status?: SuggestionStatus): Promise<MarketSuggestion[]> {
   const supabase = await createClient();
-  let query = supabase
-    .from("market_suggestions")
-    .select("*")
-    .order("created_at", { ascending: false });
+  let query = supabase.from("market_suggestions").select("*").order("created_at", { ascending: false });
 
   if (status) {
     query = query.eq("status", status);
@@ -34,11 +31,7 @@ export async function getSuggestions(status?: SuggestionStatus): Promise<MarketS
 
 export async function getSuggestionById(id: string): Promise<MarketSuggestion | null> {
   const supabase = await createClient();
-  const { data, error } = await supabase
-    .from("market_suggestions")
-    .select("*")
-    .eq("id", id)
-    .single();
+  const { data, error } = await supabase.from("market_suggestions").select("*").eq("id", id).single();
 
   if (error) return null;
   return data as MarketSuggestion;

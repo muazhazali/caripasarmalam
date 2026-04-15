@@ -148,7 +148,8 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
   // Normalize defaults to Malay labels (same behaviour as markets-filter-client)
   const stateFromUrl = searchParams.get("state");
   const normalizedState = stateFromUrl === "All States" ? malaysianStates[0] : stateFromUrl;
-  const defaultState = normalizedState || (initialState === "All States" ? malaysianStates[0] : initialState) || malaysianStates[0];
+  const defaultState =
+    normalizedState || (initialState === "All States" ? malaysianStates[0] : initialState) || malaysianStates[0];
   const [selectedState, setSelectedState] = useState(defaultState);
 
   const dayFromUrl = searchParams.get("day");

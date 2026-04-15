@@ -27,10 +27,10 @@ export const marketFormSchema = z.object({
             start: z.string().regex(/^\d{2}:\d{2}$/, "Format: HH:MM"),
             end: z.string().regex(/^\d{2}:\d{2}$/, "Format: HH:MM"),
             note: z.string().optional(),
-          })
+          }),
         )
         .min(1, "Add at least one time slot"),
-    })
+    }),
   ),
   contact: z
     .object({
