@@ -62,6 +62,44 @@ export function dbRowsToMarkets(rows: DatabaseRow[]): Market[] {
   return rows.map(dbRowToMarket);
 }
 
+/**
+ * Transform MarketFormValues into a Supabase DB row object
+ */
+import type { MarketFormValues } from "@/lib/admin-schema";
+
+export function marketFormToDbRow(data: MarketFormValues) {
+  return {
+    name: data.name,
+    address: data.address,
+    district: data.district,
+    state: data.state,
+    status: data.status,
+    description: data.description ?? null,
+    area_m2: data.area_m2 ?? null,
+    total_shop: data.total_shop ?? null,
+    shop_list: data.shop_list ?? null,
+    amen_toilet: data.amenities.toilet,
+    amen_prayer_room: data.amenities.prayer_room,
+    parking_available: data.parking.available,
+    parking_accessible: data.parking.accessible,
+    parking_notes: data.parking.notes,
+    location: data.location
+      ? {
+          latitude: data.location.latitude,
+          longitude: data.location.longitude,
+          gmaps_link: data.location.gmaps_link ?? "",
+        }
+      : null,
+    schedule: data.schedule,
+    contact: data.contact
+      ? {
+          phone: data.contact.phone ?? null,
+          email: data.contact.email ?? null,
+        }
+      : null,
+  };
+}
+
 export interface DatabaseRow {
   id: string;
   name: string;

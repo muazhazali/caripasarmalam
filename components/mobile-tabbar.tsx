@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, ShoppingBag, Map as MapIcon, MoreHorizontal, Info, Users, Github, Sun, Moon } from "lucide-react";
+import { Home, ShoppingBag, Map as MapIcon, MoreHorizontal, Info, Users, Github, Sun, Moon, PlusCircle } from "lucide-react";
 import { useLanguage } from "@/components/language-provider";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { useTheme } from "next-themes";
@@ -76,6 +76,13 @@ export default function MobileTabBar() {
                 <SheetTitle>{t.more}</SheetTitle>
               </SheetHeader>
               <div className="grid grid-cols-2 gap-4">
+                <Link
+                  href="/suggest"
+                  className="flex items-center gap-3 rounded-lg border border-border px-4 py-4 text-sm text-foreground hover:bg-muted/50 transition-colors"
+                >
+                  <PlusCircle className="h-4 w-4" />
+                  <span>{t.suggestMarket}</span>
+                </Link>
                 <Link
                   href="/about"
                   className="flex items-center gap-3 rounded-lg border border-border px-4 py-4 text-sm text-foreground hover:bg-muted/50 transition-colors"

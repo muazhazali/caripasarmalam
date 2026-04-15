@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, ShoppingBag, Map as MapIcon, Github, Info, Users } from "lucide-react";
+import { Home, ShoppingBag, Map as MapIcon, Github, Info, Users, PlusCircle } from "lucide-react";
 import { useLanguage } from "@/components/language-provider";
 import LanguageSwitcher from "@/components/language-switcher";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
@@ -45,6 +45,7 @@ export default function DesktopNavbar() {
       { href: "/", label: t.home, icon: Home },
       { href: "/markets", label: t.markets, icon: ShoppingBag },
       { href: "/map", label: t.mapView, icon: MapIcon },
+      { href: "/suggest", label: t.suggestMarket, icon: PlusCircle },
       { href: "/about", label: t.about, icon: Info },
       { href: "/contributors", label: t.contributors, icon: Users },
     ];

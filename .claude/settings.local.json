@@ -17,7 +17,9 @@
       "Bash(echo not found:*)",
       "Bash(ls:*)",
       "Bash(cd C:/GitHub/caripasarmalam && pnpm add sharp --save-dev 2>&1)",
-      "Bash(cd /c/GitHub/caripasarmalam && pnpm build 2>&1)"
+      "Bash(cd /c/GitHub/caripasarmalam && pnpm build 2>&1)",
+      "Bash(pnpm build *)",
+      "Bash(pnpm lint *)"
     ]
   }
 }
