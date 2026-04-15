@@ -579,10 +579,10 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <Button asChild variant="outline" className="gap-2 dark:hover:text-white dark:hover:bg-gray-900">
-                      <a href={suggestFormUrl} target="_blank" rel="noopener noreferrer">
+                      <Link href="/suggest">
                         <MapPin className="h-4 w-4" />
                         {t.suggestMarket}
-                      </a>
+                      </Link>
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent>
@@ -605,10 +605,10 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
                 </Button>
               )}
               <Button asChild className="gap-2 h-auto p-3 flex flex-col items-center justify-center">
-                <a href={suggestFormUrl} target="_blank" rel="noopener noreferrer">
+                <Link href="/suggest">
                   <MapPin className="h-4 w-4" />
                   <span className="text-xs font-medium">{t.suggestMarket}</span>
-                </a>
+                </Link>
               </Button>
             </div>
 

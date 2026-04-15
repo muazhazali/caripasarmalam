@@ -133,6 +133,25 @@ export interface Translations {
   suggestMarket: string;
   addMarketCta: string;
 
+  // Suggest page
+  suggestPageTitle: string;
+  suggestPageSubtitle: string;
+  suggestTypeNew: string;
+  suggestTypeNewDesc: string;
+  suggestTypeUpdate: string;
+  suggestTypeUpdateDesc: string;
+  suggestSelectMarket: string;
+  suggestSelectMarketPlaceholder: string;
+  suggestSearchMarket: string;
+  suggestNoMarketFound: string;
+  suggestYourEmail: string;
+  suggestYourEmailPlaceholder: string;
+  suggestYourEmailHint: string;
+  suggestSubmit: string;
+  suggestSuccessTitle: string;
+  suggestSuccessBody: string;
+  suggestAnother: string;
+
   // Location prompt
   enableLocationTitle: string;
   enableLocationDescription: string;
@@ -289,6 +308,25 @@ export const translations: Record<string, Translations> = {
     // Contribution CTA
     suggestMarket: "Add or update a market",
     addMarketCta: "Know a market we missed or info to update? Submit it here.",
+
+    // Suggest page
+    suggestPageTitle: "Suggest a Market",
+    suggestPageSubtitle: "Help us keep the directory up to date by suggesting a new market or an update to an existing one.",
+    suggestTypeNew: "Suggest a New Market",
+    suggestTypeNewDesc: "Know a pasar malam that isn't listed yet?",
+    suggestTypeUpdate: "Update an Existing Market",
+    suggestTypeUpdateDesc: "See outdated info? Help us fix it.",
+    suggestSelectMarket: "Select market to update",
+    suggestSelectMarketPlaceholder: "Search markets...",
+    suggestSearchMarket: "Search market name...",
+    suggestNoMarketFound: "No market found.",
+    suggestYourEmail: "Your email (optional)",
+    suggestYourEmailPlaceholder: "you@example.com",
+    suggestYourEmailHint: "We may reach out if we need more info. We won't spam you.",
+    suggestSubmit: "Submit Suggestion",
+    suggestSuccessTitle: "Thank you for your suggestion!",
+    suggestSuccessBody: "Our team will review it and update the directory if approved.",
+    suggestAnother: "Submit another suggestion",
 
     // Location prompt
     enableLocationTitle: "See nearby markets",
@@ -448,6 +486,25 @@ export const translations: Record<string, Translations> = {
     // Contribution CTA
     suggestMarket: "Tambah atau kemas kini pasar",
     addMarketCta: "Tahu pasar baharu atau maklumat perlu dikemas kini? Hantar di sini.",
+
+    // Suggest page
+    suggestPageTitle: "Cadang Pasar",
+    suggestPageSubtitle: "Bantu kami kemas kini direktori dengan mencadangkan pasar baharu atau kemas kini maklumat sedia ada.",
+    suggestTypeNew: "Cadang Pasar Baharu",
+    suggestTypeNewDesc: "Tahu pasar malam yang belum disenaraikan?",
+    suggestTypeUpdate: "Kemas Kini Pasar Sedia Ada",
+    suggestTypeUpdateDesc: "Nampak maklumat lapuk? Bantu kami betulkan.",
+    suggestSelectMarket: "Pilih pasar untuk dikemas kini",
+    suggestSelectMarketPlaceholder: "Cari pasar...",
+    suggestSearchMarket: "Cari nama pasar...",
+    suggestNoMarketFound: "Tiada pasar dijumpai.",
+    suggestYourEmail: "E-mel anda (pilihan)",
+    suggestYourEmailPlaceholder: "anda@contoh.com",
+    suggestYourEmailHint: "Kami mungkin menghubungi anda jika perlu maklumat lanjut. Kami tidak akan menghantar spam.",
+    suggestSubmit: "Hantar Cadangan",
+    suggestSuccessTitle: "Terima kasih atas cadangan anda!",
+    suggestSuccessBody: "Pasukan kami akan menyemak dan mengemas kini direktori jika diluluskan.",
+    suggestAnother: "Hantar cadangan lain",
 
     // Location prompt
     enableLocationTitle: "Lihat pasar berdekatan",
