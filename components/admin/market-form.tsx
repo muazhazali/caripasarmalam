@@ -11,21 +11,8 @@ import { Switch } from "@/components/ui/switch";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { PlusCircle, Trash2 } from "lucide-react";
 
 const DAY_OPTIONS = [
@@ -69,7 +56,11 @@ export function MarketForm({ defaultValues, onSubmit, states, isSubmitting, subm
     defaultValues: { ...DEFAULT_VALUES, ...defaultValues },
   });
 
-  const { fields: scheduleFields, append: appendSchedule, remove: removeSchedule } = useFieldArray({
+  const {
+    fields: scheduleFields,
+    append: appendSchedule,
+    remove: removeSchedule,
+  } = useFieldArray({
     control: form.control,
     name: "schedule",
   });
@@ -79,92 +70,152 @@ export function MarketForm({ defaultValues, onSubmit, states, isSubmitting, subm
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         {/* Basic Info */}
         <Card>
-          <CardHeader><CardTitle className="text-base">Basic Info</CardTitle></CardHeader>
+          <CardHeader>
+            <CardTitle className="text-base">Basic Info</CardTitle>
+          </CardHeader>
           <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <FormField control={form.control} name="name" render={({ field }) => (
-              <FormItem className="md:col-span-2">
-                <FormLabel>Name *</FormLabel>
-                <FormControl><Input {...field} /></FormControl>
-                <FormMessage />
-              </FormItem>
-            )} />
-            <FormField control={form.control} name="address" render={({ field }) => (
-              <FormItem className="md:col-span-2">
-                <FormLabel>Address *</FormLabel>
-                <FormControl><Textarea {...field} rows={2} /></FormControl>
-                <FormMessage />
-              </FormItem>
-            )} />
-            <FormField control={form.control} name="district" render={({ field }) => (
-              <FormItem>
-                <FormLabel>District *</FormLabel>
-                <FormControl><Input {...field} /></FormControl>
-                <FormMessage />
-              </FormItem>
-            )} />
-            <FormField control={form.control} name="state" render={({ field }) => (
-              <FormItem>
-                <FormLabel>State *</FormLabel>
-                <FormControl>
-                  <Input {...field} list="states-list" />
-                </FormControl>
-                <datalist id="states-list">
-                  {states.map((s) => <option key={s} value={s} />)}
-                </datalist>
-                <FormMessage />
-              </FormItem>
-            )} />
-            <FormField control={form.control} name="status" render={({ field }) => (
-              <FormItem>
-                <FormLabel>Status</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem className="md:col-span-2">
+                  <FormLabel>Name *</FormLabel>
                   <FormControl>
-                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <Input {...field} />
                   </FormControl>
-                  <SelectContent>
-                    {STATUS_OPTIONS.map((s) => (
-                      <SelectItem key={s} value={s}>{s}</SelectItem>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="address"
+              render={({ field }) => (
+                <FormItem className="md:col-span-2">
+                  <FormLabel>Address *</FormLabel>
+                  <FormControl>
+                    <Textarea {...field} rows={2} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="district"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>District *</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="state"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>State *</FormLabel>
+                  <FormControl>
+                    <Input {...field} list="states-list" />
+                  </FormControl>
+                  <datalist id="states-list">
+                    {states.map((s) => (
+                      <option key={s} value={s} />
                     ))}
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )} />
+                  </datalist>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="status"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Status</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {STATUS_OPTIONS.map((s) => (
+                        <SelectItem key={s} value={s}>
+                          {s}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </CardContent>
         </Card>
 
         {/* Details */}
         <Card>
-          <CardHeader><CardTitle className="text-base">Details</CardTitle></CardHeader>
+          <CardHeader>
+            <CardTitle className="text-base">Details</CardTitle>
+          </CardHeader>
           <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <FormField control={form.control} name="description" render={({ field }) => (
-              <FormItem className="md:col-span-2">
-                <FormLabel>Description</FormLabel>
-                <FormControl><Textarea {...field} rows={3} /></FormControl>
-                <FormMessage />
-              </FormItem>
-            )} />
-            <FormField control={form.control} name="area_m2" render={({ field }) => (
-              <FormItem>
-                <FormLabel>Area (m²)</FormLabel>
-                <FormControl><Input type="number" min={0} {...field} value={field.value ?? ""} /></FormControl>
-                <FormMessage />
-              </FormItem>
-            )} />
-            <FormField control={form.control} name="total_shop" render={({ field }) => (
-              <FormItem>
-                <FormLabel>Total Stalls</FormLabel>
-                <FormControl><Input type="number" min={0} {...field} value={field.value ?? ""} /></FormControl>
-                <FormMessage />
-              </FormItem>
-            )} />
-            <FormField control={form.control} name="shop_list" render={({ field }) => (
-              <FormItem className="md:col-span-2">
-                <FormLabel>Shop List (comma-separated)</FormLabel>
-                <FormControl><Input {...field} placeholder="e.g. Nasi Lemak, Rojak, Satay" /></FormControl>
-                <FormMessage />
-              </FormItem>
-            )} />
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem className="md:col-span-2">
+                  <FormLabel>Description</FormLabel>
+                  <FormControl>
+                    <Textarea {...field} rows={3} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="area_m2"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Area (m²)</FormLabel>
+                  <FormControl>
+                    <Input type="number" min={0} {...field} value={field.value ?? ""} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="total_shop"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Total Stalls</FormLabel>
+                  <FormControl>
+                    <Input type="number" min={0} {...field} value={field.value ?? ""} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="shop_list"
+              render={({ field }) => (
+                <FormItem className="md:col-span-2">
+                  <FormLabel>Shop List (comma-separated)</FormLabel>
+                  <FormControl>
+                    <Input {...field} placeholder="e.g. Nasi Lemak, Rojak, Satay" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </CardContent>
         </Card>
 
@@ -185,97 +236,168 @@ export function MarketForm({ defaultValues, onSubmit, states, isSubmitting, subm
           </CardHeader>
           <CardContent className="space-y-4">
             {scheduleFields.map((scheduleField, si) => (
-              <ScheduleEntry key={scheduleField.id} form={form} scheduleIndex={si} onRemove={() => removeSchedule(si)} />
+              <ScheduleEntry
+                key={scheduleField.id}
+                form={form}
+                scheduleIndex={si}
+                onRemove={() => removeSchedule(si)}
+              />
             ))}
           </CardContent>
         </Card>
 
         {/* Location */}
         <Card>
-          <CardHeader><CardTitle className="text-base">Location (optional)</CardTitle></CardHeader>
+          <CardHeader>
+            <CardTitle className="text-base">Location (optional)</CardTitle>
+          </CardHeader>
           <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <FormField control={form.control} name="location.latitude" render={({ field }) => (
-              <FormItem>
-                <FormLabel>Latitude</FormLabel>
-                <FormControl><Input type="number" step="any" {...field} value={field.value ?? ""} /></FormControl>
-                <FormMessage />
-              </FormItem>
-            )} />
-            <FormField control={form.control} name="location.longitude" render={({ field }) => (
-              <FormItem>
-                <FormLabel>Longitude</FormLabel>
-                <FormControl><Input type="number" step="any" {...field} value={field.value ?? ""} /></FormControl>
-                <FormMessage />
-              </FormItem>
-            )} />
-            <FormField control={form.control} name="location.gmaps_link" render={({ field }) => (
-              <FormItem>
-                <FormLabel>Google Maps Link</FormLabel>
-                <FormControl><Input {...field} value={field.value ?? ""} /></FormControl>
-                <FormMessage />
-              </FormItem>
-            )} />
+            <FormField
+              control={form.control}
+              name="location.latitude"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Latitude</FormLabel>
+                  <FormControl>
+                    <Input type="number" step="any" {...field} value={field.value ?? ""} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="location.longitude"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Longitude</FormLabel>
+                  <FormControl>
+                    <Input type="number" step="any" {...field} value={field.value ?? ""} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="location.gmaps_link"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Google Maps Link</FormLabel>
+                  <FormControl>
+                    <Input {...field} value={field.value ?? ""} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </CardContent>
         </Card>
 
         {/* Contact */}
         <Card>
-          <CardHeader><CardTitle className="text-base">Contact (optional)</CardTitle></CardHeader>
+          <CardHeader>
+            <CardTitle className="text-base">Contact (optional)</CardTitle>
+          </CardHeader>
           <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <FormField control={form.control} name="contact.phone" render={({ field }) => (
-              <FormItem>
-                <FormLabel>Phone</FormLabel>
-                <FormControl><Input {...field} value={field.value ?? ""} /></FormControl>
-                <FormMessage />
-              </FormItem>
-            )} />
-            <FormField control={form.control} name="contact.email" render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <FormControl><Input type="email" {...field} value={field.value ?? ""} /></FormControl>
-                <FormMessage />
-              </FormItem>
-            )} />
+            <FormField
+              control={form.control}
+              name="contact.phone"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Phone</FormLabel>
+                  <FormControl>
+                    <Input {...field} value={field.value ?? ""} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="contact.email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input type="email" {...field} value={field.value ?? ""} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </CardContent>
         </Card>
 
         {/* Amenities & Parking */}
         <Card>
-          <CardHeader><CardTitle className="text-base">Amenities &amp; Parking</CardTitle></CardHeader>
+          <CardHeader>
+            <CardTitle className="text-base">Amenities &amp; Parking</CardTitle>
+          </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <FormField control={form.control} name="amenities.toilet" render={({ field }) => (
-                <FormItem className="flex items-center gap-2 space-y-0">
-                  <FormControl><Switch checked={field.value} onCheckedChange={field.onChange} /></FormControl>
-                  <FormLabel className="font-normal">Toilet</FormLabel>
-                </FormItem>
-              )} />
-              <FormField control={form.control} name="amenities.prayer_room" render={({ field }) => (
-                <FormItem className="flex items-center gap-2 space-y-0">
-                  <FormControl><Switch checked={field.value} onCheckedChange={field.onChange} /></FormControl>
-                  <FormLabel className="font-normal">Prayer Room</FormLabel>
-                </FormItem>
-              )} />
-              <FormField control={form.control} name="parking.available" render={({ field }) => (
-                <FormItem className="flex items-center gap-2 space-y-0">
-                  <FormControl><Switch checked={field.value} onCheckedChange={field.onChange} /></FormControl>
-                  <FormLabel className="font-normal">Parking</FormLabel>
-                </FormItem>
-              )} />
-              <FormField control={form.control} name="parking.accessible" render={({ field }) => (
-                <FormItem className="flex items-center gap-2 space-y-0">
-                  <FormControl><Switch checked={field.value} onCheckedChange={field.onChange} /></FormControl>
-                  <FormLabel className="font-normal">Accessible Parking</FormLabel>
-                </FormItem>
-              )} />
+              <FormField
+                control={form.control}
+                name="amenities.toilet"
+                render={({ field }) => (
+                  <FormItem className="flex items-center gap-2 space-y-0">
+                    <FormControl>
+                      <Switch checked={field.value} onCheckedChange={field.onChange} />
+                    </FormControl>
+                    <FormLabel className="font-normal">Toilet</FormLabel>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="amenities.prayer_room"
+                render={({ field }) => (
+                  <FormItem className="flex items-center gap-2 space-y-0">
+                    <FormControl>
+                      <Switch checked={field.value} onCheckedChange={field.onChange} />
+                    </FormControl>
+                    <FormLabel className="font-normal">Prayer Room</FormLabel>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="parking.available"
+                render={({ field }) => (
+                  <FormItem className="flex items-center gap-2 space-y-0">
+                    <FormControl>
+                      <Switch checked={field.value} onCheckedChange={field.onChange} />
+                    </FormControl>
+                    <FormLabel className="font-normal">Parking</FormLabel>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="parking.accessible"
+                render={({ field }) => (
+                  <FormItem className="flex items-center gap-2 space-y-0">
+                    <FormControl>
+                      <Switch checked={field.value} onCheckedChange={field.onChange} />
+                    </FormControl>
+                    <FormLabel className="font-normal">Accessible Parking</FormLabel>
+                  </FormItem>
+                )}
+              />
             </div>
-            <FormField control={form.control} name="parking.notes" render={({ field }) => (
-              <FormItem>
-                <FormLabel>Parking Notes</FormLabel>
-                <FormControl><Input {...field} /></FormControl>
-                <FormMessage />
-              </FormItem>
-            )} />
+            <FormField
+              control={form.control}
+              name="parking.notes"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Parking Notes</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </CardContent>
         </Card>
 
@@ -299,7 +421,11 @@ function ScheduleEntry({
   scheduleIndex: number;
   onRemove: () => void;
 }) {
-  const { fields: timeFields, append: appendTime, remove: removeTime } = useFieldArray({
+  const {
+    fields: timeFields,
+    append: appendTime,
+    remove: removeTime,
+  } = useFieldArray({
     control: form.control,
     name: `schedule.${si}.times`,
   });
@@ -327,10 +453,7 @@ function ScheduleEntry({
         <div className="flex flex-wrap gap-2">
           {DAY_OPTIONS.map(({ value, label }) => (
             <label key={value} className="flex items-center gap-1 cursor-pointer">
-              <Checkbox
-                checked={days.includes(value)}
-                onCheckedChange={() => toggleDay(value)}
-              />
+              <Checkbox checked={days.includes(value)} onCheckedChange={() => toggleDay(value)} />
               <span className="text-sm">{label}</span>
             </label>
           ))}
@@ -342,17 +465,9 @@ function ScheduleEntry({
         <Label className="text-xs text-muted-foreground">Time Slots</Label>
         {timeFields.map((timeField, ti) => (
           <div key={timeField.id} className="flex items-center gap-2">
-            <Input
-              className="w-28"
-              placeholder="17:00"
-              {...form.register(`schedule.${si}.times.${ti}.start`)}
-            />
+            <Input className="w-28" placeholder="17:00" {...form.register(`schedule.${si}.times.${ti}.start`)} />
             <span className="text-muted-foreground text-sm">to</span>
-            <Input
-              className="w-28"
-              placeholder="22:00"
-              {...form.register(`schedule.${si}.times.${ti}.end`)}
-            />
+            <Input className="w-28" placeholder="22:00" {...form.register(`schedule.${si}.times.${ti}.end`)} />
             <Input
               className="flex-1"
               placeholder="Note (optional)"

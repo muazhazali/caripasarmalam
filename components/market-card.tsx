@@ -82,7 +82,9 @@ export function MarketCard({ market, userLocation, showAddress = false }: Market
     <Card className="overflow-hidden hover:shadow-lg transition-shadow h-full flex flex-col">
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between mb-2">
-          <Badge variant="secondary" className="bg-amber-400 dark:bg-gray-600/30">{market.state}</Badge>
+          <Badge variant="secondary" className="bg-amber-400 dark:bg-gray-600/30">
+            {market.state}
+          </Badge>
           {status.status === "open" ? (
             <Badge className="bg-green-600 text-white border-transparent">{t.openNow}</Badge>
           ) : (
@@ -184,7 +186,6 @@ export function MarketCard({ market, userLocation, showAddress = false }: Market
         />
       </CardContent>
     </Card>
-
   );
 }
 

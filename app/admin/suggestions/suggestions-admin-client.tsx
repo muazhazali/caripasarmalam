@@ -41,13 +41,7 @@ function formatDate(dateStr: string) {
   });
 }
 
-function DiffTable({
-  current,
-  proposed,
-}: {
-  current: Market | null;
-  proposed: MarketFormValues;
-}) {
+function DiffTable({ current, proposed }: { current: Market | null; proposed: MarketFormValues }) {
   const fields: { label: string; currentVal: string; proposedVal: string }[] = [
     {
       label: "Name",
@@ -107,9 +101,7 @@ function DiffTable({
             return (
               <tr key={f.label} className={changed ? "bg-yellow-50 dark:bg-yellow-950/20" : ""}>
                 <td className="px-3 py-2 font-medium">{f.label}</td>
-                <td className={`px-3 py-2 ${changed ? "line-through text-muted-foreground" : ""}`}>
-                  {f.currentVal}
-                </td>
+                <td className={`px-3 py-2 ${changed ? "line-through text-muted-foreground" : ""}`}>{f.currentVal}</td>
                 <td className={`px-3 py-2 ${changed ? "font-medium text-green-700 dark:text-green-400" : ""}`}>
                   {f.proposedVal}
                 </td>
@@ -224,9 +216,7 @@ export function SuggestionsAdminClient({ suggestions, targetMarkets, currentStat
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold">Suggestions</h1>
-        <p className="text-muted-foreground text-sm mt-1">
-          Review user-submitted market suggestions.
-        </p>
+        <p className="text-muted-foreground text-sm mt-1">Review user-submitted market suggestions.</p>
       </div>
 
       <Tabs value={currentStatus} onValueChange={handleStatusChange}>
@@ -238,9 +228,7 @@ export function SuggestionsAdminClient({ suggestions, targetMarkets, currentStat
       </Tabs>
 
       {suggestions.length === 0 ? (
-        <p className="text-muted-foreground text-sm py-8 text-center">
-          No {currentStatus} suggestions.
-        </p>
+        <p className="text-muted-foreground text-sm py-8 text-center">No {currentStatus} suggestions.</p>
       ) : (
         <div className="rounded-md border overflow-hidden">
           <table className="w-full text-sm">
@@ -251,9 +239,7 @@ export function SuggestionsAdminClient({ suggestions, targetMarkets, currentStat
                 <th className="text-left px-4 py-3 font-medium text-muted-foreground hidden md:table-cell">
                   Submitted By
                 </th>
-                <th className="text-left px-4 py-3 font-medium text-muted-foreground hidden md:table-cell">
-                  Date
-                </th>
+                <th className="text-left px-4 py-3 font-medium text-muted-foreground hidden md:table-cell">Date</th>
                 <th className="px-4 py-3" />
               </tr>
             </thead>
@@ -274,21 +260,13 @@ export function SuggestionsAdminClient({ suggestions, targetMarkets, currentStat
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-2 justify-end">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => setSelectedSuggestion(s)}
-                      >
+                      <Button variant="outline" size="sm" onClick={() => setSelectedSuggestion(s)}>
                         View
                       </Button>
 
                       {currentStatus === "pending" && (
                         <>
-                          <Button
-                            size="sm"
-                            disabled={isPending}
-                            onClick={() => handleApprove(s.id)}
-                          >
+                          <Button size="sm" disabled={isPending} onClick={() => handleApprove(s.id)}>
                             Approve
                           </Button>
 
@@ -316,9 +294,7 @@ export function SuggestionsAdminClient({ suggestions, targetMarkets, currentStat
                                 />
                               </div>
                               <AlertDialogFooter>
-                                <AlertDialogCancel onClick={() => setRejectReason("")}>
-                                  Cancel
-                                </AlertDialogCancel>
+                                <AlertDialogCancel onClick={() => setRejectReason("")}>Cancel</AlertDialogCancel>
                                 <AlertDialogAction
                                   onClick={() => handleReject(s.id)}
                                   className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
@@ -349,9 +325,7 @@ export function SuggestionsAdminClient({ suggestions, targetMarkets, currentStat
             <SuggestionDetail
               suggestion={selectedSuggestion}
               currentMarket={
-                selectedSuggestion.target_id
-                  ? (targetMarkets[selectedSuggestion.target_id] ?? null)
-                  : null
+                selectedSuggestion.target_id ? (targetMarkets[selectedSuggestion.target_id] ?? null) : null
               }
             />
           )}

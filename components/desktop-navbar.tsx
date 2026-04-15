@@ -21,10 +21,11 @@ function NavLink({
   return (
     <Link
       href={href}
-      className={`inline-flex items-center gap-2 px-4 py-2 rounded-md transition-colors ${isActive
+      className={`inline-flex items-center gap-2 px-4 py-2 rounded-md transition-colors ${
+        isActive
           ? "text-primary bg-primary/10 border border-primary/20"
           : "text-muted-foreground hover:text-foreground hover:bg-gray-100"
-        }`}
+      }`}
       aria-current={isActive ? "page" : undefined}
     >
       <Icon className="h-4 w-4" />
@@ -42,13 +43,13 @@ export default function DesktopNavbar() {
     label: string;
     icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
   }[] = [
-      { href: "/", label: t.home, icon: Home },
-      { href: "/markets", label: t.markets, icon: ShoppingBag },
-      { href: "/map", label: t.mapView, icon: MapIcon },
-      { href: "/suggest", label: t.suggestMarket, icon: PlusCircle },
-      { href: "/about", label: t.about, icon: Info },
-      { href: "/contributors", label: t.contributors, icon: Users },
-    ];
+    { href: "/", label: t.home, icon: Home },
+    { href: "/markets", label: t.markets, icon: ShoppingBag },
+    { href: "/map", label: t.mapView, icon: MapIcon },
+    { href: "/suggest", label: t.suggestMarket, icon: PlusCircle },
+    { href: "/about", label: t.about, icon: Info },
+    { href: "/contributors", label: t.contributors, icon: Users },
+  ];
 
   return (
     <header className="sticky top-0 z-50 hidden border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 md:block shadow-sm">

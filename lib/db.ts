@@ -175,10 +175,7 @@ export async function getAllStates(): Promise<string[]> {
  * Fetch all markets for admin (no status filter), paginated
  * Returns markets and total count
  */
-export async function getAdminMarkets(
-  page = 1,
-  pageSize = 50
-): Promise<{ markets: Market[]; count: number }> {
+export async function getAdminMarkets(page = 1, pageSize = 50): Promise<{ markets: Market[]; count: number }> {
   const supabase = await createClient();
   const offset = (page - 1) * pageSize;
 

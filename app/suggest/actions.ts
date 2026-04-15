@@ -7,7 +7,7 @@ export async function submitSuggestion(
   type: "new" | "update",
   targetId: string | null,
   data: MarketFormValues,
-  submitterEmail?: string
+  submitterEmail?: string,
 ): Promise<{ error?: string }> {
   const parsed = marketFormSchema.safeParse(data);
   if (!parsed.success) {

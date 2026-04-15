@@ -19,7 +19,10 @@ function marketToFormValues(market: Market): MarketFormValues {
     area_m2: market.area_m2 ?? undefined,
     total_shop: market.total_shop ?? undefined,
     shop_list: market.shop_list?.join(", ") ?? "",
-    schedule: market.schedule.length > 0 ? market.schedule : [{ days: [], times: [{ start: "17:00", end: "22:00", note: "" }] }],
+    schedule:
+      market.schedule.length > 0
+        ? market.schedule
+        : [{ days: [], times: [{ start: "17:00", end: "22:00", note: "" }] }],
     amenities: {
       toilet: market.amenities.toilet,
       prayer_room: market.amenities.prayer_room,

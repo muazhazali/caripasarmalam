@@ -7,10 +7,7 @@ export const metadata = {
 };
 
 export default async function SuggestPage() {
-  const [markets, states] = await Promise.all([
-    getMarkets(),
-    getAllStates(),
-  ]);
+  const [markets, states] = await Promise.all([getMarkets(), getAllStates()]);
 
   return <SuggestClient markets={markets as Market[]} states={states} />;
 }
