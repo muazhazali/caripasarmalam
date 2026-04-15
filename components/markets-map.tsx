@@ -24,9 +24,10 @@ interface MarketsMapProps {
   selectedMarket?: Market | null;
   onMarketSelect?: (market: Market) => void;
   className?: string;
+  boundsKey?: number;
 }
 
-export default function MarketsMap({ markets, selectedMarket, onMarketSelect, className = "" }: MarketsMapProps) {
+export default function MarketsMap({ markets, selectedMarket, onMarketSelect, className = "", boundsKey }: MarketsMapProps) {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<Map | null>(null);
   const markersRef = useRef<Marker[]>([]);
@@ -67,6 +68,13 @@ export default function MarketsMap({ markets, selectedMarket, onMarketSelect, cl
       /* ignore */
     }
   }, [theme, systemTheme, isReady]);
+
+  // Reset user-interaction flag when parent signals a new bounds fit is wanted
+  useEffect(() => {
+    if (boundsKey !== undefined) {
+      hasUserInteractedRef.current = false;
+    }
+  }, [boundsKey]);
 
   // Get user location
   useEffect(() => {

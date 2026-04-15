@@ -42,6 +42,7 @@ export default function MapPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedState, setSelectedState] = useState("Semua Negeri");
   const [selectedMarket, setSelectedMarket] = useState<Market | null>(null);
+  const [boundsKey, setBoundsKey] = useState(0);
 
   // Fetch markets from server
   const fetchMarkets = useCallback(async (state?: string, limitOverride?: number) => {
@@ -87,6 +88,7 @@ export default function MapPage() {
       // Normalize "All States" to "Semua Negeri" for consistency
       const normalizedState = newState === "All States" ? malaysianStates[0] : newState;
       setSelectedState(normalizedState);
+      setBoundsKey((k) => k + 1);
       fetchMarkets(
         normalizedState !== "Semua Negeri" && normalizedState !== "All States" ? normalizedState : undefined,
       );
@@ -110,23 +112,22 @@ export default function MapPage() {
             setSelectedState(state);
             fetchMarkets(state);
           } else {
-            // Location outside Malaysia, fetch all
-            fetchMarkets();
+            // Location outside Malaysia — don't fetch, show prompt
+            setIsLoadingMarkets(false);
           }
         },
         (error) => {
-          // Permission denied or unavailable - fetch all markets
+          // Permission denied or unavailable — show empty map + select state prompt
           console.warn("Geolocation error:", error);
           setLocationDenied(true);
-          // Show a limited set by default when no location permission
-          fetchMarkets(undefined, 20);
+          setIsLoadingMarkets(false);
         },
         { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 },
       );
     } else {
-      // Geolocation not available - fetch all markets
+      // Geolocation not available — show empty map + select state prompt
       setLocationDenied(true);
-      fetchMarkets(undefined, 20);
+      setIsLoadingMarkets(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // Only run on mount
@@ -174,12 +175,7 @@ export default function MapPage() {
     return withDistance.map((x) => x.market);
   }, [filteredMarkets, userLocation]);
 
-  // If location permission denied and no state filter, cap to top 100
-  const displayedMarkets = useMemo(() => {
-    const isAllStates = selectedState === "Semua Negeri" || selectedState === "All States";
-    if (locationDenied && isAllStates) return sortedMarkets.slice(0, 100);
-    return sortedMarkets;
-  }, [sortedMarkets, locationDenied, selectedState]);
+  const displayedMarkets = useMemo(() => sortedMarkets, [sortedMarkets]);
 
   const reRequestLocation = useCallback(async () => {
     try {
@@ -249,18 +245,28 @@ export default function MapPage() {
               </div>
             </div>
           )}
+          {/* Empty state prompt — no state selected and no markets */}
+          {!isLoadingMarkets &&
+            markets.length === 0 &&
+            (selectedState === "Semua Negeri" || selectedState === "All States") && (
+              <div className="mt-3 rounded-md border bg-muted/50 px-4 py-3 flex items-center gap-3">
+                <span className="text-xl">🗺️</span>
+                <div>
+                  <p className="text-sm font-medium">{t.selectStatePromptTitle}</p>
+                  <p className="text-xs text-muted-foreground">{t.selectStatePromptDescription}</p>
+                </div>
+              </div>
+            )}
+
           <div className="mt-2 text-sm text-muted-foreground">
             {isLoadingMarkets ? (
               <span className="flex items-center gap-2">
                 <Loader2 className="h-4 w-4 animate-spin" />
                 Loading markets...
               </span>
-            ) : (
+            ) : (selectedState === "Semua Negeri" || selectedState === "All States") && markets.length === 0 ? null : (
               <span>
                 {t.showingResults} {displayedMarkets.length} {t.markets}
-                {locationDenied && (selectedState === "Semua Negeri" || selectedState === "All States")
-                  ? ` · ${t.showingTopMarkets}`
-                  : ""}
               </span>
             )}
           </div>
@@ -274,6 +280,7 @@ export default function MapPage() {
           selectedMarket={selectedMarket}
           onMarketSelect={setSelectedMarket}
           className="h-full"
+          boundsKey={boundsKey}
         />
       </div>
     </div>
