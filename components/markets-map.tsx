@@ -27,7 +27,13 @@ interface MarketsMapProps {
   boundsKey?: number;
 }
 
-export default function MarketsMap({ markets, selectedMarket, onMarketSelect, className = "", boundsKey }: MarketsMapProps) {
+export default function MarketsMap({
+  markets,
+  selectedMarket,
+  onMarketSelect,
+  className = "",
+  boundsKey,
+}: MarketsMapProps) {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<Map | null>(null);
   const markersRef = useRef<Marker[]>([]);
