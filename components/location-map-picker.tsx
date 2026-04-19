@@ -176,7 +176,13 @@ export function LocationMapPicker({ latitude, longitude, onChange, onClear, labe
           <span className="text-sm font-medium">{title}</span>
         </div>
         {latitude && latitude !== 0 && (
-          <Button type="button" variant="ghost" size="sm" onClick={handleClear} className="text-muted-foreground h-7 px-2">
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={handleClear}
+            className="text-muted-foreground h-7 px-2"
+          >
             <X className="w-3 h-3 mr-1" />
             {clearLabel}
           </Button>
@@ -199,7 +205,14 @@ export function LocationMapPicker({ latitude, longitude, onChange, onClear, labe
           }}
           className="text-sm"
         />
-        <Button type="button" variant="outline" size="sm" onClick={handleSearch} disabled={isSearching} className="shrink-0">
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          onClick={handleSearch}
+          disabled={isSearching}
+          className="shrink-0"
+        >
           <Search className="w-4 h-4 mr-1" />
           {searchBtnLabel}
         </Button>

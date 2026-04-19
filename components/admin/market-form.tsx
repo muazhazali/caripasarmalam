@@ -142,7 +142,14 @@ const DEFAULT_VALUES: MarketFormValues = {
   location: { latitude: 0, longitude: 0, gmaps_link: "" },
 };
 
-export function MarketForm({ defaultValues, onSubmit, states, isSubmitting, submitLabel = "Save", labels }: MarketFormProps) {
+export function MarketForm({
+  defaultValues,
+  onSubmit,
+  states,
+  isSubmitting,
+  submitLabel = "Save",
+  labels,
+}: MarketFormProps) {
   const L = { ...DEFAULT_LABELS, ...labels };
 
   const form = useForm<MarketFormValues>({
@@ -165,7 +172,6 @@ export function MarketForm({ defaultValues, onSubmit, states, isSubmitting, subm
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
-
         {/* ── Basic Info ── */}
         <Card className="border-border/60">
           <CardHeader className="pb-3 pt-4 px-5">
@@ -592,7 +598,13 @@ function ScheduleEntry({
         <span className="text-sm font-semibold text-foreground">
           {L.scheduleSchedule} {si + 1}
         </span>
-        <Button type="button" variant="ghost" size="sm" onClick={onRemove} className="h-7 w-7 p-0 text-muted-foreground hover:text-destructive">
+        <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          onClick={onRemove}
+          className="h-7 w-7 p-0 text-muted-foreground hover:text-destructive"
+        >
           <Trash2 className="w-4 h-4" />
         </Button>
       </div>
