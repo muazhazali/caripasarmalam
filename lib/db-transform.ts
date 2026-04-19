@@ -49,7 +49,6 @@ export function dbRowToMarket(row: DatabaseRow): Market {
     },
 
     // Parse JSONB back to objects (Supabase may return as objects or strings)
-    contact: row.contact ? (typeof row.contact === "string" ? JSON.parse(row.contact) : row.contact) : undefined,
     location: row.location ? (typeof row.location === "string" ? JSON.parse(row.location) : row.location) : undefined,
     schedule: typeof row.schedule === "string" ? JSON.parse(row.schedule) : row.schedule || [],
   };
@@ -91,12 +90,6 @@ export function marketFormToDbRow(data: MarketFormValues) {
         }
       : null,
     schedule: data.schedule,
-    contact: data.contact
-      ? {
-          phone: data.contact.phone ?? null,
-          email: data.contact.email ?? null,
-        }
-      : null,
   };
 }
 
@@ -122,7 +115,6 @@ export interface DatabaseRow {
   amen_prayer_room?: boolean | null;
 
   // JSONB fields (can be string or already parsed object)
-  contact?: string | { phone?: string; email?: string } | null;
   location?: string | { latitude: number; longitude: number; gmaps_link: string } | null;
   schedule?: string | MarketSchedule[] | null;
 }

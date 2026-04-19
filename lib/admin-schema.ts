@@ -32,12 +32,6 @@ export const marketFormSchema = z.object({
         .min(1, "Add at least one time slot"),
     }),
   ),
-  contact: z
-    .object({
-      phone: z.string().optional(),
-      email: z.string().email("Invalid email").optional().or(z.literal("")),
-    })
-    .optional(),
   amenities: z.object({
     toilet: z.boolean(),
     prayer_room: z.boolean(),

@@ -71,7 +71,6 @@ export interface Translations {
   areaSize: string;
   district: string;
   state: string;
-  contactInformation: string;
   actions: string;
   reportWrongInfo: string;
   getDirections: string;
@@ -172,7 +171,6 @@ export interface Translations {
   formSectionDetails: string;
   formSectionSchedule: string;
   formSectionLocation: string;
-  formSectionContact: string;
   formSectionAmenities: string;
   formFieldName: string;
   formFieldAddress: string;
@@ -187,8 +185,6 @@ export interface Translations {
   formFieldLatitude: string;
   formFieldLongitude: string;
   formFieldGmapsLink: string;
-  formFieldPhone: string;
-  formFieldEmail: string;
   formFieldToilet: string;
   formFieldPrayerRoom: string;
   formFieldParking: string;
@@ -293,7 +289,6 @@ export const translations: Record<string, Translations> = {
     areaSize: "Area Size",
     district: "District",
     state: "State",
-    contactInformation: "Contact Information",
     actions: "Actions",
     reportWrongInfo: "Report Wrong Info",
     getDirections: "Get Directions",
@@ -395,7 +390,6 @@ export const translations: Record<string, Translations> = {
     formSectionDetails: "Details",
     formSectionSchedule: "Operating Schedule",
     formSectionLocation: "Location",
-    formSectionContact: "Contact (optional)",
     formSectionAmenities: "Amenities & Parking",
     formFieldName: "Market Name *",
     formFieldAddress: "Address *",
@@ -410,8 +404,6 @@ export const translations: Record<string, Translations> = {
     formFieldLatitude: "Latitude",
     formFieldLongitude: "Longitude",
     formFieldGmapsLink: "Google Maps Link",
-    formFieldPhone: "Phone",
-    formFieldEmail: "Email",
     formFieldToilet: "Toilet",
     formFieldPrayerRoom: "Prayer Room",
     formFieldParking: "Parking Available",
@@ -518,7 +510,6 @@ export const translations: Record<string, Translations> = {
     areaSize: "Saiz Kawasan",
     district: "Daerah",
     state: "Negeri",
-    contactInformation: "Maklumat Hubungan",
     actions: "Tindakan",
     reportWrongInfo: "Laporkan Maklumat Salah",
     getDirections: "Dapatkan Arah",
@@ -620,7 +611,6 @@ export const translations: Record<string, Translations> = {
     formSectionDetails: "Butiran",
     formSectionSchedule: "Jadual Operasi",
     formSectionLocation: "Lokasi",
-    formSectionContact: "Hubungan (pilihan)",
     formSectionAmenities: "Kemudahan & Tempat Letak Kereta",
     formFieldName: "Nama Pasar *",
     formFieldAddress: "Alamat *",
@@ -635,8 +625,6 @@ export const translations: Record<string, Translations> = {
     formFieldLatitude: "Latitud",
     formFieldLongitude: "Longitud",
     formFieldGmapsLink: "Pautan Google Maps",
-    formFieldPhone: "Telefon",
-    formFieldEmail: "E-mel",
     formFieldToilet: "Tandas",
     formFieldPrayerRoom: "Surau",
     formFieldParking: "Tempat Letak Kereta",
