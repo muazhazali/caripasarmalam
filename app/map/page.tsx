@@ -254,16 +254,8 @@ export default function MapPage() {
             </div>
 
             {/* Location button */}
-            <Button
-              className="w-full gap-2"
-              onClick={handleModalLocationRequest}
-              disabled={isRequestingLocation}
-            >
-              {isRequestingLocation ? (
-                <Loader2 className="w-4 h-4 animate-spin" />
-              ) : (
-                <Navigation className="w-4 h-4" />
-              )}
+            <Button className="w-full gap-2" onClick={handleModalLocationRequest} disabled={isRequestingLocation}>
+              {isRequestingLocation ? <Loader2 className="w-4 h-4 animate-spin" /> : <Navigation className="w-4 h-4" />}
               {isRequestingLocation ? t.searching : t.enableLocationButton}
             </Button>
 
@@ -286,7 +278,6 @@ export default function MapPage() {
                 </button>
               ))}
             </div>
-
           </div>
         </div>
       )}
