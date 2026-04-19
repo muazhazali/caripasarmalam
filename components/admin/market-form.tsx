@@ -12,7 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { PlusCircle, Trash2, MapPin, Clock, Info, Phone, Car, Layers } from "lucide-react";
+import { PlusCircle, Trash2, MapPin, Clock, Info, Car, Layers } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const LocationMapPicker = dynamic(() => import("@/components/location-map-picker").then((m) => m.LocationMapPicker), {
@@ -507,44 +507,6 @@ export function MarketForm({
                   <FormLabel className="text-sm">{L.fieldShopList}</FormLabel>
                   <FormControl>
                     <Input {...field} placeholder={L.fieldShopListPlaceholder} className="bg-background" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </CardContent>
-        </Card>
-
-        {/* ── Contact ── */}
-        <Card className="border-border/60">
-          <CardHeader className="pb-3 pt-4 px-5">
-            <CardTitle className="text-sm font-semibold flex items-center gap-2 text-foreground">
-              <Phone className="w-4 h-4 text-primary" />
-              {L.sectionContact}
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="px-5 pb-5 grid grid-cols-1 md:grid-cols-2 gap-4">
-            <FormField
-              control={form.control}
-              name="contact.phone"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-sm">{L.fieldPhone}</FormLabel>
-                  <FormControl>
-                    <Input {...field} value={field.value ?? ""} className="bg-background" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="contact.email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-sm">{L.fieldEmail}</FormLabel>
-                  <FormControl>
-                    <Input type="email" {...field} value={field.value ?? ""} className="bg-background" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

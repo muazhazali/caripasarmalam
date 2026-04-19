@@ -26,18 +26,21 @@ export async function middleware(request: NextRequest) {
   );
 
   const {
-    data: { session },
-  } = await supabase.auth.getSession();
+    data: { user },
+  } = await supabase.auth.getUser();
 
   const pathname = request.nextUrl.pathname;
   const isAdminLogin = pathname === "/admin/login";
   const isAdminRoute = pathname.startsWith("/admin");
 
-  if (isAdminRoute && !isAdminLogin && !session) {
+  const adminEmail = process.env.ADMIN_EMAIL;
+  const isAdmin = !!user && (!adminEmail || user.email === adminEmail);
+
+  if (isAdminRoute && !isAdminLogin && !isAdmin) {
     return NextResponse.redirect(new URL("/admin/login", request.url));
   }
 
-  if (isAdminLogin && session) {
+  if (isAdminLogin && isAdmin) {
     return NextResponse.redirect(new URL("/admin/markets", request.url));
   }
 
