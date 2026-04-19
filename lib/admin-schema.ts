@@ -13,8 +13,8 @@ export const marketFormSchema = z.object({
   shop_list: z.string().optional(),
   location: z
     .object({
-      latitude: z.coerce.number(),
-      longitude: z.coerce.number(),
+      latitude: z.coerce.number().min(-90).max(90),
+      longitude: z.coerce.number().min(-180).max(180),
       gmaps_link: z.string().optional().or(z.literal("")),
     })
     .optional(),
