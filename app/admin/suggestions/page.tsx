@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { getSuggestions } from "@/lib/suggestions-db";
 import { getMarketById } from "@/lib/db";
 import { SuggestionsAdminClient } from "./suggestions-admin-client";

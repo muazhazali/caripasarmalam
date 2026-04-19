@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { notFound } from "next/navigation";
 import { getMarketById, getAllStates } from "@/lib/db";
 import { EditMarketClient } from "./edit-market-client";

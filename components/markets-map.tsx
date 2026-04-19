@@ -19,6 +19,10 @@ declare global {
   }
 }
 
+function escapeHtml(str: string): string {
+  return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+}
+
 interface MarketsMapProps {
   markets: Market[];
   selectedMarket?: Market | null;
@@ -234,9 +238,9 @@ export default function MarketsMap({
 
         marker.bindPopup(`
           <div class="p-3 min-w-64">
-            <h3 class="font-semibold text-sm mb-2">${market.name}</h3>
-            <p class="text-xs text-gray-600 mb-2">${market.district}, ${market.state}</p>
-            <p class="text-xs text-gray-500 mb-2">${scheduleText}</p>
+            <h3 class="font-semibold text-sm mb-2">${escapeHtml(market.name)}</h3>
+            <p class="text-xs text-gray-600 mb-2">${escapeHtml(market.district)}, ${escapeHtml(market.state)}</p>
+            <p class="text-xs text-gray-500 mb-2">${escapeHtml(scheduleText)}</p>
             <div class="flex gap-1 mb-2">
               ${market.parking.available ? `<span class=\"text-xs bg-green-100 text-green-800 px-1 rounded\">${t.parking}</span>` : ""}
               ${market.amenities.toilet ? `<span class=\"text-xs bg-blue-100 text-blue-800 px-1 rounded\">${t.toilet}</span>` : ""}

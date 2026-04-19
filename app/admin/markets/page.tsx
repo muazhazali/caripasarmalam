@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { getAdminMarkets } from "@/lib/db";
 import { MarketsAdminClient } from "./markets-admin-client";
 
