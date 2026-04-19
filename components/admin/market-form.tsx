@@ -25,7 +25,6 @@ export interface MarketFormLabels {
   sectionDetails?: string;
   sectionSchedule?: string;
   sectionLocation?: string;
-  sectionContact?: string;
   sectionAmenities?: string;
   fieldName?: string;
   fieldAddress?: string;
@@ -40,8 +39,6 @@ export interface MarketFormLabels {
   fieldLatitude?: string;
   fieldLongitude?: string;
   fieldGmapsLink?: string;
-  fieldPhone?: string;
-  fieldEmail?: string;
   fieldToilet?: string;
   fieldPrayerRoom?: string;
   fieldParking?: string;
@@ -68,7 +65,6 @@ const DEFAULT_LABELS: Required<MarketFormLabels> = {
   sectionDetails: "Details",
   sectionSchedule: "Operating Schedule",
   sectionLocation: "Location",
-  sectionContact: "Contact (optional)",
   sectionAmenities: "Amenities & Parking",
   fieldName: "Market Name *",
   fieldAddress: "Address *",
@@ -83,8 +79,6 @@ const DEFAULT_LABELS: Required<MarketFormLabels> = {
   fieldLatitude: "Latitude",
   fieldLongitude: "Longitude",
   fieldGmapsLink: "Google Maps Link",
-  fieldPhone: "Phone",
-  fieldEmail: "Email",
   fieldToilet: "Toilet",
   fieldPrayerRoom: "Prayer Room",
   fieldParking: "Parking Available",
@@ -138,7 +132,6 @@ const DEFAULT_VALUES: MarketFormValues = {
   schedule: [{ days: [], times: [{ start: "17:00", end: "22:00", note: "" }] }],
   amenities: { toilet: false, prayer_room: false },
   parking: { available: false, accessible: false, notes: "" },
-  contact: { phone: "", email: "" },
   location: { latitude: 0, longitude: 0, gmaps_link: "" },
 };
 

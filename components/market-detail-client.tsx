@@ -12,8 +12,6 @@ import {
   Toilet as Restroom,
   Home as Mosque,
   ExternalLink,
-  Phone,
-  Mail,
   Calendar,
   Share2,
   Flag,
@@ -50,8 +48,6 @@ export default function MarketDetailClient({ market }: MarketDetailClientProps) 
       addressCountry: "MY",
     },
     url: `${process.env.NEXT_PUBLIC_SITE_URL || "https://pasarmalam.app"}/markets/${market.id}`,
-    telephone: market.contact?.phone,
-    email: market.contact?.email,
     geo: market.location
       ? {
           "@type": "GeoCoordinates",
@@ -420,31 +416,6 @@ export default function MarketDetailClient({ market }: MarketDetailClientProps) 
                 </CardContent>
               </Card>
 
-              {market.contact && (
-                <Card>
-                  <CardHeader>
-                    <CardTitle>{t.contactInformation}</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-3">
-                    {market.contact.phone && (
-                      <div className="flex items-center gap-2">
-                        <Phone className="h-4 w-4 text-muted-foreground" />
-                        <a href={`tel:${market.contact.phone}`} className="text-primary hover:underline">
-                          {market.contact.phone}
-                        </a>
-                      </div>
-                    )}
-                    {market.contact.email && (
-                      <div className="flex items-center gap-2">
-                        <Mail className="h-4 w-4 text-muted-foreground" />
-                        <a href={`mailto:${market.contact.email}`} className="text-primary hover:underline">
-                          {market.contact.email}
-                        </a>
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
-              )}
 
               {/* Actions */}
               <Card>

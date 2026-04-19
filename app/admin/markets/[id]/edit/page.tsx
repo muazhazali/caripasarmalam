@@ -39,10 +39,6 @@ function marketToFormValues(market: Market): MarketFormValues {
           gmaps_link: market.location.gmaps_link ?? "",
         }
       : { latitude: 0, longitude: 0, gmaps_link: "" },
-    contact: {
-      phone: market.contact?.phone ?? "",
-      email: market.contact?.email ?? "",
-    },
   };
 }
 

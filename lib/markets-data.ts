@@ -33,10 +33,6 @@ export interface Market {
   // Optional list of stall types or popular items, split from comma-separated text
   shop_list?: string[];
   description?: string;
-  contact?: {
-    phone?: string;
-    email?: string;
-  };
   location?: {
     latitude: number;
     longitude: number;

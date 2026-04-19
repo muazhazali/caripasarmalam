@@ -31,12 +31,6 @@ export function marketToFormValues(market: Market): MarketFormValues {
         note: t.note ?? "",
       })),
     })),
-    contact: market.contact
-      ? {
-          phone: market.contact.phone ?? "",
-          email: market.contact.email ?? "",
-        }
-      : undefined,
     amenities: {
       toilet: market.amenities.toilet,
       prayer_room: market.amenities.prayer_room,
