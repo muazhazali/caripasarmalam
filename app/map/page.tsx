@@ -1,8 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useMemo } from "react";
-import Link from "next/link";
-import { ArrowLeft, List, Search, Loader2 } from "lucide-react";
+import { MapPin, Search, Loader2, Navigation } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -33,6 +32,9 @@ const malaysianStates = [
   "Terengganu",
 ];
 
+// States without "Semua Negeri" for the picker modal
+const STATE_LIST = malaysianStates.slice(1);
+
 export default function MapPage() {
   const { t } = useLanguage();
   const [markets, setMarkets] = useState<Market[]>([]);
@@ -43,6 +45,9 @@ export default function MapPage() {
   const [selectedState, setSelectedState] = useState("Semua Negeri");
   const [selectedMarket, setSelectedMarket] = useState<Market | null>(null);
   const [boundsKey, setBoundsKey] = useState(0);
+  // Modal: show until user picks a state or grants location
+  const [showStatePicker, setShowStatePicker] = useState(true);
+  const [isRequestingLocation, setIsRequestingLocation] = useState(false);
 
   // Fetch markets from server
   const fetchMarkets = useCallback(async (state?: string, limitOverride?: number) => {
@@ -96,7 +101,7 @@ export default function MapPage() {
     [fetchMarkets],
   );
 
-  // Get user location on mount
+  // Get user location on mount — silently, don't block modal
   useEffect(() => {
     if (typeof navigator !== "undefined" && navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -110,14 +115,14 @@ export default function MapPage() {
           const state = getStateFromCoordinates(lat, lng);
           if (state) {
             setSelectedState(state);
+            setShowStatePicker(false);
             fetchMarkets(state);
           } else {
-            // Location outside Malaysia — don't fetch, show prompt
+            // Location outside Malaysia — keep modal open
             setIsLoadingMarkets(false);
           }
         },
         (error) => {
-          // Permission denied or unavailable — show empty map + select state prompt
           console.warn("Geolocation error:", error);
           setLocationDenied(true);
           setIsLoadingMarkets(false);
@@ -125,12 +130,46 @@ export default function MapPage() {
         { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 },
       );
     } else {
-      // Geolocation not available — show empty map + select state prompt
       setLocationDenied(true);
       setIsLoadingMarkets(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // Only run on mount
+
+  // Pick state from modal
+  const handleModalStateSelect = useCallback(
+    (state: string) => {
+      setSelectedState(state);
+      setShowStatePicker(false);
+      setBoundsKey((k) => k + 1);
+      fetchMarkets(state);
+    },
+    [fetchMarkets],
+  );
+
+  // Request location from modal
+  const handleModalLocationRequest = useCallback(async () => {
+    setIsRequestingLocation(true);
+    try {
+      const { lat, lng } = await requestUserLocation({ enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 });
+      setUserLocation({ lat, lng });
+      setLocationDenied(false);
+      const state = getStateFromCoordinates(lat, lng);
+      if (state) {
+        setSelectedState(state);
+        setShowStatePicker(false);
+        fetchMarkets(state);
+      } else {
+        fetchMarkets();
+        setShowStatePicker(false);
+      }
+    } catch (err) {
+      console.warn("Geolocation request failed:", err);
+      setLocationDenied(true);
+    } finally {
+      setIsRequestingLocation(false);
+    }
+  }, [fetchMarkets]);
 
   // Filter markets client-side (search, state, and coordinates only)
   const filteredMarkets = markets.filter((market) => {
@@ -185,24 +224,73 @@ export default function MapPage() {
       const state = getStateFromCoordinates(lat, lng);
       if (state) {
         setSelectedState(state);
+        setShowStatePicker(false);
         fetchMarkets(state);
       } else {
         fetchMarkets();
+        setShowStatePicker(false);
       }
     } catch (err) {
       console.warn("Geolocation request failed:", err);
       setLocationDenied(true);
-      // Helpful guidance when permission is blocked/denied
-      if (typeof window !== "undefined") {
-        alert(
-          "Location access is blocked or denied. Please enable location for this site in your browser settings and try again.",
-        );
-      }
     }
   }, [fetchMarkets]);
 
   return (
     <div className="min-h-screen bg-background">
+      {/* State Picker Modal */}
+      {showStatePicker && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm">
+          <div className="bg-card border border-border rounded-2xl shadow-2xl w-full max-w-md p-6 space-y-5">
+            {/* Header */}
+            <div className="text-center space-y-1">
+              <div className="flex justify-center mb-3">
+                <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+                  <MapPin className="w-6 h-6 text-primary" />
+                </div>
+              </div>
+              <h2 className="text-lg font-bold text-foreground">{t.selectStatePromptTitle}</h2>
+              <p className="text-sm text-muted-foreground">{t.selectStatePromptDescription}</p>
+            </div>
+
+            {/* Location button */}
+            <Button
+              className="w-full gap-2"
+              onClick={handleModalLocationRequest}
+              disabled={isRequestingLocation}
+            >
+              {isRequestingLocation ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <Navigation className="w-4 h-4" />
+              )}
+              {isRequestingLocation ? t.searching : t.enableLocationButton}
+            </Button>
+
+            <div className="flex items-center gap-3">
+              <div className="flex-1 h-px bg-border" />
+              <span className="text-xs text-muted-foreground uppercase tracking-wide">atau pilih negeri</span>
+              <div className="flex-1 h-px bg-border" />
+            </div>
+
+            {/* State grid */}
+            <div className="grid grid-cols-3 gap-2 max-h-64 overflow-y-auto pr-1">
+              {STATE_LIST.map((state) => (
+                <button
+                  key={state}
+                  type="button"
+                  onClick={() => handleModalStateSelect(state)}
+                  className="rounded-lg border border-border bg-muted/40 px-2 py-2.5 text-xs font-medium text-foreground hover:border-primary hover:bg-primary/10 hover:text-primary transition-colors text-center leading-tight"
+                >
+                  {state}
+                </button>
+              ))}
+            </div>
+
+          </div>
+        </div>
+      )}
+
       {/* Search Controls */}
       <div className="border-b border-border bg-card relative z-10">
         <div className="container mx-auto px-4 py-3">
