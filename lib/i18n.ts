@@ -73,6 +73,7 @@ export interface Translations {
   state: string;
   contactInformation: string;
   actions: string;
+  reportWrongInfo: string;
   getDirections: string;
   showDirection: string;
   shareMarket: string;
@@ -294,6 +295,7 @@ export const translations: Record<string, Translations> = {
     state: "State",
     contactInformation: "Contact Information",
     actions: "Actions",
+    reportWrongInfo: "Report Wrong Info",
     getDirections: "Get Directions",
     showDirection: "Show Direction",
     shareMarket: "Share Market",
@@ -518,6 +520,7 @@ export const translations: Record<string, Translations> = {
     state: "Negeri",
     contactInformation: "Maklumat Hubungan",
     actions: "Tindakan",
+    reportWrongInfo: "Laporkan Maklumat Salah",
     getDirections: "Dapatkan Arah",
     showDirection: "Tunjuk Arah",
     shareMarket: "Kongsi Pasar",

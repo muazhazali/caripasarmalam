@@ -22,9 +22,10 @@ type SuggestType = "new" | "update" | null;
 interface SuggestClientProps {
   markets: Market[];
   states: string[];
+  preselectedMarket?: Market | null;
 }
 
-export function SuggestClient({ markets, states }: SuggestClientProps) {
+export function SuggestClient({ markets, states, preselectedMarket }: SuggestClientProps) {
   const { t } = useLanguage();
 
   const formLabels: MarketFormLabels = {
@@ -69,8 +70,8 @@ export function SuggestClient({ markets, states }: SuggestClientProps) {
     mapPickerClear: t.formMapPickerClear,
     saving: t.formSaving,
   };
-  const [type, setType] = useState<SuggestType>(null);
-  const [selectedMarket, setSelectedMarket] = useState<Market | null>(null);
+  const [type, setType] = useState<SuggestType>(preselectedMarket ? "update" : null);
+  const [selectedMarket, setSelectedMarket] = useState<Market | null>(preselectedMarket ?? null);
   const [email, setEmail] = useState("");
   const [honeypot, setHoneypot] = useState("");
   const [open, setOpen] = useState(false);

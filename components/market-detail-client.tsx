@@ -16,6 +16,7 @@ import {
   Mail,
   Calendar,
   Share2,
+  Flag,
 } from "lucide-react";
 import Link from "next/link";
 import { Market } from "@/lib/markets-data";
@@ -469,6 +470,15 @@ export default function MarketDetailClient({ market }: MarketDetailClientProps) 
                     <Share2 className="h-4 w-4 mr-2" />
                     {t.shareMarket}
                   </Button>
+                  <Link href={`/suggest?marketId=${market.id}`} className="w-full">
+                    <Button
+                      variant="outline"
+                      className="w-full bg-transparent cursor-pointer text-muted-foreground hover:text-white dark:hover:bg-gray-800"
+                    >
+                      <Flag className="h-4 w-4 mr-2" />
+                      {t.reportWrongInfo}
+                    </Button>
+                  </Link>
                 </CardContent>
               </Card>
 
