@@ -10,7 +10,7 @@ import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, Command
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/components/language-provider";
-import { MarketForm } from "@/components/admin/market-form";
+import { MarketForm, type MarketFormLabels } from "@/components/admin/market-form";
 import { marketToFormValues } from "@/lib/suggestion-utils";
 import { submitSuggestion } from "./actions";
 import type { Market } from "@/lib/markets-data";
@@ -26,6 +26,49 @@ interface SuggestClientProps {
 
 export function SuggestClient({ markets, states }: SuggestClientProps) {
   const { t } = useLanguage();
+
+  const formLabels: MarketFormLabels = {
+    sectionBasicInfo: t.formSectionBasicInfo,
+    sectionDetails: t.formSectionDetails,
+    sectionSchedule: t.formSectionSchedule,
+    sectionLocation: t.formSectionLocation,
+    sectionContact: t.formSectionContact,
+    sectionAmenities: t.formSectionAmenities,
+    fieldName: t.formFieldName,
+    fieldAddress: t.formFieldAddress,
+    fieldDistrict: t.formFieldDistrict,
+    fieldState: t.formFieldState,
+    fieldStatus: t.formFieldStatus,
+    fieldDescription: t.formFieldDescription,
+    fieldAreaM2: t.formFieldAreaM2,
+    fieldTotalStalls: t.formFieldTotalStalls,
+    fieldShopList: t.formFieldShopList,
+    fieldShopListPlaceholder: t.formFieldShopListPlaceholder,
+    fieldLatitude: t.formFieldLatitude,
+    fieldLongitude: t.formFieldLongitude,
+    fieldGmapsLink: t.formFieldGmapsLink,
+    fieldPhone: t.formFieldPhone,
+    fieldEmail: t.formFieldEmail,
+    fieldToilet: t.formFieldToilet,
+    fieldPrayerRoom: t.formFieldPrayerRoom,
+    fieldParking: t.formFieldParking,
+    fieldAccessibleParking: t.formFieldAccessibleParking,
+    fieldParkingNotes: t.formFieldParkingNotes,
+    scheduleDays: t.formScheduleDays,
+    scheduleTimeSlots: t.formScheduleTimeSlots,
+    scheduleFrom: t.formScheduleFrom,
+    scheduleTo: t.formScheduleTo,
+    scheduleNote: t.formScheduleNote,
+    scheduleAddTimeSlot: t.formScheduleAddTimeSlot,
+    scheduleAddSchedule: t.formScheduleAddSchedule,
+    scheduleSchedule: t.formScheduleSchedule,
+    mapPickerTitle: t.formMapPickerTitle,
+    mapPickerHint: t.formMapPickerHint,
+    mapPickerSearch: t.formMapPickerSearch,
+    mapPickerSearchBtn: t.formMapPickerSearchBtn,
+    mapPickerClear: t.formMapPickerClear,
+    saving: t.formSaving,
+  };
   const [type, setType] = useState<SuggestType>(null);
   const [selectedMarket, setSelectedMarket] = useState<Market | null>(null);
   const [email, setEmail] = useState("");
@@ -226,6 +269,7 @@ export function SuggestClient({ markets, states }: SuggestClientProps) {
             states={states}
             isSubmitting={isPending}
             submitLabel={t.suggestSubmit}
+            labels={formLabels}
           />
         </div>
       )}
