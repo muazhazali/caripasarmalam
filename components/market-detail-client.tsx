@@ -416,7 +416,6 @@ export default function MarketDetailClient({ market }: MarketDetailClientProps) 
                 </CardContent>
               </Card>
 
-
               {/* Actions */}
               <Card>
                 <CardHeader>
