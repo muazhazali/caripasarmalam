@@ -165,6 +165,49 @@ export interface Translations {
   // Open status
   openNow: string;
   closedNow: string;
+
+  // Market form (suggest page)
+  formSectionBasicInfo: string;
+  formSectionDetails: string;
+  formSectionSchedule: string;
+  formSectionLocation: string;
+  formSectionContact: string;
+  formSectionAmenities: string;
+  formFieldName: string;
+  formFieldAddress: string;
+  formFieldDistrict: string;
+  formFieldState: string;
+  formFieldStatus: string;
+  formFieldDescription: string;
+  formFieldAreaM2: string;
+  formFieldTotalStalls: string;
+  formFieldShopList: string;
+  formFieldShopListPlaceholder: string;
+  formFieldLatitude: string;
+  formFieldLongitude: string;
+  formFieldGmapsLink: string;
+  formFieldPhone: string;
+  formFieldEmail: string;
+  formFieldToilet: string;
+  formFieldPrayerRoom: string;
+  formFieldParking: string;
+  formFieldAccessibleParking: string;
+  formFieldParkingNotes: string;
+  formScheduleDays: string;
+  formScheduleTimeSlots: string;
+  formScheduleFrom: string;
+  formScheduleTo: string;
+  formScheduleNote: string;
+  formScheduleAddTimeSlot: string;
+  formScheduleAddSchedule: string;
+  formScheduleSchedule: string;
+  formMapPickerTitle: string;
+  formMapPickerHint: string;
+  formMapPickerSearch: string;
+  formMapPickerSearchBtn: string;
+  formMapPickerClear: string;
+  formSaving: string;
+
   // About page paragraphs
   aboutPara1: string;
   aboutPara2: string;
@@ -344,6 +387,49 @@ export const translations: Record<string, Translations> = {
     // Open status
     openNow: "Open now",
     closedNow: "Closed",
+
+    // Market form (suggest page)
+    formSectionBasicInfo: "Basic Info",
+    formSectionDetails: "Details",
+    formSectionSchedule: "Operating Schedule",
+    formSectionLocation: "Location",
+    formSectionContact: "Contact (optional)",
+    formSectionAmenities: "Amenities & Parking",
+    formFieldName: "Market Name *",
+    formFieldAddress: "Address *",
+    formFieldDistrict: "District *",
+    formFieldState: "State *",
+    formFieldStatus: "Status",
+    formFieldDescription: "Description",
+    formFieldAreaM2: "Area (m²)",
+    formFieldTotalStalls: "Total Stalls",
+    formFieldShopList: "Stall Types",
+    formFieldShopListPlaceholder: "e.g. Nasi Lemak, Rojak, Satay",
+    formFieldLatitude: "Latitude",
+    formFieldLongitude: "Longitude",
+    formFieldGmapsLink: "Google Maps Link",
+    formFieldPhone: "Phone",
+    formFieldEmail: "Email",
+    formFieldToilet: "Toilet",
+    formFieldPrayerRoom: "Prayer Room",
+    formFieldParking: "Parking Available",
+    formFieldAccessibleParking: "Accessible Parking",
+    formFieldParkingNotes: "Parking Notes",
+    formScheduleDays: "Operating Days",
+    formScheduleTimeSlots: "Time Slots",
+    formScheduleFrom: "From",
+    formScheduleTo: "To",
+    formScheduleNote: "Note (optional)",
+    formScheduleAddTimeSlot: "Add Time Slot",
+    formScheduleAddSchedule: "Add Schedule",
+    formScheduleSchedule: "Schedule",
+    formMapPickerTitle: "Pin Location on Map",
+    formMapPickerHint: "Click on the map to set the market location, or search by address below.",
+    formMapPickerSearch: "Search address...",
+    formMapPickerSearchBtn: "Search",
+    formMapPickerClear: "Clear pin",
+    formSaving: "Submitting...",
+
     // About page
     aboutPara1: "Project background",
     aboutPara2:
@@ -525,6 +611,49 @@ export const translations: Record<string, Translations> = {
     // Open status
     openNow: "Dibuka sekarang",
     closedNow: "Tutup",
+
+    // Market form (suggest page)
+    formSectionBasicInfo: "Maklumat Asas",
+    formSectionDetails: "Butiran",
+    formSectionSchedule: "Jadual Operasi",
+    formSectionLocation: "Lokasi",
+    formSectionContact: "Hubungan (pilihan)",
+    formSectionAmenities: "Kemudahan & Tempat Letak Kereta",
+    formFieldName: "Nama Pasar *",
+    formFieldAddress: "Alamat *",
+    formFieldDistrict: "Daerah *",
+    formFieldState: "Negeri *",
+    formFieldStatus: "Status",
+    formFieldDescription: "Penerangan",
+    formFieldAreaM2: "Keluasan (m²)",
+    formFieldTotalStalls: "Jumlah Gerai",
+    formFieldShopList: "Jenis Gerai",
+    formFieldShopListPlaceholder: "cth. Nasi Lemak, Rojak, Satay",
+    formFieldLatitude: "Latitud",
+    formFieldLongitude: "Longitud",
+    formFieldGmapsLink: "Pautan Google Maps",
+    formFieldPhone: "Telefon",
+    formFieldEmail: "E-mel",
+    formFieldToilet: "Tandas",
+    formFieldPrayerRoom: "Surau",
+    formFieldParking: "Tempat Letak Kereta",
+    formFieldAccessibleParking: "Tempat Letak Kereta OKU",
+    formFieldParkingNotes: "Nota Tempat Letak Kereta",
+    formScheduleDays: "Hari Operasi",
+    formScheduleTimeSlots: "Slot Masa",
+    formScheduleFrom: "Dari",
+    formScheduleTo: "Hingga",
+    formScheduleNote: "Nota (pilihan)",
+    formScheduleAddTimeSlot: "Tambah Slot Masa",
+    formScheduleAddSchedule: "Tambah Jadual",
+    formScheduleSchedule: "Jadual",
+    formMapPickerTitle: "Tandakan Lokasi di Peta",
+    formMapPickerHint: "Klik pada peta untuk tetapkan lokasi pasar, atau cari mengikut alamat di bawah.",
+    formMapPickerSearch: "Cari alamat...",
+    formMapPickerSearchBtn: "Cari",
+    formMapPickerClear: "Buang pin",
+    formSaving: "Menghantar...",
+
     // About page (Malay)
     aboutPara1: "Latar Belakang Projek",
     aboutPara2: "Masa saya(Muaz) duduk di UiTM Perlis, tak tahu mana pasar malam yang terdekat.",
