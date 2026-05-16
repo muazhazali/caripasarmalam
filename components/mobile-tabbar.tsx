@@ -2,17 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import {
-  Home,
-  ShoppingBag,
-  Map as MapIcon,
-  MoreHorizontal,
-  Info,
-  Github,
-  Sun,
-  Moon,
-  PlusCircle,
-} from "lucide-react";
+import { Home, ShoppingBag, Map as MapIcon, MoreHorizontal, Info, Github, Sun, Moon, PlusCircle } from "lucide-react";
 import { useLanguage } from "@/components/language-provider";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { useTheme } from "next-themes";
