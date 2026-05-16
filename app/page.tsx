@@ -10,7 +10,10 @@ interface HomePageProps {
 export async function generateMetadata({ searchParams }: HomePageProps): Promise<Metadata> {
   const resolvedSearchParams = await searchParams;
   const hasIndexableFilters = Boolean(
-    resolvedSearchParams?.state || resolvedSearchParams?.day || resolvedSearchParams?.open || resolvedSearchParams?.lang,
+    resolvedSearchParams?.state ||
+      resolvedSearchParams?.day ||
+      resolvedSearchParams?.open ||
+      resolvedSearchParams?.lang,
   );
 
   return {

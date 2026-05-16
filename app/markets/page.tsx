@@ -12,7 +12,10 @@ export async function generateMetadata({ searchParams }: MarketsPageProps): Prom
   const url = `${base}/markets`;
   const resolvedSearchParams = await searchParams;
   const hasIndexableFilters = Boolean(
-    resolvedSearchParams?.state || resolvedSearchParams?.day || resolvedSearchParams?.open || resolvedSearchParams?.lang,
+    resolvedSearchParams?.state ||
+      resolvedSearchParams?.day ||
+      resolvedSearchParams?.open ||
+      resolvedSearchParams?.lang,
   );
 
   const title = "Direktori Pasar Malam Malaysia | Senarai Pasar Malam Mengikut Negeri";
