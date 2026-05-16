@@ -11,6 +11,7 @@ import { useLanguage } from "@/components/language-provider";
 import { createBrowserSupabaseClient } from "@/lib/supabase-client";
 import { getStateFromCoordinates, requestUserLocation } from "@/lib/geolocation";
 import { dbRowToMarket } from "@/lib/db-transform";
+import { getMarketOpenStatus } from "@/lib/utils";
 
 const malaysianStates = [
   "Semua Negeri",
@@ -34,6 +35,19 @@ const malaysianStates = [
 
 // States without "Semua Negeri" for the picker modal
 const STATE_LIST = malaysianStates.slice(1);
+const OPENING_SOON_MINUTES = 120;
+const OPEN_NEARBY_RADIUS_KM = 20;
+
+type MapStatusFilter = "all" | "open" | "opening-soon";
+
+function getMapFilterStatus(market: Market): MapStatusFilter | "closed" {
+  const status = getMarketOpenStatus(market);
+  if (status.status === "open") return "open";
+  if (typeof status.minutesUntilNextOpen === "number" && status.minutesUntilNextOpen <= OPENING_SOON_MINUTES) {
+    return "opening-soon";
+  }
+  return "closed";
+}
 
 export default function MapPage() {
   const { t } = useLanguage();
@@ -44,6 +58,7 @@ export default function MapPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedState, setSelectedState] = useState("Semua Negeri");
   const [selectedMarket, setSelectedMarket] = useState<Market | null>(null);
+  const [statusFilter, setStatusFilter] = useState<MapStatusFilter>("all");
   const [boundsKey, setBoundsKey] = useState(0);
   // Modal: show until user picks a state or grants location
   const [showStatePicker, setShowStatePicker] = useState(true);
@@ -130,8 +145,10 @@ export default function MapPage() {
         { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 },
       );
     } else {
-      setLocationDenied(true);
-      setIsLoadingMarkets(false);
+      queueMicrotask(() => {
+        setLocationDenied(true);
+        setIsLoadingMarkets(false);
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // Only run on mount
@@ -172,19 +189,23 @@ export default function MapPage() {
   }, [fetchMarkets]);
 
   // Filter markets client-side (search, state, and coordinates only)
-  const filteredMarkets = markets.filter((market) => {
-    const matchesSearch =
-      searchQuery === "" ||
-      market.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      market.district.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      market.state.toLowerCase().includes(searchQuery.toLowerCase());
+  const filteredMarkets = useMemo(
+    () =>
+      markets.filter((market) => {
+        const matchesSearch =
+          searchQuery === "" ||
+          market.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          market.district.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          market.state.toLowerCase().includes(searchQuery.toLowerCase());
 
-    const matchesState =
-      selectedState === "Semua Negeri" || selectedState === "All States" || market.state === selectedState;
+        const matchesState =
+          selectedState === "Semua Negeri" || selectedState === "All States" || market.state === selectedState;
 
-    // Only show markets with coordinates
-    return matchesSearch && matchesState && market.location;
-  });
+        // Only show markets with coordinates
+        return matchesSearch && matchesState && market.location;
+      }),
+    [markets, searchQuery, selectedState],
+  );
 
   // Distance calculation
   function getDistanceKm(aLat: number, aLng: number, bLat: number, bLng: number): number {
@@ -214,7 +235,23 @@ export default function MapPage() {
     return withDistance.map((x) => x.market);
   }, [filteredMarkets, userLocation]);
 
-  const displayedMarkets = useMemo(() => sortedMarkets, [sortedMarkets]);
+  const displayedMarkets = useMemo(() => {
+    if (statusFilter === "all") return sortedMarkets;
+    return sortedMarkets.filter((market) => getMapFilterStatus(market) === statusFilter);
+  }, [sortedMarkets, statusFilter]);
+
+  const openNearbyCount = useMemo(() => {
+    const openMarkets = filteredMarkets.filter((market) => getMapFilterStatus(market) === "open");
+    if (!userLocation) return openMarkets.length;
+
+    return openMarkets.filter((market) => {
+      if (!market.location) return false;
+      return (
+        getDistanceKm(userLocation.lat, userLocation.lng, market.location.latitude, market.location.longitude) <=
+        OPEN_NEARBY_RADIUS_KM
+      );
+    }).length;
+  }, [filteredMarkets, userLocation]);
 
   const reRequestLocation = useCallback(async () => {
     try {
@@ -310,6 +347,38 @@ export default function MapPage() {
               </SelectContent>
             </Select>
           </div>
+          <div className="mt-3 flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+            <div className="flex gap-2 overflow-x-auto pb-1 md:pb-0">
+              {(
+                [
+                  ["all", t.allMarkets],
+                  ["open", t.openNow],
+                  ["opening-soon", t.openingSoon],
+                ] as const
+              ).map(([value, label]) => (
+                <Button
+                  key={value}
+                  type="button"
+                  size="sm"
+                  variant={statusFilter === value ? "default" : "outline"}
+                  onClick={() => {
+                    setStatusFilter(value);
+                    setSelectedMarket(null);
+                    setBoundsKey((key) => key + 1);
+                  }}
+                  className="shrink-0"
+                >
+                  {label}
+                </Button>
+              ))}
+            </div>
+            <div className="inline-flex w-fit items-center gap-2 rounded-full border bg-background px-3 py-1 text-xs font-medium text-foreground">
+              <span className="h-2 w-2 rounded-full bg-green-600" />
+              <span>
+                {openNearbyCount} {userLocation ? t.openNearby : t.openNow}
+              </span>
+            </div>
+          </div>
           {locationDenied && (
             <div className="mt-3 flex flex-col md:flex-row items-start md:items-center gap-3 rounded-md border bg-muted/50 p-3">
               <div className="flex-1">
@@ -358,6 +427,7 @@ export default function MapPage() {
           markets={displayedMarkets}
           selectedMarket={selectedMarket}
           onMarketSelect={setSelectedMarket}
+          userLocation={userLocation}
           className="h-full"
           boundsKey={boundsKey}
         />
