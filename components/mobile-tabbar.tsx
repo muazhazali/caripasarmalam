@@ -8,7 +8,6 @@ import {
   Map as MapIcon,
   MoreHorizontal,
   Info,
-  Users,
   Github,
   Sun,
   Moon,
@@ -100,13 +99,6 @@ export default function MobileTabBar() {
                 >
                   <Info className="h-4 w-4" />
                   <span>{t.about}</span>
-                </Link>
-                <Link
-                  href="/contributors"
-                  className="flex items-center gap-3 rounded-lg border border-border px-4 py-4 text-sm text-foreground hover:bg-muted/50 transition-colors"
-                >
-                  <Users className="h-4 w-4" />
-                  <span>{t.contributors}</span>
                 </Link>
                 <a
                   href="https://github.com/muazhazali/caripasarmalam"
