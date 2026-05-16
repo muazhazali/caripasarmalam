@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { ExternalLink, Github, Linkedin } from "lucide-react";
-import { useLanguage } from "@/components/language-provider";
 
 interface Contributor {
   name: string;
@@ -22,7 +21,6 @@ function getLinkInfo(url: string) {
 }
 
 export default function ContributorsClient() {
-  const { t } = useLanguage();
   const contributors: Contributor[] = [
     { name: "Kamalin Annuar", role: "Data Collector, Cleaner", link: "https://www.linkedin.com/in/kamalin-annuar/" },
     { name: "Nayli Umairah", role: "UI/UX Designer", link: "https://www.linkedin.com/in/nayli-u-24b90a272/" },
@@ -47,41 +45,36 @@ export default function ContributorsClient() {
   ];
 
   return (
-    <div className="mx-auto max-w-5xl px-4 py-8">
-      <h1 className="text-2xl font-semibold tracking-tight">{t.contributorsTitle}</h1>
-      <p className="text-muted-foreground mt-1">{t.contributorsSubtitle}</p>
-
-      <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {contributors.map((c) => (
-          <Card key={c.name} className="border-border">
-            <CardHeader>
-              <CardTitle className="text-base font-semibold">{c.name}</CardTitle>
-              {c.role ? <CardDescription>{c.role}</CardDescription> : null}
-              {c.link ? (
-                <CardDescription>
-                  <Link
-                    href={c.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-primary hover:underline inline-flex items-center gap-1"
-                  >
-                    {(() => {
-                      const linkInfo = getLinkInfo(c.link!);
-                      const IconComponent = linkInfo.icon;
-                      return (
-                        <>
-                          <IconComponent className="h-4 w-4" />
-                          {linkInfo.text}
-                        </>
-                      );
-                    })()}
-                  </Link>
-                </CardDescription>
-              ) : null}
-            </CardHeader>
-          </Card>
-        ))}
-      </div>
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {contributors.map((c) => (
+        <Card key={c.name} className="border-border">
+          <CardHeader>
+            <CardTitle className="text-base font-semibold">{c.name}</CardTitle>
+            {c.role ? <CardDescription>{c.role}</CardDescription> : null}
+            {c.link ? (
+              <CardDescription>
+                <Link
+                  href={c.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-primary hover:underline inline-flex items-center gap-1"
+                >
+                  {(() => {
+                    const linkInfo = getLinkInfo(c.link!);
+                    const IconComponent = linkInfo.icon;
+                    return (
+                      <>
+                        <IconComponent className="h-4 w-4" />
+                        {linkInfo.text}
+                      </>
+                    );
+                  })()}
+                </Link>
+              </CardDescription>
+            ) : null}
+          </CardHeader>
+        </Card>
+      ))}
     </div>
   );
 }
