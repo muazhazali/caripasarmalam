@@ -2,7 +2,6 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getMarketById } from "@/lib/db";
 import MarketDetailClient from "@/components/market-detail-client";
-import { cookies } from "next/headers";
 
 interface MarketPageProps {
   params: Promise<{
@@ -61,10 +60,6 @@ export async function generateMetadata({ params }: MarketPageProps): Promise<Met
     ].join(", "),
     alternates: {
       canonical: url,
-      languages: {
-        "ms-MY": url,
-        "en-MY": `${url}?lang=en`,
-      },
     },
     openGraph: {
       type: "article",

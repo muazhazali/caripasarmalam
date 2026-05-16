@@ -3,9 +3,17 @@ import { getMarkets } from "@/lib/db";
 import MarketsFilterClient from "@/components/markets-filter-client";
 import { DayCode } from "../enums";
 
-export async function generateMetadata(): Promise<Metadata> {
+interface MarketsPageProps {
+  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
+}
+
+export async function generateMetadata({ searchParams }: MarketsPageProps): Promise<Metadata> {
   const base = process.env.NEXT_PUBLIC_SITE_URL || "https://pasarmalam.app";
   const url = `${base}/markets`;
+  const resolvedSearchParams = await searchParams;
+  const hasIndexableFilters = Boolean(
+    resolvedSearchParams?.state || resolvedSearchParams?.day || resolvedSearchParams?.open || resolvedSearchParams?.lang,
+  );
 
   const title = "Direktori Pasar Malam Malaysia | Senarai Pasar Malam Mengikut Negeri";
   const description =
@@ -26,20 +34,14 @@ export async function generateMetadata(): Promise<Metadata> {
     "pasar malam Malaysia",
   ].join(", ");
 
-  // Get markets count for metadata
-  const markets = await getMarkets({ status: "Active", limit: 1 });
-
   return {
     title,
     description,
     keywords,
     alternates: {
       canonical: url,
-      languages: {
-        "ms-MY": url,
-        "en-MY": `${url}?lang=en`,
-      },
     },
+    robots: hasIndexableFilters ? { index: false, follow: true } : { index: true, follow: true },
     openGraph: {
       type: "website",
       locale: "ms_MY",
@@ -66,10 +68,6 @@ export async function generateMetadata(): Promise<Metadata> {
       "page:type": "directory",
     },
   };
-}
-
-interface MarketsPageProps {
-  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
 export default async function MarketsPage({ searchParams }: MarketsPageProps) {
