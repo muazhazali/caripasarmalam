@@ -4,7 +4,7 @@ import type { Market } from "@/lib/markets-data";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Suggest a Market",
+  title: "Add or update a market",
   robots: {
     index: false,
     follow: true,
