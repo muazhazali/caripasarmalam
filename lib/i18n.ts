@@ -229,7 +229,7 @@ export interface Translations {
 export const translations: Record<string, Translations> = {
   en: {
     // App/Home Titles
-    appTitle: "Find Night Markets",
+    appTitle: "PasarMalam",
     heroTitle: "Find Your Nearest Night Market",
     heroDescription: "Explore Malaysian night markets with operating hours, amenities, and locations",
     homeSubtitle: "Discover night markets across Malaysia",
@@ -359,13 +359,12 @@ export const translations: Record<string, Translations> = {
     footerText: `© ${new Date().getFullYear()} Malaysia Night Market Directory. An open-source project for the community.`,
     flaticonAttribution: "Maps-and-location icons created by nawicon - Flaticon",
     // Contribution CTA
-    suggestMarket: "Add or update a market",
+    suggestMarket: "Suggest Market",
     addMarketCta: "Know a market we missed or info to update? Submit it here.",
 
     // Suggest page
-    suggestPageTitle: "Suggest a Market",
-    suggestPageSubtitle:
-      "Help us keep the directory up to date by suggesting a new market or an update to an existing one.",
+    suggestPageTitle: "Add or update a market",
+    suggestPageSubtitle: "Submit a new market or suggest changes to an existing one.",
     suggestTypeNew: "Suggest a New Market",
     suggestTypeNewDesc: "Know a pasar malam that isn't listed yet?",
     suggestTypeUpdate: "Update an Existing Market",
@@ -461,7 +460,7 @@ export const translations: Record<string, Translations> = {
   },
   ms: {
     // App/Home Titles
-    appTitle: "Cari Pasar Malam",
+    appTitle: "PasarMalam",
     heroTitle: "Cari Pasar Malam Terdekat Anda",
     heroDescription: "Jelajahi pasar malam Malaysia dengan maklumat waktu operasi, kemudahan dan lokasi",
     homeSubtitle: "Terokai pasar malam di seluruh Malaysia",
@@ -591,13 +590,12 @@ export const translations: Record<string, Translations> = {
     footerText: `© ${new Date().getFullYear()} Direktori Pasar Malam Malaysia. Projek sumber terbuka untuk komuniti.`,
     flaticonAttribution: "Ikon peta dan lokasi dicipta oleh nawicon - Flaticon",
     // Contribution CTA
-    suggestMarket: "Tambah atau kemas kini pasar",
+    suggestMarket: "Cadang Pasar",
     addMarketCta: "Tahu pasar baharu atau maklumat perlu dikemas kini? Hantar di sini.",
 
     // Suggest page
-    suggestPageTitle: "Cadang Pasar",
-    suggestPageSubtitle:
-      "Bantu kami kemas kini direktori dengan mencadangkan pasar baharu atau kemas kini maklumat sedia ada.",
+    suggestPageTitle: "Tambah atau kemas kini pasar",
+    suggestPageSubtitle: "Hantar pasar baharu atau cadangkan perubahan pada pasar sedia ada.",
     suggestTypeNew: "Cadang Pasar Baharu",
     suggestTypeNewDesc: "Tahu pasar malam yang belum disenaraikan?",
     suggestTypeUpdate: "Kemas Kini Pasar Sedia Ada",
