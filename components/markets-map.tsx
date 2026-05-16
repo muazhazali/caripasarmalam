@@ -84,10 +84,24 @@ function formatDuration(minutes: number): string {
   return mins > 0 ? `${hours}h ${mins}m` : `${hours}h`;
 }
 
+function formatDistance(distanceKm: number): string {
+  if (distanceKm < 1) return `${Math.round(distanceKm * 1000)} m`;
+  return `${distanceKm.toFixed(distanceKm < 10 ? 1 : 0)} km`;
+}
+
+function getClosedClusterPrecision(zoom: number): number | null {
+  if (zoom >= 11) return null;
+  if (zoom <= 7) return 0.7;
+  if (zoom <= 8) return 0.45;
+  if (zoom <= 9) return 0.28;
+  return 0.16;
+}
+
 interface MarketsMapProps {
   markets: Market[];
   selectedMarket?: Market | null;
   onMarketSelect?: (market: Market) => void;
+  userLocation?: { lat: number; lng: number } | null;
   className?: string;
   boundsKey?: number;
 }
@@ -96,6 +110,7 @@ export default function MarketsMap({
   markets,
   selectedMarket,
   onMarketSelect,
+  userLocation: userLocationProp,
   className = "",
   boundsKey,
 }: MarketsMapProps) {
@@ -108,8 +123,10 @@ export default function MarketsMap({
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [isReady, setIsReady] = useState(false);
   const [isUpdating, setIsUpdating] = useState(true);
+  const [mapZoom, setMapZoom] = useState(10);
   const { t, language } = useLanguage();
   const { theme, systemTheme } = useTheme();
+  const effectiveUserLocation = userLocationProp ?? userLocation;
 
   const formatTime = useCallback(
     (date: Date) =>
@@ -121,7 +138,7 @@ export default function MarketsMap({
   );
 
   const nearestAvailableMarket = useMemo(() => {
-    if (!userLocation) return null;
+    if (!effectiveUserLocation) return null;
 
     const candidates = markets
       .filter((market) => market.location)
@@ -129,8 +146,8 @@ export default function MarketsMap({
         market,
         state: getMapStatus(market),
         distance: calculateDistanceKm(
-          userLocation.lat,
-          userLocation.lng,
+          effectiveUserLocation.lat,
+          effectiveUserLocation.lng,
           market.location!.latitude,
           market.location!.longitude,
         ),
@@ -145,7 +162,7 @@ export default function MarketsMap({
     });
 
     return candidates[0];
-  }, [markets, userLocation]);
+  }, [markets, effectiveUserLocation]);
 
   const resolveIsDark = useCallback((): boolean => {
     const pref = theme === "system" ? systemTheme : theme;
@@ -198,6 +215,94 @@ export default function MarketsMap({
     }
   }, []);
 
+  const createMarketMarker = useCallback(
+    (
+      L: typeof import("leaflet"),
+      map: Map,
+      market: Market,
+      marketState: ReturnType<typeof getMapStatus>,
+    ): Marker | null => {
+      if (!market.location) return null;
+
+      const isSelected = selectedMarket?.id === market.id;
+      const markerStyle = statusStyles[marketState.mapStatus];
+      const markerSize = isSelected ? 34 : marketState.mapStatus === "closed" ? 24 : 28;
+      const iconSize = isSelected ? 16 : 13;
+      const statusLabel =
+        marketState.mapStatus === "open"
+          ? t.openNow
+          : marketState.mapStatus === "opening-soon"
+            ? t.openingSoon
+            : t.closedNow;
+      const timingText =
+        marketState.status === "open" && marketState.closesAt
+          ? `${t.closesAt} ${formatTime(marketState.closesAt)}`
+          : marketState.nextOpenAt && typeof marketState.minutesUntilNextOpen === "number"
+            ? `${t.opensIn} ${formatDuration(marketState.minutesUntilNextOpen)}`
+            : t.scheduleNotAvailable;
+      const distanceText = effectiveUserLocation
+        ? `${formatDistance(
+            calculateDistanceKm(
+              effectiveUserLocation.lat,
+              effectiveUserLocation.lng,
+              market.location.latitude,
+              market.location.longitude,
+            ),
+          )} ${t.fromHere}`
+        : "";
+
+      const markerIcon = L.divIcon({
+        html: `<div style="position:relative;width:${markerSize}px;height:${markerSize}px;">
+                 <div style="position:absolute;inset:${isSelected ? "-7px" : "-5px"};border-radius:999px;background:${markerStyle.pulse};"></div>
+                 <div style="width:${markerSize}px;height:${markerSize}px;background:${markerStyle.color};border-radius:999px;border:3px solid white;box-shadow:0 10px 24px rgba(15,23,42,.26),0 0 0 6px ${markerStyle.ring};display:flex;align-items:center;justify-content:center;">
+                 <svg style="width:${iconSize}px;height:${iconSize}px;color:white;" fill="currentColor" viewBox="0 0 20 20">
+                   <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
+                 </svg>
+               </div>`,
+        className: "market-marker",
+        iconSize: [markerSize, markerSize],
+        iconAnchor: [markerSize / 2, markerSize / 2],
+      });
+      const marker = L.marker([market.location.latitude, market.location.longitude], { icon: markerIcon }).addTo(map);
+      marker.setZIndexOffset(isSelected ? 900 : markerStyle.zIndex);
+
+      const scheduleText = market.schedule[0]
+        ? formatScheduleRule(market.schedule[0], language)
+        : t.scheduleNotAvailable;
+
+      marker.bindPopup(`
+        <div class="p-3 min-w-64">
+          <div class="flex items-start justify-between gap-3 mb-2">
+            <h3 class="font-semibold text-sm">${escapeHtml(market.name)}</h3>
+            <span style="background:${markerStyle.ring};color:${markerStyle.color};border:1px solid ${markerStyle.ring};" class="text-xs font-semibold px-2 py-0.5 rounded-full whitespace-nowrap">${escapeHtml(statusLabel)}</span>
+          </div>
+          <p class="text-xs text-gray-600 mb-1">${escapeHtml(market.district)}, ${escapeHtml(market.state)}</p>
+          ${distanceText ? `<p class="text-xs text-gray-500 mb-2">${escapeHtml(distanceText)}</p>` : ""}
+          <p class="text-xs font-medium mb-1" style="color:${markerStyle.color};">${escapeHtml(timingText)}</p>
+          <p class="text-xs text-gray-500 mb-2">${escapeHtml(scheduleText)}</p>
+          <div class="flex gap-1 mb-2">
+            ${market.parking.available ? `<span class=\"text-xs bg-green-100 text-green-800 px-1 rounded\">${t.parking}</span>` : ""}
+            ${market.amenities.toilet ? `<span class=\"text-xs bg-blue-100 text-blue-800 px-1 rounded\">${t.toilet}</span>` : ""}
+            ${market.amenities.prayer_room ? `<span class=\"text-xs bg-purple-100 text-purple-800 px-1 rounded\">${t.prayerRoom}</span>` : ""}
+          </div>
+          <div class="flex gap-2">
+            <button onclick=\"window.openDirections(${market.location.latitude}, ${market.location.longitude})\" class=\"text-xs bg-primary text-white px-2 py-1 rounded hover:bg-primary/90\">${t.getDirections}</button>
+            <button onclick=\"window.location.href='/markets/${market.id}'\" class=\"text-xs bg-primary text-white px-2 py-1 rounded hover:bg-primary/90\">${t.viewDetails}</button>
+          </div>
+        </div>
+      `);
+
+      if (isSelected) marker.openPopup();
+
+      marker.on("click", () => {
+        if (onMarketSelect) onMarketSelect(market);
+      });
+
+      return marker;
+    },
+    [effectiveUserLocation, formatTime, language, onMarketSelect, selectedMarket?.id, t],
+  );
+
   // Initialize the map ONCE
   useEffect(() => {
     if (typeof window === "undefined" || !mapRef.current) return;
@@ -240,6 +345,9 @@ export default function MarketsMap({
           // Track interaction to preserve viewport
           map.on("zoomstart", () => {
             hasUserInteractedRef.current = true;
+          });
+          map.on("zoomend", () => {
+            setMapZoom(map.getZoom());
           });
           map.on("dragstart", () => {
             hasUserInteractedRef.current = true;
@@ -294,85 +402,90 @@ export default function MarketsMap({
       markersRef.current = [];
 
       // User location
-      if (userLocation) {
+      if (effectiveUserLocation) {
         const userIcon = L.divIcon({
           html: '<div class="w-4 h-4 bg-blue-500 rounded-full border-2 border-white shadow-lg"></div>',
           className: "user-location-marker",
           iconSize: [16, 16],
           iconAnchor: [8, 8],
         });
-        const userMarker = L.marker([userLocation.lat, userLocation.lng], { icon: userIcon }).addTo(map);
+        const userMarker = L.marker([effectiveUserLocation.lat, effectiveUserLocation.lng], { icon: userIcon }).addTo(
+          map,
+        );
         userMarker.bindPopup(`<div class="p-2"><p class="text-sm font-medium">${t.yourLocation}</p></div>`);
         markersRef.current.push(userMarker);
       }
 
       // Market markers
+      const clusterPrecision = getClosedClusterPrecision(mapZoom);
+      const closedClusters = new Map<
+        string,
+        {
+          markets: Market[];
+          latitude: number;
+          longitude: number;
+        }
+      >();
+
       markets.forEach((market) => {
         if (!market.location) return;
-        const isSelected = selectedMarket?.id === market.id;
         const marketState = getMapStatus(market);
-        const markerStyle = statusStyles[marketState.mapStatus];
-        const markerSize = isSelected ? 34 : marketState.mapStatus === "closed" ? 24 : 28;
-        const iconSize = isSelected ? 16 : 13;
-        const statusLabel =
-          marketState.mapStatus === "open"
-            ? t.openNow
-            : marketState.mapStatus === "opening-soon"
-              ? t.openingSoon
-              : t.closedNow;
-        const timingText =
-          marketState.status === "open" && marketState.closesAt
-            ? `${t.closesAt} ${formatTime(marketState.closesAt)}`
-            : marketState.nextOpenAt && typeof marketState.minutesUntilNextOpen === "number"
-              ? `${t.opensIn} ${formatDuration(marketState.minutesUntilNextOpen)}`
-              : t.scheduleNotAvailable;
-        const markerIcon = L.divIcon({
-          html: `<div style="position:relative;width:${markerSize}px;height:${markerSize}px;">
-                   <div style="position:absolute;inset:${isSelected ? "-7px" : "-5px"};border-radius:999px;background:${markerStyle.pulse};"></div>
-                   <div style="width:${markerSize}px;height:${markerSize}px;background:${markerStyle.color};border-radius:999px;border:3px solid white;box-shadow:0 10px 24px rgba(15,23,42,.26),0 0 0 6px ${markerStyle.ring};display:flex;align-items:center;justify-content:center;">
-                   <svg style="width:${iconSize}px;height:${iconSize}px;color:white;" fill="currentColor" viewBox="0 0 20 20">
-                     <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
-                   </svg>
-                 </div>`,
-          className: "market-marker",
-          iconSize: [markerSize, markerSize],
-          iconAnchor: [markerSize / 2, markerSize / 2],
-        });
-        const marker = L.marker([market.location.latitude, market.location.longitude], { icon: markerIcon }).addTo(map);
-        marker.setZIndexOffset(isSelected ? 900 : markerStyle.zIndex);
 
-        const scheduleText = market.schedule[0]
-          ? formatScheduleRule(market.schedule[0], language)
-          : t.scheduleNotAvailable;
+        if (marketState.mapStatus === "closed" && clusterPrecision && selectedMarket?.id !== market.id) {
+          const clusterLat = Math.round(market.location.latitude / clusterPrecision) * clusterPrecision;
+          const clusterLng = Math.round(market.location.longitude / clusterPrecision) * clusterPrecision;
+          const key = `${clusterLat}:${clusterLng}`;
+          const cluster = closedClusters.get(key);
 
-        marker.bindPopup(`
-          <div class="p-3 min-w-64">
-            <div class="flex items-start justify-between gap-3 mb-2">
-              <h3 class="font-semibold text-sm">${escapeHtml(market.name)}</h3>
-              <span style="background:${markerStyle.ring};color:${markerStyle.color};border:1px solid ${markerStyle.ring};" class="text-xs font-semibold px-2 py-0.5 rounded-full whitespace-nowrap">${escapeHtml(statusLabel)}</span>
-            </div>
-            <p class="text-xs text-gray-600 mb-2">${escapeHtml(market.district)}, ${escapeHtml(market.state)}</p>
-            <p class="text-xs font-medium mb-1" style="color:${markerStyle.color};">${escapeHtml(timingText)}</p>
-            <p class="text-xs text-gray-500 mb-2">${escapeHtml(scheduleText)}</p>
-            <div class="flex gap-1 mb-2">
-              ${market.parking.available ? `<span class=\"text-xs bg-green-100 text-green-800 px-1 rounded\">${t.parking}</span>` : ""}
-              ${market.amenities.toilet ? `<span class=\"text-xs bg-blue-100 text-blue-800 px-1 rounded\">${t.toilet}</span>` : ""}
-              ${market.amenities.prayer_room ? `<span class=\"text-xs bg-purple-100 text-purple-800 px-1 rounded\">${t.prayerRoom}</span>` : ""}
-            </div>
-            <div class="flex gap-2">
-              <button onclick=\"window.openDirections(${market.location.latitude}, ${market.location.longitude})\" class=\"text-xs bg-primary text-white px-2 py-1 rounded hover:bg-primary/90\">${t.getDirections}</button>
-              <button onclick=\"window.location.href='/markets/${market.id}'\" class=\"text-xs bg-primary text-white px-2 py-1 rounded hover:bg-primary/90\">${t.viewDetails}</button>
-            </div>
-          </div>
-        `);
-
-        // If this market is currently selected, open its popup so the user sees details
-        if (isSelected) {
-          marker.openPopup();
+          if (cluster) {
+            cluster.markets.push(market);
+            cluster.latitude += market.location.latitude;
+            cluster.longitude += market.location.longitude;
+          } else {
+            closedClusters.set(key, {
+              markets: [market],
+              latitude: market.location.latitude,
+              longitude: market.location.longitude,
+            });
+          }
+          return;
         }
 
+        const marker = createMarketMarker(L, map, market, marketState);
+        if (marker) markersRef.current.push(marker);
+      });
+
+      closedClusters.forEach((cluster) => {
+        if (cluster.markets.length === 1) {
+          const market = cluster.markets[0];
+          const marker = createMarketMarker(L, map, market, getMapStatus(market));
+          if (marker) markersRef.current.push(marker);
+          return;
+        }
+
+        const count = cluster.markets.length;
+        const latitude = cluster.latitude / count;
+        const longitude = cluster.longitude / count;
+        const size = count > 20 ? 44 : count > 9 ? 38 : 32;
+        const clusterIcon = L.divIcon({
+          html: `<div style="width:${size}px;height:${size}px;border-radius:999px;background:#64748b;color:white;border:3px solid white;box-shadow:0 12px 26px rgba(15,23,42,.3),0 0 0 7px rgba(100,116,139,.2);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;">${count}</div>`,
+          className: "closed-market-cluster",
+          iconSize: [size, size],
+          iconAnchor: [size / 2, size / 2],
+        });
+        const marker = L.marker([latitude, longitude], { icon: clusterIcon }).addTo(map);
+        marker.setZIndexOffset(statusStyles.closed.zIndex - 20);
+        marker.bindPopup(`
+          <div class="p-3 min-w-48">
+            <p class="text-sm font-semibold mb-1">${count} ${escapeHtml(t.closedMarkets)}</p>
+            <p class="text-xs text-gray-500">${escapeHtml(t.zoomInToSeeClosedMarkets)}</p>
+          </div>
+        `);
         marker.on("click", () => {
-          if (onMarketSelect) onMarketSelect(market);
+          const bounds = L.latLngBounds(
+            cluster.markets.map((market) => [market.location!.latitude, market.location!.longitude]),
+          );
+          map.fitBounds(bounds.pad(0.25), { animate: true });
         });
         markersRef.current.push(marker);
       });
@@ -395,12 +508,15 @@ export default function MarketsMap({
 
     updateMarkers();
     // Also re-run when the map is ready so markers are added after initialization
-  }, [markets, selectedMarket, userLocation, onMarketSelect, t, language, formatTime, isReady]);
+  }, [markets, selectedMarket, effectiveUserLocation, createMarketMarker, t, mapZoom, isReady]);
 
   const centerOnUserLocation = () => {
-    if (userLocation && mapInstanceRef.current) {
+    if (effectiveUserLocation && mapInstanceRef.current) {
       try {
-        mapInstanceRef.current.flyTo([userLocation.lat, userLocation.lng], 13, { animate: true, duration: 0.8 });
+        mapInstanceRef.current.flyTo([effectiveUserLocation.lat, effectiveUserLocation.lng], 13, {
+          animate: true,
+          duration: 0.8,
+        });
       } catch {
         /* ignore */
       }
@@ -444,7 +560,7 @@ export default function MarketsMap({
 
       {/* Map controls */}
       <div className="absolute top-4 right-4 flex flex-col gap-2 z-[1001]">
-        {userLocation && (
+        {effectiveUserLocation && (
           <Button
             size="sm"
             variant="default"
@@ -468,11 +584,12 @@ export default function MarketsMap({
               });
               if (onMarketSelect) onMarketSelect(market);
             }}
-            className="shadow-lg"
+            className="gap-2 shadow-lg md:w-auto"
             title={t.nearestOpenMarketHint}
             aria-label={t.nearestOpenMarket}
           >
             <LocateFixed className="h-4 w-4" />
+            <span className="hidden md:inline">{t.nearestOpenMarket}</span>
           </Button>
         )}
         <Button size="sm" variant="default" onClick={zoomIn} className="shadow-lg" aria-label="Zoom in">

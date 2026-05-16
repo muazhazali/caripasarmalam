@@ -163,14 +163,19 @@ export interface Translations {
   selectStatePromptDescription: string;
 
   // Open status
+  allMarkets: string;
   openNow: string;
   openingSoon: string;
   closedNow: string;
   opensIn: string;
   closesAt: string;
+  openNearby: string;
+  fromHere: string;
   nearestOpenMarket: string;
   nearestOpenMarketHint: string;
   mapLegend: string;
+  closedMarkets: string;
+  zoomInToSeeClosedMarkets: string;
 
   // Market form (suggest page)
   formSectionBasicInfo: string;
@@ -388,14 +393,19 @@ export const translations: Record<string, Translations> = {
     selectStatePromptDescription: "Choose a state from the dropdown, or enable location to see nearby markets.",
 
     // Open status
+    allMarkets: "All",
     openNow: "Open now",
     openingSoon: "Opening soon",
     closedNow: "Closed",
     opensIn: "Opens in",
     closesAt: "Closes at",
+    openNearby: "open nearby",
+    fromHere: "from here",
     nearestOpenMarket: "Nearest open",
     nearestOpenMarketHint: "Center the closest market that is open now or opening soon.",
     mapLegend: "Map legend",
+    closedMarkets: "closed markets",
+    zoomInToSeeClosedMarkets: "Zoom in to see each closed market.",
 
     // Market form (suggest page)
     formSectionBasicInfo: "Basic Info",
@@ -615,14 +625,19 @@ export const translations: Record<string, Translations> = {
     selectStatePromptDescription: "Pilih negeri dari senarai, atau hidupkan lokasi untuk lihat pasar berdekatan.",
 
     // Open status
+    allMarkets: "Semua",
     openNow: "Dibuka sekarang",
     openingSoon: "Buka sekejap lagi",
     closedNow: "Tutup",
     opensIn: "Buka dalam",
     closesAt: "Tutup pada",
+    openNearby: "dibuka berdekatan",
+    fromHere: "dari sini",
     nearestOpenMarket: "Terdekat dibuka",
     nearestOpenMarketHint: "Fokus pasar terdekat yang sedang dibuka atau akan buka sekejap lagi.",
     mapLegend: "Petunjuk peta",
+    closedMarkets: "pasar tutup",
+    zoomInToSeeClosedMarkets: "Zum masuk untuk lihat setiap pasar yang tutup.",
 
     // Market form (suggest page)
     formSectionBasicInfo: "Maklumat Asas",
