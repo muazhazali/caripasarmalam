@@ -164,7 +164,13 @@ export interface Translations {
 
   // Open status
   openNow: string;
+  openingSoon: string;
   closedNow: string;
+  opensIn: string;
+  closesAt: string;
+  nearestOpenMarket: string;
+  nearestOpenMarketHint: string;
+  mapLegend: string;
 
   // Market form (suggest page)
   formSectionBasicInfo: string;
@@ -383,7 +389,13 @@ export const translations: Record<string, Translations> = {
 
     // Open status
     openNow: "Open now",
+    openingSoon: "Opening soon",
     closedNow: "Closed",
+    opensIn: "Opens in",
+    closesAt: "Closes at",
+    nearestOpenMarket: "Nearest open",
+    nearestOpenMarketHint: "Center the closest market that is open now or opening soon.",
+    mapLegend: "Map legend",
 
     // Market form (suggest page)
     formSectionBasicInfo: "Basic Info",
@@ -604,7 +616,13 @@ export const translations: Record<string, Translations> = {
 
     // Open status
     openNow: "Dibuka sekarang",
+    openingSoon: "Buka sekejap lagi",
     closedNow: "Tutup",
+    opensIn: "Buka dalam",
+    closesAt: "Tutup pada",
+    nearestOpenMarket: "Terdekat dibuka",
+    nearestOpenMarketHint: "Fokus pasar terdekat yang sedang dibuka atau akan buka sekejap lagi.",
+    mapLegend: "Petunjuk peta",
 
     // Market form (suggest page)
     formSectionBasicInfo: "Maklumat Asas",
@@ -665,7 +683,7 @@ export function useTranslation(locale = "ms") {
 
 import { DayCode } from "@/app/enums";
 // Helpers to format weekday codes and schedule rules
-import type { Weekday, MarketSchedule } from "@/lib/markets-data";
+import type { MarketSchedule } from "@/lib/markets-data";
 
 export function formatWeekday(code: DayCode, locale: string = "ms"): string {
   const t = translations[locale] || translations.ms;
