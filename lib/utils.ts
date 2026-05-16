@@ -99,8 +99,12 @@ export function getMarketOpenStatus(market: Market, now?: Date): OpenStatus {
     const minutesFromNowToStartOfDay = deltaDay * 24 * 60;
     for (const r of ranges) {
       if (r.day !== day) continue;
-      const candidateMinutes =
-        minutesFromNowToStartOfDay + Math.max(0, r.start - (deltaDay === 0 ? currentMinutes : 0));
+
+      // For today, only future start times can be the next opening.
+      // Already-passed slots must roll forward to their next scheduled day.
+      if (deltaDay === 0 && r.start <= currentMinutes) continue;
+
+      const candidateMinutes = deltaDay === 0 ? r.start - currentMinutes : minutesFromNowToStartOfDay + r.start;
       if (candidateMinutes >= 0 && candidateMinutes < bestDeltaMinutes) {
         bestDeltaMinutes = candidateMinutes;
         nextMinutes = r.start;
