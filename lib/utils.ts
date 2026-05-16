@@ -13,6 +13,8 @@ interface OpenStatus {
   status: "open" | "closed";
   closesAt?: Date;
   nextOpenAt?: Date;
+  minutesUntilClose?: number;
+  minutesUntilNextOpen?: number;
 }
 
 function getMalaysiaNow(date?: Date): Date {
@@ -86,12 +88,11 @@ export function getMarketOpenStatus(market: Market, now?: Date): OpenStatus {
     const closesMinutes = Math.min(...todayClosings);
     const closesAt = new Date(localNow);
     closesAt.setHours(Math.floor(closesMinutes / 60), closesMinutes % 60, 0, 0);
-    return { status: "open", closesAt };
+    return { status: "open", closesAt, minutesUntilClose: closesMinutes - currentMinutes };
   }
 
   // Find next opening time within next 7 days
   let bestDeltaMinutes = Infinity;
-  let nextDay: number = currentWeekday;
   let nextMinutes = 0;
   for (let deltaDay = 0; deltaDay < 7; deltaDay++) {
     const day = (currentWeekday + deltaDay) % 7;
@@ -102,7 +103,6 @@ export function getMarketOpenStatus(market: Market, now?: Date): OpenStatus {
         minutesFromNowToStartOfDay + Math.max(0, r.start - (deltaDay === 0 ? currentMinutes : 0));
       if (candidateMinutes >= 0 && candidateMinutes < bestDeltaMinutes) {
         bestDeltaMinutes = candidateMinutes;
-        nextDay = day;
         nextMinutes = r.start;
       }
     }
@@ -116,5 +116,9 @@ export function getMarketOpenStatus(market: Market, now?: Date): OpenStatus {
     nextOpenAt.setHours(hours, mins, 0, 0);
   }
 
-  return { status: "closed", nextOpenAt };
+  return {
+    status: "closed",
+    nextOpenAt,
+    minutesUntilNextOpen: bestDeltaMinutes === Infinity ? undefined : bestDeltaMinutes,
+  };
 }
