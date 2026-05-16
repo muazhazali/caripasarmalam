@@ -1,3 +1,13 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Offline",
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
+
 export default function OfflinePage() {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center gap-4 p-8 text-center">

@@ -1,5 +1,4 @@
 "use client";
-
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { MapPin, Search, Loader2, Navigation } from "lucide-react";
 import { Button } from "@/components/ui/button";

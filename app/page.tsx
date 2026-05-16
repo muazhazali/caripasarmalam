@@ -1,9 +1,24 @@
 import { getMarkets } from "@/lib/db";
 import HomepageClient from "@/components/homepage-client";
 import { DayCode } from "./enums";
+import type { Metadata } from "next";
 
 interface HomePageProps {
   searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
+}
+
+export async function generateMetadata({ searchParams }: HomePageProps): Promise<Metadata> {
+  const resolvedSearchParams = await searchParams;
+  const hasIndexableFilters = Boolean(
+    resolvedSearchParams?.state || resolvedSearchParams?.day || resolvedSearchParams?.open || resolvedSearchParams?.lang,
+  );
+
+  return {
+    alternates: {
+      canonical: "/",
+    },
+    robots: hasIndexableFilters ? { index: false, follow: true } : { index: true, follow: true },
+  };
 }
 
 export default async function HomePage({ searchParams }: HomePageProps) {

@@ -1,9 +1,14 @@
 import { getMarkets, getAllStates, getMarketById } from "@/lib/db";
 import { SuggestClient } from "./suggest-client";
 import type { Market } from "@/lib/markets-data";
+import type { Metadata } from "next";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Suggest a Market",
+  robots: {
+    index: false,
+    follow: true,
+  },
 };
 
 interface PageProps {
