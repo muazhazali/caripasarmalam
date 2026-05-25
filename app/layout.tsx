@@ -90,7 +90,8 @@ export default async function RootLayout({
   const headersList = await headers();
   // Accept-Language header format sample: en-US,en;q=0.9,fr;q=0.8,ms;q=0.7
   const preferredLanguage = headersList.get("accept-language")?.split(",")[0].split(";")[0].split("-")[0];
-  const initialLanguage = preferredLanguage === "en" || cookieLang === "en" ? "en" : "ms";
+  let initialLanguage = cookieLang;
+  if (!cookieLang) initialLanguage = preferredLanguage === "en" ? "en" : "ms";
   const pathname = headersList.get("x-pathname") ?? "";
   const isAdmin = pathname.startsWith("/admin");
   return (
