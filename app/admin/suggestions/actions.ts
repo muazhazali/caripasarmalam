@@ -11,6 +11,10 @@ export async function approveSuggestion(id: string): Promise<{ error?: string }>
     data: { user },
   } = await supabase.auth.getUser();
 
+  if (!user) {
+    return { error: "Unauthorized." };
+  }
+
   const suggestion = await getSuggestionById(id);
   if (!suggestion) return { error: "Suggestion not found." };
   if (suggestion.status !== "pending") return { error: "Suggestion is not pending." };
@@ -36,11 +40,10 @@ export async function approveSuggestion(id: string): Promise<{ error?: string }>
     .from("market_suggestions")
     .update({
       status: "approved",
-      reviewed_by: user!.id,
+      reviewed_by: user.id,
       reviewed_at: new Date().toISOString(),
     })
     .eq("id", id);
-
   if (reviewError) {
     console.error("Error updating suggestion status:", reviewError);
     return { error: reviewError.message };
@@ -50,7 +53,7 @@ export async function approveSuggestion(id: string): Promise<{ error?: string }>
   revalidatePath("/markets");
   revalidatePath("/");
 
-  return {};
+  return { error: undefined };
 }
 
 export async function rejectSuggestion(id: string, reason?: string): Promise<{ error?: string }> {
@@ -59,16 +62,19 @@ export async function rejectSuggestion(id: string, reason?: string): Promise<{ e
     data: { user },
   } = await supabase.auth.getUser();
 
+  if (!user) {
+    return { error: "Unauthorized." };
+  }
+
   const { error } = await supabase
     .from("market_suggestions")
     .update({
       status: "rejected",
       rejection_reason: reason?.trim() || null,
-      reviewed_by: user!.id,
+      reviewed_by: user.id,
       reviewed_at: new Date().toISOString(),
     })
     .eq("id", id);
-
   if (error) {
     console.error("Error rejecting suggestion:", error);
     return { error: error.message };

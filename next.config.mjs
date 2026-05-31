@@ -5,6 +5,40 @@ const nextConfig = {
   typescript: { ignoreBuildErrors: true },
   images: { unoptimized: true },
   turbopack: {},
+  async headers() {
+    return [
+      {
+        source: "/:path*",
+        headers: [
+          {
+            key: "Content-Security-Policy",
+            value:
+              "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com https://*.googleapis.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: blob:; connect-src 'self' https://*.supabase.co https://*.googleapis.com; font-src 'self' data:; frame-ancestors 'none'; base-uri 'self'; form-action 'self';",
+          },
+          {
+            key: "Strict-Transport-Security",
+            value: "max-age=31536000; includeSubDomains",
+          },
+          {
+            key: "X-Frame-Options",
+            value: "DENY",
+          },
+          {
+            key: "X-Content-Type-Options",
+            value: "nosniff",
+          },
+          {
+            key: "Referrer-Policy",
+            value: "strict-origin-when-cross-origin",
+          },
+          {
+            key: "Permissions-Policy",
+            value: "geolocation=(self), camera=(), microphone=(), payment=()",
+          },
+        ],
+      },
+    ];
+  },
 };
 
 export default withPWA({
@@ -15,72 +49,8 @@ export default withPWA({
   disable: process.env.NODE_ENV === "development",
 
   fallbacks: {
-    document: "/offline", // shown for uncached HTML navigations
+    document: "/offline",
   },
 
-  workboxOptions: {
-    maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
-    runtimeCaching: [
-      // Next.js hashed static chunks — cache forever
-      {
-        urlPattern: /^https?:\/\/.*\/_next\/static\/.*/i,
-        handler: "CacheFirst",
-        options: {
-          cacheName: "next-static-assets",
-          expiration: { maxEntries: 200, maxAgeSeconds: 60 * 60 * 24 * 365 },
-          cacheableResponse: { statuses: [0, 200] },
-        },
-      },
-      // Next.js image optimization
-      {
-        urlPattern: /^https?:\/\/.*\/_next\/image\?.*/i,
-        handler: "StaleWhileRevalidate",
-        options: {
-          cacheName: "next-image-opt",
-          expiration: { maxEntries: 100, maxAgeSeconds: 60 * 60 * 24 * 30 },
-          cacheableResponse: { statuses: [0, 200] },
-        },
-      },
-      // Static files (icons, images, fonts from /public)
-      {
-        urlPattern: /\.(?:png|jpg|jpeg|svg|gif|webp|ico|woff2?|ttf|otf)$/i,
-        handler: "CacheFirst",
-        options: {
-          cacheName: "static-media",
-          expiration: { maxEntries: 80, maxAgeSeconds: 60 * 60 * 24 * 90 },
-          cacheableResponse: { statuses: [0, 200] },
-        },
-      },
-      // App HTML pages — NetworkFirst (fresh when online, cached when offline)
-      {
-        urlPattern: /^https?:\/\/.*\/(?:markets(?:\/[^/]+)?|about|contributors|$)/i,
-        handler: "NetworkFirst",
-        options: {
-          cacheName: "page-cache",
-          networkTimeoutSeconds: 5,
-          expiration: { maxEntries: 60, maxAgeSeconds: 60 * 60 * 24 * 7 },
-          cacheableResponse: { statuses: [0, 200] },
-        },
-      },
-      // Google Fonts CSS
-      {
-        urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
-        handler: "StaleWhileRevalidate",
-        options: {
-          cacheName: "google-fonts-stylesheets",
-          expiration: { maxEntries: 10, maxAgeSeconds: 60 * 60 * 24 * 365 },
-        },
-      },
-      // Google Fonts files
-      {
-        urlPattern: /^https:\/\/fonts\.gstatic\.com\/.*/i,
-        handler: "CacheFirst",
-        options: {
-          cacheName: "google-fonts-webfonts",
-          expiration: { maxEntries: 20, maxAgeSeconds: 60 * 60 * 24 * 365 },
-          cacheableResponse: { statuses: [0, 200] },
-        },
-      },
-    ],
-  },
-})(nextConfig);
+  ...nextConfig,
+});
