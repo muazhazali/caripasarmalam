@@ -41,16 +41,22 @@ const nextConfig = {
   },
 };
 
-export default withPWA({
-  dest: "public",
-  cacheOnFrontEndNav: true,
-  aggressiveFrontEndNavCaching: true,
-  reloadOnOnline: true,
-  disable: process.env.NODE_ENV === "development",
+// Disable PWA in production builds with Turbopack (webpack conflict)
+// TODO: Migrate to Turbopack-compatible PWA solution
+const isPWAEnabled = false;
 
-  fallbacks: {
-    document: "/offline",
-  },
+const finalConfig = isPWAEnabled
+  ? withPWA({
+      dest: "public",
+      cacheOnFrontEndNav: true,
+      aggressiveFrontEndNavCaching: true,
+      reloadOnOnline: true,
+      disable: process.env.NODE_ENV === "development",
+      fallbacks: {
+        document: "/offline",
+      },
+      ...nextConfig,
+    })
+  : nextConfig;
 
-  ...nextConfig,
-});
+export default finalConfig;
