@@ -4,11 +4,37 @@
  */
 
 import type { Market, MarketSchedule } from "./markets-data";
+import type { MarketFormValues } from "@/lib/admin-schema";
 
 /**
  * Database row structure from Supabase
  * Represents the flattened schema where nested objects are stored as JSONB or separate columns
  */
+export interface DatabaseRow {
+  id: string;
+  name: string;
+  address: string;
+  district: string;
+  state: string;
+  status: string;
+  description?: string | null;
+  area_m2?: number | null;
+  total_shop?: number | null;
+  shop_list?: string | null;
+
+  // Parking fields (flattened)
+  parking_available?: boolean | null;
+  parking_accessible?: boolean | null;
+  parking_notes?: string | null;
+
+  // Amenities fields (flattened)
+  amen_toilet?: boolean | null;
+  amen_prayer_room?: boolean | null;
+
+  // JSONB fields (can be string or already parsed object)
+  location?: string | { latitude: number; longitude: number; gmaps_link: string } | null;
+  schedule?: string | MarketSchedule[] | null;
+}
 
 /**
  * Transform a database row to a Market object
@@ -64,10 +90,16 @@ export function dbRowsToMarkets(rows: DatabaseRow[]): Market[] {
 /**
  * Transform MarketFormValues into a Supabase DB row object
  */
-import type { MarketFormValues } from "@/lib/admin-schema";
+export function marketFormToDbRow(data: MarketFormValues, existingId?: string) {
+  const id =
+    existingId ??
+    `${data.state}-${data.district}-${data.name}`
+      .toLowerCase()
+      .replace(/[^\w\s-]/g, "")
+      .replace(/\s+/g, "-");
 
-export function marketFormToDbRow(data: MarketFormValues) {
   return {
+    id,
     name: data.name,
     address: data.address,
     district: data.district,
@@ -91,30 +123,4 @@ export function marketFormToDbRow(data: MarketFormValues) {
       : null,
     schedule: data.schedule,
   };
-}
-
-export interface DatabaseRow {
-  id: string;
-  name: string;
-  address: string;
-  district: string;
-  state: string;
-  status: string;
-  description?: string | null;
-  area_m2?: number | null;
-  total_shop?: number | null;
-  shop_list?: string | null;
-
-  // Parking fields (flattened)
-  parking_available?: boolean | null;
-  parking_accessible?: boolean | null;
-  parking_notes?: string | null;
-
-  // Amenities fields (flattened)
-  amen_toilet?: boolean | null;
-  amen_prayer_room?: boolean | null;
-
-  // JSONB fields (can be string or already parsed object)
-  location?: string | { latitude: number; longitude: number; gmaps_link: string } | null;
-  schedule?: string | MarketSchedule[] | null;
 }
