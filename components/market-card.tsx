@@ -173,9 +173,13 @@ export function MarketCard({ market, userLocation, showAddress = false }: Market
               {t.showDirection}
             </Button>
           )}
-          <Link href={`/markets/${market.id}`}>
-            <Button variant="outline">{t.viewDetails}</Button>
-          </Link>
+          <Button
+            asChild
+            variant="outline"
+            className="border-primary/40 text-primary hover:bg-primary/10 hover:text-primary dark:border-primary/50 dark:bg-primary/15 dark:hover:bg-primary/25"
+          >
+            <Link href={`/markets/${market.id}`}>{t.viewDetails}</Link>
+          </Button>
         </div>
         {/* Render the mobile-only directions chooser. */}
         <DirectionsChooserDialog
