@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useLanguage } from "@/components/language-provider";
 import { MapPin } from "lucide-react";
-import type { Map } from "leaflet";
+import type { Map as LeafletMap } from "leaflet";
 
 interface InteractiveMapProps {
   latitude: number;
@@ -15,13 +15,14 @@ interface InteractiveMapProps {
 
 export default function InteractiveMap({ latitude, longitude, name, address, className = "" }: InteractiveMapProps) {
   const mapRef = useRef<HTMLDivElement>(null);
-  const mapInstanceRef = useRef<Map | null>(null);
+  const mapInstanceRef = useRef<LeafletMap | null>(null);
   const [isReady, setIsReady] = useState(false);
   const { t } = useLanguage();
 
   useEffect(() => {
     // Only load map on client side
     if (typeof window === "undefined" || !mapRef.current) return;
+    const mapElement = mapRef.current;
 
     const loadMap = async () => {
       try {
@@ -32,7 +33,7 @@ export default function InteractiveMap({ latitude, longitude, name, address, cla
         await import("leaflet/dist/leaflet.css");
 
         // Fix for default markers in Leaflet with webpack
-        delete (L.Icon.Default.prototype as Record<string, unknown>)._getIconUrl;
+        delete (L.Icon.Default.prototype as unknown as Record<string, unknown>)._getIconUrl;
         L.Icon.Default.mergeOptions({
           iconRetinaUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png",
           iconUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png",
@@ -44,7 +45,7 @@ export default function InteractiveMap({ latitude, longitude, name, address, cla
           mapInstanceRef.current.remove();
         }
 
-        const map = L.map(mapRef.current).setView([latitude, longitude], 15);
+        const map = L.map(mapElement).setView([latitude, longitude], 15);
 
         // Add OpenStreetMap tiles
         L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -55,16 +56,16 @@ export default function InteractiveMap({ latitude, longitude, name, address, cla
         const marker = L.marker([latitude, longitude]).addTo(map);
 
         // Add popup with market info
-        marker
-          .bindPopup(
-            `
-          <div class="p-2">
-            <h3 class="font-semibold text-sm mb-1">${name}</h3>
-            <p class="text-xs text-gray-600">${address}</p>
-          </div>
-        `,
-          )
-          .openPopup();
+        const popupContent = document.createElement("div");
+        popupContent.className = "p-2";
+        const heading = document.createElement("h3");
+        heading.className = "mb-1 text-sm font-semibold";
+        heading.textContent = name;
+        const addressText = document.createElement("p");
+        addressText.className = "text-xs text-gray-600";
+        addressText.textContent = address;
+        popupContent.append(heading, addressText);
+        marker.bindPopup(popupContent).openPopup();
 
         mapInstanceRef.current = map;
 

@@ -30,7 +30,7 @@ export function LanguageProvider({
       try {
         // 1 year
         document.cookie = `language=${code}; path=/; max-age=${60 * 60 * 24 * 365}`;
-      } catch (e) {
+      } catch {
         // ignore
       }
     }
@@ -46,7 +46,7 @@ export function LanguageProvider({
         if (typeof document !== "undefined") {
           try {
             document.cookie = `language=${storedLanguage}; path=/; max-age=${60 * 60 * 24 * 365}`;
-          } catch (e) {
+          } catch {
             /* ignore */
           }
         }

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Offline",
@@ -17,9 +18,9 @@ export default function OfflinePage() {
         Anda sedang luar talian. Halaman ini tidak tersedia dalam cache. Sila semak sambungan internet anda dan cuba
         semula.
       </p>
-      <a href="/" className="bg-primary text-primary-foreground rounded-md px-4 py-2 text-sm font-medium">
+      <Link href="/" className="bg-primary text-primary-foreground rounded-md px-4 py-2 text-sm font-medium">
         Cuba Semula
-      </a>
+      </Link>
     </div>
   );
 }

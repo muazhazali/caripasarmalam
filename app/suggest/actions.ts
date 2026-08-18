@@ -1,7 +1,7 @@
 "use server";
 
 import { headers } from "next/headers";
-import { createClient } from "@/lib/supabase";
+import { createServiceRoleClient } from "@/lib/supabase";
 import { marketFormSchema, type MarketFormValues } from "@/lib/admin-schema";
 
 // ---------------------------------------------------------------------------
@@ -80,7 +80,7 @@ export async function submitSuggestion(
   }
 
   // 6. Insert into DB
-  const supabase = await createClient();
+  const supabase = createServiceRoleClient();
 
   const { error } = await supabase.from("market_suggestions").insert({
     type,

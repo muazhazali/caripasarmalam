@@ -1,21 +1,7 @@
 "use client";
 
 import { useState, useMemo, useEffect, useCallback } from "react";
-import {
-  Search,
-  MapPin,
-  Clock,
-  CalendarDays,
-  Car,
-  Toilet as Restroom,
-  Home as Mosque,
-  Navigation2,
-  ArrowUpDown,
-  ArrowUp,
-  ArrowDown,
-  Filter,
-  Loader2,
-} from "lucide-react";
+import { Search, MapPin, Navigation2, ArrowUpDown, ArrowUp, ArrowDown, Filter, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -33,7 +19,6 @@ import {
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Market } from "@/lib/markets-data";
-import { formatScheduleRule, formatWeekday } from "@/lib/i18n";
 import { useLanguage } from "@/components/language-provider";
 import { getMarketOpenStatus } from "@/lib/utils";
 import { getStateFromCoordinates } from "@/lib/geolocation";
@@ -141,7 +126,6 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
     lat: number;
     lng: number;
   } | null>(null);
-  const [detectedState, setDetectedState] = useState<string | null>(null);
   const [isRequestingLocation, setIsRequestingLocation] = useState(false);
   const [sortBy, setSortBy] = useState("smart");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
@@ -165,7 +149,6 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
   });
   const [showFilters, setShowFilters] = useState(false);
   const [showLocationModal, setShowLocationModal] = useState(false);
-  const suggestFormUrl = process.env.NEXT_PUBLIC_SUGGEST_MARKET_URL || "https://forms.gle/9sXDZYQknTszNSJfA";
 
   // Update URL params when state/day changes
   const updateURLParams = useCallback(
@@ -246,20 +229,6 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
     [selectedDay, updateURLParams, fetchMarkets, searchQuery],
   );
 
-  // Handle day change - fetch from server and update URL
-  const handleDayChange = useCallback(
-    (newDay: string) => {
-      setSelectedDay(newDay);
-      updateURLParams(selectedState, newDay);
-      fetchMarkets(
-        selectedState !== "All States" && selectedState !== "Semua Negeri" ? selectedState : undefined,
-        newDay !== "All Days" && newDay !== "Semua Hari" ? newDay : undefined,
-        searchQuery,
-      );
-    },
-    [selectedState, updateURLParams, fetchMarkets],
-  );
-
   // Handle "Browse More" - load more markets from current state
   const handleBrowseMore = useCallback(() => {
     fetchMarkets(
@@ -329,7 +298,6 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
         // Detect state from coordinates
         const state = getStateFromCoordinates(lat, lng);
         if (state) {
-          setDetectedState(state);
           // Auto-filter by detected state with limit of 20 markets
           handleStateChange(state, 20);
         }
@@ -502,20 +470,6 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
 
     return filtered;
   }, [searchQuery, userLocation, sortBy, sortOrder, markets, selectedState, selectedDay, filters, openNow]);
-
-  const formatArea = (areaM2: number) => {
-    if (areaM2 >= 10000) {
-      return `${(areaM2 / 1000000).toFixed(2)} ${t.kmSquared}`;
-    }
-    return `${Math.round(areaM2)} m²`;
-  };
-
-  function isPositiveNumber(value: unknown): boolean {
-    if (value === null || value === undefined) return false;
-    const n = typeof value === "string" ? Number(value) : (value as number);
-    if (Number.isNaN(n)) return false;
-    return n > 0;
-  }
 
   return (
     <div className="min-h-screen bg-background">

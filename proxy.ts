@@ -34,7 +34,7 @@ export async function proxy(request: NextRequest) {
   const isAdminRoute = pathname.startsWith("/admin");
 
   const adminEmail = process.env.ADMIN_EMAIL;
-  const isAdmin = !!user && (!adminEmail || user.email === adminEmail);
+  const isAdmin = !!user && !!adminEmail && user.email?.toLowerCase() === adminEmail.toLowerCase();
 
   if (isAdminRoute && !isAdminLogin && !isAdmin) {
     return NextResponse.redirect(new URL("/admin/login", request.url));

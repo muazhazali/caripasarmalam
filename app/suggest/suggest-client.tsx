@@ -8,7 +8,6 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
 import { useLanguage } from "@/components/language-provider";
 import { MarketForm, type MarketFormLabels } from "@/components/admin/market-form";
 import { marketToFormValues } from "@/lib/suggestion-utils";
@@ -183,9 +182,7 @@ export function SuggestClient({ markets, states, preselectedMarket }: SuggestCli
                             setOpen(false);
                           }}
                         >
-                          <Check
-                            className={cn("mr-2 h-4 w-4", selectedMarket?.id === m.id ? "opacity-100" : "opacity-0")}
-                          />
+                          <Check className="mr-2 h-4 w-4 opacity-0" />
                           <div>
                             <div className="font-medium text-sm">{m.name}</div>
                             <div className="text-xs text-muted-foreground">
