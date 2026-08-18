@@ -3,13 +3,13 @@ import type { Metadata } from "next";
 import { Source_Sans_3 } from "next/font/google";
 import { Playfair_Display } from "next/font/google";
 import { GeistMono } from "geist/font/mono";
-import { Analytics } from "@vercel/analytics/next";
 import { Suspense } from "react";
 import { cookies, headers } from "next/headers";
 import Script from "next/script";
 import "./globals.css";
 import MobileTabBar from "@/components/mobile-tabbar";
 import DesktopNavbar from "@/components/desktop-navbar";
+import { AdSenseScript } from "@/components/adsense-script";
 import { LanguageProvider } from "@/components/language-provider";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
@@ -98,6 +98,7 @@ export default async function RootLayout({
     <html lang={initialLanguage} suppressHydrationWarning>
       <head>
         <meta name="theme-color" content="#f97316" />
+        <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="PasarMalam" />
@@ -126,13 +127,6 @@ export default async function RootLayout({
           data-website-id="e9608536-210c-47a7-bcb3-0109c583bef9"
           strategy="afterInteractive"
         />
-        <Script
-          id="adsbygoogle-init"
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3393623405576068"
-          crossOrigin="anonymous"
-          strategy="afterInteractive"
-        />
         {process.env.NEXT_PUBLIC_ADSENSE_PUBLISHER_ID ? (
           <meta name="google-adsense-account" content={process.env.NEXT_PUBLIC_ADSENSE_PUBLISHER_ID} />
         ) : null}
@@ -148,7 +142,7 @@ export default async function RootLayout({
             <Toaster />
           </LanguageProvider>
         </ThemeProvider>
-        <Analytics />
+        <AdSenseScript />
       </body>
     </html>
   );

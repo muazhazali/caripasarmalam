@@ -137,7 +137,10 @@ export default function MapPage() {
           }
         },
         (error) => {
-          console.warn("Geolocation error:", error);
+          console.warn("Geolocation error:", {
+            code: error.code,
+            message: error.message,
+          });
           setLocationDenied(true);
           setIsLoadingMarkets(false);
         },
