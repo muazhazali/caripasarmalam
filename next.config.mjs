@@ -14,10 +14,10 @@ const nextConfig = {
             key: "Content-Security-Policy",
             value: [
               "default-src 'self'",
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com https://*.googleapis.com https://umami.muaz.app https://*.googlesyndication.com https://*.google.com https://*.doubleclick.net",
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com https://*.googleapis.com https://umami.muaz.app https://*.googlesyndication.com https://*.google.com https://*.doubleclick.net https://*.adtrafficquality.google",
               "style-src 'self' 'unsafe-inline'",
               "img-src 'self' data: https: blob:",
-              "connect-src 'self' https://*.supabase.co https://*.googleapis.com https://umami.muaz.app https://*.googlesyndication.com https://*.google.com https://*.doubleclick.net",
+              "connect-src 'self' https://*.supabase.co https://*.googleapis.com https://umami.muaz.app https://*.googlesyndication.com https://*.google.com https://*.doubleclick.net https://*.adtrafficquality.google",
               "frame-src https://*.googlesyndication.com https://*.google.com https://*.doubleclick.net",
               "font-src 'self' data:",
               "frame-ancestors 'none'",
