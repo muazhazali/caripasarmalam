@@ -21,10 +21,10 @@ function NavLink({
   return (
     <Link
       href={href}
-      className={`inline-flex items-center gap-2 px-4 py-2 rounded-md transition-colors ${
+      className={`inline-flex items-center gap-2 rounded-md border px-4 py-2 transition-colors ${
         isActive
-          ? "text-primary bg-primary/10 border border-primary/20"
-          : "text-muted-foreground hover:text-foreground hover:bg-gray-100"
+          ? "border-primary/30 bg-primary/10 text-primary dark:border-primary/50 dark:bg-primary/15"
+          : "border-transparent text-muted-foreground hover:bg-muted/70 hover:text-foreground"
       }`}
       aria-current={isActive ? "page" : undefined}
     >
@@ -51,10 +51,10 @@ export default function DesktopNavbar() {
   ];
 
   return (
-    <header className="sticky top-0 z-50 hidden border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 md:block shadow-sm">
+    <header className="sticky top-0 z-50 hidden border-b border-border bg-background/95 shadow-sm backdrop-blur supports-[backdrop-filter]:bg-background/60 md:block dark:bg-background/90 dark:supports-[backdrop-filter]:bg-background/75">
       <div className="mx-auto max-w-7xl px-4">
         <div className="flex h-16 items-center justify-between gap-3">
-          <Link href="/" className="font-semibold text-foreground hover:text-primary transition-colors text-lg">
+          <Link href="/" className="text-lg font-semibold text-foreground transition-colors hover:text-primary">
             {t.appTitle}
           </Link>
           <div className="flex items-center gap-3">
@@ -76,7 +76,7 @@ export default function DesktopNavbar() {
               href="https://github.com/muazhazali/caripasarmalam"
               target="_blank"
               rel="noopener noreferrer"
-              className="items-center px-3 py-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted/50"
+              className="items-center rounded-md border border-transparent px-3 py-2 text-muted-foreground transition-colors hover:bg-muted/70 hover:text-foreground"
               aria-label="GitHub Repository"
             >
               <Github className="h-4 w-4" />
