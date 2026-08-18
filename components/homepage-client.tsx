@@ -882,27 +882,31 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
           }
         }}
       >
-        <DialogContent className="sm:max-w-md" showCloseButton={false}>
-          <DialogHeader>
-            <div className="flex items-center justify-center mb-2">
-              <Navigation2 className="h-8 w-8 text-primary" />
+        <DialogContent className="gap-6 rounded-2xl p-6 sm:max-w-md sm:p-7" showCloseButton={false}>
+          <DialogHeader className="gap-3">
+            <div className="mb-1 flex items-center justify-center">
+              <div className="rounded-full bg-primary/10 p-3 text-primary dark:bg-primary/15">
+                <Navigation2 className="h-7 w-7" />
+              </div>
             </div>
-            <DialogTitle className="text-center">{t.enableLocationTitle}</DialogTitle>
-            <DialogDescription className="text-center">{t.enableLocationDescription}</DialogDescription>
+            <DialogTitle className="text-center text-xl leading-tight">{t.enableLocationTitle}</DialogTitle>
+            <DialogDescription className="mx-auto max-w-xs text-center leading-6">
+              {t.enableLocationDescription}
+            </DialogDescription>
           </DialogHeader>
-          <DialogFooter className="flex flex-col sm:flex-row gap-2 sm:gap-0">
-            <Button variant="outline" onClick={handleSkipLocation} className="w-full sm:w-auto">
+          <DialogFooter className="grid gap-3 sm:grid-cols-2 sm:gap-3">
+            <Button variant="outline" onClick={handleSkipLocation} className="h-11 w-full px-5">
               {t.skipLocationButton}
             </Button>
-            <Button onClick={handleEnableLocation} disabled={isRequestingLocation} className="w-full sm:w-auto">
+            <Button onClick={handleEnableLocation} disabled={isRequestingLocation} className="h-11 w-full px-5">
               {isRequestingLocation ? (
                 <>
-                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  <Loader2 className="h-4 w-4 animate-spin" />
                   {t.searching}
                 </>
               ) : (
                 <>
-                  <Navigation2 className="h-4 w-4 mr-2" />
+                  <Navigation2 className="h-4 w-4" />
                   {t.enableLocationButton}
                 </>
               )}
