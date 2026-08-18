@@ -2,7 +2,6 @@ import withPWA from "@ducanh2912/next-pwa";
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  typescript: { ignoreBuildErrors: true },
   images: { unoptimized: true },
   turbopack: {},
   async headers() {
@@ -17,7 +16,7 @@ const nextConfig = {
               "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com https://*.googleapis.com https://umami.muaz.app https://*.googlesyndication.com https://*.google.com https://*.doubleclick.net https://*.adtrafficquality.google",
               "style-src 'self' 'unsafe-inline'",
               "img-src 'self' data: https: blob:",
-              "connect-src 'self' https://*.supabase.co https://*.googleapis.com https://umami.muaz.app https://*.googlesyndication.com https://*.google.com https://*.doubleclick.net https://*.adtrafficquality.google",
+              "connect-src 'self' https://*.supabase.co https://*.googleapis.com https://nominatim.openstreetmap.org https://umami.muaz.app https://*.googlesyndication.com https://*.google.com https://*.doubleclick.net https://*.adtrafficquality.google",
               "frame-src https://*.googlesyndication.com https://*.google.com https://*.doubleclick.net",
               "font-src 'self' data:",
               "frame-ancestors 'none'",

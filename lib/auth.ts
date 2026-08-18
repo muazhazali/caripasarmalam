@@ -12,7 +12,7 @@ export async function requireAdmin() {
   if (!user) redirect("/admin/login");
 
   const adminEmail = process.env.ADMIN_EMAIL;
-  if (adminEmail && user.email !== adminEmail) redirect("/admin/login");
+  if (!adminEmail || user.email?.toLowerCase() !== adminEmail.toLowerCase()) redirect("/admin/login");
 
   return supabase;
 }

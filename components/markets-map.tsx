@@ -6,17 +6,11 @@ import { useLanguage } from "@/components/language-provider";
 import { getMarketOpenStatus } from "@/lib/utils";
 import { Clock, Loader2, LocateFixed, MapPin, Maximize2, Minus, Navigation, Plus } from "lucide-react";
 import { useTheme } from "next-themes";
+import { useRouter } from "next/navigation";
 import openDirections from "@/lib/directions";
 import { Button } from "@/components/ui/button";
 import type { Market } from "@/lib/markets-data";
-import type { Map, Marker, TileLayer } from "leaflet";
-
-// Extend Window interface to include openDirections
-declare global {
-  interface Window {
-    openDirections: typeof openDirections;
-  }
-}
+import type { Map as LeafletMap, Marker, TileLayer } from "leaflet";
 
 function escapeHtml(str: string): string {
   return str
@@ -115,7 +109,7 @@ export default function MarketsMap({
   boundsKey,
 }: MarketsMapProps) {
   const mapRef = useRef<HTMLDivElement>(null);
-  const mapInstanceRef = useRef<Map | null>(null);
+  const mapInstanceRef = useRef<LeafletMap | null>(null);
   const markersRef = useRef<Marker[]>([]);
   const lightTilesRef = useRef<TileLayer | null>(null);
   const darkTilesRef = useRef<TileLayer | null>(null);
@@ -126,6 +120,7 @@ export default function MarketsMap({
   const [mapZoom, setMapZoom] = useState(10);
   const { t, language } = useLanguage();
   const { theme, systemTheme } = useTheme();
+  const router = useRouter();
   const effectiveUserLocation = userLocationProp ?? userLocation;
 
   const formatTime = useCallback(
@@ -218,7 +213,7 @@ export default function MarketsMap({
   const createMarketMarker = useCallback(
     (
       L: typeof import("leaflet"),
-      map: Map,
+      map: LeafletMap,
       market: Market,
       marketState: ReturnType<typeof getMapStatus>,
     ): Marker | null => {
@@ -270,8 +265,9 @@ export default function MarketsMap({
         ? formatScheduleRule(market.schedule[0], language)
         : t.scheduleNotAvailable;
 
-      marker.bindPopup(`
-        <div class="p-3 min-w-64">
+      const popupContent = document.createElement("div");
+      popupContent.className = "min-w-64 p-3";
+      popupContent.innerHTML = `
           <div class="flex items-start justify-between gap-3 mb-2">
             <h3 class="font-semibold text-sm">${escapeHtml(market.name)}</h3>
             <span style="background:${markerStyle.ring};color:${markerStyle.color};border:1px solid ${markerStyle.ring};" class="text-xs font-semibold px-2 py-0.5 rounded-full whitespace-nowrap">${escapeHtml(statusLabel)}</span>
@@ -281,16 +277,34 @@ export default function MarketsMap({
           <p class="text-xs font-medium mb-1" style="color:${markerStyle.color};">${escapeHtml(timingText)}</p>
           <p class="text-xs text-gray-500 mb-2">${escapeHtml(scheduleText)}</p>
           <div class="flex gap-1 mb-2">
-            ${market.parking.available ? `<span class=\"text-xs bg-green-100 text-green-800 px-1 rounded\">${t.parking}</span>` : ""}
-            ${market.amenities.toilet ? `<span class=\"text-xs bg-blue-100 text-blue-800 px-1 rounded\">${t.toilet}</span>` : ""}
-            ${market.amenities.prayer_room ? `<span class=\"text-xs bg-purple-100 text-purple-800 px-1 rounded\">${t.prayerRoom}</span>` : ""}
+            ${market.parking.available ? `<span class=\"text-xs bg-green-100 text-green-800 px-1 rounded\">${escapeHtml(t.parking)}</span>` : ""}
+            ${market.amenities.toilet ? `<span class=\"text-xs bg-blue-100 text-blue-800 px-1 rounded\">${escapeHtml(t.toilet)}</span>` : ""}
+            ${market.amenities.prayer_room ? `<span class=\"text-xs bg-purple-100 text-purple-800 px-1 rounded\">${escapeHtml(t.prayerRoom)}</span>` : ""}
           </div>
-          <div class="flex gap-2">
-            <button onclick=\"window.openDirections(${market.location.latitude}, ${market.location.longitude})\" class=\"text-xs bg-primary text-white px-2 py-1 rounded hover:bg-primary/90\">${t.getDirections}</button>
-            <button onclick=\"window.location.href='/markets/${market.id}'\" class=\"text-xs bg-primary text-white px-2 py-1 rounded hover:bg-primary/90\">${t.viewDetails}</button>
-          </div>
-        </div>
-      `);
+      `;
+
+      const actions = document.createElement("div");
+      actions.className = "flex gap-2";
+
+      const directionsButton = document.createElement("button");
+      directionsButton.type = "button";
+      directionsButton.className = "rounded bg-primary px-2 py-1 text-xs text-white hover:bg-primary/90";
+      directionsButton.textContent = t.getDirections;
+      directionsButton.addEventListener("click", () => {
+        openDirections(market.location!.latitude, market.location!.longitude);
+      });
+
+      const detailsButton = document.createElement("button");
+      detailsButton.type = "button";
+      detailsButton.className = "rounded bg-primary px-2 py-1 text-xs text-white hover:bg-primary/90";
+      detailsButton.textContent = t.viewDetails;
+      detailsButton.addEventListener("click", () => {
+        router.push(`/markets/${encodeURIComponent(market.id)}`);
+      });
+
+      actions.append(directionsButton, detailsButton);
+      popupContent.appendChild(actions);
+      marker.bindPopup(popupContent);
 
       if (isSelected) marker.openPopup();
 
@@ -300,12 +314,13 @@ export default function MarketsMap({
 
       return marker;
     },
-    [effectiveUserLocation, formatTime, language, onMarketSelect, selectedMarket?.id, t],
+    [effectiveUserLocation, formatTime, language, onMarketSelect, router, selectedMarket?.id, t],
   );
 
   // Initialize the map ONCE
   useEffect(() => {
     if (typeof window === "undefined" || !mapRef.current) return;
+    const mapElement = mapRef.current;
 
     let resizeObserver: ResizeObserver | null = null;
 
@@ -315,7 +330,7 @@ export default function MarketsMap({
         await import("leaflet/dist/leaflet.css");
 
         // Fix for default markers
-        delete (L.Icon.Default.prototype as Record<string, unknown>)._getIconUrl;
+        delete (L.Icon.Default.prototype as unknown as Record<string, unknown>)._getIconUrl;
         L.Icon.Default.mergeOptions({
           iconRetinaUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png",
           iconUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png",
@@ -324,7 +339,7 @@ export default function MarketsMap({
 
         if (!mapInstanceRef.current) {
           // Initialize map with center and zoom so subsequent flyTo calls are safe
-          const map = L.map(mapRef.current, { zoomControl: false }).setView([3.139, 101.6869], 10);
+          const map = L.map(mapElement, { zoomControl: false }).setView([3.139, 101.6869], 10);
           // Prepare light and dark tile layers
           lightTilesRef.current = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
             attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
@@ -352,10 +367,6 @@ export default function MarketsMap({
           map.on("dragstart", () => {
             hasUserInteractedRef.current = true;
           });
-          // Expose the shared helper on window for popup markup (popup HTML calls window.openDirections)
-          if (typeof window !== "undefined") {
-            window.openDirections = openDirections;
-          }
           // ready after first paint
           setTimeout(() => {
             setIsReady(true);
@@ -412,7 +423,7 @@ export default function MarketsMap({
         const userMarker = L.marker([effectiveUserLocation.lat, effectiveUserLocation.lng], { icon: userIcon }).addTo(
           map,
         );
-        userMarker.bindPopup(`<div class="p-2"><p class="text-sm font-medium">${t.yourLocation}</p></div>`);
+        userMarker.bindPopup(`<div class="p-2"><p class="text-sm font-medium">${escapeHtml(t.yourLocation)}</p></div>`);
         markersRef.current.push(userMarker);
       }
 

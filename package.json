@@ -76,6 +76,7 @@
     "@snaplet/copycat": "^6.0.0",
     "@snaplet/seed": "0.98.0",
     "@tailwindcss/postcss": "^4.3.0",
+    "@types/leaflet": "^1.9.22",
     "@types/node": "^22.19.19",
     "@types/pg": "^8.20.0",
     "@types/react": "^18.3.28",

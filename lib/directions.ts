@@ -69,7 +69,7 @@ export async function openDirections(destLat: number, destLng: number, onShowCho
       const url = `${mapsBase}&origin=${encodeURIComponent(origin)}&destination=${encodeURIComponent(destination)}`;
       window.open(url, "_blank", "noopener");
       return;
-    } catch (err) {
+    } catch {
       // user denied or timed out - fall through to fallback
     }
   }

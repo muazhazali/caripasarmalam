@@ -89,7 +89,7 @@ export async function requestUserLocation(options?: PositionOptions): Promise<{ 
       }
       // If "prompt" or "granted", proceed to request which will surface the browser prompt if needed
     }
-  } catch (_) {
+  } catch {
     // Ignore Permissions API errors and proceed to request; older browsers may not support it
   }
 

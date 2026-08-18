@@ -1,28 +1,16 @@
 "use client";
 
 import { useState, useMemo, useCallback, useEffect } from "react";
-import {
-  Search,
-  Car,
-  Toilet as Restroom,
-  Home as Mosque,
-  ArrowUpDown,
-  ArrowUp,
-  ArrowDown,
-  Map,
-  Navigation2,
-  Filter,
-} from "lucide-react";
+import { Search, ArrowUpDown, ArrowUp, ArrowDown, Filter } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getMarketOpenStatus } from "@/lib/utils";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Market } from "@/lib/markets-data";
-import openDirections from "@/lib/directions";
 import { useLanguage } from "@/components/language-provider";
 import { createBrowserSupabaseClient } from "@/lib/supabase-client";
 import { Loader2 } from "lucide-react";
@@ -188,12 +176,23 @@ export default function MarketsFilterClient({ initialMarkets, initialState }: Ma
   });
   const [showFilters, setShowFilters] = useState(false);
   // Pagination
-  const [visibleCount, setVisibleCount] = useState(24);
   const PAGE_SIZE = 24;
+  const paginationKey = JSON.stringify([
+    searchQuery,
+    selectedState,
+    selectedDay,
+    sortBy,
+    sortOrder,
+    filters,
+    userLocation,
+    openNow,
+  ]);
+  const [pagination, setPagination] = useState({ key: paginationKey, count: PAGE_SIZE });
+  const visibleCount = pagination.key === paginationKey ? pagination.count : PAGE_SIZE;
 
   // Attempt to get user location on first load to enable nearest sorting by default
   useEffect(() => {
-    if (!userLocation && typeof window !== "undefined" && navigator.geolocation) {
+    if (typeof window !== "undefined" && navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           setUserLocation({
@@ -286,26 +285,6 @@ export default function MarketsFilterClient({ initialMarkets, initialState }: Ma
     [searchParams, router, selectedState, selectedDay, fetchMarkets],
   );
 
-  const findNearestMarkets = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setUserLocation({
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
-          });
-          setSortBy("distance");
-        },
-        (error) => {
-          console.error("Geolocation error:", error);
-          alert("Unable to get your location. Please enable location services.");
-        },
-      );
-    } else {
-      alert("Geolocation is not supported by this browser.");
-    }
-  };
-
   const filteredAndSortedMarkets = useMemo(() => {
     const filtered = markets.filter((market) => {
       const matchesSearch =
@@ -378,11 +357,6 @@ export default function MarketsFilterClient({ initialMarkets, initialState }: Ma
     return filtered;
   }, [searchQuery, selectedState, selectedDay, sortBy, sortOrder, filters, userLocation, openNow, markets]);
 
-  // Reset visible results when filters or sorting change
-  useEffect(() => {
-    setVisibleCount(PAGE_SIZE);
-  }, [searchQuery, selectedState, selectedDay, sortBy, sortOrder, filters, userLocation, openNow]);
-
   const clearAllFilters = () => {
     setSearchQuery("");
     setSelectedState(malaysianStates[0]); // "Semua Negeri"
@@ -398,20 +372,6 @@ export default function MarketsFilterClient({ initialMarkets, initialState }: Ma
       accessible_parking: false,
     });
   };
-
-  const formatArea = (areaM2: number) => {
-    if (areaM2 >= 10000) {
-      return `${(areaM2 / 1000000).toFixed(2)} ${t.kmSquared}`;
-    }
-    return `${Math.round(areaM2)} m²`;
-  };
-
-  function isPositiveNumber(value: unknown): boolean {
-    if (value === null || value === undefined) return false;
-    const n = typeof value === "string" ? Number(value) : (value as number);
-    if (Number.isNaN(n)) return false;
-    return n > 0;
-  }
 
   return (
     <>
@@ -793,7 +753,10 @@ export default function MarketsFilterClient({ initialMarkets, initialState }: Ma
               </div>
               {filteredAndSortedMarkets.length > visibleCount && (
                 <div className="flex justify-center mt-8">
-                  <Button onClick={() => setVisibleCount((c) => c + PAGE_SIZE)} variant="outline">
+                  <Button
+                    onClick={() => setPagination({ key: paginationKey, count: visibleCount + PAGE_SIZE })}
+                    variant="outline"
+                  >
                     {t.showMore}
                   </Button>
                 </div>

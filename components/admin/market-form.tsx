@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm, useFieldArray, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { marketFormSchema, type MarketFormValues } from "@/lib/admin-schema";
 import { DayCode } from "@/app/enums";
@@ -159,8 +159,10 @@ export function MarketForm({
     name: "schedule",
   });
 
-  const lat = form.watch("location.latitude");
-  const lng = form.watch("location.longitude");
+  const [lat, lng] = useWatch({
+    control: form.control,
+    name: ["location.latitude", "location.longitude"],
+  });
 
   return (
     <Form {...form}>
