@@ -12,8 +12,18 @@ const nextConfig = {
         headers: [
           {
             key: "Content-Security-Policy",
-            value:
-              "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com https://*.googleapis.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: blob:; connect-src 'self' https://*.supabase.co https://*.googleapis.com; font-src 'self' data:; frame-ancestors 'none'; base-uri 'self'; form-action 'self';",
+            value: [
+              "default-src 'self'",
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com https://*.googleapis.com https://umami.muaz.app https://*.googlesyndication.com https://*.google.com https://*.doubleclick.net",
+              "style-src 'self' 'unsafe-inline'",
+              "img-src 'self' data: https: blob:",
+              "connect-src 'self' https://*.supabase.co https://*.googleapis.com https://umami.muaz.app https://*.googlesyndication.com https://*.google.com https://*.doubleclick.net",
+              "frame-src https://*.googlesyndication.com https://*.google.com https://*.doubleclick.net",
+              "font-src 'self' data:",
+              "frame-ancestors 'none'",
+              "base-uri 'self'",
+              "form-action 'self'",
+            ].join("; "),
           },
           {
             key: "Strict-Transport-Security",
