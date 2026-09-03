@@ -5,12 +5,11 @@ import { formatScheduleRule } from "@/lib/i18n";
 import { useLanguage } from "@/components/language-provider";
 import { getMarketOpenStatus } from "@/lib/utils";
 import { Clock, Loader2, LocateFixed, MapPin, Maximize2, Minus, Navigation, Plus } from "lucide-react";
-import { useTheme } from "next-themes";
 import { useRouter } from "next/navigation";
 import openDirections from "@/lib/directions";
 import { Button } from "@/components/ui/button";
 import type { Market } from "@/lib/markets-data";
-import type { Map as LeafletMap, Marker, TileLayer } from "leaflet";
+import type { Map as LeafletMap, Marker } from "leaflet";
 
 function escapeHtml(str: string): string {
   return str
@@ -111,15 +110,12 @@ export default function MarketsMap({
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<LeafletMap | null>(null);
   const markersRef = useRef<Marker[]>([]);
-  const lightTilesRef = useRef<TileLayer | null>(null);
-  const darkTilesRef = useRef<TileLayer | null>(null);
   const hasUserInteractedRef = useRef<boolean>(false);
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [isReady, setIsReady] = useState(false);
   const [isUpdating, setIsUpdating] = useState(true);
   const [mapZoom, setMapZoom] = useState(10);
   const { t, language } = useLanguage();
-  const { theme, systemTheme } = useTheme();
   const router = useRouter();
   const effectiveUserLocation = userLocationProp ?? userLocation;
 
@@ -158,33 +154,6 @@ export default function MarketsMap({
 
     return candidates[0];
   }, [markets, effectiveUserLocation]);
-
-  const resolveIsDark = useCallback((): boolean => {
-    const pref = theme === "system" ? systemTheme : theme;
-    if (pref === "dark") return true;
-    if (pref === "light") return false;
-    if (typeof window !== "undefined" && window.matchMedia) {
-      return window.matchMedia("(prefers-color-scheme: dark)").matches;
-    }
-    return false;
-  }, [systemTheme, theme]);
-
-  useEffect(() => {
-    const resolved = resolveIsDark();
-    // If map already exists, swap tile layers to match the theme
-    if (!mapInstanceRef.current || !lightTilesRef.current || !darkTilesRef.current) return;
-    try {
-      if (resolved) {
-        if (lightTilesRef.current) mapInstanceRef.current.removeLayer(lightTilesRef.current);
-        darkTilesRef.current.addTo(mapInstanceRef.current);
-      } else {
-        if (darkTilesRef.current) mapInstanceRef.current.removeLayer(darkTilesRef.current);
-        lightTilesRef.current.addTo(mapInstanceRef.current);
-      }
-    } catch {
-      /* ignore */
-    }
-  }, [isReady, resolveIsDark]);
 
   // Reset user-interaction flag when parent signals a new bounds fit is wanted
   useEffect(() => {
@@ -340,22 +309,11 @@ export default function MarketsMap({
         if (!mapInstanceRef.current) {
           // Initialize map with center and zoom so subsequent flyTo calls are safe
           const map = L.map(mapElement, { zoomControl: false }).setView([3.139, 101.6869], 10);
-          // Prepare light and dark tile layers
-          lightTilesRef.current = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+          // Single OSM tile layer used for both light and dark mode
+          L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
             attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-          });
-          darkTilesRef.current = L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
-            attribution:
-              '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-            subdomains: "abcd",
             maxZoom: 20,
-          });
-          const resolvedDark =
-            typeof window !== "undefined" &&
-            window.matchMedia &&
-            window.matchMedia("(prefers-color-scheme: dark)").matches;
-          if (resolvedDark && darkTilesRef.current) darkTilesRef.current.addTo(map);
-          else if (lightTilesRef.current) lightTilesRef.current.addTo(map);
+          }).addTo(map);
           mapInstanceRef.current = map;
           // Track interaction to preserve viewport
           map.on("zoomstart", () => {
@@ -562,8 +520,6 @@ export default function MarketsMap({
       /* ignore */
     }
   };
-
-  // Theme is handled automatically via next-themes effect above
 
   return (
     <div className={`relative ${className}`}>
