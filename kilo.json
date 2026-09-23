@@ -1,0 +1,90 @@
+{
+  "$schema": "https://app.kilo.ai/config.json",
+  "mcp": {
+    "cloudflare-api": {
+      "type": "remote",
+      "url": "https://mcp.cloudflare.com/mcp",
+      "enabled": true
+    },
+    "cloudflare-docs": {
+      "type": "remote",
+      "url": "https://docs.mcp.cloudflare.com/mcp",
+      "enabled": true
+    },
+    "cloudflare-bindings": {
+      "type": "remote",
+      "url": "https://bindings.mcp.cloudflare.com/mcp",
+      "enabled": true
+    },
+    "cloudflare-builds": {
+      "type": "remote",
+      "url": "https://builds.mcp.cloudflare.com/mcp",
+      "enabled": true
+    },
+    "cloudflare-observability": {
+      "type": "remote",
+      "url": "https://observability.mcp.cloudflare.com/mcp",
+      "enabled": true
+    },
+    "cloudflare-radar": {
+      "type": "remote",
+      "url": "https://radar.mcp.cloudflare.com/mcp",
+      "enabled": true
+    },
+    "cloudflare-container": {
+      "type": "remote",
+      "url": "https://containers.mcp.cloudflare.com/mcp",
+      "enabled": true
+    },
+    "cloudflare-browser": {
+      "type": "remote",
+      "url": "https://browser.mcp.cloudflare.com/mcp",
+      "enabled": true
+    },
+    "cloudflare-logpush": {
+      "type": "remote",
+      "url": "https://logs.mcp.cloudflare.com/mcp",
+      "enabled": true
+    },
+    "cloudflare-ai-gateway": {
+      "type": "remote",
+      "url": "https://ai-gateway.mcp.cloudflare.com/mcp",
+      "enabled": true
+    },
+    "cloudflare-ai-search": {
+      "type": "remote",
+      "url": "https://autorag.mcp.cloudflare.com/mcp",
+      "enabled": true
+    },
+    "cloudflare-auditlogs": {
+      "type": "remote",
+      "url": "https://auditlogs.mcp.cloudflare.com/mcp",
+      "enabled": true
+    },
+    "cloudflare-dns-analytics": {
+      "type": "remote",
+      "url": "https://dns-analytics.mcp.cloudflare.com/mcp",
+      "enabled": true
+    },
+    "cloudflare-dex": {
+      "type": "remote",
+      "url": "https://dex.mcp.cloudflare.com/mcp",
+      "enabled": true
+    },
+    "cloudflare-casb": {
+      "type": "remote",
+      "url": "https://casb.mcp.cloudflare.com/mcp",
+      "enabled": true
+    },
+    "cloudflare-graphql": {
+      "type": "remote",
+      "url": "https://graphql.mcp.cloudflare.com/mcp",
+      "enabled": true
+    },
+    "cloudflare-agents": {
+      "type": "remote",
+      "url": "https://agents.cloudflare.com/mcp",
+      "enabled": true
+    }
+  }
+}
