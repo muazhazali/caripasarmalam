@@ -25,7 +25,12 @@ export function json(data: unknown, init: { status?: number; headers?: Record<st
   });
 }
 
-export function apiError(status: number, code: string, message: string, extraHeaders?: Record<string, string>): Response {
+export function apiError(
+  status: number,
+  code: string,
+  message: string,
+  extraHeaders?: Record<string, string>,
+): Response {
   return json({ error: { code, message } }, { status, headers: extraHeaders });
 }
 
@@ -56,7 +61,9 @@ export async function checkRateLimit(
 ): Promise<{ limited: boolean; headers: Record<string, string> }> {
   const limiter = getLimiter();
   const ip =
-    request.headers.get("cf-connecting-ip") ?? request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
+    request.headers.get("cf-connecting-ip") ??
+    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
+    "unknown";
 
   if (!limiter) return { limited: false, headers: {} };
 

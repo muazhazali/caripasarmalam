@@ -15,7 +15,10 @@ export async function GET(request: Request) {
 
   try {
     const states = await getAllStates();
-    return json({ data: states, meta: { count: states.length } }, { headers: { ...cacheHeaders(3600, 86400), ...rateHeaders } });
+    return json(
+      { data: states, meta: { count: states.length } },
+      { headers: { ...cacheHeaders(3600, 86400), ...rateHeaders } },
+    );
   } catch (e) {
     console.error("API /states error:", e);
     return apiError(500, "internal_error", "Failed to fetch states.");

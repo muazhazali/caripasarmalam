@@ -34,7 +34,10 @@ export async function getSuggestions(status?: SuggestionStatus): Promise<MarketS
 
 export async function getSuggestionById(id: string): Promise<MarketSuggestion | null> {
   const db = await getDB();
-  const row = await db.prepare("SELECT * FROM market_suggestions WHERE id = ?").bind(id).first<Record<string, unknown>>();
+  const row = await db
+    .prepare("SELECT * FROM market_suggestions WHERE id = ?")
+    .bind(id)
+    .first<Record<string, unknown>>();
   if (!row) return null;
   return toSuggestion(row);
 }
@@ -60,7 +63,14 @@ export async function insertSuggestion(input: {
       `INSERT INTO market_suggestions (id, type, target_id, data, submitter_email, status, created_at)
        VALUES (?, ?, ?, ?, ?, 'pending', ?)`,
     )
-    .bind(input.id, input.type, input.targetId, JSON.stringify(input.data), input.submitterEmail, new Date().toISOString())
+    .bind(
+      input.id,
+      input.type,
+      input.targetId,
+      JSON.stringify(input.data),
+      input.submitterEmail,
+      new Date().toISOString(),
+    )
     .run();
 }
 

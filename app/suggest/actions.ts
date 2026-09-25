@@ -15,7 +15,9 @@ async function checkSubmitRateLimit(ip: string): Promise<boolean> {
   try {
     const { getCloudflareContext } = await import("@opennextjs/cloudflare");
     const limiter = (
-      getCloudflareContext().env as { RATE_LIMITER?: { fetch: (input: string, init?: RequestInit) => Promise<Response> } }
+      getCloudflareContext().env as {
+        RATE_LIMITER?: { fetch: (input: string, init?: RequestInit) => Promise<Response> };
+      }
     ).RATE_LIMITER;
     if (!limiter) return true; // limiter not deployed yet (local dev without preview)
     const res = await limiter.fetch("https://rate-limiter.internal/", {

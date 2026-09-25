@@ -68,7 +68,9 @@ export async function getMarkets(filters: MarketFilters = {}): Promise<Market[]>
   // Case-insensitive partial match across key text columns
   if (filters.q && filters.q.trim().length > 0) {
     const like = `%${filters.q.trim()}%`;
-    where.push("(name LIKE ? COLLATE NOCASE OR district LIKE ? COLLATE NOCASE OR state LIKE ? COLLATE NOCASE OR address LIKE ? COLLATE NOCASE)");
+    where.push(
+      "(name LIKE ? COLLATE NOCASE OR district LIKE ? COLLATE NOCASE OR state LIKE ? COLLATE NOCASE OR address LIKE ? COLLATE NOCASE)",
+    );
     params.push(like, like, like, like);
   }
 
@@ -84,7 +86,10 @@ export async function getMarkets(filters: MarketFilters = {}): Promise<Market[]>
   sql += " LIMIT ? OFFSET ?";
   params.push(limit, offset);
 
-  const result = await db.prepare(sql).bind(...params).all<Record<string, unknown>>();
+  const result = await db
+    .prepare(sql)
+    .bind(...params)
+    .all<Record<string, unknown>>();
   return (result.results ?? []).map((r) => dbRowToMarket(toDatabaseRow(r)));
 }
 
@@ -122,7 +127,10 @@ export async function getAdminMarkets(page = 1, pageSize = 50): Promise<{ market
   const offset = (page - 1) * pageSize;
 
   const [{ results }, countRow] = await Promise.all([
-    db.prepare("SELECT * FROM pasar_malams ORDER BY name LIMIT ? OFFSET ?").bind(pageSize, offset).all<Record<string, unknown>>(),
+    db
+      .prepare("SELECT * FROM pasar_malams ORDER BY name LIMIT ? OFFSET ?")
+      .bind(pageSize, offset)
+      .all<Record<string, unknown>>(),
     db.prepare("SELECT COUNT(*) AS n FROM pasar_malams").first<{ n: number }>(),
   ]);
 
@@ -149,7 +157,10 @@ async function syncMarketDays(db: D1Database, marketId: string, schedule: Market
   if (days.length === 0) return;
   const placeholders = days.map(() => "(?, ?)").join(", ");
   const params = days.flatMap((day) => [marketId, day]);
-  await db.prepare(`INSERT OR IGNORE INTO market_days (market_id, day) VALUES ${placeholders}`).bind(...params).run();
+  await db
+    .prepare(`INSERT OR IGNORE INTO market_days (market_id, day) VALUES ${placeholders}`)
+    .bind(...params)
+    .run();
 }
 
 /**

@@ -34,26 +34,17 @@ export class RateLimiter {
     const windowStart = now - body.windowMs;
 
     // Prune expired entries + count current window in one pass
-    await this.storage.sql.exec(
-      `DELETE FROM requests WHERE key = ?1 AND ts <= ?2`,
-      body.key,
-      windowStart,
-    );
+    await this.storage.sql.exec(`DELETE FROM requests WHERE key = ?1 AND ts <= ?2`, body.key, windowStart);
 
-    const rows = this.storage.sql.exec<{ n: number }>(
-      `SELECT COUNT(*) AS n FROM requests WHERE key = ?1`,
-      body.key,
-    ).toArray();
+    const rows = this.storage.sql
+      .exec<{ n: number }>(`SELECT COUNT(*) AS n FROM requests WHERE key = ?1`, body.key)
+      .toArray();
 
     const count = Number(rows[0]?.n ?? 0);
     const success = count < body.max;
 
     if (success) {
-      await this.storage.sql.exec(
-        `INSERT INTO requests (key, ts) VALUES (?1, ?2)`,
-        body.key,
-        now,
-      );
+      await this.storage.sql.exec(`INSERT INTO requests (key, ts) VALUES (?1, ?2)`, body.key, now);
     }
 
     // Schedule alarm for pruning (idempotent; fires at earliest pending expiry)
