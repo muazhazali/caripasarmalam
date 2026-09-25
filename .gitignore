@@ -30,3 +30,6 @@ git config --global user.email "you@example.com"
   git config --global user.name "Your Name"
 
 .kilo
+
+# supabase data backups (contain submitter emails; keep out of repo)
+/docs/archive/supabase/
