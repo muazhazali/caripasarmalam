@@ -2,7 +2,7 @@
 
 import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { createBrowserSupabaseClient } from "@/lib/supabase-client";
+import { loginAction } from "./actions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -13,7 +13,6 @@ const LOCKOUT_MS = 5 * 60 * 1000; // 5 minutes
 
 export function LoginClient() {
   const router = useRouter();
-  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -32,10 +31,9 @@ export function LoginClient() {
     setLoading(true);
     setError(null);
 
-    const supabase = createBrowserSupabaseClient();
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    const result = await loginAction(password);
 
-    if (error) {
+    if (result.error) {
       attempts.current += 1;
       if (attempts.current >= MAX_ATTEMPTS) {
         lockedUntil.current = Date.now() + LOCKOUT_MS;
@@ -61,17 +59,6 @@ export function LoginClient() {
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-1">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                autoFocus
-              />
-            </div>
-            <div className="space-y-1">
               <Label htmlFor="password">Password</Label>
               <Input
                 id="password"
@@ -79,6 +66,7 @@ export function LoginClient() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
+                autoFocus
               />
             </div>
             {error && <p className="text-sm text-destructive">{error}</p>}

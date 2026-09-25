@@ -33,3 +33,5 @@ git config --global user.email "you@example.com"
 
 # supabase data backups (contain submitter emails; keep out of repo)
 /docs/archive/supabase/
+# wrangler local dev state
+/.wrangler/

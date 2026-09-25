@@ -5,6 +5,7 @@ allowBuilds:
   esbuild: true
   sharp: true
   unrs-resolver: true
+  workerd: true
 
 overrides:
   tar: ^7.5.9

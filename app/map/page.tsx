@@ -7,9 +7,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import MarketsMap from "@/components/markets-map";
 import { type Market } from "@/lib/markets-data";
 import { useLanguage } from "@/components/language-provider";
-import { createBrowserSupabaseClient } from "@/lib/supabase-client";
+import { fetchMarketsApi } from "@/lib/markets-api-client";
 import { getStateFromCoordinates, requestUserLocation } from "@/lib/geolocation";
-import { dbRowToMarket } from "@/lib/db-transform";
 import { getMarketOpenStatus } from "@/lib/utils";
 
 const malaysianStates = [
@@ -63,37 +62,21 @@ export default function MapPage() {
   const [showStatePicker, setShowStatePicker] = useState(true);
   const [isRequestingLocation, setIsRequestingLocation] = useState(false);
 
-  // Fetch markets from server
+  // Fetch markets from the public API
   const fetchMarkets = useCallback(async (state?: string, limitOverride?: number) => {
     setIsLoadingMarkets(true);
     try {
-      const supabase = createBrowserSupabaseClient();
-      let query = supabase.from("pasar_malams").select("*").eq("status", "Active");
+      const params: Record<string, string | number | undefined> = {
+        status: "Active",
+        limit: typeof limitOverride === "number" ? limitOverride : 1000,
+      };
 
       if (state && state !== "Semua Negeri" && state !== "All States") {
-        query = query.eq("state", state);
+        params.state = state;
       }
 
-      const limit =
-        typeof limitOverride === "number"
-          ? limitOverride
-          : state && state !== "Semua Negeri" && state !== "All States"
-            ? 1000
-            : 1000;
-      query = query.limit(limit);
-
-      const { data, error } = await query;
-
-      if (error) {
-        console.error("Error fetching markets:", error);
-        return;
-      }
-
-      if (data) {
-        // Transform database rows to Market objects
-        const transformedMarkets = data.map(dbRowToMarket);
-        setMarkets(transformedMarkets);
-      }
+      const markets = await fetchMarketsApi(params);
+      setMarkets(markets);
     } catch (error) {
       console.error("Error fetching markets:", error);
     } finally {

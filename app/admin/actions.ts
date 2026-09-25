@@ -4,8 +4,12 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import type { MarketFormValues } from "@/lib/admin-schema";
 import { requireAdmin } from "@/lib/auth";
-import { createClient } from "@/lib/supabase";
-import { marketFormToDbRow } from "@/lib/db-transform";
+import {
+  deleteMarketById,
+  insertMarketFromForm,
+  updateMarketFromForm,
+  updateMarketStatus as updateMarketStatusInDb,
+} from "@/lib/db";
 
 function revalidateMarketPaths(id?: string) {
   revalidatePath("/");
@@ -15,14 +19,13 @@ function revalidateMarketPaths(id?: string) {
 }
 
 export async function createMarket(data: MarketFormValues): Promise<{ error?: string }> {
-  const supabase = await requireAdmin();
-  const row = marketFormToDbRow(data);
+  await requireAdmin();
 
-  const { error } = await supabase.from("pasar_malams").insert(row);
-
-  if (error) {
-    console.error("Error creating market:", error);
-    return { error: error.message };
+  try {
+    await insertMarketFromForm(data);
+  } catch (e) {
+    console.error("Error creating market:", e);
+    return { error: e instanceof Error ? e.message : "Unknown error" };
   }
 
   revalidateMarketPaths();
@@ -30,14 +33,13 @@ export async function createMarket(data: MarketFormValues): Promise<{ error?: st
 }
 
 export async function updateMarket(id: string, data: MarketFormValues): Promise<{ error?: string }> {
-  const supabase = await requireAdmin();
-  const row = marketFormToDbRow(data);
+  await requireAdmin();
 
-  const { error } = await supabase.from("pasar_malams").update(row).eq("id", id);
-
-  if (error) {
-    console.error("Error updating market:", error);
-    return { error: error.message };
+  try {
+    await updateMarketFromForm(id, data);
+  } catch (e) {
+    console.error("Error updating market:", e);
+    return { error: e instanceof Error ? e.message : "Unknown error" };
   }
 
   revalidateMarketPaths(id);
@@ -45,13 +47,13 @@ export async function updateMarket(id: string, data: MarketFormValues): Promise<
 }
 
 export async function deleteMarket(id: string): Promise<{ error?: string }> {
-  const supabase = await requireAdmin();
+  await requireAdmin();
 
-  const { error } = await supabase.from("pasar_malams").delete().eq("id", id);
-
-  if (error) {
-    console.error("Error deleting market:", error);
-    return { error: error.message };
+  try {
+    await deleteMarketById(id);
+  } catch (e) {
+    console.error("Error deleting market:", e);
+    return { error: e instanceof Error ? e.message : "Unknown error" };
   }
 
   revalidateMarketPaths(id);
@@ -59,13 +61,13 @@ export async function deleteMarket(id: string): Promise<{ error?: string }> {
 }
 
 export async function updateMarketStatus(id: string, status: string): Promise<{ error?: string }> {
-  const supabase = await requireAdmin();
+  await requireAdmin();
 
-  const { error } = await supabase.from("pasar_malams").update({ status }).eq("id", id);
-
-  if (error) {
-    console.error("Error updating market status:", error);
-    return { error: error.message };
+  try {
+    await updateMarketStatusInDb(id, status);
+  } catch (e) {
+    console.error("Error updating market status:", e);
+    return { error: e instanceof Error ? e.message : "Unknown error" };
   }
 
   revalidateMarketPaths(id);
@@ -73,7 +75,8 @@ export async function updateMarketStatus(id: string, status: string): Promise<{ 
 }
 
 export async function signOut() {
-  const supabase = await createClient();
-  await supabase.auth.signOut();
+  await requireAdmin();
+  const { deleteSessionCookie } = await import("@/lib/auth");
+  await deleteSessionCookie();
   redirect("/admin/login");
 }

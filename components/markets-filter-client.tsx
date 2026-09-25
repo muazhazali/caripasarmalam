@@ -12,9 +12,8 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/co
 import { useRouter, useSearchParams } from "next/navigation";
 import { Market } from "@/lib/markets-data";
 import { useLanguage } from "@/components/language-provider";
-import { createBrowserSupabaseClient } from "@/lib/supabase-client";
+import { fetchMarketsApi } from "@/lib/markets-api-client";
 import { Loader2 } from "lucide-react";
-import { dbRowToMarket } from "@/lib/db-transform";
 import MarketCard from "@/components/market-card";
 
 const malaysianStates = [
@@ -209,39 +208,23 @@ export default function MarketsFilterClient({ initialMarkets, initialState }: Ma
     }
   }, []);
 
-  // Fetch markets using browser client
+  // Fetch markets using the public API
   const fetchMarkets = useCallback(async (state?: string, day?: string) => {
     setIsLoadingMarkets(true);
     try {
-      const supabase = createBrowserSupabaseClient();
-      let query = supabase.from("pasar_malams").select("*").eq("status", "Active");
+      const params: Record<string, string | number | undefined> = { status: "Active", limit: 150 };
 
       if (state && state !== "All States" && state !== "Semua Negeri") {
-        query = query.eq("state", state);
+        params.state = state;
       }
 
       const dayCode = day && dayMap[day] ? dayMap[day] : undefined;
       if (dayCode) {
-        // Use filter with 'cs' (contains) operator for JSONB to avoid serialization issues
-        const dayFilterValue = `[{"days":["${dayCode}"]}]`;
-        query = query.filter("schedule", "cs", dayFilterValue);
+        params.day = dayCode;
       }
 
-      // Reduce server load by limiting result set; UI paginates on client
-      query = query.limit(150);
-
-      const { data, error } = await query;
-
-      if (error) {
-        console.error("Error fetching markets:", error);
-        return;
-      }
-
-      if (data) {
-        // Transform database rows to Market objects
-        const transformedMarkets = data.map(dbRowToMarket);
-        setMarkets(transformedMarkets);
-      }
+      const markets = await fetchMarketsApi(params);
+      setMarkets(markets);
     } catch (error) {
       console.error("Error fetching markets:", error);
     } finally {

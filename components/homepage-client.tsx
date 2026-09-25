@@ -22,8 +22,7 @@ import { Market } from "@/lib/markets-data";
 import { useLanguage } from "@/components/language-provider";
 import { getMarketOpenStatus } from "@/lib/utils";
 import { getStateFromCoordinates } from "@/lib/geolocation";
-import { createBrowserSupabaseClient } from "@/lib/supabase-client";
-import { dbRowToMarket } from "@/lib/db-transform";
+import { fetchMarketsApi } from "@/lib/markets-api-client";
 import MarketCard from "@/components/market-card";
 
 function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
@@ -166,47 +165,29 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
     [router],
   );
 
-  // Fetch markets using browser client (with optional search)
+  // Fetch markets using the public API (with optional search)
   const fetchMarkets = useCallback(async (state?: string, day?: string, search?: string, limit: number = 100) => {
     setIsLoadingMarkets(true);
     try {
-      const supabase = createBrowserSupabaseClient();
-      let query = supabase.from("pasar_malams").select("*").eq("status", "Active");
+      const params: Record<string, string | number | undefined> = { status: "Active", limit };
 
       if (state && state !== "All States" && state !== "Semua Negeri") {
-        query = query.eq("state", state);
+        params.state = state;
       }
 
       const dayCode = dayNameToCode(day);
       if (dayCode) {
-        // Use filter with 'cs' (contains) operator for JSONB to avoid serialization issues
-        const dayFilterValue = `[{"days":["${dayCode}"]}]`;
-        query = query.filter("schedule", "cs", dayFilterValue);
+        params.day = dayCode;
       }
 
       const q = (search || "").trim();
       if (q.length > 0) {
-        // Perform case-insensitive partial match across key text columns
-        const like = `%${q}%`;
-        query = query.or(
-          [`name.ilike.${like}`, `district.ilike.${like}`, `state.ilike.${like}`, `address.ilike.${like}`].join(","),
-        );
+        // Case-insensitive partial match handled server-side on name/district/state/address
+        params.q = q;
       }
 
-      query = query.limit(limit);
-
-      const { data, error } = await query;
-
-      if (error) {
-        console.error("Error fetching markets:", error);
-        return;
-      }
-
-      if (data) {
-        // Transform database rows to Market objects
-        const transformedMarkets = data.map(dbRowToMarket);
-        setMarkets(transformedMarkets);
-      }
+      const markets = await fetchMarketsApi(params);
+      setMarkets(markets);
     } catch (error) {
       console.error("Error fetching markets:", error);
     } finally {

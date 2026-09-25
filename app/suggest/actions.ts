@@ -1,43 +1,35 @@
 "use server";
 
 import { headers } from "next/headers";
-import { createServiceRoleClient } from "@/lib/supabase";
+import { newId } from "@/lib/d1";
+import { insertSuggestion } from "@/lib/suggestions-db";
 import { marketFormSchema, type MarketFormValues } from "@/lib/admin-schema";
 
 // ---------------------------------------------------------------------------
-// Simple in-process rate limiter (resets on server restart / cold start)
-// For production with multiple instances, replace with Redis/Upstash.
+// Rate limiting is enforced by the RateLimiter Durable Object (fail-closed):
+// POST { key: "suggest:<ip>", max: 5, windowMs: 3600000 }.
+// The helper below degrades to an error (submission blocked) if the limiter
+// is unreachable, so the 5/hour rule holds even during partial outages.
 // ---------------------------------------------------------------------------
-const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
-const RATE_LIMIT_MAX = 5; // max submissions per window
-const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000; // 1 hour
-
-function checkRateLimit(ip: string): boolean {
-  const now = Date.now();
-  const entry = rateLimitMap.get(ip);
-
-  if (!entry || now > entry.resetAt) {
-    rateLimitMap.set(ip, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS });
-    return true;
-  }
-
-  if (entry.count >= RATE_LIMIT_MAX) return false;
-
-  entry.count++;
-  return true;
-}
-
-// Periodically prune stale entries so the map doesn't grow forever
-function pruneRateLimitMap() {
-  const now = Date.now();
-  for (const [key, entry] of rateLimitMap.entries()) {
-    if (now > entry.resetAt) rateLimitMap.delete(key);
+async function checkSubmitRateLimit(ip: string): Promise<boolean> {
+  try {
+    const { getCloudflareContext } = await import("@opennextjs/cloudflare");
+    const limiter = (
+      getCloudflareContext().env as { RATE_LIMITER?: { fetch: (input: string, init?: RequestInit) => Promise<Response> } }
+    ).RATE_LIMITER;
+    if (!limiter) return true; // limiter not deployed yet (local dev without preview)
+    const res = await limiter.fetch("https://rate-limiter.internal/", {
+      method: "POST",
+      body: JSON.stringify({ key: `suggest:${ip}`, max: 5, windowMs: 60 * 60 * 1000 }),
+    });
+    const data = (await res.json()) as { success: boolean };
+    return data.success;
+  } catch (e) {
+    console.error("Rate limiter unreachable, blocking submission:", e);
+    return false;
   }
 }
 
-// ---------------------------------------------------------------------------
-// Server action
-// ---------------------------------------------------------------------------
 export async function submitSuggestion(
   type: "new" | "update",
   targetId: string | null,
@@ -50,13 +42,12 @@ export async function submitSuggestion(
     return {};
   }
 
-  // 2. Rate limit by IP
+  // 2. Rate limit by IP (Durable Object, cross-isolate)
   const headersList = await headers();
-  const ip = headersList.get("x-forwarded-for")?.split(",")[0]?.trim() ?? headersList.get("x-real-ip") ?? "unknown";
+  const forwarded = headersList.get("x-forwarded-for")?.split(",")[0]?.trim();
+  const ip = headersList.get("cf-connecting-ip") ?? forwarded ?? "unknown";
 
-  pruneRateLimitMap();
-
-  if (!checkRateLimit(ip)) {
+  if (!(await checkSubmitRateLimit(ip))) {
     return { error: "Too many submissions. Please try again in an hour." };
   }
 
@@ -79,19 +70,17 @@ export async function submitSuggestion(
     return { error: "Please select a market to update." };
   }
 
-  // 6. Insert into DB
-  const supabase = createServiceRoleClient();
-
-  const { error } = await supabase.from("market_suggestions").insert({
-    type,
-    target_id: targetId ?? null,
-    data: parsed.data,
-    submitter_email: submitterEmail?.trim() || null,
-    status: "pending",
-  });
-
-  if (error) {
-    console.error("Error submitting suggestion:", error);
+  // 6. Insert into D1
+  try {
+    await insertSuggestion({
+      id: newId(),
+      type,
+      targetId: targetId ?? null,
+      data: parsed.data,
+      submitterEmail: submitterEmail?.trim() || null,
+    });
+  } catch (e) {
+    console.error("Error submitting suggestion:", e);
     return { error: "Failed to submit suggestion. Please try again." };
   }
 

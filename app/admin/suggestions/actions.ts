@@ -1,16 +1,13 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { requireAdmin } from "@/lib/auth";
-import { getSuggestionById } from "@/lib/suggestions-db";
-import { marketFormToDbRow } from "@/lib/db-transform";
+import { requireAdmin, getAdminUser } from "@/lib/auth";
+import { insertMarketFromForm, updateMarketFromForm } from "@/lib/db";
+import { getSuggestionById, reviewSuggestion } from "@/lib/suggestions-db";
 
 export async function approveSuggestion(id: string): Promise<{ error?: string }> {
-  const supabase = await requireAdmin();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
+  await requireAdmin();
+  const user = await getAdminUser();
   if (!user) {
     return { error: "Unauthorized." };
   }
@@ -19,34 +16,18 @@ export async function approveSuggestion(id: string): Promise<{ error?: string }>
   if (!suggestion) return { error: "Suggestion not found." };
   if (suggestion.status !== "pending") return { error: "Suggestion is not pending." };
 
-  const row = marketFormToDbRow(suggestion.data);
-
-  if (suggestion.type === "new") {
-    const { error } = await supabase.from("pasar_malams").insert(row);
-    if (error) {
-      console.error("Error creating market from suggestion:", error);
-      return { error: error.message };
+  try {
+    if (suggestion.type === "new") {
+      await insertMarketFromForm(suggestion.data);
+    } else {
+      if (!suggestion.target_id) return { error: "Missing target market ID." };
+      await updateMarketFromForm(suggestion.target_id, suggestion.data);
     }
-  } else {
-    if (!suggestion.target_id) return { error: "Missing target market ID." };
-    const { error } = await supabase.from("pasar_malams").update(row).eq("id", suggestion.target_id);
-    if (error) {
-      console.error("Error updating market from suggestion:", error);
-      return { error: error.message };
-    }
-  }
 
-  const { error: reviewError } = await supabase
-    .from("market_suggestions")
-    .update({
-      status: "approved",
-      reviewed_by: user.id,
-      reviewed_at: new Date().toISOString(),
-    })
-    .eq("id", id);
-  if (reviewError) {
-    console.error("Error updating suggestion status:", reviewError);
-    return { error: reviewError.message };
+    await reviewSuggestion(id, { status: "approved", reviewedBy: user.id });
+  } catch (e) {
+    console.error("Error approving suggestion:", e);
+    return { error: e instanceof Error ? e.message : "Unknown error" };
   }
 
   revalidatePath("/admin/suggestions");
@@ -57,27 +38,21 @@ export async function approveSuggestion(id: string): Promise<{ error?: string }>
 }
 
 export async function rejectSuggestion(id: string, reason?: string): Promise<{ error?: string }> {
-  const supabase = await requireAdmin();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
+  await requireAdmin();
+  const user = await getAdminUser();
   if (!user) {
     return { error: "Unauthorized." };
   }
 
-  const { error } = await supabase
-    .from("market_suggestions")
-    .update({
+  try {
+    await reviewSuggestion(id, {
       status: "rejected",
-      rejection_reason: reason?.trim() || null,
-      reviewed_by: user.id,
-      reviewed_at: new Date().toISOString(),
-    })
-    .eq("id", id);
-  if (error) {
-    console.error("Error rejecting suggestion:", error);
-    return { error: error.message };
+      reviewedBy: user.id,
+      rejectionReason: reason?.trim() || null,
+    });
+  } catch (e) {
+    console.error("Error rejecting suggestion:", e);
+    return { error: e instanceof Error ? e.message : "Unknown error" };
   }
 
   revalidatePath("/admin/suggestions");
