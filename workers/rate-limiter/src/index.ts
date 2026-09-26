@@ -3,8 +3,9 @@
  *
  * POST / { key, max, windowMs } -> { success, remaining, resetMs }
  *
- * Uses DO SQLite storage (requests table) with alarm-based pruning.
- * Deployed as its own Worker; bound into the main app as a service binding.
+ * Uses DO SQLite storage (requests table, created lazily) with
+ * alarm-based pruning. Deployed as its own Worker; bound into the
+ * main app as a service binding.
  */
 
 interface RateLimitRequest {
@@ -24,6 +25,12 @@ export class RateLimiter {
     if (request.method !== "POST") {
       return Response.json({ error: "Method not allowed" }, { status: 405 });
     }
+
+    // Ensure schema exists (idempotent)
+    await this.storage.sql.exec(
+      `CREATE TABLE IF NOT EXISTS requests (key TEXT NOT NULL, ts INTEGER NOT NULL)`,
+    );
+    await this.storage.sql.exec(`CREATE INDEX IF NOT EXISTS idx_requests_key_ts ON requests (key, ts)`);
 
     const body = (await request.json()) as RateLimitRequest;
     if (!body.key || typeof body.max !== "number" || typeof body.windowMs !== "number") {
