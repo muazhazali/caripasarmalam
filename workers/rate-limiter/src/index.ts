@@ -27,9 +27,7 @@ export class RateLimiter {
     }
 
     // Ensure schema exists (idempotent)
-    await this.storage.sql.exec(
-      `CREATE TABLE IF NOT EXISTS requests (key TEXT NOT NULL, ts INTEGER NOT NULL)`,
-    );
+    await this.storage.sql.exec(`CREATE TABLE IF NOT EXISTS requests (key TEXT NOT NULL, ts INTEGER NOT NULL)`);
     await this.storage.sql.exec(`CREATE INDEX IF NOT EXISTS idx_requests_key_ts ON requests (key, ts)`);
 
     const body = (await request.json()) as RateLimitRequest;
