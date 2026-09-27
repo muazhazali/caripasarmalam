@@ -2,6 +2,7 @@
 
 # dependencies
 /node_modules
+.open-next
 
 # next.js
 /.next/
@@ -35,3 +36,5 @@ git config --global user.email "you@example.com"
 /docs/archive/supabase/
 # wrangler local dev state
 /.wrangler/
+**/.wrangler/
+.dev.vars*

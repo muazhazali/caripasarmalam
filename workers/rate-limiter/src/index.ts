@@ -14,6 +14,36 @@ interface RateLimitRequest {
   windowMs: number;
 }
 
+interface Env {
+  RATE_LIMITER: DurableObjectNamespace;
+}
+
+// Service bindings call the Worker's entrypoint, not the DO class directly.
+export default {
+  async fetch(request: Request, env: Env): Promise<Response> {
+    if (request.method !== "POST") {
+      return Response.json({ error: "Method not allowed" }, { status: 405 });
+    }
+    const body = (await request
+      .clone()
+      .json()
+      .catch(() => null)) as RateLimitRequest | null;
+    if (
+      !body ||
+      typeof body.key !== "string" ||
+      !body.key ||
+      !Number.isSafeInteger(body.max) ||
+      body.max <= 0 ||
+      !Number.isSafeInteger(body.windowMs) ||
+      body.windowMs <= 0
+    ) {
+      return Response.json({ error: "Invalid request" }, { status: 400 });
+    }
+    const id = env.RATE_LIMITER.idFromName(body.key);
+    return env.RATE_LIMITER.get(id).fetch(request);
+  },
+} satisfies ExportedHandler<Env>;
+
 export class RateLimiter {
   private storage: DurableObjectStorage;
 

@@ -1,0 +1,28 @@
+diff --git a/dist/build/copyTracedFiles.js b/dist/build/copyTracedFiles.js
+index c847154da1464b71bbd871ba668336ae0078cfed..48ed5d75ad4dca16ff4ede54fcb017e22e9f4936 100644
+--- a/dist/build/copyTracedFiles.js
++++ b/dist/build/copyTracedFiles.js
+@@ -234,7 +234,22 @@ File ${serverPath} does not exist
+         }
+         if (symlink) {
+             try {
+-                symlinkSync(symlink, to);
++                // Windows pnpm junctions contain absolute project paths. Rebase
++                // them into the output so bundling uses OpenNext's patched files.
++                if (path.isAbsolute(symlink)) {
++                    const copiedTarget = nodePackages.get(path.normalize(symlink));
++                    const standaloneRelative = path.relative(standaloneDir, symlink);
++                    if (copiedTarget) {
++                        symlink = path.relative(path.dirname(to), copiedTarget);
++                    }
++                    else if (!standaloneRelative.startsWith("..") && !path.isAbsolute(standaloneRelative)) {
++                        symlink = path.relative(path.dirname(to), path.join(outputDir, standaloneRelative));
++                    }
++                    else {
++                        throw new Error(`Cannot relocate absolute dependency link: ${from}`);
++                    }
++                }
++                symlinkSync(symlink, to, statSync(from).isDirectory() ? "dir" : "file");
+             }
+             catch (e) {
+                 if (e.code !== "EEXIST") {
