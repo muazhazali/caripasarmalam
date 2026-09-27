@@ -1,0 +1,14 @@
+# Copy this file to `.dev.vars` for `pnpm preview` (Wrangler/Miniflare).
+# `.dev.vars` is gitignored; never commit real secrets.
+#
+# Values here override `vars` in wrangler.jsonc for local preview only.
+# Cloudflare deployments read secrets set with:
+#   pnpm exec wrangler secret put ADMIN_PASSWORD
+#   pnpm exec wrangler secret put JWT_SECRET
+
+ADMIN_PASSWORD=change-me
+JWT_SECRET=change-me-too
+ADMIN_EMAIL=admin@example.com
+
+NEXT_PUBLIC_SITE_URL=http://localhost:8787
+NEXT_PUBLIC_ADSENSE_PUBLISHER_ID=

@@ -12,7 +12,7 @@ import { useLanguage } from "@/components/language-provider";
 import { MarketForm, type MarketFormLabels } from "@/components/admin/market-form";
 import { marketToFormValues } from "@/lib/suggestion-utils";
 import { submitSuggestion } from "./actions";
-import type { Market } from "@/lib/markets-data";
+import type { Market } from "@/lib/market-types";
 import type { MarketFormValues } from "@/lib/admin-schema";
 import { toast } from "sonner";
 

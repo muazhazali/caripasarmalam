@@ -696,7 +696,7 @@ export function useTranslation(locale = "ms") {
 
 import { DayCode } from "@/app/enums";
 // Helpers to format weekday codes and schedule rules
-import type { MarketSchedule } from "@/lib/markets-data";
+import type { MarketSchedule } from "@/lib/market-types";
 
 export function formatWeekday(code: DayCode, locale: string = "ms"): string {
   const t = translations[locale] || translations.ms;

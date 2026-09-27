@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Car, Toilet as Restroom, Home as Mosque, CalendarDays, Clock } from "lucide-react";
-import type { Market } from "@/lib/markets-data";
+import type { Market } from "@/lib/market-types";
 import { useLanguage } from "@/components/language-provider";
 import { getMarketOpenStatus } from "@/lib/utils";
 import { formatWeekday } from "@/lib/i18n";

@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { getMarketById, getAllStates } from "@/lib/db";
 import { EditMarketClient } from "./edit-market-client";
 import type { MarketFormValues } from "@/lib/admin-schema";
-import type { Market } from "@/lib/markets-data";
+import type { Market } from "@/lib/market-types";
 
 interface PageProps {
   params: Promise<{ id: string }>;

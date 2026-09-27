@@ -8,7 +8,7 @@ import { Clock, Loader2, LocateFixed, MapPin, Maximize2, Minus, Navigation, Plus
 import { useRouter } from "next/navigation";
 import openDirections from "@/lib/directions";
 import { Button } from "@/components/ui/button";
-import type { Market } from "@/lib/markets-data";
+import type { Market } from "@/lib/market-types";
 import type { Map as LeafletMap, Marker, TileLayer } from "leaflet";
 
 function escapeHtml(str: string): string {

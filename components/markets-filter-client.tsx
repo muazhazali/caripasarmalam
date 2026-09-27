@@ -10,7 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Market } from "@/lib/markets-data";
+import { Market } from "@/lib/market-types";
 import { useLanguage } from "@/components/language-provider";
 import { fetchMarketsApi } from "@/lib/markets-api-client";
 import { Loader2 } from "lucide-react";

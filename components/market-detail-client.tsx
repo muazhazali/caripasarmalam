@@ -17,7 +17,7 @@ import {
   Flag,
 } from "lucide-react";
 import Link from "next/link";
-import { Market } from "@/lib/markets-data";
+import { Market } from "@/lib/market-types";
 import { useLanguage } from "@/components/language-provider";
 import openDirections from "@/lib/directions";
 import InteractiveMap from "@/components/interactive-map";

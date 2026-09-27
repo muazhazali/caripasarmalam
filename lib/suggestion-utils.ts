@@ -1,4 +1,4 @@
-import type { Market } from "@/lib/markets-data";
+import type { Market } from "@/lib/market-types";
 import type { MarketFormValues } from "@/lib/admin-schema";
 
 /**

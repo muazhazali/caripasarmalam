@@ -1,71 +1,111 @@
-# CLAUDE.md
+# AGENTS.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Guidance for AI coding agents working in this repository. Human contributors
+should read [CONTRIBUTING.md](CONTRIBUTING.md) instead.
 
 ## Commands
 
 ```bash
-pnpm dev          # Start development server (http://localhost:3000)
-pnpm build        # Build for production (also type-checks)
-pnpm lint         # Run ESLint
-pnpm lint:fix     # Run ESLint with auto-fix
-pnpm format       # Format all files with Prettier
-pnpm format:check # Check formatting without writing
+pnpm dev            # development server (http://localhost:3000), local D1 via Wrangler
+pnpm build          # production build (also type-checks)
+pnpm typecheck      # tsc --noEmit, fastest type check
+pnpm lint           # ESLint
+pnpm lint:fix       # ESLint with auto-fix
+pnpm format         # Prettier, write
+pnpm format:check   # Prettier, verify (CI uses this)
 
-# Supabase local dev (requires Docker Desktop running)
-npx supabase start   # Start local Supabase (outputs API keys to copy into .env.local)
-npx supabase stop    # Stop local Supabase
-npx supabase db reset  # Drop and re-apply all migrations + seed data
-npx supabase gen types typescript --local > types/database.types.ts  # Regenerate types after schema changes
+# Full-stack local run on the Workers runtime (Miniflare) at http://localhost:8787
+pnpm preview
+
+# Local D1
+pnpm db:migrate:local                      # apply d1/migrations
+pnpm db:seed:local                         # load d1/data.sql
+pnpm exec wrangler d1 migrations create caripasarmalam <name>   # new migration
 ```
 
-There are no automated tests. Validate changes by running `pnpm build` for TypeScript errors and `pnpm lint` for lint issues.
+There are no automated tests. Validate changes with `pnpm typecheck`, `pnpm lint`,
+`pnpm build`, and the preview smoke checks in
+[docs/cloudflare-preview.md](docs/cloudflare-preview.md). CI runs
+`format:check`, `lint`, `typecheck`, and `build`.
 
 ## Architecture
 
-**Next.js 15 App Router** with React Server Components. The app uses a server/client split where pages fetch data server-side and pass it to `*-client.tsx` components that handle interactivity.
+**Next.js App Router** (Next 16) with React Server Components, deployed on
+**Cloudflare Workers** through `@opennextjs/cloudflare`, backed by **Cloudflare
+D1** (SQLite). Pages fetch data server-side and pass it to `*-client.tsx`
+components that handle interactivity.
 
-### Data Flow
+### Data flow
 
-- **Database**: Supabase (PostgreSQL). Single table: `pasar_malams`.
-- **Server queries**: `lib/db.ts` — `getMarkets()`, `getMarketById()`, `getAllStates()`, `getDistrictsByState()`. Uses `lib/supabase.ts` (server-side client via `@supabase/ssr`).
-- **Browser client**: `lib/supabase-client.ts` — for client components.
-- **DB → App type**: `lib/db-transform.ts` transforms raw Supabase rows into the `Market` type defined in `lib/markets-data.ts`.
-- **Core type**: `Market` in `lib/markets-data.ts`. `MarketSchedule[]` uses `DayCode` enum from `app/enums.ts`.
+- **Database**: D1 binding `DB`, accessed only server-side. `lib/d1.ts` wraps
+  `getCloudflareContext({ async: true })` and JSON/boolean helpers.
+- **Queries**: `lib/db.ts` — `getMarkets()`, `getMarketById()`, `getAllStates()`,
+  `getDistrictsByState()`, `getAdminMarkets()`, plus admin write helpers.
+  `lib/suggestions-db.ts` covers suggestions.
+- **Row ↔ domain mapping**: `lib/db-transform.ts` (`dbRowToMarket`,
+  `marketFormToDbRow`).
+- **Core type**: `Market` in `lib/market-types.ts` (types only — there is no
+  static data array). `MarketSchedule[]` uses `DayCode` from `app/enums.ts`.
+- **Client fetches**: `lib/markets-api-client.ts` calls `/api/v1/markets`.
+  Client components must never import `lib/d1.ts` or `lib/db.ts`.
+- **Writes**: server actions only, behind `requireAdmin()` (`lib/auth.ts`).
+  Every market write must keep `market_days` in sync with `schedule`.
+- **Public API**: `app/api/v1/*` route handlers using helpers in `lib/api.ts`
+  (CORS, rate limiting via the `RATE_LIMITER` service binding, cache headers).
+- **Rate limiter**: separate Worker exporting a Durable Object, in
+  `workers/rate-limiter/` (outside the root tsconfig).
+
+### Auth
+
+Single admin: password compared in constant time against `ADMIN_PASSWORD`, then a
+`jose` HS256 JWT in an HttpOnly `admin_session` cookie. `proxy.ts` (Next 16
+middleware) gates `/admin/*` on that cookie and sets the `x-pathname` header.
 
 ### Internationalization
 
-Language (English/Malay) is stored in a cookie (`language: "en" | "ms"`). `LanguageProvider` (`components/language-provider.tsx`) provides context via `useLanguage()`. All translations are in `lib/i18n.ts` as a flat key-value object per language. All user-facing strings must be added there and accessed via `useTranslations()` hook.
+Language (`en` / `ms`) is stored in a `language` cookie. `LanguageProvider`
+(`components/language-provider.tsx`) exposes `useLanguage()` and
+`useTranslations()`. All user-facing strings live in `lib/i18n.ts` — add both
+languages when adding a string.
 
 ### Map
 
-Interactive map uses Leaflet (`components/interactive-map.tsx`, `components/markets-map.tsx`). Leaflet is client-side only — components using it must be dynamically imported with `ssr: false`.
+Leaflet is client-only. Components importing it must be dynamically imported with
+`ssr: false`.
 
 ### Navigation
 
 - Desktop: `components/desktop-navbar.tsx`
-- Mobile: `components/mobile-tabbar.tsx` (fixed bottom bar, requires `pb-16` on `<main>`)
+- Mobile: `components/mobile-tabbar.tsx` (fixed bottom bar; pages need `pb-16`)
 
-### Key Routes
+### Key routes
 
-- `/` — Homepage with featured markets
-- `/markets` — Filterable list view (`markets-filter-client.tsx`)
-- `/markets/[id]` — Market detail page
-- `/markets/map` — Map view of all markets
-- `/about`, `/contributors` — Static info pages
+- `/` — homepage with featured markets and filters
+- `/markets` — filterable list (`components/markets-filter-client.tsx`)
+- `/markets/[id]` — market detail
+- `/map` — map view (`/markets/map` redirects here)
+- `/suggest` — public suggestion form; `/admin/*` — admin dashboard
+- `/api/v1/{markets,markets/[id],states,districts}` — public JSON API
 
-### `lib/markets-data.ts`
+## Conventions
 
-Contains the `Market` TypeScript type and a static `marketsData` array (legacy/fallback data). **Primary data source is Supabase** via `lib/db.ts`.
+- Prettier: 120-column width. Run `pnpm format` before committing; the pre-commit
+  hook formats staged files with lint-staged.
+- Do not add comments unless they explain non-obvious intent.
+- Prefer server components; add `"use client"` only for interactivity.
+- New UI primitives should come from shadcn/ui, not hand-rolled.
+- Schema changes require a new file in `d1/migrations/`; never edit an applied
+  migration.
+- Do not commit `.env`, `.dev.vars`, or anything under `docs/archive/supabase/`
+  (it contains submitter emails).
 
-## Environment Variables
+## Environment variables
 
-Copy `env.local.example` to `.env.local`. After `npx supabase start`, paste the printed `anon key` and `service_role key`:
+Copy `.env.example` to `.env` for `pnpm dev`; see that file for the full list and
+[README.md](README.md#-environment-variables) for descriptions.
 
-```env
-NEXT_PUBLIC_SUPABASE_URL=http://127.0.0.1:54321
-NEXT_PUBLIC_SUPABASE_ANON_KEY=<from supabase start output>
-SUPABASE_SERVICE_ROLE_KEY=<from supabase start output>
-NEXT_PUBLIC_SITE_URL=http://localhost:3000
-NEXT_PUBLIC_SUGGEST_MARKET_URL=https://forms.gle/9sXDZYQknTszNSJfA
-```
+## Superseded files
+
+`docs/cloudflare-migration.md` and `docs/archive/supabase-legacy/` document the
+completed Supabase → Cloudflare migration. They are historical; do not treat them
+as current architecture, and do not re-add Supabase dependencies to build the app.

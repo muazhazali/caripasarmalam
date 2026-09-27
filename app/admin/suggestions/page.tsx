@@ -4,7 +4,7 @@ import { getSuggestions } from "@/lib/suggestions-db";
 import { getMarketById } from "@/lib/db";
 import { SuggestionsAdminClient } from "./suggestions-admin-client";
 import type { SuggestionStatus } from "@/lib/suggestions-db";
-import type { Market } from "@/lib/markets-data";
+import type { Market } from "@/lib/market-types";
 
 interface PageProps {
   searchParams: Promise<{ status?: string }>;

@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import MarketsMap from "@/components/markets-map";
-import { type Market } from "@/lib/markets-data";
+import { type Market } from "@/lib/market-types";
 import { useLanguage } from "@/components/language-provider";
 import { fetchMarketsApi } from "@/lib/markets-api-client";
 import { getStateFromCoordinates, requestUserLocation } from "@/lib/geolocation";

@@ -1,6 +1,4 @@
 allowBuilds:
-  '@prisma/engines': true
-  '@snaplet/seed': true
   '@tailwindcss/oxide': true
   esbuild: true
   sharp: true

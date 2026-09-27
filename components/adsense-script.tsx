@@ -3,16 +3,16 @@
 import { useEffect } from "react";
 
 const ADSENSE_SCRIPT_ID = "adsbygoogle-init";
-const ADSENSE_CLIENT_ID = "ca-pub-3393623405576068";
 
 export function AdSenseScript() {
   useEffect(() => {
-    if (process.env.NODE_ENV !== "production" || document.getElementById(ADSENSE_SCRIPT_ID)) return;
+    const clientId = process.env.NEXT_PUBLIC_ADSENSE_PUBLISHER_ID;
+    if (process.env.NODE_ENV !== "production" || !clientId || document.getElementById(ADSENSE_SCRIPT_ID)) return;
 
     const script = document.createElement("script");
     script.id = ADSENSE_SCRIPT_ID;
     script.async = true;
-    script.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT_ID}`;
+    script.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${clientId}`;
     script.crossOrigin = "anonymous";
     document.head.appendChild(script);
 

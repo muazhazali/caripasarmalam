@@ -21,8 +21,8 @@ this command if an R2 or other persistent cache override is added later.
 For a **new, empty** local database only:
 
 ```powershell
-pnpm.cmd exec wrangler d1 migrations apply caripasarmalam --local
-pnpm.cmd exec wrangler d1 execute caripasarmalam --local --file d1/data.sql
+pnpm.cmd db:migrate:local
+pnpm.cmd db:seed:local
 ```
 
 Do not repeat the data import on a populated database. The export contains 1,139
@@ -35,8 +35,9 @@ Check the active database:
 pnpm.cmd exec wrangler d1 execute caripasarmalam --local --command "SELECT COUNT(*) AS markets FROM pasar_malams;"
 ```
 
-Set `ADMIN_PASSWORD` and `JWT_SECRET` in the ignored `.env` or `.dev.vars` file.
-Do not print or commit their values. Live Workers require their own configured secrets.
+Set `ADMIN_PASSWORD` and `JWT_SECRET` in the ignored `.env` or `.dev.vars` file
+(see `.env.example` and `.dev.vars.example`). Do not print or commit their values.
+Live Workers require their own configured secrets.
 
 ## Smoke checks
 
@@ -70,7 +71,7 @@ Local success does not verify production D1 data, secrets, or service bindings.
 Deploy the rate-limiter Worker before the main app:
 
 ```powershell
-pnpm.cmd exec wrangler deploy --config workers/rate-limiter/wrangler.jsonc
+pnpm.cmd deploy:rate-limiter
 pnpm.cmd deploy
 ```
 

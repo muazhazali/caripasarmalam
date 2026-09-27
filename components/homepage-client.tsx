@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/dialog";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Market } from "@/lib/markets-data";
+import { Market } from "@/lib/market-types";
 import { useLanguage } from "@/components/language-provider";
 import { getMarketOpenStatus } from "@/lib/utils";
 import { getStateFromCoordinates } from "@/lib/geolocation";

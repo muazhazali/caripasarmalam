@@ -1,6 +1,6 @@
 import { getMarkets, getAllStates, getMarketById } from "@/lib/db";
 import { SuggestClient } from "./suggest-client";
-import type { Market } from "@/lib/markets-data";
+import type { Market } from "@/lib/market-types";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {

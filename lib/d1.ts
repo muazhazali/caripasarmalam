@@ -1,6 +1,6 @@
 /**
  * D1 access helpers (SQLite via Cloudflare Workers binding).
- * Replaces lib/supabase.ts. Server-only.
+ * Server-only: never import this from a client component.
  * getDB() is async (getCloudflareContext async mode) so it works in
  * static routes and route handlers alike.
  */

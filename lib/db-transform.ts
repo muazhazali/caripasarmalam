@@ -1,14 +1,15 @@
 /**
- * Shared utility for transforming Supabase database rows to Market objects
- * This avoids code duplication across client and server components
+ * Shared utility for transforming D1 database rows to Market objects.
+ * This avoids code duplication across client and server components.
  */
 
-import type { Market, MarketSchedule } from "./markets-data";
+import type { Market, MarketSchedule } from "./market-types";
 import type { MarketFormValues } from "@/lib/admin-schema";
 
 /**
- * Database row structure from Supabase
- * Represents the flattened schema where nested objects are stored as JSONB or separate columns
+ * Database row structure from D1
+ * Represents the flattened schema where nested objects are stored as JSON text
+ * and related data is denormalized across columns.
  */
 export interface DatabaseRow {
   id: string;
@@ -31,14 +32,14 @@ export interface DatabaseRow {
   amen_toilet?: boolean | null;
   amen_prayer_room?: boolean | null;
 
-  // JSONB fields (can be string or already parsed object)
+  // JSON columns (can be string or already parsed object)
   location?: string | { latitude: number; longitude: number; gmaps_link: string } | null;
   schedule?: string | MarketSchedule[] | null;
 }
 
 /**
  * Transform a database row to a Market object
- * Handles JSONB parsing (both string and object formats)
+ * Handles JSON parsing (both string and object formats)
  */
 export function dbRowToMarket(row: DatabaseRow): Market {
   return {
@@ -74,7 +75,7 @@ export function dbRowToMarket(row: DatabaseRow): Market {
       prayer_room: row.amen_prayer_room ?? false,
     },
 
-    // Parse JSONB back to objects (Supabase may return as objects or strings)
+    // JSON columns may arrive as objects or strings depending on the driver
     location: row.location ? (typeof row.location === "string" ? JSON.parse(row.location) : row.location) : undefined,
     schedule: typeof row.schedule === "string" ? JSON.parse(row.schedule) : row.schedule || [],
   };
@@ -88,7 +89,7 @@ export function dbRowsToMarkets(rows: DatabaseRow[]): Market[] {
 }
 
 /**
- * Transform MarketFormValues into a Supabase DB row object
+ * Transform MarketFormValues into a D1 DB row object
  */
 export function marketFormToDbRow(data: MarketFormValues, existingId?: string) {
   const id =

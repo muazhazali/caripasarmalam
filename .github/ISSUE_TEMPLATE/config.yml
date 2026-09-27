@@ -1,0 +1,11 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Add or correct a market
+    url: https://forms.gle/9sXDZYQknTszNSJfA
+    about: The fastest way to submit market data — no GitHub account or code needed.
+  - name: Report a security issue
+    url: https://github.com/muazhazali/caripasarmalam/security/advisories/new
+    about: Please report vulnerabilities privately, not in a public issue.
+  - name: Contribution guide
+    url: https://github.com/muazhazali/caripasarmalam/blob/main/CONTRIBUTING.md
+    about: Setup, conventions, and the pull-request checklist.

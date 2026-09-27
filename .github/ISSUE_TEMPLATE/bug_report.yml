@@ -1,0 +1,66 @@
+name: Bug report
+description: Something on the site or in the app is broken or wrong
+title: "bug: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a bug. If this is a security issue, please do **not**
+        continue — follow [SECURITY.md](https://github.com/muazhazali/caripasarmalam/blob/main/SECURITY.md) instead.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Describe the bug and what you expected to happen instead.
+      placeholder: I searched for markets in Selangor and the list came back empty, but I expected several results.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Numbered steps so someone else can see the same thing.
+      placeholder: |
+        1. Go to /markets
+        2. Select "Selangor"
+        3. Leave the page and come back
+        4. See empty list
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Affected area
+      options:
+        - Market list or search
+        - Market detail page
+        - Map view
+        - Suggestion form
+        - Admin dashboard
+        - Public API (/api/v1)
+        - Other / not sure
+    validations:
+      required: true
+  - type: input
+    id: market
+    attributes:
+      label: Market involved (if any)
+      description: Name or link if the bug is about a specific market.
+      placeholder: Pasar Malam Taman Melawati
+    validations:
+      required: false
+  - type: textarea
+    id: environment
+    attributes:
+      label: Device and browser
+      placeholder: Android 15 / Chrome 140, or iPhone 15 / Safari 18
+    validations:
+      required: false
+  - type: textarea
+    id: extra
+    attributes:
+      label: Screenshots or other context
+      description: Drag in screenshots or paste console output if you have it.
+    validations:
+      required: false

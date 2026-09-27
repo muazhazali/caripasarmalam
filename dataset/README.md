@@ -38,6 +38,7 @@ The script will generate `dataset/processed-markets.csv` with the transformed da
 #### 1. Column Removal
 
 The following columns are removed from the dataset:
+
 - `place_id`, `description`, `is_spending_on_ads`, `reviews`, `rating`, `competitors`
 - `website`, `phone`, `can_claim`, `owner`, `owner_posts`, `featured_image`
 - `main_category`, `categories`, `status`, `is_temporarily_closed`, `is_permanently_closed`
@@ -61,6 +62,7 @@ The `closed_on` column is transformed to `opening_day` using inverse logic:
 - **Empty/null** → All 7 days
 
 Day names are converted to lowercase abbreviations:
+
 - Monday → mon
 - Tuesday → tue
 - Wednesday → wed
@@ -74,42 +76,51 @@ The result is stored as a JSON string array.
 #### 4. Coordinates Transformation
 
 The `coordinates` column (JSON string format) is parsed and transformed:
+
 - **Input**: `'{"latitude":5.2781252,"longitude":115.24570569999999}'`
-- **Output**: JSON string with same structure, stored temporarily for location JSONB creation
+- **Output**: JSON string with same structure, stored temporarily for location JSON creation
 - The original `coordinates` column is removed after transformation
 
-#### 5. Location JSONB Creation
+#### 5. Location JSON Creation
 
 A new `location` column is created combining:
+
 - `latitude` (from coordinates)
 - `longitude` (from coordinates)
 - `gmaps_link` (from renamed `link` column)
 
 **Format**: `{"latitude": 5.2781252, "longitude": 115.24570569999999, "gmaps_link": "https://..."}`
 
-Stored as a JSON string (will be parsed as JSONB in the database).
+Stored as a JSON string (parsed as JSON by the database layer).
 
 #### 6. Hours → Schedule Transformation
 
 The `hours` column is transformed to match the codebase schedule format:
 
 **Input format**:
+
 ```json
-[{"day":"Monday","times":["6 pm-12 am"]},{"day":"Tuesday","times":["6 pm-12 am"]}]
+[
+  { "day": "Monday", "times": ["6 pm-12 am"] },
+  { "day": "Tuesday", "times": ["6 pm-12 am"] }
+]
 ```
 
 **Output format**:
+
 ```json
-[{"days": ["mon", "tue"], "times": [{"start": "18:00", "end": "00:00"}]}]
+[{ "days": ["mon", "tue"], "times": [{ "start": "18:00", "end": "00:00" }] }]
 ```
 
 **Special cases handled**:
+
 - **"Open 24 hours"** → `{"start": "00:00", "end": "23:59", "note": "Open 24 hours"}`
 - **"Closed"** → Day is skipped (not included in schedule)
 - **Time ranges** like "6 pm-12 am" → Parsed to 24-hour format `{"start": "18:00", "end": "00:00"}`
 - **Consecutive days with same times** → Grouped into single schedule entries
 
 **Time parsing examples**:
+
 - `"6 pm-12 am"` → `{"start": "18:00", "end": "00:00"}`
 - `"4:30-8:30 pm"` → `{"start": "16:30", "end": "20:30"}`
 - `"Open 24 hours"` → `{"start": "00:00", "end": "23:59", "note": "Open 24 hours"}`
@@ -119,6 +130,7 @@ The result is stored as a JSON string array.
 #### 7. Row Filtering
 
 Rows are removed if:
+
 - `is_temporarily_closed` has a truthy value (non-empty, not "false", not "0")
 - `is_permanently_closed` has a truthy value (non-empty, not "false", not "0")
 
@@ -131,18 +143,18 @@ The processed CSV file (`processed-markets.csv`) contains the following columns:
 - `gmaps_link` - Google Maps link (renamed from `link`)
 - `opening_hour` - Workday timing (renamed from `workday_timing`)
 - `opening_day` - JSON array of opening days (transformed from `closed_on`)
-- `location` - JSONB object with latitude, longitude, and gmaps_link
-- `schedule` - JSONB array with schedule format matching codebase structure
+- `location` - JSON object with latitude, longitude, and gmaps_link
+- `schedule` - JSON array with schedule format matching codebase structure
 - Other columns that were not removed
 
-All JSON fields are stored as JSON strings in the CSV file and will be parsed as JSONB when imported into the database.
+All JSON fields are stored as JSON strings in the CSV file and are parsed as JSON when imported into the database.
 
 ### Database Schema Compatibility
 
 The processed data is compatible with the `pasar_malams` table schema:
 
-- **location** (jsonb): `{"latitude": number, "longitude": number, "gmaps_link": string}`
-- **schedule** (jsonb): Array of `{"days": string[], "times": [{"start": string, "end": string, "note": string}]}`
+- **location** (TEXT JSON): `{"latitude": number, "longitude": number, "gmaps_link": string}`
+- **schedule** (TEXT JSON): Array of `{"days": string[], "times": [{"start": string, "end": string, "note": string}]}`
 
 ### Notes
 
@@ -151,4 +163,3 @@ The processed data is compatible with the `pasar_malams` table schema:
 - Coordinate precision is maintained
 - Various time formats are parsed and normalized
 - Days are automatically grouped when they have identical schedules
-

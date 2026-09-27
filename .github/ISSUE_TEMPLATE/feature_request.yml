@@ -1,0 +1,49 @@
+name: Feature request
+description: Suggest a new feature or an improvement
+title: "feat: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the idea. If you plan to implement this yourself, say so and a
+        maintainer can help scope it before you start.
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does this solve?
+      description: Describe the situation where the current app falls short. Focus on the need, not the implementation.
+      placeholder: I want to plan a weekend trip but there's no way to filter markets by district on the map.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: What you would like to see happen. Rough sketches are fine.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Other approaches you thought about, or existing workarounds.
+    validations:
+      required: false
+  - type: dropdown
+    id: willing-to-implement
+    attributes:
+      label: Would you like to work on this?
+      options:
+        - "Yes, I can open a pull request"
+        - "Yes, with guidance"
+        - "No, just suggesting"
+    validations:
+      required: true
+  - type: textarea
+    id: extra
+    attributes:
+      label: Additional context
+      description: Links, screenshots, or examples from other projects.
+    validations:
+      required: false

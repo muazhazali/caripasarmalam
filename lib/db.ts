@@ -5,7 +5,7 @@
 
 import { boolToInt, getDB, nowIso, toDatabaseRow, type D1Database } from "./d1";
 import { dbRowToMarket, marketFormToDbRow } from "./db-transform";
-import type { Market, Weekday } from "./markets-data";
+import type { Market, Weekday } from "./market-types";
 import type { MarketFormValues } from "./admin-schema";
 import { getMarketOpenStatus } from "./utils";
 

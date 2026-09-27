@@ -6,7 +6,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 // Time helpers for market open status
-import type { Market, MarketSchedule, Weekday } from "@/lib/markets-data";
+import type { Market, MarketSchedule, Weekday } from "@/lib/market-types";
 import { DayCode } from "@/app/enums";
 
 interface OpenStatus {

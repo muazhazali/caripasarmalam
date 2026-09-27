@@ -2,7 +2,7 @@
 
 import { startTransition, useState } from "react";
 import Link from "next/link";
-import type { Market } from "@/lib/markets-data";
+import type { Market } from "@/lib/market-types";
 import { deleteMarket, updateMarketStatus } from "@/app/admin/actions";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";

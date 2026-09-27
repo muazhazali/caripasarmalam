@@ -2,11 +2,12 @@
 
 # dependencies
 /node_modules
-.open-next
 
 # next.js
 /.next/
 /out/
+/.open-next/
+next-env.d.ts
 
 # production
 /build
@@ -17,24 +18,26 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files
-.env*
-
-# vercel
-.vercel
+# env files (keep the committed examples)
+.env
+.env.*
+!.env.example
 
 # typescript
 *.tsbuildinfo
-next-env.d.ts
 
-git config --global user.email "you@example.com"
-  git config --global user.name "Your Name"
+# cloudflare / wrangler local dev state
+/.wrangler/
+**/.wrangler/
+.dev.vars
+.dev.vars.*
+!.dev.vars.example
 
-.kilo
+# editor and agent-local files (personal, machine-specific)
+.claude/
+.cursor/
+.kilo/
+.vercel/
 
 # supabase data backups (contain submitter emails; keep out of repo)
 /docs/archive/supabase/
-# wrangler local dev state
-/.wrangler/
-**/.wrangler/
-.dev.vars*

@@ -22,7 +22,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { approveSuggestion, rejectSuggestion } from "./actions";
 import type { MarketSuggestion, SuggestionStatus } from "@/lib/suggestions-db";
-import type { Market } from "@/lib/markets-data";
+import type { Market } from "@/lib/market-types";
 import type { MarketFormValues } from "@/lib/admin-schema";
 
 interface Props {

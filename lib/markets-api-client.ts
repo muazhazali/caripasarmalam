@@ -1,9 +1,9 @@
 /**
  * Client-side fetch of markets from the public API (/api/v1).
- * Replaces direct Supabase browser access.
+ * Client components must use this instead of importing lib/d1.ts or lib/db.ts.
  */
 
-import type { Market } from "./markets-data";
+import type { Market } from "./market-types";
 
 export interface MarketsApiResponse {
   data: Market[];

@@ -4,7 +4,7 @@ import { SignJWT, jwtVerify } from "jose";
 
 /**
  * Admin auth: single-admin password + HS256 JWT session cookie.
- * Replaces Supabase Auth. Secrets come from wrangler secrets / .env:
+ * Secrets come from wrangler secrets / .env:
  *   ADMIN_PASSWORD - admin login password
  *   JWT_SECRET     - JWT signing secret
  */
