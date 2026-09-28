@@ -135,3 +135,111 @@
     @apply font-serif;
   }
 }
+
+/* ── Work-in-progress banner animations ─────────────────────────── */
+
+@keyframes wip-shimmer {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+.wip-shimmer-text {
+  background: linear-gradient(
+    90deg,
+    var(--foreground) 0%,
+    var(--foreground) 35%,
+    #f59e0b 45%,
+    #fbbf24 50%,
+    #f59e0b 55%,
+    var(--foreground) 65%,
+    var(--foreground) 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: wip-shimmer 3.2s linear infinite;
+}
+
+@keyframes wip-wiggle {
+  0%,
+  100% {
+    transform: rotate(-4deg);
+  }
+  50% {
+    transform: rotate(5deg);
+  }
+}
+
+.wip-wiggle {
+  animation: wip-wiggle 1.6s ease-in-out infinite;
+  transform-origin: 50% 80%;
+}
+
+.wip-card:hover .wip-wiggle-hover {
+  animation: wip-wiggle 0.4s ease-in-out infinite;
+}
+
+@keyframes wip-twinkle {
+  0%,
+  100% {
+    opacity: 0.15;
+    transform: scale(0.7) rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.15) rotate(20deg);
+  }
+}
+
+.wip-twinkle {
+  animation: wip-twinkle 2.4s ease-in-out infinite;
+}
+
+@keyframes wip-confetti-fall {
+  0% {
+    transform: translateY(-10px) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(140px) rotate(540deg);
+    opacity: 0;
+  }
+}
+
+.wip-confetti-piece {
+  position: absolute;
+  width: 7px;
+  height: 10px;
+  border-radius: 2px;
+  animation: wip-confetti-fall 1.15s ease-in forwards;
+}
+
+@keyframes wip-pulse-soft {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.06);
+  }
+}
+
+.wip-pulse {
+  animation: wip-pulse-soft 2.2s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wip-shimmer-text,
+  .wip-wiggle,
+  .wip-wiggle-hover,
+  .wip-twinkle,
+  .wip-confetti-piece,
+  .wip-pulse {
+    animation: none;
+  }
+}

@@ -246,6 +246,11 @@ export interface Translations {
   searchFood: string;
   suggestSeller: string;
 
+  // WIP banner
+  wipTitle: string;
+  wipSubtitle: string;
+  wipHint: string;
+
   // Seller form (admin/suggest)
   formFieldSellerName: string;
   formFieldSellerCategory: string;
@@ -525,6 +530,11 @@ export const translations: Record<string, Translations> = {
     searchFoodPlaceholder: "Search food e.g. nasi lemak...",
     searchFood: "Search Food",
     suggestSeller: "Suggest Seller",
+
+    // WIP banner
+    wipTitle: "Sellers are under construction!",
+    wipSubtitle: "We're building a directory of pasar malam sellers — their items, prices, and where to find them.",
+    wipHint: "Coming soon. Psst… the markets already work great, check them out!",
 
     // Seller form (admin/suggest)
     formFieldSellerName: "Seller Name *",
@@ -807,6 +817,11 @@ export const translations: Record<string, Translations> = {
     searchFoodPlaceholder: "Cari makanan cth. nasi lemak...",
     searchFood: "Cari Makanan",
     suggestSeller: "Cadang Penjual",
+
+    // WIP banner
+    wipTitle: "Penjual sedang dibina!",
+    wipSubtitle: "Kami sedang membina direktori penjual pasar malam — item, harga, dan lokasi jualan mereka.",
+    wipHint: "Nantikan. Psst… direktori pasar sudah berfungsi, jom tengok!",
 
     // Seller form (admin/suggest)
     formFieldSellerName: "Nama Penjual *",

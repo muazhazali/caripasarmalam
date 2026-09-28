@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { getSellers, getSellerCategories } from "@/lib/sellers-db";
 import { SellersFilterClient } from "@/components/sellers-filter-client";
+import { WipBanner } from "@/components/wip-banner";
 
 interface SellersPageProps {
   searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -32,5 +33,12 @@ export default async function SellersPage({ searchParams }: SellersPageProps) {
     getSellerCategories(),
   ]);
 
-  return <SellersFilterClient initialSellers={sellers} categories={categories} initialState={state} />;
+  return (
+    <div className="pb-24 md:pb-8">
+      <div className="container mx-auto px-4 pt-6">
+        <WipBanner />
+      </div>
+      <SellersFilterClient initialSellers={sellers} categories={categories} initialState={state} />
+    </div>
+  );
 }
