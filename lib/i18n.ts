@@ -158,6 +158,7 @@ export interface Translations {
   enableLocationButton: string;
   skipLocationButton: string;
   chooseStateButton: string;
+  orPickStateDivider: string;
   showingTopMarkets: string;
   selectStatePromptTitle: string;
   selectStatePromptDescription: string;
@@ -437,6 +438,7 @@ export const translations: Record<string, Translations> = {
     enableLocationButton: "Use my location",
     skipLocationButton: "Not now",
     chooseStateButton: "Choose state",
+    orPickStateDivider: "or pick a state",
     showingTopMarkets: "Showing top 20 markets (enable location for nearest)",
     selectStatePromptTitle: "Select a state to explore markets",
     selectStatePromptDescription: "Choose a state from the dropdown, or enable location to see nearby markets.",
@@ -718,6 +720,7 @@ export const translations: Record<string, Translations> = {
     enableLocationButton: "Guna lokasi saya",
     skipLocationButton: "Lain kali",
     chooseStateButton: "Pilih negeri",
+    orPickStateDivider: "atau pilih negeri",
     showingTopMarkets: "Menunjukkan 20 pasar teratas (hidupkan lokasi untuk terdekat)",
     selectStatePromptTitle: "Pilih negeri untuk terokai pasar",
     selectStatePromptDescription: "Pilih negeri dari senarai, atau hidupkan lokasi untuk lihat pasar berdekatan.",

@@ -23,6 +23,7 @@ import { useLanguage } from "@/components/language-provider";
 import { getMarketOpenStatus } from "@/lib/utils";
 import { getStateFromCoordinates } from "@/lib/geolocation";
 import { fetchMarketsApi } from "@/lib/markets-api-client";
+import StatePickerGrid from "@/components/state-picker-grid";
 import MarketCard from "@/components/market-card";
 
 function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
@@ -148,6 +149,8 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
   });
   const [showFilters, setShowFilters] = useState(false);
   const [showLocationModal, setShowLocationModal] = useState(false);
+  // Two-step first-visit flow: ask for location, fall back to state picker
+  const [modalStep, setModalStep] = useState<"ask" | "pickState">("ask");
 
   // Update URL params when state/day changes
   const updateURLParams = useCallback(
@@ -262,9 +265,17 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
     fetchMarkets(undefined, selectedDay !== "All Days" && selectedDay !== "Semua Hari" ? selectedDay : undefined);
   }, [selectedDay, updateURLParams, fetchMarkets]);
 
+  // Mark location modal as seen
+  const markLocationModalSeen = useCallback(() => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("locationModalSeen", "true");
+    }
+  }, []);
+
   const findNearestMarkets = useCallback(() => {
     if (typeof navigator === "undefined" || !navigator.geolocation) {
-      // Geolocation not available; silently skip
+      // Geolocation not available; fall back to state picking
+      setModalStep("pickState");
       return;
     }
 
@@ -281,27 +292,25 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
         if (state) {
           // Auto-filter by detected state with limit of 20 markets
           handleStateChange(state, 20);
+          markLocationModalSeen();
+        } else {
+          // Location outside Malaysia — ask for state instead
+          setModalStep("pickState");
         }
 
         setIsRequestingLocation(false);
         // Close modal if open
-        setShowLocationModal(false);
+        if (state) setShowLocationModal(false);
       },
       (error) => {
-        // Permission denied, unavailable, or timeout; silently skip
+        // Permission denied, unavailable, or timeout; fall back to state picking
         console.warn("Geolocation error:", error);
         setIsRequestingLocation(false);
+        setModalStep("pickState");
       },
       { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 },
     );
-  }, [handleStateChange]);
-
-  // Mark location modal as seen
-  const markLocationModalSeen = useCallback(() => {
-    if (typeof window !== "undefined") {
-      localStorage.setItem("locationModalSeen", "true");
-    }
-  }, []);
+  }, [handleStateChange, markLocationModalSeen]);
 
   // Handle location permission from modal
   const handleEnableLocation = useCallback(() => {
@@ -311,11 +320,23 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
     findNearestMarkets();
   }, [findNearestMarkets, markLocationModalSeen]);
 
-  // Handle skip location
+  // Handle skip: must pick a state before the flow ends
   const handleSkipLocation = useCallback(() => {
-    markLocationModalSeen();
-    setShowLocationModal(false);
-  }, [markLocationModalSeen]);
+    setModalStep("pickState");
+  }, []);
+
+  // Pick a state from the modal grid: filter homepage to that state and persist
+  const handleModalStateSelect = useCallback(
+    (state: string) => {
+      markLocationModalSeen();
+      setShowLocationModal(false);
+      if (typeof window !== "undefined") {
+        localStorage.setItem("homeSelectedState", state);
+      }
+      handleStateChange(state, 20);
+    },
+    [handleStateChange, markLocationModalSeen],
+  );
 
   const clearAllFilters = () => {
     setSearchQuery("");
@@ -332,17 +353,27 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
     fetchMarkets(undefined, undefined, undefined);
   };
 
-  // Show location modal on first visit if not already seen
+  // Show location modal on first visit if not already seen;
+  // otherwise restore the previously chosen state
   useEffect(() => {
-    if (typeof window !== "undefined" && !userLocation) {
-      const hasSeenLocationModal = localStorage.getItem("locationModalSeen") === "true";
-      if (!hasSeenLocationModal) {
-        // Small delay to ensure page is loaded
-        const timer = setTimeout(() => {
-          setShowLocationModal(true);
-        }, 500);
-        return () => clearTimeout(timer);
-      }
+    if (typeof window === "undefined") return;
+    const hasSeenLocationModal = localStorage.getItem("locationModalSeen") === "true";
+    const savedState = localStorage.getItem("homeSelectedState");
+
+    if (hasSeenLocationModal && savedState && savedState !== "Semua Negeri" && savedState !== "All States") {
+      const timer = setTimeout(() => {
+        setSelectedState(savedState);
+        fetchMarkets(savedState, undefined, undefined, 20);
+      }, 0);
+      return () => clearTimeout(timer);
+    }
+
+    if (!hasSeenLocationModal && !userLocation) {
+      // Small delay to ensure page is loaded
+      const timer = setTimeout(() => {
+        setShowLocationModal(true);
+      }, 500);
+      return () => clearTimeout(timer);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -822,10 +853,14 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
         </div>
       </footer>
 
-      {/* Location Permission Modal */}
+      {/* Location Permission Modal (step 1: location, step 2: state picker) */}
       <Dialog
         open={showLocationModal}
         onOpenChange={(open) => {
+          if (!open && modalStep === "pickState") {
+            // Unclosable while a state must be picked (backdrop clicks ignored)
+            return;
+          }
           setShowLocationModal(open);
           if (!open) {
             // Mark as seen when modal is closed
@@ -833,36 +868,73 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
           }
         }}
       >
-        <DialogContent className="gap-6 rounded-2xl p-6 sm:max-w-md sm:p-7" showCloseButton={false}>
+        <DialogContent
+          className="gap-6 rounded-2xl p-6 sm:max-w-md sm:p-7"
+          showCloseButton={modalStep === "ask"}
+          onInteractOutside={(e) => {
+            if (modalStep === "pickState") e.preventDefault();
+          }}
+        >
           <DialogHeader className="gap-3">
             <div className="mb-1 flex items-center justify-center">
               <div className="rounded-full bg-primary/10 p-3 text-primary dark:bg-primary/15">
                 <Navigation2 className="h-7 w-7" />
               </div>
             </div>
-            <DialogTitle className="text-center text-xl leading-tight">{t.enableLocationTitle}</DialogTitle>
-            <DialogDescription className="mx-auto max-w-xs text-center leading-6">
-              {t.enableLocationDescription}
-            </DialogDescription>
+            {modalStep === "ask" ? (
+              <>
+                <DialogTitle className="text-center text-xl leading-tight">{t.enableLocationTitle}</DialogTitle>
+                <DialogDescription className="mx-auto max-w-xs text-center leading-6">
+                  {t.enableLocationDescription}
+                </DialogDescription>
+              </>
+            ) : (
+              <>
+                <DialogTitle className="text-center text-xl leading-tight">{t.selectStatePromptTitle}</DialogTitle>
+                <DialogDescription className="mx-auto max-w-xs text-center leading-6">
+                  {t.selectStatePromptDescription}
+                </DialogDescription>
+              </>
+            )}
           </DialogHeader>
-          <DialogFooter className="grid gap-3 sm:grid-cols-2 sm:gap-3">
-            <Button variant="outline" onClick={handleSkipLocation} className="h-11 w-full px-5">
-              {t.skipLocationButton}
-            </Button>
-            <Button onClick={handleEnableLocation} disabled={isRequestingLocation} className="h-11 w-full px-5">
-              {isRequestingLocation ? (
-                <>
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                  {t.searching}
-                </>
-              ) : (
-                <>
-                  <Navigation2 className="h-4 w-4" />
-                  {t.enableLocationButton}
-                </>
-              )}
-            </Button>
-          </DialogFooter>
+
+          {modalStep === "ask" ? (
+            <DialogFooter className="grid gap-3 sm:grid-cols-2 sm:gap-3">
+              <Button variant="outline" onClick={handleSkipLocation} className="h-11 w-full px-5">
+                {t.skipLocationButton}
+              </Button>
+              <Button onClick={handleEnableLocation} disabled={isRequestingLocation} className="h-11 w-full px-5">
+                {isRequestingLocation ? (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    {t.searching}
+                  </>
+                ) : (
+                  <>
+                    <Navigation2 className="h-4 w-4" />
+                    {t.enableLocationButton}
+                  </>
+                )}
+              </Button>
+            </DialogFooter>
+          ) : (
+            <div className="space-y-5">
+              <Button className="w-full gap-2" onClick={handleEnableLocation} disabled={isRequestingLocation}>
+                {isRequestingLocation ? (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    {t.searching}
+                  </>
+                ) : (
+                  <>
+                    <Navigation2 className="h-4 w-4" />
+                    {t.enableLocationButton}
+                  </>
+                )}
+              </Button>
+              <StatePickerGrid onSelect={handleModalStateSelect} dividerLabel={t.orPickStateDivider} />
+            </div>
+          )}
         </DialogContent>
       </Dialog>
     </div>

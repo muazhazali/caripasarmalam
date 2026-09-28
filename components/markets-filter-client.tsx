@@ -232,6 +232,21 @@ export default function MarketsFilterClient({ initialMarkets, initialState }: Ma
     }
   }, []);
 
+  // Apply the saved state choice when no explicit state filter is in the URL
+  const urlHasState = Boolean(searchParams.get("state"));
+  useEffect(() => {
+    if (urlHasState) return;
+    const savedState = typeof window !== "undefined" ? localStorage.getItem("homeSelectedState") : null;
+    if (!savedState || savedState === "Semua Negeri" || savedState === "All States") return;
+
+    const timer = setTimeout(() => {
+      setSelectedState(savedState);
+      fetchMarkets(savedState, selectedDay !== "All Days" && selectedDay !== "Semua Hari" ? selectedDay : undefined);
+    }, 0);
+    return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [urlHasState]);
+
   const setQueryParam = useCallback(
     (key: string, value: string | null) => {
       const params = new URLSearchParams(searchParams.toString());
@@ -251,6 +266,10 @@ export default function MarketsFilterClient({ initialMarkets, initialState }: Ma
       // Update local state - use first item from arrays as default
       if (key === "state") {
         setSelectedState(value || malaysianStates[0]); // "Semua Negeri"
+        if (typeof window !== "undefined") {
+          if (!value || value === "Semua Negeri") localStorage.removeItem("homeSelectedState");
+          else localStorage.setItem("homeSelectedState", value);
+        }
       }
       if (key === "day") {
         setSelectedDay(value || daysOfWeek[0]); // "Semua Hari"

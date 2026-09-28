@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import MarketsMap from "@/components/markets-map";
+import StatePickerGrid from "@/components/state-picker-grid";
 import { type Market } from "@/lib/market-types";
 import { useLanguage } from "@/components/language-provider";
 import { fetchMarketsApi } from "@/lib/markets-api-client";
@@ -31,8 +32,7 @@ const malaysianStates = [
   "Terengganu",
 ];
 
-// States without "Semua Negeri" for the picker modal
-const STATE_LIST = malaysianStates.slice(1);
+// OPENING_SOON_MINUTES for the "opening soon" filter
 const OPENING_SOON_MINUTES = 120;
 const OPEN_NEARBY_RADIUS_KM = 20;
 
@@ -91,12 +91,43 @@ export default function MapPage() {
       const normalizedState = newState === "All States" ? malaysianStates[0] : newState;
       setSelectedState(normalizedState);
       setBoundsKey((k) => k + 1);
+      // Persist explicit choice so map/homepage stop re-asking
+      if (typeof window !== "undefined") {
+        if (normalizedState === "Semua Negeri") localStorage.removeItem("homeSelectedState");
+        else localStorage.setItem("homeSelectedState", normalizedState);
+      }
       fetchMarkets(
         normalizedState !== "Semua Negeri" && normalizedState !== "All States" ? normalizedState : undefined,
       );
     },
     [fetchMarkets],
   );
+
+  // Restore a previously chosen state on open — no repeated asking
+  useEffect(() => {
+    const savedState = typeof window !== "undefined" ? localStorage.getItem("homeSelectedState") : null;
+    if (!savedState || savedState === "Semua Negeri" || savedState === "All States") return;
+
+    const timer = setTimeout(() => {
+      setSelectedState(savedState);
+      setShowStatePicker(false);
+      fetchMarkets(savedState);
+    }, 0);
+
+    // Silent location fetch for distance sorting only; never re-opens the modal
+    if (typeof navigator !== "undefined" && navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setUserLocation({ lat: position.coords.latitude, lng: position.coords.longitude });
+          setLocationDenied(false);
+        },
+        () => setLocationDenied(true),
+        { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 },
+      );
+    }
+    return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Get user location on mount — silently, don't block modal
   useEffect(() => {
@@ -281,25 +312,7 @@ export default function MapPage() {
               {isRequestingLocation ? t.searching : t.enableLocationButton}
             </Button>
 
-            <div className="flex items-center gap-3">
-              <div className="flex-1 h-px bg-border" />
-              <span className="text-xs text-muted-foreground uppercase tracking-wide">atau pilih negeri</span>
-              <div className="flex-1 h-px bg-border" />
-            </div>
-
-            {/* State grid */}
-            <div className="grid grid-cols-3 gap-2 max-h-64 overflow-y-auto pr-1">
-              {STATE_LIST.map((state) => (
-                <button
-                  key={state}
-                  type="button"
-                  onClick={() => handleModalStateSelect(state)}
-                  className="rounded-lg border border-border bg-muted/40 px-2 py-2.5 text-xs font-medium text-foreground hover:border-primary hover:bg-primary/10 hover:text-primary transition-colors text-center leading-tight"
-                >
-                  {state}
-                </button>
-              ))}
-            </div>
+            <StatePickerGrid onSelect={handleModalStateSelect} dividerLabel={t.orPickStateDivider} />
           </div>
         </div>
       )}
