@@ -62,17 +62,17 @@ export function dbRowToMarket(row: DatabaseRow): Market {
             .filter(Boolean)
         : undefined,
 
-    // Reconstruct parking object
+    // Reconstruct parking object (D1 stores booleans as 0/1 integers)
     parking: {
-      available: row.parking_available ?? false,
-      accessible: row.parking_accessible ?? false,
+      available: Boolean(row.parking_available),
+      accessible: Boolean(row.parking_accessible),
       notes: row.parking_notes || "",
     },
 
     // Reconstruct amenities object
     amenities: {
-      toilet: row.amen_toilet ?? false,
-      prayer_room: row.amen_prayer_room ?? false,
+      toilet: Boolean(row.amen_toilet),
+      prayer_room: Boolean(row.amen_prayer_room),
     },
 
     // JSON columns may arrive as objects or strings depending on the driver
