@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo, useEffect, useCallback } from "react";
-import { Search, MapPin, Navigation2, ArrowUpDown, ArrowUp, ArrowDown, Filter, Loader2 } from "lucide-react";
+import { Search, MapPin, Navigation2, ArrowUpDown, ArrowUp, ArrowDown, Filter, Loader2, Store } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -475,6 +475,22 @@ export default function HomepageClient({ initialMarkets, initialState }: Homepag
                   />
                 </div>
               </div>
+              <form action="/sellers" method="get" className="flex gap-2 max-w-md mx-auto w-full">
+                {selectedState && selectedState !== "Semua Negeri" && (
+                  <input type="hidden" name="state" value={selectedState} />
+                )}
+                <div className="flex-1 relative">
+                  <Store className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
+                  <Input
+                    name="q"
+                    placeholder={t.searchFoodPlaceholder}
+                    className="pl-10 h-11 md:h-12 text-base md:text-lg bg-primary/10"
+                  />
+                </div>
+                <Button type="submit" className="h-11 md:h-12 px-4">
+                  {t.searchFood}
+                </Button>
+              </form>
             </div>
           </div>
         </div>

@@ -216,6 +216,56 @@ export interface Translations {
   formMapPickerClear: string;
   formSaving: string;
 
+  // Sellers
+  sellers: string;
+  sellerDirectoryTitle: string;
+  sellerDirectorySubtitle: string;
+  sellersSearchPlaceholder: string;
+  allCategories: string;
+  sellerCategory: string;
+  sellerItems: string;
+  sellerItemsAt: string;
+  sellerPhone: string;
+  sellerWhatsapp: string;
+  sellerSocial: string;
+  sellerNoItems: string;
+  sellerAskPrice: string;
+  sellerAttendsMarkets: string;
+  sellerStall: string;
+  noSellersFound: string;
+  tryAdjustingSellerFilters: string;
+  viewSeller: string;
+  backToSellers: string;
+  sellerContact: string;
+  sellerNotFound: string;
+  sellerCallNow: string;
+  sellersAtMarket: string;
+  noSellersAtMarket: string;
+  searchFoodPlaceholder: string;
+  searchFood: string;
+  suggestSeller: string;
+
+  // Seller form (admin/suggest)
+  formFieldSellerName: string;
+  formFieldSellerCategory: string;
+  formFieldSellerCategoryPlaceholder: string;
+  formFieldSellerPhone: string;
+  formFieldSellerDescription: string;
+  formSectionSellerItems: string;
+  formFieldItemName: string;
+  formFieldItemPrice: string;
+  formFieldItemNote: string;
+  formSectionSellerLocations: string;
+  formFieldSelectMarket: string;
+  formFieldStall: string;
+  formFieldLocationNotes: string;
+  formAddItem: string;
+  formAddLocation: string;
+  formFieldSocialPlatform: string;
+  formFieldSocialUrl: string;
+  formAddSocial: string;
+  formSectionSellerContact: string;
+
   // About page paragraphs
   aboutPara1: string;
   aboutPara2: string;
@@ -444,6 +494,56 @@ export const translations: Record<string, Translations> = {
     formMapPickerSearchBtn: "Search",
     formMapPickerClear: "Clear pin",
     formSaving: "Submitting...",
+
+    // Sellers
+    sellers: "Sellers",
+    sellerDirectoryTitle: "Pasar Malam Sellers Directory",
+    sellerDirectorySubtitle: "Find sellers, their food, and where they set up each week",
+    sellersSearchPlaceholder: "Search food, seller, or category...",
+    allCategories: "All Categories",
+    sellerCategory: "Category",
+    sellerItems: "Items",
+    sellerItemsAt: "Sells at",
+    sellerPhone: "Phone",
+    sellerWhatsapp: "WhatsApp",
+    sellerSocial: "Social Media",
+    sellerNoItems: "No items listed yet",
+    sellerAskPrice: "Ask seller",
+    sellerAttendsMarkets: "Markets attended",
+    sellerStall: "Stall",
+    noSellersFound: "No sellers found.",
+    tryAdjustingSellerFilters: "Try adjusting your search or filters.",
+    viewSeller: "View Seller",
+    backToSellers: "Back to Sellers",
+    sellerContact: "Contact",
+    sellerNotFound: "Seller not found",
+    sellerCallNow: "Call now",
+    sellersAtMarket: "Sellers",
+    noSellersAtMarket: "No seller info for this market yet.",
+    searchFoodPlaceholder: "Search food e.g. nasi lemak...",
+    searchFood: "Search Food",
+    suggestSeller: "Suggest Seller",
+
+    // Seller form (admin/suggest)
+    formFieldSellerName: "Seller Name *",
+    formFieldSellerCategory: "Category",
+    formFieldSellerCategoryPlaceholder: "e.g. Food, Drinks, Kuih",
+    formFieldSellerPhone: "Phone Number",
+    formFieldSellerDescription: "Description",
+    formSectionSellerItems: "Items & Prices",
+    formFieldItemName: "Item Name",
+    formFieldItemPrice: "Price (RM)",
+    formFieldItemNote: "Note (optional)",
+    formSectionSellerLocations: "Selling Locations",
+    formFieldSelectMarket: "Select market",
+    formFieldStall: "Stall No.",
+    formFieldLocationNotes: "Notes (optional)",
+    formAddItem: "Add Item",
+    formAddLocation: "Add Location",
+    formFieldSocialPlatform: "Platform",
+    formFieldSocialUrl: "URL",
+    formAddSocial: "Add Social Link",
+    formSectionSellerContact: "Contact & Social",
 
     // About page
     aboutPara1: "Project background",
@@ -675,6 +775,56 @@ export const translations: Record<string, Translations> = {
     formMapPickerSearchBtn: "Cari",
     formMapPickerClear: "Buang pin",
     formSaving: "Menghantar...",
+
+    // Sellers
+    sellers: "Penjual",
+    sellerDirectoryTitle: "Direktori Penjual Pasar Malam",
+    sellerDirectorySubtitle: "Cari penjual, makanan mereka, dan lokasi jualan mingguan",
+    sellersSearchPlaceholder: "Cari makanan, penjual atau kategori...",
+    allCategories: "Semua Kategori",
+    sellerCategory: "Kategori",
+    sellerItems: "Item",
+    sellerItemsAt: "Jual di",
+    sellerPhone: "Telefon",
+    sellerWhatsapp: "WhatsApp",
+    sellerSocial: "Media Sosial",
+    sellerNoItems: "Tiada item disenaraikan lagi",
+    sellerAskPrice: "Tanya penjual",
+    sellerAttendsMarkets: "Pasar yang dilawati",
+    sellerStall: "Gerai",
+    noSellersFound: "Tiada penjual dijumpai.",
+    tryAdjustingSellerFilters: "Cuba laraskan carian atau penapis anda.",
+    viewSeller: "Lihat Penjual",
+    backToSellers: "Kembali ke Penjual",
+    sellerContact: "Hubungi",
+    sellerNotFound: "Penjual tidak dijumpai",
+    sellerCallNow: "Telefon sekarang",
+    sellersAtMarket: "Penjual",
+    noSellersAtMarket: "Tiada maklumat penjual untuk pasar ini lagi.",
+    searchFoodPlaceholder: "Cari makanan cth. nasi lemak...",
+    searchFood: "Cari Makanan",
+    suggestSeller: "Cadang Penjual",
+
+    // Seller form (admin/suggest)
+    formFieldSellerName: "Nama Penjual *",
+    formFieldSellerCategory: "Kategori",
+    formFieldSellerCategoryPlaceholder: "cth. Makanan, Minuman, Kuih",
+    formFieldSellerPhone: "Nombor Telefon",
+    formFieldSellerDescription: "Penerangan",
+    formSectionSellerItems: "Item & Harga",
+    formFieldItemName: "Nama Item",
+    formFieldItemPrice: "Harga (RM)",
+    formFieldItemNote: "Nota (pilihan)",
+    formSectionSellerLocations: "Lokasi Jualan",
+    formFieldSelectMarket: "Pilih pasar",
+    formFieldStall: "No. Gerai",
+    formFieldLocationNotes: "Nota (pilihan)",
+    formAddItem: "Tambah Item",
+    formAddLocation: "Tambah Lokasi",
+    formFieldSocialPlatform: "Platform",
+    formFieldSocialUrl: "Pautan",
+    formAddSocial: "Tambah Pautan Sosial",
+    formSectionSellerContact: "Hubungan & Sosial",
 
     // About page (Malay)
     aboutPara1: "Latar Belakang Projek",

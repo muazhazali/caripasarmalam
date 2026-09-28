@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, ShoppingBag, Map as MapIcon, Github, Info, PlusCircle } from "lucide-react";
+import { Home, ShoppingBag, Map as MapIcon, Github, Info, PlusCircle, Store } from "lucide-react";
 import { useLanguage } from "@/components/language-provider";
 import LanguageSwitcher from "@/components/language-switcher";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
@@ -45,6 +45,7 @@ export default function DesktopNavbar() {
   }[] = [
     { href: "/", label: t.home, icon: Home },
     { href: "/markets", label: t.markets, icon: ShoppingBag },
+    { href: "/sellers", label: t.sellers, icon: Store },
     { href: "/map", label: t.mapView, icon: MapIcon },
     { href: "/suggest", label: t.suggestMarket, icon: PlusCircle },
     { href: "/about", label: t.about, icon: Info },
@@ -65,7 +66,7 @@ export default function DesktopNavbar() {
                   href={item.href}
                   label={item.label}
                   icon={item.icon}
-                  isActive={pathname === item.href}
+                  isActive={pathname === item.href || pathname.startsWith(`${item.href}/`)}
                 />
               ))}
             </nav>

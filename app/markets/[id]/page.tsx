@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getMarketById } from "@/lib/db";
+import { getSellersByMarket } from "@/lib/sellers-db";
 import MarketDetailClient from "@/components/market-detail-client";
 
 interface MarketPageProps {
@@ -95,7 +96,10 @@ export async function generateMetadata({ params }: MarketPageProps): Promise<Met
 
 export default async function MarketPage({ params }: MarketPageProps) {
   const resolvedParams = await params;
-  const market = await getMarketById(resolvedParams.id);
+  const [market, sellers] = await Promise.all([
+    getMarketById(resolvedParams.id),
+    getSellersByMarket(resolvedParams.id),
+  ]);
 
   if (!market) {
     notFound();
@@ -103,5 +107,5 @@ export default async function MarketPage({ params }: MarketPageProps) {
 
   // Read language cookie on the server (LanguageProvider in RootLayout already uses it)
   // No need to pass initialLanguage; MarketDetailClient will use the shared context.
-  return <MarketDetailClient market={market} />;
+  return <MarketDetailClient market={market} sellers={sellers} />;
 }

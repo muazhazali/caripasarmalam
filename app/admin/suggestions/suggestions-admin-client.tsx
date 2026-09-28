@@ -20,15 +20,20 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { approveSuggestion, rejectSuggestion } from "./actions";
+import { approveSuggestion, rejectSuggestion, approveSellerSuggestion, rejectSellerSuggestion } from "./actions";
 import type { MarketSuggestion, SuggestionStatus } from "@/lib/suggestions-db";
+import type { SellerSuggestion } from "@/lib/seller-types";
 import type { Market } from "@/lib/market-types";
+import type { Seller } from "@/lib/seller-types";
 import type { MarketFormValues } from "@/lib/admin-schema";
 
 interface Props {
-  suggestions: MarketSuggestion[];
-  targetMarkets: Record<string, Market>;
+  type: "markets" | "sellers";
   currentStatus: SuggestionStatus;
+  suggestions?: MarketSuggestion[];
+  targetMarkets?: Record<string, Market>;
+  sellerSuggestions?: SellerSuggestion[];
+  targetSellers?: Record<string, Seller>;
 }
 
 function formatDate(dateStr: string) {
@@ -114,6 +119,91 @@ function DiffTable({ current, proposed }: { current: Market | null; proposed: Ma
   );
 }
 
+function SellerSuggestionDetail({
+  suggestion,
+  currentSeller,
+}: {
+  suggestion: SellerSuggestion;
+  currentSeller: Seller | null;
+}) {
+  const data = suggestion.data;
+  const fields: { label: string; currentVal: string; proposedVal: string }[] = [
+    { label: "Name", currentVal: currentSeller?.name ?? "—", proposedVal: data.name },
+    { label: "Category", currentVal: currentSeller?.category ?? "—", proposedVal: data.category ?? "—" },
+    { label: "Phone", currentVal: currentSeller?.phone ?? "—", proposedVal: data.phone || "—" },
+    { label: "Description", currentVal: currentSeller?.description ?? "—", proposedVal: data.description || "—" },
+    {
+      label: "Items",
+      currentVal:
+        (currentSeller?.items ?? []).map((i) => `${i.name}${i.price !== null ? ` RM${i.price}` : ""}`).join(", ") ||
+        "—",
+      proposedVal:
+        (data.items ?? [])
+          .map((i) => `${i.name}${i.price !== null && i.price !== undefined ? ` RM${i.price}` : ""}`)
+          .join(", ") || "—",
+    },
+    {
+      label: "Locations",
+      currentVal:
+        (currentSeller?.locations ?? [])
+          .map((l) => `${l.market_name ?? l.market_id} (${l.days.join(",")})`)
+          .join("; ") || "—",
+      proposedVal: (data.locations ?? []).map((l) => `${l.market_id} (${l.days.join(",")})`).join("; ") || "—",
+    },
+  ];
+
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center gap-2">
+        <Badge variant={suggestion.type === "new" ? "default" : "secondary"}>
+          {suggestion.type === "new" ? "New Seller" : "Update"}
+        </Badge>
+        <span className="text-sm text-muted-foreground">{formatDate(suggestion.created_at)}</span>
+      </div>
+
+      {suggestion.submitter_email && (
+        <p className="text-sm">
+          <span className="font-medium">Submitted by: </span>
+          {suggestion.submitter_email}
+        </p>
+      )}
+
+      <div className="overflow-x-auto rounded-md border text-sm">
+        <table className="w-full">
+          <thead>
+            <tr className="bg-muted/50">
+              <th className="text-left px-3 py-2 font-medium text-muted-foreground w-1/4">Field</th>
+              <th className="text-left px-3 py-2 font-medium text-muted-foreground w-1/3">Current</th>
+              <th className="text-left px-3 py-2 font-medium text-muted-foreground w-1/3">Proposed</th>
+            </tr>
+          </thead>
+          <tbody>
+            {fields.map((f) => {
+              const changed = f.currentVal !== f.proposedVal;
+              return (
+                <tr key={f.label} className={changed ? "bg-yellow-50 dark:bg-yellow-950/20" : ""}>
+                  <td className="px-3 py-2 font-medium">{f.label}</td>
+                  <td className={`px-3 py-2 ${changed ? "line-through text-muted-foreground" : ""}`}>{f.currentVal}</td>
+                  <td className={`px-3 py-2 ${changed ? "font-medium text-green-700 dark:text-green-400" : ""}`}>
+                    {f.proposedVal}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+
+      {suggestion.rejection_reason && (
+        <div className="rounded-md bg-destructive/10 text-destructive px-3 py-2 text-sm">
+          <span className="font-medium">Rejection reason: </span>
+          {suggestion.rejection_reason}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function SuggestionDetail({
   suggestion,
   currentMarket,
@@ -177,23 +267,39 @@ function SuggestionDetail({
   );
 }
 
-export function SuggestionsAdminClient({ suggestions, targetMarkets, currentStatus }: Props) {
+export function SuggestionsAdminClient({
+  type,
+  currentStatus,
+  suggestions = [],
+  targetMarkets = {},
+  sellerSuggestions = [],
+  targetSellers = {},
+}: Props) {
   const router = useRouter();
-  const [selectedSuggestion, setSelectedSuggestion] = useState<MarketSuggestion | null>(null);
+  const [selectedSuggestion, setSelectedSuggestion] = useState<MarketSuggestion | SellerSuggestion | null>(null);
   const [rejectReason, setRejectReason] = useState("");
   const [isPending, startTransition] = useTransition();
 
+  const isSellers = type === "sellers";
+  const items: (MarketSuggestion | SellerSuggestion)[] = isSellers ? sellerSuggestions : suggestions;
+
+  function handleTypeChange(newType: string) {
+    router.push(`/admin/suggestions?type=${newType}&status=${currentStatus}`);
+  }
+
   function handleStatusChange(status: string) {
-    router.push(`/admin/suggestions?status=${status}`);
+    router.push(`/admin/suggestions?type=${type}&status=${status}`);
   }
 
   function handleApprove(id: string) {
     startTransition(async () => {
-      const result = await approveSuggestion(id);
+      const result = isSellers ? await approveSellerSuggestion(id) : await approveSuggestion(id);
       if (result.error) {
         toast.error(result.error);
       } else {
-        toast.success("Suggestion approved and market updated.");
+        toast.success(
+          isSellers ? "Suggestion approved and seller updated." : "Suggestion approved and market updated.",
+        );
         setSelectedSuggestion(null);
       }
     });
@@ -201,7 +307,9 @@ export function SuggestionsAdminClient({ suggestions, targetMarkets, currentStat
 
   function handleReject(id: string) {
     startTransition(async () => {
-      const result = await rejectSuggestion(id, rejectReason);
+      const result = isSellers
+        ? await rejectSellerSuggestion(id, rejectReason)
+        : await rejectSuggestion(id, rejectReason);
       if (result.error) {
         toast.error(result.error);
       } else {
@@ -216,8 +324,17 @@ export function SuggestionsAdminClient({ suggestions, targetMarkets, currentStat
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold">Suggestions</h1>
-        <p className="text-muted-foreground text-sm mt-1">Review user-submitted market suggestions.</p>
+        <p className="text-muted-foreground text-sm mt-1">
+          Review user-submitted {isSellers ? "seller" : "market"} suggestions.
+        </p>
       </div>
+
+      <Tabs value={type} onValueChange={handleTypeChange}>
+        <TabsList>
+          <TabsTrigger value="markets">Markets</TabsTrigger>
+          <TabsTrigger value="sellers">Sellers</TabsTrigger>
+        </TabsList>
+      </Tabs>
 
       <Tabs value={currentStatus} onValueChange={handleStatusChange}>
         <TabsList>
@@ -227,7 +344,7 @@ export function SuggestionsAdminClient({ suggestions, targetMarkets, currentStat
         </TabsList>
       </Tabs>
 
-      {suggestions.length === 0 ? (
+      {items.length === 0 ? (
         <p className="text-muted-foreground text-sm py-8 text-center">No {currentStatus} suggestions.</p>
       ) : (
         <div className="rounded-md border overflow-hidden">
@@ -244,7 +361,7 @@ export function SuggestionsAdminClient({ suggestions, targetMarkets, currentStat
               </tr>
             </thead>
             <tbody>
-              {suggestions.map((s, i) => (
+              {items.map((s, i) => (
                 <tr key={s.id} className={`border-b last:border-0 ${i % 2 === 0 ? "" : "bg-muted/20"}`}>
                   <td className="px-4 py-3">
                     <Badge variant={s.type === "new" ? "default" : "secondary"} className="whitespace-nowrap">
@@ -321,13 +438,22 @@ export function SuggestionsAdminClient({ suggestions, targetMarkets, currentStat
           <SheetHeader className="mb-4">
             <SheetTitle>Suggestion Detail</SheetTitle>
           </SheetHeader>
-          {selectedSuggestion && (
+          {selectedSuggestion && selectedSuggestion.data && "address" in selectedSuggestion.data ? (
             <SuggestionDetail
-              suggestion={selectedSuggestion}
+              suggestion={selectedSuggestion as MarketSuggestion}
               currentMarket={
                 selectedSuggestion.target_id ? (targetMarkets[selectedSuggestion.target_id] ?? null) : null
               }
             />
+          ) : (
+            selectedSuggestion && (
+              <SellerSuggestionDetail
+                suggestion={selectedSuggestion as SellerSuggestion}
+                currentSeller={
+                  selectedSuggestion.target_id ? (targetSellers[selectedSuggestion.target_id] ?? null) : null
+                }
+              />
+            )
           )}
         </SheetContent>
       </Sheet>

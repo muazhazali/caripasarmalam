@@ -1,5 +1,7 @@
 import type { Market } from "@/lib/market-types";
 import type { MarketFormValues } from "@/lib/admin-schema";
+import type { Seller } from "@/lib/seller-types";
+import type { SellerFormValues } from "@/lib/seller-schema";
 
 /**
  * Convert a Market object back into MarketFormValues shape for prefilling
@@ -40,5 +42,31 @@ export function marketToFormValues(market: Market): MarketFormValues {
       accessible: market.parking.accessible,
       notes: market.parking.notes,
     },
+  };
+}
+
+/**
+ * Convert a Seller object back into SellerFormValues shape for prefilling
+ * the seller form (admin edit and update suggestions).
+ */
+export function sellerToFormValues(seller: Seller): SellerFormValues {
+  return {
+    name: seller.name,
+    category: seller.category ?? "",
+    description: seller.description ?? "",
+    phone: seller.phone ?? "",
+    social: seller.social.map((s) => ({ platform: s.platform, url: s.url })),
+    status: seller.status,
+    items: (seller.items ?? []).map((i) => ({
+      name: i.name,
+      price: i.price ?? null,
+      note: i.note ?? "",
+    })),
+    locations: (seller.locations ?? []).map((l) => ({
+      market_id: l.market_id,
+      days: l.days,
+      stall: l.stall ?? "",
+      notes: l.notes ?? "",
+    })),
   };
 }

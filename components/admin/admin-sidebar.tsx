@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutList, PlusCircle, LogOut, Inbox } from "lucide-react";
+import { LayoutList, PlusCircle, LogOut, Inbox, Store } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { signOut } from "@/app/admin/actions";
@@ -39,6 +39,15 @@ export function AdminSidebar({ pendingCount = 0 }: AdminSidebarProps) {
         >
           <PlusCircle className="w-4 h-4" />
           New Market
+        </Link>
+        <Link
+          href="/admin/sellers"
+          className={`flex items-center gap-2 px-3 py-2 rounded-md text-sm transition-colors hover:bg-accent ${
+            pathname.startsWith("/admin/sellers") ? "bg-accent font-medium" : "text-muted-foreground"
+          }`}
+        >
+          <Store className="w-4 h-4" />
+          Sellers
         </Link>
         <Link
           href="/admin/suggestions"

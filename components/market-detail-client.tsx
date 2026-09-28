@@ -23,12 +23,15 @@ import openDirections from "@/lib/directions";
 import InteractiveMap from "@/components/interactive-map";
 import { getMarketOpenStatus } from "@/lib/utils";
 import { DirectionsChooserDialog } from "@/components/directions-chooser-dialog";
+import { MarketSellersCard } from "@/components/market-sellers-section";
+import type { Seller } from "@/lib/seller-types";
 
 interface MarketDetailClientProps {
   market: Market;
+  sellers?: Seller[];
 }
 
-export default function MarketDetailClient({ market }: MarketDetailClientProps) {
+export default function MarketDetailClient({ market, sellers = [] }: MarketDetailClientProps) {
   // Use the shared language context so translations stay consistent across the app
   const { t, language } = useLanguage();
   const [showDirectionsDialog, setShowDirectionsDialog] = useState(false);
@@ -243,6 +246,9 @@ export default function MarketDetailClient({ market }: MarketDetailClientProps) 
                   </CardContent>
                 </Card>
               )}
+
+              {/* Sellers attending this market */}
+              <MarketSellersCard sellers={sellers} />
 
               {/* Schedule */}
               <Card>

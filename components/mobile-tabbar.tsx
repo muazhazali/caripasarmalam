@@ -2,7 +2,18 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, ShoppingBag, Map as MapIcon, MoreHorizontal, Info, Github, Sun, Moon, PlusCircle } from "lucide-react";
+import {
+  Home,
+  ShoppingBag,
+  Map as MapIcon,
+  MoreHorizontal,
+  Info,
+  Github,
+  Sun,
+  Moon,
+  PlusCircle,
+  Store,
+} from "lucide-react";
 import { useLanguage } from "@/components/language-provider";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { useTheme } from "next-themes";
@@ -41,6 +52,7 @@ export default function MobileTabBar() {
   const tabs = [
     { href: "/", label: t.home, icon: Home },
     { href: "/markets", label: t.markets, icon: ShoppingBag },
+    { href: "/sellers", label: t.sellers, icon: Store },
     { href: "/map", label: t.mapView, icon: MapIcon },
   ];
 
@@ -58,7 +70,7 @@ export default function MobileTabBar() {
               href={tab.href}
               label={tab.label}
               icon={tab.icon}
-              isActive={pathname === tab.href}
+              isActive={pathname === tab.href || pathname.startsWith(`${tab.href}/`)}
             />
           ))}
           <Sheet>
