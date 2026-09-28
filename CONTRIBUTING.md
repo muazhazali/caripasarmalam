@@ -10,6 +10,7 @@ By participating you agree to the [Code of Conduct](CODE_OF_CONDUCT.md).
 | I want to…                        | Start here                                                                                    |
 | --------------------------------- | --------------------------------------------------------------------------------------------- |
 | Add or correct a market           | Use the [suggestion form](https://forms.gle/9sXDZYQknTszNSJfA), or the in-app `/suggest` page |
+| Add a seller to a market          | Use the in-app `/suggest?type=seller` page (reviewed before publishing)                       |
 | Report a bug or request a feature | Open a GitHub issue (templates provided)                                                      |
 | Report a security issue           | Read [SECURITY.md](SECURITY.md) first — do not open a public issue                            |
 | Fix or add code                   | This document, then open a pull request                                                       |
@@ -77,10 +78,15 @@ PR what you verified.
 - **Strings**: every user-facing string goes in `lib/i18n.ts`, in **both** English
   and Malay. Never hardcode display text in a component.
 - **Database**: reads and writes are server-side only. Client components reach
-  data through `/api/v1` (see `lib/markets-api-client.ts`), never through the D1
-  binding.
+  data through `/api/v1` (see `lib/markets-api-client.ts` and
+  `lib/sellers-api-client.ts`), never through the D1 binding.
 - **Writes**: all mutations are server actions guarded by `requireAdmin()`. Keep
-  `market_days` consistent with `schedule` on every market write.
+  `market_days` consistent with `schedule` on every market write. On every
+  seller write, keep `seller_items`, `seller_locations`, `seller_location_days`,
+  and `seller_fts` in sync — use the helpers in `lib/sellers-db.ts`.
+- **Privacy**: seller `phone` and `social` come from the public only through
+  suggestions and are published after admin review. Don't add flows that publish
+  contact data without that gate.
 - **Schema**: add a new file in `d1/migrations/`; never edit an applied migration.
 - **Comments**: add one only when it explains non-obvious intent.
 - **Secrets**: never commit `.env`, `.dev.vars`, or files under
@@ -102,6 +108,15 @@ docs: document local D1 setup
 are fine. Any breaking change to the response shape or existing parameters needs a
 new version under `/api/v2` while v1 keeps working. Document the change in the
 README API table.
+
+## Seller directory status
+
+The seller feature is mid-build: admin CRUD, the API, market-page seller
+sections, and the suggestion flow are live; the public `/sellers` list shows a
+work-in-progress banner while real seller data is collected. The design and
+phased plan live in
+[docs/seller-directory-plan.md](docs/seller-directory-plan.md) — read it before
+touching seller code so the schema conventions stay consistent.
 
 ## Questions
 

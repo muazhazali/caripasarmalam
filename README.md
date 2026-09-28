@@ -10,16 +10,25 @@ filterable list, check which markets are open tonight, and see the details you
 need to plan a visit. Built with Next.js and deployed on Cloudflare Workers with
 D1, with an open, keyless JSON API.
 
+A **seller directory** is under construction: each market will list the sellers
+who attend it, their items and prices, and users will be able to search for food
+("nasi lemak") instead of just locations. See
+[docs/seller-directory-plan.md](docs/seller-directory-plan.md).
+
 ## ✨ Features
 
 - 🗺️ **Interactive map** — market locations with Leaflet
 - 📋 **List view** — search and filter by state, day, and amenities
 - 🕐 **Open now** — markets currently trading, based on their schedule
 - 📍 **Near me** — find markets closest to your current location
+- 🏪 **Sellers (WIP)** — per-market seller lists, items with prices, and food
+  search; the public `/sellers` page carries a work-in-progress banner while the
+  directory grows
 - 🌍 **Bilingual** — full English and Bahasa Malaysia support
 - 📱 **Responsive** — mobile-first UI with a PWA manifest
 - 🔌 **Public API** — free, keyless, CORS-enabled read access (see below)
-- 🤝 **Community suggestions** — anyone can submit a new market or a correction
+- 🤝 **Community suggestions** — anyone can submit a new market, a correction,
+  or a seller
 
 ## 🚀 Quick Start
 
@@ -61,18 +70,21 @@ pnpm db:seed:local      # load d1/data.sql (1,139 public markets)
 caripasarmalam/
 ├── app/                      # Next.js App Router
 │   ├── api/v1/               # Public JSON API route handlers
-│   ├── admin/                # Admin dashboard (login, markets, suggestions)
+│   ├── admin/                # Admin dashboard (login, markets, sellers, suggestions)
 │   ├── markets/              # List + detail pages
+│   ├── sellers/              # Seller list + detail pages (WIP banner on list)
 │   ├── map/                  # Map view
-│   └── suggest/              # Public market suggestion form
+│   └── suggest/              # Public suggestion form (market or seller mode)
 ├── components/
 │   ├── ui/                   # shadcn/ui primitives
-│   ├── admin/                # Admin-only components
+│   ├── admin/                # Admin-only components (market + seller forms)
 │   └── *-client.tsx          # Interactive client components
 ├── lib/
 │   ├── d1.ts                 # Cloudflare D1 binding helpers
 │   ├── db.ts                 # Server-side market queries
+│   ├── sellers-db.ts         # Server-side seller queries + writes
 │   ├── market-types.ts       # `Market` domain types
+│   ├── seller-types.ts       # `Seller` domain types
 │   ├── i18n.ts               # English + Malay translations
 │   └── api.ts                # CORS / rate limit / cache helpers
 ├── d1/
@@ -85,12 +97,18 @@ caripasarmalam/
 ### Data flow
 
 - **Server components** query D1 directly through `lib/db.ts` (`getMarkets`,
-  `getMarketById`, `getAllStates`, `getDistrictsByState`).
-- **Client components** call the public API through `lib/markets-api-client.ts`;
-  they never touch the database binding.
+  `getMarketById`, `getAllStates`, `getDistrictsByState`) and, for sellers,
+  `lib/sellers-db.ts` (`getSellers`, `getSellerById`, `getSellersByMarket`,
+  `searchSellers` via the `seller_fts` full-text index).
+- **Client components** call the public API through `lib/markets-api-client.ts`
+  and `lib/sellers-api-client.ts`; they never touch the database binding.
 - **Writes** (admin CRUD and suggestion approval) happen only in server actions
   behind `requireAdmin()` in `lib/auth.ts`.
-- `lib/db-transform.ts` maps between SQLite rows and the `Market` type.
+- `lib/db-transform.ts` maps between SQLite rows and the `Market` type; sellers
+  map rows in `lib/sellers-db.ts`.
+- **Seller writes** must keep `seller_items`, `seller_locations`,
+  `seller_location_days`, and the `seller_fts` index in sync — use the helpers
+  in `lib/sellers-db.ts` rather than writing those tables directly.
 
 ### Internationalization
 
@@ -121,6 +139,8 @@ Free and keyless, CORS `*`, cached at the edge. All endpoints live under
 | `GET /api/v1/markets/{id}`     | A single market, or `404`                                                                                                                                                                  |
 | `GET /api/v1/states`           | Distinct states with active markets                                                                                                                                                        |
 | `GET /api/v1/districts?state=` | Distinct districts within a state                                                                                                                                                          |
+| `GET /api/v1/sellers`          | Paginated sellers with items and locations. `q` searches items, names, and categories via full-text index; filters: `category`, `state`, `district`, `marketId`, `day`, `status`           |
+| `GET /api/v1/sellers/{id}`     | A single seller with items and locations, or `404`                                                                                                                                         |
 
 ```bash
 curl "http://localhost:3000/api/v1/markets?state=Selangor&day=sat&limit=5"
@@ -136,14 +156,22 @@ repository.
 
 ## 🗄️ Database
 
-Two tables, defined in `d1/migrations/`:
+Tables, defined in `d1/migrations/`:
 
 - **`pasar_malams`** — market records. JSON columns (`location`, `schedule`) are
   stored as `TEXT`, so check them with `json_valid(...)`.
-- **`market_suggestions`** — community submissions awaiting review. Never
+- **`market_suggestions`** — community market submissions awaiting review. Never
   publicly readable.
 - **`market_days`** — one row per market per trading day, replacing a JSON search
   so day filters stay index-backed.
+- **`sellers`** — seller records; `phone` and `social` are published only after
+  admin review of a suggestion.
+- **`seller_items`** — items sold, each with a single optional numeric `price`.
+- **`seller_locations`** + **`seller_location_days`** — which markets a seller
+  attends on which days (a seller can attend many markets on different days).
+- **`seller_suggestions`** — community seller submissions awaiting review.
+- **`seller_fts`** — FTS5 index over items, seller names, and categories for
+  food search; rebuilt by application code on every seller write.
 
 ### Changing the schema
 

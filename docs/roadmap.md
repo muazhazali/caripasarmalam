@@ -13,9 +13,20 @@ it can be coordinated.
 - **Automated tests** — there is no test suite today; changes are validated by
   typecheck, lint, build, and manual preview smoke checks. Playwright for the
   public flows and Vitest for `lib/*` would be the highest-value additions.
+- **Seller data collection** — the seller feature ships with a work-in-progress
+  banner on `/sellers` while real seller data is gathered (via admin CRUD and
+  public suggestions). Removing the banner once the directory has meaningful
+  coverage is tracked in
+  [seller-directory-plan.md](seller-directory-plan.md).
 
 ## Medium impact
 
+- **Seller photos** — no seller image field exists. Add photo storage (for
+  example R2) once seller data is populated.
+- **Seller self-service** — let sellers claim and edit their own listing,
+  instead of everything flowing through admin review.
+- **Price-range food filters** — item prices are numeric; "under RM10" filters
+  on `/sellers` are a natural follow-up.
 - **Real Open Graph images** — market pages fall back to `/placeholder.jpg`. Use
   Next.js `opengraph-image.tsx` so shared market links render a real preview.
 - **Market photos** — no market has an image. Consider a community-submitted
@@ -36,6 +47,13 @@ it can be coordinated.
 
 ## Done
 
+- ~~Seller directory foundation~~ — seller schema, API, admin CRUD, market-page
+  seller sections, and the reviewed public suggestion flow (see
+  [seller-directory-plan.md](seller-directory-plan.md)); data collection in
+  progress.
+- ~~First-visit location/state prompt on the homepage~~ — location permission
+  dialog falls back to a state picker; the choice is remembered across the
+  homepage, `/markets`, and `/map` via `homeSelectedState`.
 - ~~Rate limiting beyond a single process~~ — replaced by the `RateLimiter`
   Durable Object in `workers/rate-limiter/`.
 - ~~Global error boundary~~ — `app/error.tsx` exists.

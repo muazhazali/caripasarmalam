@@ -41,15 +41,25 @@ components that handle interactivity.
   `getCloudflareContext({ async: true })` and JSON/boolean helpers.
 - **Queries**: `lib/db.ts` — `getMarkets()`, `getMarketById()`, `getAllStates()`,
   `getDistrictsByState()`, `getAdminMarkets()`, plus admin write helpers.
-  `lib/suggestions-db.ts` covers suggestions.
+  `lib/suggestions-db.ts` covers market suggestions. Sellers live in
+  `lib/sellers-db.ts` (queries, writes, `searchSellers()` over `seller_fts`),
+  `lib/seller-suggestions-db.ts`, and `lib/seller-schema.ts` (zod form schema).
 - **Row ↔ domain mapping**: `lib/db-transform.ts` (`dbRowToMarket`,
-  `marketFormToDbRow`).
-- **Core type**: `Market` in `lib/market-types.ts` (types only — there is no
-  static data array). `MarketSchedule[]` uses `DayCode` from `app/enums.ts`.
-- **Client fetches**: `lib/markets-api-client.ts` calls `/api/v1/markets`.
-  Client components must never import `lib/d1.ts` or `lib/db.ts`.
+  `marketFormToDbRow`). Booleans arrive from D1 as 0/1 integers — coerce with
+  `Boolean()` there, or `0 && x` renders as text in JSX.
+- **Core type**: `Market` in `lib/market-types.ts`, `Seller` in
+  `lib/seller-types.ts` (types only — there is no static data array). Schedule
+  and attendance days use `DayCode` from `app/enums.ts`.
+- **Client fetches**: `lib/markets-api-client.ts` calls `/api/v1/markets`;
+  `lib/sellers-api-client.ts` calls `/api/v1/sellers`. Client components must
+  never import `lib/d1.ts`, `lib/db.ts`, or `lib/sellers-db.ts`.
 - **Writes**: server actions only, behind `requireAdmin()` (`lib/auth.ts`).
-  Every market write must keep `market_days` in sync with `schedule`.
+  Every market write must keep `market_days` in sync with `schedule`. Every
+  seller write must keep `seller_items`, `seller_locations`,
+  `seller_location_days`, and `seller_fts` in sync — use the helpers in
+  `lib/sellers-db.ts`, never write those tables elsewhere.
+- **Privacy**: public seller suggestions may include phone/social, but they are
+  only published after admin approval. Do not add flows that bypass review.
 - **Public API**: `app/api/v1/*` route handlers using helpers in `lib/api.ts`
   (CORS, rate limiting via the `RATE_LIMITER` service binding, cache headers).
 - **Rate limiter**: separate Worker exporting a Durable Object, in
@@ -80,12 +90,19 @@ Leaflet is client-only. Components importing it must be dynamically imported wit
 
 ### Key routes
 
-- `/` — homepage with featured markets and filters
+- `/` — homepage with featured markets and filters (first-visit location/state
+  prompt; saved state shared with /markets and /map via the `homeSelectedState`
+  localStorage key)
 - `/markets` — filterable list (`components/markets-filter-client.tsx`)
-- `/markets/[id]` — market detail
+- `/markets/[id]` — market detail, including a sellers-attending section
+- `/sellers` — seller list with a WIP banner (`components/wip-banner.tsx`);
+  `/sellers/[id]` — seller detail (name, category, items with prices, phone,
+  WhatsApp link derived from phone, social, locations by day)
 - `/map` — map view (`/markets/map` redirects here)
-- `/suggest` — public suggestion form; `/admin/*` — admin dashboard
-- `/api/v1/{markets,markets/[id],states,districts}` — public JSON API
+- `/suggest` — public suggestion form (market mode and `?type=seller` mode);
+  `/admin/*` — admin dashboard
+- `/api/v1/{markets,markets/[id],states,districts,sellers,sellers/[id]}` —
+  public JSON API
 
 ## Conventions
 

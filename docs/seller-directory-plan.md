@@ -1,6 +1,10 @@
 # Seller Directory Upgrade — Plan
 
-Status: design agreed, awaiting go-ahead to start implementation.
+Status: implemented (schema, API, public pages, admin CRUD, suggestion flow).
+The public `/sellers` list carries a WIP banner (`components/wip-banner.tsx`)
+while real seller data is collected; remove it once coverage is meaningful.
+Remaining ideas live in [roadmap.md](roadmap.md) (photos, self-service claims,
+price filters).
 Scope: each pasar malam location gets a list of sellers; sellers can appear at multiple
 markets on different days; users can browse/search sellers and search for food, not just
 locations.
