@@ -24,8 +24,8 @@ export const marketFormSchema = z.object({
       times: z
         .array(
           z.object({
-            start: z.string().regex(/^\d{2}:\d{2}$/, "Format: HH:MM"),
-            end: z.string().regex(/^\d{2}:\d{2}$/, "Format: HH:MM"),
+            start: z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/, "Format: HH:MM (24-hour)"),
+            end: z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/, "Format: HH:MM (24-hour)"),
             note: z.string().optional(),
           }),
         )
