@@ -52,7 +52,6 @@ export default function MobileTabBar() {
   const tabs = [
     { href: "/", label: t.home, icon: Home },
     { href: "/markets", label: t.markets, icon: ShoppingBag },
-    { href: "/sellers", label: t.sellers, icon: Store },
     { href: "/map", label: t.mapView, icon: MapIcon },
   ];
 
@@ -88,6 +87,13 @@ export default function MobileTabBar() {
                 <SheetTitle>{t.more}</SheetTitle>
               </SheetHeader>
               <div className="grid grid-cols-2 gap-4">
+                <Link
+                  href="/sellers"
+                  className="flex items-center gap-3 rounded-lg border border-border px-4 py-4 text-sm text-foreground hover:bg-muted/50 transition-colors"
+                >
+                  <Store className="h-4 w-4" />
+                  <span>{t.sellers}</span>
+                </Link>
                 <Link
                   href="/suggest"
                   className="flex items-center gap-3 rounded-lg border border-border px-4 py-4 text-sm text-foreground hover:bg-muted/50 transition-colors"

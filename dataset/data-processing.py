@@ -100,6 +100,16 @@ def parse_time_range(time_str: str) -> Optional[Dict[str, str]]:
     end_min = int(match.group(5)) if match.group(5) else 0
     end_ampm = (match.group(6) or '').lower()
     
+    # When Google Maps omits start am/pm (e.g. "4:30-8:30 pm", "6-10 am"),
+    # inherit the meridiem from end_ampm.
+    if not start_ampm and end_ampm:
+        if end_ampm == 'pm':
+            start_ampm = 'pm'
+        elif end_ampm == 'am' and end_hour == 12:
+            start_ampm = 'pm'
+        else:
+            start_ampm = 'am'
+    
     # Convert to 24-hour format
     if start_ampm == 'pm' and start_hour != 12:
         start_hour += 12
@@ -109,10 +119,6 @@ def parse_time_range(time_str: str) -> Optional[Dict[str, str]]:
     if end_ampm == 'pm' and end_hour != 12:
         end_hour += 12
     elif end_ampm == 'am' and end_hour == 12:
-        end_hour = 0
-    
-    # Handle midnight (12 am = 00:00)
-    if end_hour == 12 and end_ampm == 'am':
         end_hour = 0
     
     start_time = f"{start_hour:02d}:{start_min:02d}"
@@ -151,25 +157,33 @@ def transform_hours_to_schedule(hours_str: str) -> List[Dict[str, Any]]:
         if not isinstance(times_list, list) or len(times_list) == 0:
             continue
         
-        # Parse the first time entry (assuming single time range per day)
-        time_str = times_list[0] if times_list else ''
-        time_obj = parse_time_range(time_str)
+        parsed_slots = []
+        for time_str in times_list:
+            time_obj = parse_time_range(time_str)
+            if time_obj is not None:
+                parsed_slots.append(time_obj)
         
-        if time_obj is None:
+        if not parsed_slots:
             continue  # Skip closed days
         
+        if len(parsed_slots) > 1:
+            non_midnight = [s for s in parsed_slots if s['start'] != '00:00']
+            if non_midnight:
+                parsed_slots = non_midnight
+        
         # Create a key for grouping (same times = same schedule entry)
-        time_key = json.dumps(time_obj, sort_keys=True)
+        time_key = json.dumps(parsed_slots, sort_keys=True)
         
         if time_key not in schedule_map:
             schedule_map[time_key] = {
-                'times': [time_obj],
+                'times': parsed_slots,
                 'days': []
             }
         
         # Convert day name to abbreviation
         day_abbr = DAY_MAPPING.get(day_name, day_name.lower()[:3])
-        schedule_map[time_key]['days'].append(day_abbr)
+        if day_abbr not in schedule_map[time_key]['days']:
+            schedule_map[time_key]['days'].append(day_abbr)
     
     # Convert to final format and sort days
     schedule = []
