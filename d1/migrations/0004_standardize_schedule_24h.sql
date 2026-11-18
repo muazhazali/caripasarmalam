@@ -1,3 +1,4 @@
+-- One-time data migration for existing pasar_malams rows.
 -- Standardize pasar_malams schedule start/end times to 24-hour HH:MM format (Issue #20).
 -- Fixes afternoon/evening start times that were stored as 01:00-07:00 instead of 13:00-19:00
 -- when the original Google Maps scrape omitted the shared PM meridiem on the start time.
